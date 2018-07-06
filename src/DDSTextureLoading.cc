@@ -6,6 +6,7 @@
 #include "Core/Containers/StaticArray.h"
 #include "IO/IO.h"
 #include "HttpFS/HTTPFileSystem.h"
+#include "LocalFS/LocalFileSystem.h"
 #include "Gfx/Gfx.h"
 #include "Assets/Gfx/ShapeBuilder.h"
 #include "Assets/Gfx/TextureLoader.h"
@@ -39,8 +40,14 @@ DDSTextureLoadingApp::OnInit() {
 
     // setup IO system
     IOSetup ioSetup;
+#if ORYOL_EMSCRIPTEN
     ioSetup.FileSystems.Add("http", HTTPFileSystem::Creator());
-    ioSetup.Assigns.Add("tex:", "http://localhost:8000/data/");//"http://floooh.github.io/oryol/data/"
+    ioSetup.Assigns.Add("tex:", "http://localhost:8000/data/");
+#else
+    ioSetup.FileSystems.Add("file", LocalFileSystem::Creator());
+    ioSetup.Assigns.Add("tex:", "root:data/");
+#endif
+
     IO::Setup(ioSetup);
 
     // setup rendering system
