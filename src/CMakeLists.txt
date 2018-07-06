@@ -1,0 +1,6 @@
+fips_begin_app(dspr-frontend windowed)
+    fips_vs_warning_level(3)
+    fips_files(DDSTextureLoading.cc)
+    oryol_shader(shaders.glsl)
+    fips_deps(Assets Gfx HttpFS)
+fips_end_app()

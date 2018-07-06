@@ -1,0 +1,11 @@
+#
+# dspr-frontend
+#
+---
+imports:
+    oryol:
+        git:    https://github.com/floooh/oryol.git
+    oryol-sound:
+        git:    https://github.com/floooh/oryol-sound.git
+    oryol-websocket-client:
+        git:    https://github.com/connorcarpenter/oryol-websocket-client
