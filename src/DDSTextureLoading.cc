@@ -40,7 +40,7 @@ DDSTextureLoadingApp::OnInit() {
     // setup IO system
     IOSetup ioSetup;
     ioSetup.FileSystems.Add("http", HTTPFileSystem::Creator());
-    ioSetup.Assigns.Add("tex:", ORYOL_SAMPLE_URL);
+    ioSetup.Assigns.Add("tex:", "http://localhost:8000/data/");//"http://floooh.github.io/oryol/data/"
     IO::Setup(ioSetup);
 
     // setup rendering system
@@ -131,17 +131,18 @@ DDSTextureLoadingApp::OnRunning() {
         glm::vec3(+1.65f, -1.1f, 0.0f),
         glm::vec3(+2.75f, -1.1f, 0.0f)
     };
-    for (int i = 0; i < NumTextures; i++) {
-        const auto resState = Gfx::QueryResourceInfo(this->textures[i]).State;
-        if (resState == ResourceState::Valid) {
-            glm::vec3 p = pos[i] + glm::vec3(0.0f, 0.0f, -20.0f + glm::sin(this->distVal) * 19.0f);
-            this->vsParams.mvp = this->computeMVP(p);
-            this->drawState.FSTexture[Shader::tex] = this->textures[i];
-            Gfx::ApplyDrawState(this->drawState);
-            Gfx::ApplyUniformBlock(this->vsParams);
-            Gfx::Draw();
-        }
+    
+    int i=0;
+    const auto resState = Gfx::QueryResourceInfo(this->textures[i]).State;
+    if (resState == ResourceState::Valid) {
+        glm::vec3 p = pos[i] + glm::vec3(0.0f, 0.0f, -20.0f + glm::sin(this->distVal) * 19.0f);
+        this->vsParams.mvp = this->computeMVP(p);
+        this->drawState.FSTexture[Shader::tex] = this->textures[i];
+        Gfx::ApplyDrawState(this->drawState);
+        Gfx::ApplyUniformBlock(this->vsParams);
+        Gfx::Draw();
     }
+    
     Gfx::EndPass();
     Gfx::CommitFrame();
     
