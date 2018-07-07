@@ -8,4 +8,6 @@ imports:
     oryol-sound:
         git:    https://github.com/floooh/oryol-sound.git
     oryol-websocket-client:
-        git:    https://github.com/connorcarpenter/oryol-websocket-client
+        git:    https://github.com/connorcarpenter/oryol-websocket-client.git
+    oryol-simpl2d:
+        git:    https://github.com/connorcarpenter/oryol-simpl2d.git

@@ -9,7 +9,7 @@
 #include "LocalFS/LocalFileSystem.h"
 #include "Gfx/Gfx.h"
 #include "Assets/Gfx/ShapeBuilder.h"
-#include "Assets/Gfx/TextureLoader.h"
+#include "Simpl2D/PNGLoader.h"
 #include "glm/mat4x4.hpp"
 #include "glm/gtc/matrix_transform.hpp"
 #include "shaders.h"
@@ -57,12 +57,12 @@ DDSTextureLoadingApp::OnInit() {
     Id shd = Gfx::CreateResource(Shader::Setup());
 
     TextureSetup texBluePrint;
-    texBluePrint.Sampler.MinFilter = TextureFilterMode::Linear;
-    texBluePrint.Sampler.MagFilter = TextureFilterMode::Linear;
+    texBluePrint.Sampler.MinFilter = TextureFilterMode::Nearest;
+    texBluePrint.Sampler.MagFilter = TextureFilterMode::Nearest;
     texBluePrint.Sampler.WrapU = TextureWrapMode::ClampToEdge;
     texBluePrint.Sampler.WrapV = TextureWrapMode::ClampToEdge;
     static const char* texturePath = "tex:texture.dds";
-    this->texture = Gfx::LoadResource(TextureLoader::Create(TextureSetup::FromFile(texturePath, texBluePrint)));
+    this->texture = Gfx::LoadResource(PNGLoader::Create(TextureSetup::FromFile(texturePath, texBluePrint)));
 
     const glm::mat4 rot90 = glm::rotate(glm::mat4(), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
     ShapeBuilder shapeBuilder;
