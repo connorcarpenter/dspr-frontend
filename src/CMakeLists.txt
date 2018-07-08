@@ -4,5 +4,6 @@ fips_begin_app(dspr-frontend windowed)
             Main.cpp
             Controller.h
     )
+    oryol_shader(shaders.shd)
     fips_deps(Sova)
 fips_end_app()

@@ -1,0 +1,47 @@
+//------------------------------------------------------------------------------
+//  shaders.shd
+//------------------------------------------------------------------------------
+
+@vs canvasVS
+in vec2 position;
+in vec2 texcoord0;
+out vec2 uv;
+void main() {
+    gl_Position = vec4(((position.xy * 2.0) - 1.0), 0.0, 1.0);
+    gl_Position.y = -gl_Position.y;
+    uv = texcoord0;
+}
+@end
+
+@fs canvasFS
+uniform sampler2D tex;
+in vec2 uv;
+out vec4 fragColor;
+void main() {
+    fragColor = texture(tex, uv);
+}
+@end
+
+@program CanvasShader canvasVS canvasFS
+
+@vs crtVS
+in vec4 position;
+in vec2 texcoord0;
+out vec2 uv;
+void main() {
+    gl_Position = position;
+    uv = texcoord0;
+}
+@end
+
+@fs nocrtFS
+uniform sampler2D canvas;
+in vec2 uv;
+out vec4 fragColor;
+void main() {
+    fragColor = vec4(texture(canvas, uv).xyz, 1.0);
+}
+@end 
+
+@program NormalShader crtVS nocrtFS
+

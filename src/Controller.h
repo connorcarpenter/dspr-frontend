@@ -4,9 +4,11 @@
 // Created by connor on 4/9/18.
 //
 
+#include <Modules/Gfx/Gfx.h>
 #include "../../sova/src/Sova/Sova.h"
 #include "../../oryol/code/Modules/Core/String/String.h"
 #include "../../oryol/code/Modules/Core/Containers/Array.h"
+#include "shaders.h"
 
 using namespace Sova;
 
@@ -14,12 +16,15 @@ namespace DsprFrontend
 {
     class Controller {
     public:
-        Controller();
+        Controller() = default;;
         void onGameStart();
         void onGameUpdate();
 
         void onLoadProgress();
         void onLoadFinish();
+
+        Oryol::Id getNormalShader();
+        Oryol::Id getCanvasShader();
 
         App app;
         Viewport viewport;
@@ -28,11 +33,15 @@ namespace DsprFrontend
         Sprite nina;
     };
 
-    Controller::Controller() { }
-
     void Controller::onGameStart() {
 
-        app = App(640, 360, "Demo");
+        app = App(640, 360, "Demo",
+                  [&]() {
+                      return getNormalShader();
+                  },
+                  [&]() {
+                      return getCanvasShader();
+                  });
 
         Array<String> resources;
         resources.Add("images/myNinaSmall.png");
@@ -80,5 +89,13 @@ namespace DsprFrontend
     void Controller::onGameUpdate() {
         // this is the game loop
         world.updateChildren();
+    }
+
+    Oryol::Id Controller::getNormalShader() {
+        return Gfx::CreateResource(NormalShader::Setup());
+    }
+
+    Oryol::Id Controller::getCanvasShader() {
+        return Gfx::CreateResource(CanvasShader::Setup());
     }
 }
