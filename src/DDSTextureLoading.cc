@@ -22,19 +22,47 @@ public:
     AppState::Code OnInit();
     AppState::Code OnCleanup();
 
-    glm::mat4 computeMVP(const glm::vec3& pos);
-
-    DrawState drawState;
     Id texture;
-    Shader::vsParams vsParams;
-    glm::mat4 view;
-    glm::mat4 proj;
+private:
+    Id canvasPass;
+    DrawState canvasDrawState;
+
+    int viewPortX = 0;
+    int viewPortY = 0;
+    int viewPortW = 0;
+    int viewPortH = 0;
+    void applyViewPort();
+
+    void renderCanvas();
+    void setupCanvas(const TextureSetup& rtSetup);
+    Oryol::DrawState drawState;
+    int numVertices;
+    struct vertex {
+        float x, y, u, v;
+    };
+    static const int MaxNumVertices = 6;
+    vertex vertexBuffer[MaxNumVertices];
+
+    const void* updateVertices(int& outNumBytes);
+
+    int writeVertex(int index, float x, float y, float u, float v);
 };
 OryolMain(DDSTextureLoadingApp);
 
 //------------------------------------------------------------------------------
+
+static const int Width = 320;
+static const int Height = 240;
+static const int canvasWidth = Width;
+static const int canvasHeight = Height;
+static const int dispWidth = canvasWidth;
+static const int dispHeight = canvasHeight;
+
 AppState::Code
 DDSTextureLoadingApp::OnInit() {
+
+    //Setup screen
+    Gfx::Setup(GfxSetup::Window(dispWidth, dispHeight, "Oryol 2d example"));
 
     // setup IO system
     IOSetup ioSetup;
@@ -48,41 +76,31 @@ DDSTextureLoadingApp::OnInit() {
 
     IO::Setup(ioSetup);
 
-    // setup rendering system
-    auto gfxSetup = GfxSetup::Window(600, 400, "Oryol DDS Loading Sample");
-    gfxSetup.DefaultPassAction = PassAction::Clear(glm::vec4(0.5f, 0.5f, 0.5f, 1.0f));
-    Gfx::Setup(gfxSetup);
-
-    // setup resources
-    Id shd = Gfx::CreateResource(Shader::Setup());
-
+    // setup resource
     TextureSetup texBluePrint;
     texBluePrint.Sampler.MinFilter = TextureFilterMode::Nearest;
     texBluePrint.Sampler.MagFilter = TextureFilterMode::Nearest;
     texBluePrint.Sampler.WrapU = TextureWrapMode::ClampToEdge;
     texBluePrint.Sampler.WrapV = TextureWrapMode::ClampToEdge;
-    static const char* texturePath = "tex:owl.png";
+    static const char* texturePath = "tex:sketch.png";
     this->texture = Gfx::LoadResource(PNGLoader::Create(TextureSetup::FromFile(texturePath, texBluePrint)));
 
-    const glm::mat4 rot90 = glm::rotate(glm::mat4(), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-    ShapeBuilder shapeBuilder;
-    shapeBuilder.Layout = {
-        { VertexAttr::Position, VertexFormat::Float3 },
-        { VertexAttr::TexCoord0, VertexFormat::Float2 }
-    };
-    shapeBuilder.Transform(rot90).Plane(1.0f, 1.0f, 1.0f);
-    this->drawState.Mesh[0] = Gfx::CreateResource(shapeBuilder.Build());
-    auto ps = PipelineSetup::FromLayoutAndShader(shapeBuilder.Layout, shd);
-    ps.DepthStencilState.DepthWriteEnabled = true;
-    ps.DepthStencilState.DepthCmpFunc = CompareFunc::LessEqual;
-    ps.BlendState.BlendEnabled = true;
-    this->drawState.Pipeline = Gfx::CreateResource(ps);
+    //Setup offscreen render target
+    auto rtSetup = TextureSetup::RenderTarget2D(canvasWidth, canvasHeight);
+    rtSetup.Sampler.MinFilter = TextureFilterMode::Nearest;
+    rtSetup.Sampler.MagFilter = TextureFilterMode::Nearest;
+    Id canvasTexture = Gfx::CreateResource(rtSetup);
+    this->canvasPass = Gfx::CreateResource(PassSetup::From(canvasTexture));
 
-    const float fbWidth = (const float) Gfx::DisplayAttrs().FramebufferWidth;
-    const float fbHeight = (const float) Gfx::DisplayAttrs().FramebufferHeight;
-    this->proj = glm::perspectiveFov(glm::radians(45.0f), fbWidth, fbHeight, -1.0f, 1.0f);
-    //this->proj = glm::ortho(-300.0f, 300.0f, 300.0f, -300.0f, -1.0f, 1.0f);
-    this->view = glm::mat4();
+    auto quadSetup = MeshSetup::FullScreenQuad(Gfx::QueryFeature(GfxFeature::OriginTopLeft));
+    this->canvasDrawState.Mesh[0] = Gfx::CreateResource(quadSetup);
+    Id shd = Gfx::CreateResource(Shader::Setup());
+
+    auto ps = PipelineSetup::FromLayoutAndShader(quadSetup.Layout, shd);
+    this->canvasDrawState.Pipeline = Gfx::CreateResource(ps);
+    this->canvasDrawState.FSTexture[0] = canvasTexture;
+
+    setupCanvas(rtSetup);
     
     return App::OnInit();
 }
@@ -91,20 +109,16 @@ DDSTextureLoadingApp::OnInit() {
 AppState::Code
 DDSTextureLoadingApp::OnRunning() {
 
+    // render into offscreen render target
+    Gfx::BeginPass(this->canvasPass);
+    renderCanvas();
+    Gfx::EndPass();
+
+    // copy offscreen render target into backbuffer
     Gfx::BeginPass();
-
-    // only render when texture is loaded (until texture placeholder are implemented)
-    static const glm::vec3 pos = glm::vec3(0.0f, 0.0f, -1.0f);
-
-    const auto resState = Gfx::QueryResourceInfo(this->texture).State;
-    if (resState == ResourceState::Valid) {
-        this->vsParams.mvp = this->computeMVP(pos);
-        this->drawState.FSTexture[Shader::tex] = this->texture;
-        Gfx::ApplyDrawState(this->drawState);
-        Gfx::ApplyUniformBlock(this->vsParams);
-        Gfx::Draw();
-    }
-    
+    this->applyViewPort();
+    Gfx::ApplyDrawState(this->canvasDrawState);
+    Gfx::Draw();
     Gfx::EndPass();
     Gfx::CommitFrame();
     
@@ -121,9 +135,93 @@ DDSTextureLoadingApp::OnCleanup() {
 }
 
 //------------------------------------------------------------------------------
-glm::mat4
-DDSTextureLoadingApp::computeMVP(const glm::vec3& pos) {
-    glm::mat4 modelTform = glm::translate(glm::mat4(), pos);
-    return this->proj * this->view * modelTform;
+void
+DDSTextureLoadingApp::applyViewPort() {
+    float aspect = float(Width) / float(Height);
+    const int fbWidth = Gfx::DisplayAttrs().FramebufferWidth;
+    const int fbHeight = Gfx::DisplayAttrs().FramebufferHeight;
+    this->viewPortY = 0;
+    this->viewPortH = fbHeight;
+    this->viewPortW = (const int) (fbHeight * aspect);
+    this->viewPortX = (fbWidth - viewPortW) / 2;
+    Gfx::ApplyViewPort(this->viewPortX, this->viewPortY, this->viewPortW, this->viewPortH);
 }
 
+//--
+void
+DDSTextureLoadingApp::setupCanvas(const TextureSetup& rtSetup) {
+    this->numVertices = 6;//(this->numTilesX * this->numTilesY + this->numSprites) * 6;
+
+    // setup draw state with dynamic mesh
+    auto meshSetup = MeshSetup::Empty(this->numVertices, Usage::Stream);
+    meshSetup.Layout
+            .Add(VertexAttr::Position, VertexFormat::Float2)
+            .Add(VertexAttr::TexCoord0, VertexFormat::Float2);
+    meshSetup.AddPrimitiveGroup(PrimitiveGroup(0, this->numVertices));
+    this->drawState.Mesh[0] = Gfx::CreateResource(meshSetup);
+    Id shd = Gfx::CreateResource(CanvasShader::Setup());
+    auto ps = PipelineSetup::FromLayoutAndShader(meshSetup.Layout, shd);
+    ps.BlendState.BlendEnabled = true;
+    ps.BlendState.SrcFactorRGB = BlendFactor::SrcAlpha;
+    ps.BlendState.DstFactorRGB = BlendFactor::OneMinusSrcAlpha;
+    ps.BlendState.ColorFormat = rtSetup.ColorFormat;
+    ps.BlendState.DepthFormat = rtSetup.DepthFormat;
+    ps.RasterizerState.CullFaceEnabled = false;
+    this->drawState.Pipeline = Gfx::CreateResource(ps);
+
+    // setup sprite texture
+
+    this->drawState.FSTexture[0] = this->texture;//Gfx::CreateResource(texSetup, Sheet::Pixels, Sheet::NumBytes);//undo this Connor
+
+    // clear the vertex buffer
+    Memory::Clear(this->vertexBuffer, sizeof(this->vertexBuffer));
+}
+
+void DDSTextureLoadingApp::renderCanvas() {
+    const auto resState = Gfx::QueryResourceInfo(this->texture).State;
+    if (resState == ResourceState::Valid) {
+        int numBytes = 0;
+        const void* data = this->updateVertices(numBytes);
+        Gfx::UpdateVertices(this->drawState.Mesh[0], data, numBytes);
+        Gfx::ApplyDrawState(this->drawState);
+        Gfx::Draw();
+    }
+}
+
+const void*
+DDSTextureLoadingApp::updateVertices(int& outNumBytes) {
+    int vIndex = 0;
+
+    //0 is 0, 1 is canvasWidth, canvasHeight
+    float x0 = 0.0f;
+    float y0 = 0.0f;
+    float x1 = 32.0f / dispWidth;
+    float y1 = 48.0f / dispHeight;
+
+    //0 is 0, 1 is texWidth/texHeight
+    //This is the texture
+    float u0 = 0.0f;
+    float v0 = 0.0f;
+    float u1 = 1.0f;
+    float v1 = 1.0f;
+
+    vIndex = this->writeVertex(vIndex, x0, y0, u0, v0);
+    vIndex = this->writeVertex(vIndex, x1, y0, u1, v0);
+    vIndex = this->writeVertex(vIndex, x1, y1, u1, v1);
+    vIndex = this->writeVertex(vIndex, x0, y0, u0, v0);
+    vIndex = this->writeVertex(vIndex, x1, y1, u1, v1);
+    vIndex = this->writeVertex(vIndex, x0, y1, u0, v1);
+
+    outNumBytes = this->numVertices * sizeof(vertex);
+    return this->vertexBuffer;
+}
+
+//------------------------------------------------------------------------------
+int
+DDSTextureLoadingApp::writeVertex(int index, float x, float y, float u, float v) {
+    this->vertexBuffer[index].x = x;
+    this->vertexBuffer[index].y = y;
+    this->vertexBuffer[index].u = u;
+    this->vertexBuffer[index].v = v;
+    return index + 1;
+}

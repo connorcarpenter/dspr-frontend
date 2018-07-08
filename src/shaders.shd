@@ -44,5 +44,5 @@ void main() {
 }
 @end 
 
-@program NoCRTShader crtVS nocrtFS
+@program Shader crtVS nocrtFS
 
