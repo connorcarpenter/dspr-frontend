@@ -3,6 +3,7 @@ fips_begin_app(dspr-frontend windowed)
     fips_files(
             Main.cpp
             Controller.h
+            DsprShaderHandler.h
     )
     oryol_shader(shaders.shd)
     fips_deps(Sova)

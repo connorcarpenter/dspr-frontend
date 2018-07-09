@@ -4,11 +4,12 @@
 // Created by connor on 4/9/18.
 //
 
-#include <Modules/Gfx/Gfx.h>
+
 #include "../../sova/src/Sova/Sova.h"
 #include "../../oryol/code/Modules/Core/String/String.h"
 #include "../../oryol/code/Modules/Core/Containers/Array.h"
-#include "shaders.h"
+
+#include "DsprShaderHandler.h"
 
 using namespace Sova;
 
@@ -22,10 +23,7 @@ namespace DsprFrontend
 
         void onLoadProgress();
         void onLoadFinish();
-
-        Oryol::Id getNormalShader();
-        Oryol::Id getCanvasShader();
-
+        
         App app;
         Viewport viewport;
         Camera camera;
@@ -35,13 +33,7 @@ namespace DsprFrontend
 
     void Controller::onGameStart() {
 
-        app = App(640, 360, "Demo",
-                  [&]() {
-                      return getNormalShader();
-                  },
-                  [&]() {
-                      return getCanvasShader();
-                  });
+        app = App(640, 360, "Demo", new DsprShaderHandler());
 
         Array<String> resources;
         resources.Add("images/myNinaSmall.png");
@@ -91,11 +83,5 @@ namespace DsprFrontend
         world.updateChildren();
     }
 
-    Oryol::Id Controller::getNormalShader() {
-        return Gfx::CreateResource(NormalShader::Setup());
-    }
 
-    Oryol::Id Controller::getCanvasShader() {
-        return Gfx::CreateResource(CanvasShader::Setup());
-    }
 }
