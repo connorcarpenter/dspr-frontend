@@ -10,11 +10,11 @@ using namespace Oryol;
 
 namespace DsprFrontend
 {
-    virtual Oryol::Id DsprShaderHandler::getNormalShader()
+    Oryol::Id DsprShaderHandler::getNormalShader()
     {
         return Gfx::CreateResource(NormalShader::Setup());
     }
-    virtual Oryol::Id DsprShaderHandler::getCanvasShader()
+    Oryol::Id DsprShaderHandler::getCanvasShader()
     {
         return Gfx::CreateResource(CanvasShader::Setup());
     }

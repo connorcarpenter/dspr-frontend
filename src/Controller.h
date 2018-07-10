@@ -8,11 +8,9 @@
 
 #include "DsprShaderHandler.h"
 
-using namespace Sova;
-
 namespace DsprFrontend
 {
-    class Controller : public virtual Refable
+    class Controller : public Sova::Refable
     {
     public:
 
@@ -36,13 +34,13 @@ namespace DsprFrontend
 
         app = NewRef<App>(640, 360, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
 
-        Ref<List<Ref<String>>> resources;
+        Ref<List<Ref<String>>> resources = NewRef<List<Ref<String>>>();
         resources->Add(NewRef<String>("images/myNinaSmall.png"));
         resources->Add(NewRef<String>("images/owl.png"));
 
         app->load(resources)
            ->onProgress(
-              [&](String resource) {
+              [&](Ref<String> resource) {
                  onLoadProgress(resource);
               })
            ->onFinish(
@@ -65,7 +63,8 @@ namespace DsprFrontend
         viewport = NewRef<Viewport>(0, 0, app->width, app->height, camera);
         app->addViewport(viewport);
 
-        nina = NewRef<Sprite>(app, "images/myNinaSmall.png");
+        Ref<String> resourceString = NullRef<String>();
+        nina = NewRef<Sprite>(resourceString);
 
         world->addChild(nina);
 

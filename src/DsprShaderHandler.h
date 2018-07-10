@@ -5,16 +5,18 @@
 //
 
 #include <Sova/Internal/ShaderHandler.h>
+#include <Sova/References/RefTypes.h>
 
 using namespace Sova;
+using namespace Oryol;
 
 namespace DsprFrontend
 {
-    class Id;
     class DsprShaderHandler : public ShaderHandler
     {
     public:
-        virtual Id getNormalShader();
-        virtual Id getCanvasShader();
+        SovaTypeDecl(DsprShaderHandler, ShaderHandler);
+        virtual Oryol::Id getNormalShader();
+        virtual Oryol::Id getCanvasShader();
     };
 }
