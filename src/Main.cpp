@@ -7,7 +7,7 @@
 using namespace DsprFrontend;
 
 int main() {
-    DsprFrontend::Controller controller = DsprFrontend::Controller();
+    DsprFrontend::Controller controller;
     controller.onGameStart();
     return 0;
 }

@@ -4,10 +4,7 @@
 // Created by connor on 4/9/18.
 //
 
-
-#include "../../sova/src/Sova/Sova.h"
-#include "../../oryol/code/Modules/Core/String/String.h"
-#include "../../oryol/code/Modules/Core/Containers/Array.h"
+#include "Sova/Sova.h"
 
 #include "DsprShaderHandler.h"
 
@@ -15,73 +12,78 @@ using namespace Sova;
 
 namespace DsprFrontend
 {
-    class Controller {
+    class Controller : public virtual Refable
+    {
     public:
-        Controller() = default;;
+
+        Controller();
         void onGameStart();
         void onGameUpdate();
 
-        void onLoadProgress();
+        void onLoadProgress(Ref<String> resourceString);
         void onLoadFinish();
-        
-        App app;
-        Viewport viewport;
-        Camera camera;
-        Container world;
-        Sprite nina;
+
+        Ref<App> app = NullRef<App>();
+        Ref<Viewport> viewport = NullRef<Viewport>();
+        Ref<Camera> camera = NullRef<Camera>();
+        Ref<Container> world = NullRef<Container>();
+        Ref<Sprite> nina = NullRef<Sprite>();
     };
+
+    Controller::Controller() = default;
 
     void Controller::onGameStart() {
 
-        app = App(640, 360, "Demo", new DsprShaderHandler());
+        app = NewRef<App>(640, 360, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
 
-        Array<String> resources;
-        resources.Add("images/myNinaSmall.png");
-        resources.Add("images/owl.png");
+        Ref<List<Ref<String>>> resources;
+        resources->Add(NewRef<String>("images/myNinaSmall.png"));
+        resources->Add(NewRef<String>("images/owl.png"));
 
-        app.load(resources)
-           .onProgress(
-              [&]() {
-                 onLoadProgress();
+        app->load(resources)
+           ->onProgress(
+              [&](String resource) {
+                 onLoadProgress(resource);
               })
-           .onFinish(
+           ->onFinish(
               [&]() {
                  onLoadFinish();
               });
 
-        app.start();
+        app->start();
     }
 
-    void Controller::onLoadProgress() {
+    void Controller::onLoadProgress(Ref<String> resourceString)
+    {
         // load progress here
     }
 
-    void Controller::onLoadFinish() {
+    void Controller::onLoadFinish()
+    {
         // after loading is done
-        camera = Camera(app.width, app.height, world);
-        viewport = Viewport(0, 0, app.width, app.height, camera);
-        app.addViewport(viewport);
+        camera = NewRef<Camera>(app->width, app->height, world);
+        viewport = NewRef<Viewport>(0, 0, app->width, app->height, camera);
+        app->addViewport(viewport);
 
-        nina = Sprite(app, "images/myNinaSmall.png");
+        nina = NewRef<Sprite>(app, "images/myNinaSmall.png");
 
-        world.addChild(nina);
+        world->addChild(nina);
 
-        nina.position.set(82, 82);
-        nina.onUpdate(
+        nina->position->set(82, 82);
+        nina->onUpdate(
            [&]() {
-              nina.position.x += 1;
+              nina->position->x += 1;
            });
 
-        app.onUpdate(
+        app->onUpdate(
            [&]() {
               onGameUpdate();
            });
     }
 
-    void Controller::onGameUpdate() {
+    void Controller::onGameUpdate()
+    {
         // this is the game loop
-        world.updateChildren();
+        world->updateChildren();
     }
-
-
 }
