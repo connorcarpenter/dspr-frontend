@@ -32,39 +32,44 @@ namespace DsprFrontend
 
     void Controller::onGameStart() {
 
-        app = NewRef<App>(640, 360, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
+        {
+            app = NewRef<App>(640, 360, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
 
-        Ref<List<Ref<String>>> resources = NewRef<List<Ref<String>>>();
-        resources->Add(NewRef<String>("images/myNinaSmall.png"));
-        resources->Add(NewRef<String>("images/owl.png"));
+            Ref<List<String>> resources = NewRef<List<String>>();
+            resources->Add(NewRef<String>("images/myNinaSmall.png"));
+            resources->Add(NewRef<String>("images/owl.png"));
 
-        app->load(resources)
-           ->onProgress(
-              [&](Ref<String> resource) {
-                 onLoadProgress(resource);
-              })
-           ->onFinish(
-              [&]() {
-                 onLoadFinish();
-              });
+            app->load(resources)
+                    ->onProgress(
+                            [&](Ref<String> resource) {
+                                onLoadProgress(resource);
+                            })
+                    ->onFinish(
+                            [&]() {
+                                onLoadFinish();
+                            });
+        }
 
+        //Sova::GarbageCollector::getGC()->collect(this);
         app->start();
     }
 
     void Controller::onLoadProgress(Ref<String> resourceString)
     {
-        // load progress here
+        Log::Info("Loading progress: Loaded resource ");
+        Log::Info(resourceString->AsCStr());
+        Log::Info("\n");
     }
 
     void Controller::onLoadFinish()
     {
         // after loading is done
+        world = NewRef<Container>();
         camera = NewRef<Camera>(app->width, app->height, world);
         viewport = NewRef<Viewport>(0, 0, app->width, app->height, camera);
         app->addViewport(viewport);
 
-        Ref<String> resourceString = NullRef<String>();
-        nina = NewRef<Sprite>(resourceString);
+        nina = NewRef<Sprite>(NewRef<String>("images/myNinaSmall.png"));
 
         world->addChild(nina);
 
@@ -84,5 +89,8 @@ namespace DsprFrontend
     {
         // this is the game loop
         world->updateChildren();
+
+        //when enough time has passed, do this
+        //Sova::GarbageCollector::getGC()->collect(this);
     }
 }
