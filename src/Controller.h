@@ -32,25 +32,22 @@ namespace DsprFrontend
 
     void Controller::onGameStart() {
 
-        {
-            app = NewRef<App>(640, 360, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
+        app = NewRef<App>(640, 360, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
 
-            Ref<List<String>> resources = NewRef<List<String>>();
-            resources->Add(NewRef<String>("images/myNinaSmall.png"));
-            resources->Add(NewRef<String>("images/owl.png"));
+        Ref<List<String>> resources = NewRef<List<String>>();
+        resources->Add(NewRef<String>("images/myNinaSmall.png"));
+        resources->Add(NewRef<String>("images/owl.png"));
 
-            app->load(resources)
-                    ->onProgress(
-                            [&](Ref<String> resource) {
-                                onLoadProgress(resource);
-                            })
-                    ->onFinish(
-                            [&]() {
-                                onLoadFinish();
-                            });
-        }
+        app->load(resources)
+           ->onProgress(
+              [&](Ref<String> resource) {
+                 onLoadProgress(resource);
+              })
+           ->onFinish(
+              [&]() {
+                 onLoadFinish();
+              });
 
-        //Sova::GarbageCollector::getGC()->collect(this);
         app->start();
     }
 
@@ -85,12 +82,19 @@ namespace DsprFrontend
            });
     }
 
+    int gameCount = 0;
+
     void Controller::onGameUpdate()
     {
         // this is the game loop
         world->updateChildren();
 
         //when enough time has passed, do this
-        //Sova::GarbageCollector::getGC()->collect(this);
+        if (gameCount > 1000) {
+            Sova::GarbageCollector::getGC()->collect(this);
+            gameCount = 0;
+        }
+
+        gameCount += 1;
     }
 }
