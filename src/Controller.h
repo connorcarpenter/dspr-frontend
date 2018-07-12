@@ -4,7 +4,7 @@
 // Created by connor on 4/9/18.
 //
 
-#include "Sova/Sova.h"
+#include "Sova/SovaMain.h"
 
 #include "DsprShaderHandler.h"
 
@@ -26,13 +26,16 @@ namespace DsprFrontend
         Ref<Camera> camera = NullRef<Camera>();
         Ref<Container> world = NullRef<Container>();
         Ref<Sprite> nina = NullRef<Sprite>();
+        Ref<Sprite> nina2 = NullRef<Sprite>();
+        Ref<Point> ninaSpeed = NullRef<Point>();
+        Ref<Point> ninaSpeed2 = NullRef<Point>();
     };
 
     Controller::Controller() = default;
 
     void Controller::onGameStart() {
 
-        app = NewRef<App>(640, 360, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
+        app = NewRef<App>(1280, 720, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
 
         Ref<List<String>> resources = NewRef<List<String>>();
         resources->Add(NewRef<String>("images/myNinaSmall.png"));
@@ -53,28 +56,52 @@ namespace DsprFrontend
 
     void Controller::onLoadProgress(Ref<String> resourceString)
     {
-        Log::Info("Loading progress: Loaded resource ");
-        Log::Info(resourceString->AsCStr());
-        Log::Info("\n");
+        //Log::Info("Loading progress: Loaded resource ");
+        //Log::Info(resourceString->AsCStr());
+        //Log::Info("\n");
     }
 
     void Controller::onLoadFinish()
     {
         // after loading is done
         world = NewRef<Container>();
-        camera = NewRef<Camera>(app->width, app->height, world);
+        camera = NewRef<Camera>(0, 0, app->width / 2, app->height / 2, world);
         viewport = NewRef<Viewport>(0, 0, app->width, app->height, camera);
         app->addViewport(viewport);
 
         nina = NewRef<Sprite>(NewRef<String>("images/myNinaSmall.png"));
+        nina2 = NewRef<Sprite>(NewRef<String>("images/owl.png"));
 
         world->addChild(nina);
+        world->addChild(nina2);
 
-        nina->position->set(82, 82);
+        nina->position->set(132, 82);
+        ninaSpeed = NewRef<Point>(4, 4);
+
         nina->onUpdate(
            [&]() {
-              nina->position->x += 1;
+               nina->position->x += ninaSpeed->x;
+               nina->position->y += ninaSpeed->y;
+
+               if (nina->position->x > camera->width - nina->getWidth()) ninaSpeed->x = -4;
+               if (nina->position->y > camera->height - nina->getHeight()) ninaSpeed->y = -4;
+               if (nina->position->x < 0) ninaSpeed->x = 4;
+               if (nina->position->y < 0) ninaSpeed->y = 4;
            });
+
+        nina2->position->set(42, 253);
+        ninaSpeed2 = NewRef<Point>(-4, -4);
+
+        nina2->onUpdate(
+                [&]() {
+                    nina2->position->x += ninaSpeed2->x;
+                    nina2->position->y += ninaSpeed2->y;
+
+                    if (nina2->position->x > camera->width - nina2->getWidth()) ninaSpeed2->x = -4;
+                    if (nina2->position->y > camera->height - nina2->getHeight()) ninaSpeed2->y = -4;
+                    if (nina2->position->x < 0) ninaSpeed2->x = 4;
+                    if (nina2->position->y < 0) ninaSpeed2->y = 4;
+                });
 
         app->onUpdate(
            [&]() {
