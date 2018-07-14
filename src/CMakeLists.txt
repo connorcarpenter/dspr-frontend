@@ -4,6 +4,7 @@ fips_begin_app(dspr-frontend windowed)
             Main.cpp
             Controller.h
             DsprShaderHandler.h DsprShaderHandler.cpp
+            MoveSprite.h MoveSprite.cpp
     )
     oryol_shader(shaders.shd)
     fips_deps(Sova)
