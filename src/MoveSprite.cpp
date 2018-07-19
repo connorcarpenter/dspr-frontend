@@ -43,9 +43,9 @@ namespace DsprFrontend
         this->position->x += this->velocity->x;
         this->position->y += this->velocity->y;
 
-        if (this->position->x + this->getWidth() < 0 && this->velocity->x < 0) this->velocity->x *= -1;//this->Destroy();
-        if (this->position->y + this->getHeight() < 0 && this->velocity->y < 0) this->velocity->y *= -1;//this->Destroy();
-        if (this->position->x > this->app->width / 2 && this->velocity->x > 0) this->velocity->x *= -1;//this->Destroy();
-        if (this->position->y > this->app->height / 2 && this->velocity->y > 0) this->velocity->y *= -1;//this->Destroy();
+        if (this->position->x < 0 && this->velocity->x < 0) this->velocity->x *= -1; //this->Destroy();////
+        if (this->position->y < 0 && this->velocity->y < 0) this->velocity->y *= -1; //this->Destroy();////
+        if (this->position->x + this->getWidth() > this->app->width / 2 && this->velocity->x > 0) this->velocity->x *= -1; //this->Destroy();////
+        if (this->position->y + this->getHeight() > this->app->height / 2 && this->velocity->y > 0) this->velocity->y *= -1; //this->Destroy();////
     }
 }

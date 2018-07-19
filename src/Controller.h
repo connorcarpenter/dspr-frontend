@@ -28,6 +28,7 @@ namespace DsprFrontend
         Ref<Viewport> viewport = NullRef<Viewport>();
         Ref<Camera> camera = NullRef<Camera>();
         Ref<Container> world = NullRef<Container>();
+        Ref<Websocket> server = NullRef<Websocket>();
     };
 
     Controller::Controller() = default;
@@ -74,10 +75,26 @@ namespace DsprFrontend
               onGameUpdate();
            });
 
-        for (int i = 0; i<2500; i++) {
+        for (int i = 0; i<1; i++) {
             Ref<MoveSprite> newSprite = NewRef<MoveSprite>(app);
             world->AddChild(newSprite);
         }
+
+        server = app->openWebsocket(NewRef<String>("ws://localhost:3001"));
+
+        server->onOpen([&](){
+            auto i = 10;
+            server->send(NewRef<String>("Hey from app!"));
+        });
+
+        server->onError([&](Ref<String> error){
+            auto i = 11;
+            server->close();
+        });
+
+        server->onMessage([&](Ref<String> message){
+            auto i = 12;
+        });
     }
 
     int gameCount = 0;
@@ -92,6 +109,12 @@ namespace DsprFrontend
 
         // this is the game loop
         world->UpdateChildren();
+
+        //if (Math::Random() < 0.3f)
+//        {
+//            auto newSprite = NewRef<MoveSprite>(app);
+//            world->AddChild(newSprite);
+//        }
 
         //when enough time has passed, do this
         if (gameCount > 500) {
