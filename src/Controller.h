@@ -18,6 +18,7 @@ namespace DsprFrontend
     public:
 
         Controller();
+        virtual const char* getClassName() { return "Controller"; }
         void onGameStart();
         void onGameUpdate();
 
@@ -33,26 +34,28 @@ namespace DsprFrontend
 
     Controller::Controller() = default;
 
-    void Controller::onGameStart() {
+    void Controller::onGameStart()
+    {
+        {
+            app = NewRef<App>(1280, 720, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
 
-        app = NewRef<App>(1280, 720, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
+            Ref<List<String>> resources = NewRef<List<String>>();
+            resources->Add(NewRef<String>("images/owl.png"));
+            resources->Add(NewRef<String>("images/cat.png"));
+            resources->Add(NewRef<String>("images/mouse.png"));
 
-        Ref<List<String>> resources = NewRef<List<String>>();
-        resources->Add(NewRef<String>("images/owl.png"));
-        resources->Add(NewRef<String>("images/cat.png"));
-        resources->Add(NewRef<String>("images/mouse.png"));
+            app->load(resources)
+                    ->onProgress(
+                            [&](Ref<String> resource) {
+                                onLoadProgress(resource);
+                            })
+                    ->onFinish(
+                            [&]() {
+                                onLoadFinish();
+                            });
+        }
 
-        app->load(resources)
-           ->onProgress(
-              [&](Ref<String> resource) {
-                 onLoadProgress(resource);
-              })
-           ->onFinish(
-              [&]() {
-                 onLoadFinish();
-              });
-
-        app->start();
+        app->start(); // code continues processing within this function, which is why it should be outside the above scope
     }
 
     void Controller::onLoadProgress(Ref<String> resourceString)
@@ -117,7 +120,7 @@ namespace DsprFrontend
 //        }
 
         //when enough time has passed, do this
-        if (gameCount > 500) {
+        if (gameCount > 1000) {
             Sova::GarbageCollector::getGC()->collect(this);
             gameCount = 0;
         }

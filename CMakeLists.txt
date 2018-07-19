@@ -8,7 +8,7 @@ set(FIPS_EXCEPTIONS ON CACHE BOOL "Enable C++ exceptions" FORCE)
 #the following variable is set after emscripten.toolchain.cmake does it's thing...
 #if browser is throwing exception that no getSocketFromFd() function exists
 #1. Go to /fips/cmake-toolchains/emscripten.toolchain.cmake
-#2. Paste the following line in a newline at line 109
+#2. Paste the following line in a newline at line 108 (before the if statement that looks at it)
 set(FIPS_EMSCRIPTEN_USE_FS ON)
 #3. Rebuild
 

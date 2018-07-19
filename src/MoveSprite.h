@@ -12,6 +12,7 @@ namespace DsprFrontend
     {
     public:
         explicit MoveSprite(Ref<App> app);
+        virtual const char* getClassName() { return "MoveSprite"; }
 
         Ref<Point> velocity = NullRef<Point>();
 
