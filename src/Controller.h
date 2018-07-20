@@ -30,6 +30,8 @@ namespace DsprFrontend
         Ref<Camera> camera = Null<Camera>();
         Ref<Container> world = Null<Container>();
         Ref<Websocket> server = Null<Websocket>();
+
+        void onServerUpdate(Ref<String> message);
     };
 
     Controller::Controller() = default;
@@ -83,19 +85,20 @@ namespace DsprFrontend
             world->AddChild(newSprite);
         }
 
-//        server = app->openWebsocket(New<String>("ws://localhost:3001"));
-//
-//        server->onMessage([&](Ref<String> message){
-//            auto i = 12;
-//        });
-
-        Ref<HttpRequest> req = New<HttpRequest>(New<String>("GET"), New<String>("http://localhost:3001/orchestrator/get-bff"));
+        Ref<HttpRequest> req = New<HttpRequest>(New<String>("GET"), New<String>("http://localhost:3171/orchestrator/bff"));
         req->setRequestHeader(New<String>("Content-Type"), New<String>("application/json"));
-        req->onResponse([&](Ref<HttpResponse> response){
-            if (response->status && response->responseText->Length() > 0){
-                auto i = 13;
-            }
-        });
+        req->onResponse(
+                [&](Ref<HttpResponse> response)
+                {
+                    if (response->status == 200 && response->responseText->Length() > 0)
+                    {
+                        server = app->openWebsocket(response->responseText);
+                        server->onMessage(
+                                [&](Ref<String> message){
+                                    this->onServerUpdate(message);
+                                });
+                    }
+                });
         req->send();
     }
 
@@ -124,5 +127,9 @@ namespace DsprFrontend
         }
 
         gameCount += 1;
+    }
+
+    void Controller::onServerUpdate(Ref<String> message) {
+        auto i = 10;
     }
 }
