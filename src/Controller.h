@@ -25,11 +25,11 @@ namespace DsprFrontend
         void onLoadProgress(Ref<String> resourceString);
         void onLoadFinish();
 
-        Ref<App> app = NullRef<App>();
-        Ref<Viewport> viewport = NullRef<Viewport>();
-        Ref<Camera> camera = NullRef<Camera>();
-        Ref<Container> world = NullRef<Container>();
-        Ref<Websocket> server = NullRef<Websocket>();
+        Ref<App> app = Null<App>();
+        Ref<Viewport> viewport = Null<Viewport>();
+        Ref<Camera> camera = Null<Camera>();
+        Ref<Container> world = Null<Container>();
+        Ref<Websocket> server = Null<Websocket>();
     };
 
     Controller::Controller() = default;
@@ -37,12 +37,12 @@ namespace DsprFrontend
     void Controller::onGameStart()
     {
         {
-            app = NewRef<App>(1280, 720, NewRef<String>("Demo"), NewRef<DsprShaderHandler>());
+            app = New<App>(1280, 720, New<String>("Demo"), New<DsprShaderHandler>());
 
-            Ref<List<String>> resources = NewRef<List<String>>();
-            resources->Add(NewRef<String>("images/owl.png"));
-            resources->Add(NewRef<String>("images/cat.png"));
-            resources->Add(NewRef<String>("images/mouse.png"));
+            Ref<List<String>> resources = New<List<String>>();
+            resources->Add(New<String>("images/owl.png"));
+            resources->Add(New<String>("images/cat.png"));
+            resources->Add(New<String>("images/mouse.png"));
 
             app->load(resources)
                     ->onProgress(
@@ -68,9 +68,9 @@ namespace DsprFrontend
     void Controller::onLoadFinish()
     {
         // after loading is done
-        world = NewRef<Container>();
-        camera = NewRef<Camera>(0, 0, app->width / 2, app->height / 2, world);
-        viewport = NewRef<Viewport>(0, 0, app->width, app->height, camera);
+        world = New<Container>();
+        camera = New<Camera>(0, 0, app->width / 2, app->height / 2, world);
+        viewport = New<Viewport>(0, 0, app->width, app->height, camera);
         app->addViewport(viewport);
 
         app->onUpdate(
@@ -79,25 +79,24 @@ namespace DsprFrontend
            });
 
         for (int i = 0; i<1; i++) {
-            Ref<MoveSprite> newSprite = NewRef<MoveSprite>(app);
+            Ref<MoveSprite> newSprite = New<MoveSprite>(app);
             world->AddChild(newSprite);
         }
 
-        server = app->openWebsocket(NewRef<String>("ws://localhost:3001"));
+//        server = app->openWebsocket(New<String>("ws://localhost:3001"));
+//
+//        server->onMessage([&](Ref<String> message){
+//            auto i = 12;
+//        });
 
-        server->onOpen([&](){
-            auto i = 10;
-            server->send(NewRef<String>("Hey from app!"));
+        Ref<HttpRequest> req = New<HttpRequest>(New<String>("GET"), New<String>("http://localhost:3001/orchestrator/get-bff"));
+        req->setRequestHeader(New<String>("Content-Type"), New<String>("application/json"));
+        req->onResponse([&](Ref<HttpResponse> response){
+            if (response->status && response->responseText->Length() > 0){
+                auto i = 13;
+            }
         });
-
-        server->onError([&](Ref<String> error){
-            auto i = 11;
-            server->close();
-        });
-
-        server->onMessage([&](Ref<String> message){
-            auto i = 12;
-        });
+        req->send();
     }
 
     int gameCount = 0;
@@ -113,10 +112,9 @@ namespace DsprFrontend
         // this is the game loop
         world->UpdateChildren();
 
-        //if (Math::Random() < 0.3f)
+//        if (Math::Random() < 0.01f)
 //        {
-//            auto newSprite = NewRef<MoveSprite>(app);
-//            world->AddChild(newSprite);
+//            server->send(New<String>("hey server!"));
 //        }
 
         //when enough time has passed, do this

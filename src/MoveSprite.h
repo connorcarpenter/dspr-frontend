@@ -4,7 +4,7 @@
 // Created by connor on 7/13/18.
 //
 
-#include <Sova/Sprite.h>
+#include <Sova/Graphics/Sprite.h>
 
 namespace DsprFrontend
 {
@@ -14,10 +14,10 @@ namespace DsprFrontend
         explicit MoveSprite(Ref<App> app);
         virtual const char* getClassName() { return "MoveSprite"; }
 
-        Ref<Point> velocity = NullRef<Point>();
+        Ref<Point> velocity = Null<Point>();
 
         void Update();
     private:
-        Ref<App> app = NullRef<App>();
+        Ref<App> app = Null<App>();
     };
 }

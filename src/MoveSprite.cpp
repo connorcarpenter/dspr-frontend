@@ -3,7 +3,7 @@
 //
 
 #include "Sova/App.h"
-#include "Sova/Math.h"
+#include "Sova/Math/Math.h"
 
 #include "MoveSprite.h"
 
@@ -16,22 +16,22 @@ namespace DsprFrontend
         float random = Math::Random();
         if (random < 0.3f)
         {
-            this->setTexture(NewRef<String>("images/cat.png"));
+            this->setTexture(New<String>("images/cat.png"));
         }
         else
         {
-            this->setTexture(NewRef<String>("images/mouse.png"));
+            this->setTexture(New<String>("images/mouse.png"));
         }
 
 
-        this->velocity = NewRef<Point>();
+        this->velocity = New<Point>();
         float direction = Math::Random() * 359;
         float speed = (4 + 2 * Math::Random());
         this->velocity->x = (int) (Math::Cos(direction) * speed);
         this->velocity->y = (int) (Math::Sin(direction) * speed);
 
         this->app = app;
-        this->position = NewRef<Point>(Math::Random() * app->width/4, Math::Random() * app->height/4);
+        this->position = New<Point>(Math::Random() * app->width / 4, Math::Random() * app->height / 4);
 
         this->OnUpdate([&]() {
             this->Update();
