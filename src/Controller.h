@@ -4,6 +4,7 @@
 // Created by connor on 4/9/18.
 //
 
+#include <iostream>
 #include "Sova/SovaMain.h"
 
 #include "DsprShaderHandler.h"
@@ -29,9 +30,9 @@ namespace DsprFrontend
         Ref<Viewport> viewport = Null<Viewport>();
         Ref<Camera> camera = Null<Camera>();
         Ref<Container> world = Null<Container>();
-        Ref<Websocket> server = Null<Websocket>();
+        Ref<Websocket> bffServer = Null<Websocket>();
 
-        void onServerUpdate(Ref<String> message);
+        void onBffServerUpdate(Ref<String> message);
     };
 
     Controller::Controller() = default;
@@ -85,21 +86,20 @@ namespace DsprFrontend
             world->AddChild(newSprite);
         }
 
-        Ref<HttpRequest> req = New<HttpRequest>(New<String>("GET"), New<String>("http://localhost:3171/orchestrator/bff"));
-        req->setRequestHeader(New<String>("Content-Type"), New<String>("application/json"));
-        req->onResponse(
+        Ref<HttpRequest> bffReq = app->makeHttpRequest(New<String>("GET"), New<String>("http://www.deuspora.com:3170/orchestrator/bff"));
+        bffReq->onResponse(
                 [&](Ref<HttpResponse> response)
                 {
                     if (response->status == 200 && response->responseText->Length() > 0)
                     {
-                        server = app->openWebsocket(response->responseText);
-                        server->onMessage(
+                        bffServer = app->openWebsocket(response->responseText);
+                        bffServer->onMessage(
                                 [&](Ref<String> message){
-                                    this->onServerUpdate(message);
+                                    this->onBffServerUpdate(message);
                                 });
                     }
                 });
-        req->send();
+        bffReq->send();
     }
 
     int gameCount = 0;
@@ -129,7 +129,7 @@ namespace DsprFrontend
         gameCount += 1;
     }
 
-    void Controller::onServerUpdate(Ref<String> message) {
-        auto i = 10;
+    void Controller::onBffServerUpdate(Ref<String> message) {
+        std::cout << "message from bff: " << message->AsCStr() << "" << std::endl;
     }
 }
