@@ -20,19 +20,23 @@ namespace DsprFrontend
 
         Controller();
         virtual const char* getClassName() { return "Controller"; }
+
+        void onLoadFinish();
         void onGameStart();
         void onGameUpdate();
 
-        void onLoadProgress(Ref<String> resourceString);
-        void onLoadFinish();
+        void onBffServerStart();
+        void onBffServerUpdate(Ref<String> message);
+
+        void onGameServerStart();
+        void onGameServerUpdate(Ref<String> message);
 
         Ref<App> app = Null<App>();
         Ref<Viewport> viewport = Null<Viewport>();
         Ref<Camera> camera = Null<Camera>();
         Ref<Container> world = Null<Container>();
         Ref<Websocket> bffServer = Null<Websocket>();
-
-        void onBffServerUpdate(Ref<String> message);
+        Ref<Websocket> gameServer = Null<Websocket>();
     };
 
     Controller::Controller() = default;
@@ -48,10 +52,6 @@ namespace DsprFrontend
             resources->Add(New<String>("images/mouse.png"));
 
             app->load(resources)
-                    ->onProgress(
-                            [&](Ref<String> resource) {
-                                onLoadProgress(resource);
-                            })
                     ->onFinish(
                             [&]() {
                                 onLoadFinish();
@@ -59,13 +59,6 @@ namespace DsprFrontend
         }
 
         app->start(); // code continues processing within this function, which is why it should be outside the above scope
-    }
-
-    void Controller::onLoadProgress(Ref<String> resourceString)
-    {
-        //Log::Info("Loading progress: Loaded resource ");
-        //Log::Info(resourceString->AsCStr());
-        //Log::Info("\n");
     }
 
     void Controller::onLoadFinish()
@@ -93,6 +86,10 @@ namespace DsprFrontend
                     if (response->status == 200 && response->responseText->Length() > 0)
                     {
                         bffServer = app->openWebsocket(response->responseText);
+                        bffServer->onOpen(
+                                [&](){
+                                    this->onBffServerStart();
+                                });
                         bffServer->onMessage(
                                 [&](Ref<String> message){
                                     this->onBffServerUpdate(message);
@@ -102,7 +99,7 @@ namespace DsprFrontend
         bffReq->send();
     }
 
-    int gameCount = 0;
+    int gcCount = 0;
 
     void Controller::onGameUpdate()
     {
@@ -115,21 +112,57 @@ namespace DsprFrontend
         // this is the game loop
         world->UpdateChildren();
 
-//        if (Math::Random() < 0.01f)
-//        {
-//            server->send(New<String>("hey server!"));
-//        }
-
         //when enough time has passed, do this
-        if (gameCount > 1000) {
+        if (gcCount > 1000) {
             Sova::GarbageCollector::getGC()->collect(this);
-            gameCount = 0;
+            gcCount = 0;
         }
 
-        gameCount += 1;
+        gcCount += 1;
     }
 
-    void Controller::onBffServerUpdate(Ref<String> message) {
-        std::cout << "message from bff: " << message->AsCStr() << "" << std::endl;
+    void Controller::onBffServerStart()
+    {
+        bffServer->send(New<String>("gameservers/1.0/join"));
+    }
+
+    void Controller::onBffServerUpdate(Ref<String> message)
+    {
+        message = message->TrimEnd("\r\n");
+
+        Ref<List<String>> splitString = message->Split('|');
+
+        if (splitString->Size() != 2) return;
+
+        Ref<String> command = splitString->At(0);
+        if (command->Equals("gameserver/connect"))
+        {
+            auto addressBody = splitString->At(1);
+
+            Ref<StringBuilder> sb = New<StringBuilder>();
+            sb->Append(New<String>("ws://"));
+            sb->Append(addressBody);
+            Ref<String> fullAddress = sb->ToString();
+
+            gameServer = app->openWebsocket(fullAddress);
+            gameServer->onOpen(
+                    [&](){
+                        this->onGameServerStart();
+                    });
+            gameServer->onMessage(
+                    [&](Ref<String> message){
+                        this->onGameServerUpdate(message);
+                    });
+        }
+    }
+
+    void Controller::onGameServerStart()
+    {
+        std::cout << "Gameserver Start" << std::endl;
+    }
+
+    void Controller::onGameServerUpdate(Ref<String> message)
+    {
+        std::cout << "From Gameserver: " << message->AsCStr() << "" << std::endl;
     }
 }
