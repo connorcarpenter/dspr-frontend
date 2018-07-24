@@ -9,6 +9,7 @@
 
 #include "DsprShaderHandler.h"
 #include "MoveSprite.h"
+#include "TileManager.h"
 
 using namespace Sova;
 
@@ -37,6 +38,7 @@ namespace DsprFrontend
         Ref<Container> world = Null<Container>();
         Ref<Websocket> bffServer = Null<Websocket>();
         Ref<Websocket> gameServer = Null<Websocket>();
+        Ref<TileManager> tileManager = Null<TileManager>();
     };
 
     Controller::Controller() = default;
@@ -47,9 +49,9 @@ namespace DsprFrontend
             app = New<App>(1280, 720, New<String>("Demo"), New<DsprShaderHandler>());
 
             Ref<List<String>> resources = New<List<String>>();
-            resources->Add(New<String>("images/owl.png"));
-            resources->Add(New<String>("images/cat.png"));
-            resources->Add(New<String>("images/mouse.png"));
+            resources->Add(New<String>("images/tiles.png"));
+            resources->Add(New<String>("images/trees.png"));
+            resources->Add(New<String>("images/worker.png"));
 
             app->load(resources)
                     ->onFinish(
@@ -69,15 +71,13 @@ namespace DsprFrontend
         viewport = New<Viewport>(0, 0, app->width, app->height, camera);
         app->addViewport(viewport);
 
+        tileManager = New<TileManager>();
+        world->AddChild(tileManager);
+
         app->onUpdate(
            [&]() {
               onGameUpdate();
            });
-
-        for (int i = 0; i<1; i++) {
-            Ref<MoveSprite> newSprite = New<MoveSprite>(app);
-            world->AddChild(newSprite);
-        }
 
         Ref<HttpRequest> bffReq = app->makeHttpRequest(New<String>("GET"), New<String>("http://www.deuspora.com:3170/orchestrator/bff"));
         bffReq->onResponse(
@@ -163,6 +163,25 @@ namespace DsprFrontend
 
     void Controller::onGameServerUpdate(Ref<String> message)
     {
-        std::cout << "From Gameserver: " << message->AsCStr() << "" << std::endl;
+        message = message->TrimEnd("\r\n");
+
+        Ref<List<String>> splitString = message->Split('|');
+
+        if (splitString->Size() != 2) return;
+
+        Ref<String> command = splitString->At(0);
+        if (command->Equals("auth/1.0/gametoken"))
+        {
+            gameServer->send(New<String>("auth/1.0/gametoken|game1"));
+            return;
+        }
+        else if (command->Equals("grid/1.0/give")) {
+            Ref<List<String>> gridString = splitString->At(1)->Split(',');
+            tileManager->receiveGrid(gridString->At(0), gridString->At(1));
+        }
+        else if (command->Equals("tile/1.0/give")) {
+            Ref<List<String>> tileString = splitString->At(1)->Split(',');
+            tileManager->receiveTile(tileString->At(0), tileString->At(1), tileString->At(2));
+        }
     }
 }
