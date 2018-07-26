@@ -67,7 +67,8 @@ namespace DsprFrontend
     {
         // after loading is done
         world = New<Container>();
-        camera = New<Camera>(0, 0, app->width / 2, app->height / 2, world);
+        static const int pixelRatio = 5;
+        camera = New<Camera>(0, 0, app->width / pixelRatio, app->height / pixelRatio, world);
         viewport = New<Viewport>(0, 0, app->width, app->height, camera);
         app->addViewport(viewport);
 
@@ -163,25 +164,49 @@ namespace DsprFrontend
 
     void Controller::onGameServerUpdate(Ref<String> message)
     {
-        message = message->TrimEnd("\r\n");
+        //std::cout << "Gameserver Message: ";
+        //message->PrintChars();
+        //std::cout << std::endl;
+
+        message = message->TrimEnd("\r\n")->TrimStart("\n");
+
+//        std::cout << "gsu 1" << std::endl;
 
         Ref<List<String>> splitString = message->Split('|');
 
+//        std::cout << "gsu 2" << std::endl;
+
         if (splitString->Size() != 2) return;
 
+//        std::cout << "gsu 3" << std::endl;
+
         Ref<String> command = splitString->At(0);
+
+//        std::cout << "gsu 4." << std::endl;
+//        command->PrintChars();
+//        std::cout << std::endl;
+
         if (command->Equals("auth/1.0/gametoken"))
         {
+//            std::cout << "gsu 5" << std::endl;
             gameServer->send(New<String>("auth/1.0/gametoken|game1"));
+//            std::cout << "sent to Gameserver: auth/1.0/gametoken|game1" << std::endl;
             return;
         }
         else if (command->Equals("grid/1.0/give")) {
+//            std::cout << "splitting grid/give" << std::endl;
             Ref<List<String>> gridString = splitString->At(1)->Split(',');
+//            std::cout << "into receiveGrid()" << std::endl;
             tileManager->receiveGrid(gridString->At(0), gridString->At(1));
+            return;
         }
         else if (command->Equals("tile/1.0/give")) {
+//            std::cout << "splitting tile/give" << std::endl;
             Ref<List<String>> tileString = splitString->At(1)->Split(',');
+//            std::cout << "into receiveTile()" << std::endl;
             tileManager->receiveTile(tileString->At(0), tileString->At(1), tileString->At(2));
+            return;
         }
+        //std::cout << "gsu 6" << std::endl;
     }
 }

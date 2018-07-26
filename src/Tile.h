@@ -12,6 +12,6 @@ namespace DsprFrontend
     public:
         Tile(int frame);
 
-        int frame;
+        int frame = -1;
     };
 }

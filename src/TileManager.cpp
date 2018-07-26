@@ -39,6 +39,8 @@ namespace DsprFrontend
 
         this->tileArrayA = initializeTileArray(this->gridWidth, this->gridHeight);
         this->tileArrayB = initializeTileArray(this->gridWidth, this->gridHeight);
+
+        std::cout << "received Grid"<< std::endl;
     }
 
     void TileManager::receiveTile(Ref<Sova::String> x, Ref<Sova::String> y, Ref<Sova::String> frame)
@@ -64,7 +66,7 @@ namespace DsprFrontend
             this->tileArrayB[tileIndex] = new Tile(tileFrame);
         }
 
-        std::cout << "received tile: "<<tileX<<", "<<tileY<<", "<<tileFrame<< std::endl;
+        //std::cout << "received tile: "<<tileX<<", "<<tileY<<", "<<tileFrame<< std::endl;
     }
 
     Tile** TileManager::initializeTileArray(int width, int height)
@@ -130,21 +132,22 @@ namespace DsprFrontend
             int a = xoffset / -16;
             int b = yoffset / -8;
 
-            for (int j = 0; j < 13; j++)
+            for (int j = 0; j < 20; j++) // j should take into account grid height... right?
             {
-                for (int i = 0; i < 12; i += 1)
+                for (int i = 0; i < 18; i += 1) // j should take into account grid height... right?
                 {
                     int x = a + i;
                     int y = b + j;
 
-                    if (whichGrid(x,y) == -1)continue;
+                    if (whichGrid(x*2,y*2) == -1)continue;
 
-                    auto tile = this->tileArrayA[(y*10)+x];
+                    auto tile = this->tileArrayA[(y*this->gridWidth)+x];
                     if (tile == nullptr) return;
+                    if (tile->frame == -1) return;
 
                     drawTile(((x-1)*16)+xoffset, ((y-1)*8)+yoffset, tile->frame);
 
-                    tile = this->tileArrayB[(y*10)+x];
+                    tile = this->tileArrayB[(y*this->gridWidth)+x];
                     if (tile == nullptr) return;
 
                     drawTile(((x-1+0.5f)*16)+xoffset, ((y-1+0.5f)*8)+yoffset, tile->frame);
