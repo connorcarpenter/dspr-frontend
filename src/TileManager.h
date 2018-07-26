@@ -24,7 +24,7 @@ namespace DsprFrontend
         ~TileManager();
         void receiveGrid(Sova::Ref<Sova::String> width, Sova::Ref<Sova::String> height);
         void receiveTile(Sova::Ref<Sova::String> x, Sova::Ref<Sova::String> y, Sova::Ref<Sova::String> frame);
-        void Draw(int xoffset, int yoffset);
+        void Draw(Ref<Camera> camera, int xoffset, int yoffset);
 
     private:
 
@@ -48,6 +48,6 @@ namespace DsprFrontend
 
         int writeVertex(int index, float x, float y, float u, float v);
 
-        void drawTile(float xoffset, float yoffset, int frame);
+        void drawTile(Ref<Camera> camera, float xoffset, float yoffset, int frame);
     };
 }

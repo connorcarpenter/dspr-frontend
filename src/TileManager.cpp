@@ -7,6 +7,7 @@
 #include "TileManager.h"
 #include "Sova/Common/String.h"
 #include "Sova/Internal/OryolTexture.h"
+#include "Sova/Graphics/Internal/InternalCamera.h"
 
 using namespace Sova;
 
@@ -121,7 +122,7 @@ namespace DsprFrontend
         }
     }
 
-    void TileManager::Draw(int xoffset, int yoffset)
+    void TileManager::Draw(Ref<Camera> camera, int xoffset, int yoffset)
     {
         if (this->destroyed) return;
         if (!this->visible) return;
@@ -145,25 +146,26 @@ namespace DsprFrontend
                     if (tile == nullptr) return;
                     if (tile->frame == -1) return;
 
-                    drawTile(((x-1)*16)+xoffset, ((y-1)*8)+yoffset, tile->frame);
+                    drawTile(camera, ((x-1)*16)+xoffset, ((y-1)*8)+yoffset, tile->frame);
 
                     tile = this->tileArrayB[(y*this->gridWidth)+x];
                     if (tile == nullptr) return;
 
-                    drawTile(((x-1+0.5f)*16)+xoffset, ((y-1+0.5f)*8)+yoffset, tile->frame);
+                    drawTile(camera, ((x-1+0.5f)*16)+xoffset, ((y-1+0.5f)*8)+yoffset, tile->frame);
                 }
             }
         }
     }
 
-    void TileManager::drawTile(float xoffset, float yoffset, int frame)
+    void TileManager::drawTile(Ref<Camera> camera, float xoffset, float yoffset, int frame)
     {
-        OryolApp::getOryolApp()->drawState.FSTexture[0] = this->texture->textureId;
+        Oryol::DrawState drawState = camera->getInternalCamera()->getDrawState();
+        drawState.FSTexture[0] = this->texture->textureId;
         const void *data = this->updateVertices(xoffset, yoffset, this->texture->width, this->texture->height,
                                                 OryolApp::getOryolApp()->canvasWidth,
                                                 OryolApp::getOryolApp()->canvasHeight, frame);
-        Gfx::UpdateVertices(OryolApp::getOryolApp()->drawState.Mesh[0], data, OryolApp::numVertexesInQuad);
-        Gfx::ApplyDrawState(OryolApp::getOryolApp()->drawState);
+        Gfx::UpdateVertices(drawState.Mesh[0], data, OryolApp::numVertexesInQuad);
+        Gfx::ApplyDrawState(drawState);
 
         Gfx::Draw();
     }
