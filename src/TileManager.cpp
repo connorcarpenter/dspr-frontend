@@ -133,9 +133,9 @@ namespace DsprFrontend
             int a = xoffset / -16;
             int b = yoffset / -8;
 
-            for (int j = 0; j < 20; j++) // j should take into account grid height... right?
+            for (int j = 0; j < 18; j++) // j should take into account grid height... right?
             {
-                for (int i = 0; i < 18; i += 1) // j should take into account grid height... right?
+                for (int i = 0; i < 16; i += 1) // j should take into account grid height... right?
                 {
                     int x = a + i;
                     int y = b + j;
@@ -146,12 +146,12 @@ namespace DsprFrontend
                     if (tile == nullptr) return;
                     if (tile->frame == -1) return;
 
-                    drawTile(camera, ((x-1)*16)+xoffset, ((y-1)*8)+yoffset, tile->frame);
+                    drawTile(camera, ((x-1)*20)+xoffset, ((y-1)*10)+yoffset, tile->frame);
 
                     tile = this->tileArrayB[(y*this->gridWidth)+x];
                     if (tile == nullptr) return;
 
-                    drawTile(camera, ((x-1+0.5f)*16)+xoffset, ((y-1+0.5f)*8)+yoffset, tile->frame);
+                    drawTile(camera, ((x-1+0.5f)*20)+xoffset, ((y-1+0.5f)*10)+yoffset, tile->frame);
                 }
             }
         }
@@ -162,31 +162,31 @@ namespace DsprFrontend
         Oryol::DrawState drawState = camera->getInternalCamera()->getDrawState();
         drawState.FSTexture[0] = this->texture->textureId;
         const void *data = this->updateVertices(xoffset, yoffset, this->texture->width, this->texture->height,
-                                                OryolApp::getOryolApp()->canvasWidth,
-                                                OryolApp::getOryolApp()->canvasHeight, frame);
+                                                camera->getInternalCamera()->getWidth(),
+                                                camera->getInternalCamera()->getHeight(), 20, 12, 1, frame);
         Gfx::UpdateVertices(drawState.Mesh[0], data, OryolApp::numVertexesInQuad);
         Gfx::ApplyDrawState(drawState);
 
         Gfx::Draw();
     }
 
-    const void * TileManager::updateVertices(float x, float y, int width, int height, int canvasWidth, int canvasHeight,
-                                             int frame) {
+    const void * TileManager::updateVertices(float x, float y, int texWidth, int texHeight, int canWidth, int canHeight,
+                                             int frameWidth, int frameHeight, int padding, int frameIndex) {
 
         int vIndex = 0;
 
         //0 is 0, 1 is canvasWidth, canvasHeight
-        float x0 = x / (float) canvasWidth;
-        float y0 = y / (float) canvasHeight;
-        float x1 = (14 + x) / (float) canvasWidth;
-        float y1 = (8 + y) / (float) canvasHeight;
+        float x0 = x / (float) canWidth;
+        float y0 = y / (float) canHeight;
+        float x1 = (frameWidth - (padding*2) + x) / (float) canWidth;
+        float y1 = (frameHeight - (padding*2) + y) / (float) canHeight;
 
         //0 is 0, 1 is texWidth/texHeight
         //This is the texture
-        float u0 = (float) ((frame * 16) + 1) / (float) width;
-        float v0 = (float) 1 / (float) height;
-        float u1 = (float) (((frame+1) * 16) - 1) / (float) width;
-        float v1 = (float) (height - 1) / (float) height;
+        float u0 = (float) ((frameIndex * frameWidth) + padding) / (float) texWidth;
+        float v0 = (float) padding / (float) texHeight;
+        float u1 = (float) (((frameIndex+1) * frameWidth) - padding) / (float) texWidth;
+        float v1 = (float) (frameHeight - padding) / (float) texHeight;
 
         vIndex = this->writeVertex(vIndex, x0, y0, u0, v0);
         vIndex = this->writeVertex(vIndex, x1, y0, u1, v0);

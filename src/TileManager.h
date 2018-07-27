@@ -43,8 +43,8 @@ namespace DsprFrontend
 
         Sova::OryolTexture* texture = nullptr;
 
-        const void *updateVertices(float x, float y, int width, int height, int canvasWidth, int canvasHeight,
-                                   int frame);
+        const void *updateVertices(float x, float y, int texWidth, int texHeight, int canWidth, int canHeight, int frameWidth,
+                                           int frameHeight, int padding, int frameIndex);
 
         int writeVertex(int index, float x, float y, float u, float v);
 

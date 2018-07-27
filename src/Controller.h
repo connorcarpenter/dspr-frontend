@@ -5,11 +5,14 @@
 //
 
 #include <iostream>
+
+#include <Sova/References/Refable.h>
+#include <Sova/References/Ref.h>
 #include "Sova/SovaMain.h"
 
 #include "DsprShaderHandler.h"
-#include "MoveSprite.h"
-#include "TileManager.h"
+#include "Global.h"
+#include "Unit.h"
 
 using namespace Sova;
 
@@ -32,13 +35,7 @@ namespace DsprFrontend
         void onGameServerStart();
         void onGameServerUpdate(Ref<String> message);
 
-        Ref<App> app = Null<App>();
-        Ref<Viewport> viewport = Null<Viewport>();
-        Ref<Camera> camera = Null<Camera>();
-        Ref<Container> world = Null<Container>();
-        Ref<Websocket> bffServer = Null<Websocket>();
-        Ref<Websocket> gameServer = Null<Websocket>();
-        Ref<TileManager> tileManager = Null<TileManager>();
+        Ref<Global> g = Null<Global>();
     };
 
     Controller::Controller() = default;
@@ -46,52 +43,77 @@ namespace DsprFrontend
     void Controller::onGameStart()
     {
         {
-            app = New<App>(1280, 720, New<String>("Demo"), New<DsprShaderHandler>());
+            g = New<Global>();
+            g->app = New<App>(1280, 720, New<String>("Demo"), New<DsprShaderHandler>());
+            g->app->setGlobal(g.obj);
 
             Ref<List<String>> resources = New<List<String>>();
+            resources->Add(New<String>("images/cursor.png"));
+            resources->Add(New<String>("images/unitHover.png"));
+            resources->Add(New<String>("images/unitSelection.png"));
+            resources->Add(New<String>("images/moveMarker.png"));
             resources->Add(New<String>("images/tiles.png"));
             resources->Add(New<String>("images/trees.png"));
             resources->Add(New<String>("images/worker.png"));
 
-            app->load(resources)
+            g->app->load(resources)
                     ->onFinish(
                             [&]() {
                                 onLoadFinish();
                             });
         }
 
-        app->start(); // code continues processing within this function, which is why it should be outside the above scope
+        g->app->start(); // code continues processing within this function, which is why it should be outside the above scope
     }
 
     void Controller::onLoadFinish()
     {
         // after loading is done
-        world = New<Container>();
+        g->world = New<Container>();
         static const int pixelRatio = 5;
-        camera = New<Camera>(0, 0, app->width / pixelRatio, app->height / pixelRatio, world);
-        viewport = New<Viewport>(0, 0, app->width, app->height, camera);
-        app->addViewport(viewport);
+        g->camera = New<Camera>(0, 0, g->app->width / pixelRatio, g->app->height / pixelRatio, g->world);
+        g->viewport = New<Viewport>(0, 0, g->app->width, g->app->height, g->camera);
+        g->app->addViewport(g->viewport);
 
-        tileManager = New<TileManager>();
-        world->AddChild(tileManager);
+        g->tileManager = New<TileManager>();
+        g->world->AddChild(g->tileManager);
 
-        app->onUpdate(
-           [&]() {
-              onGameUpdate();
-           });
+        g->worker = New<Unit>();
+        g->worker->position->set(40, 40);
+        g->world->AddChild(g->worker);
 
-        Ref<HttpRequest> bffReq = app->makeHttpRequest(New<String>("GET"), New<String>("http://www.deuspora.com:3170/orchestrator/bff"));
+        ///UI stuff
+        g->unitHoverCircle = New<AnimatedSprite>(New<String>("images/unitHover.png"), 16, 12, 1);
+        g->unitHoverCircle->imageSpeed = 0.1f;
+        g->unitHoverCircle->anchor->set(8, 6);
+
+        g->unitSelectCircle = New<Sprite>(New<String>("images/unitSelection.png"));
+        g->unitSelectCircle->anchor->set(8, 5);
+
+        g->moveMarker = New<AnimatedSprite>(New<String>("images/moveMarker.png"), 11, 9, 1);
+        g->moveMarker->imageSpeed = 0.05f;
+
+        g->cursor = New<Cursor>();
+        g->world->AddChild(g->cursor);
+        /////////////////////////
+
+        g->app->onUpdate(
+                [&]() {
+                    onGameUpdate();
+                });
+
+        Ref<HttpRequest> bffReq = g->app->makeHttpRequest(New<String>("GET"), New<String>("http://www.deuspora.com:3170/orchestrator/bff"));
         bffReq->onResponse(
                 [&](Ref<HttpResponse> response)
                 {
                     if (response->status == 200 && response->responseText->Length() > 0)
                     {
-                        bffServer = app->openWebsocket(response->responseText);
-                        bffServer->onOpen(
+                        g->bffServer = g->app->openWebsocket(response->responseText);
+                        g->bffServer->onOpen(
                                 [&](){
                                     this->onBffServerStart();
                                 });
-                        bffServer->onMessage(
+                        g->bffServer->onMessage(
                                 [&](Ref<String> message){
                                     this->onBffServerUpdate(message);
                                 });
@@ -105,13 +127,13 @@ namespace DsprFrontend
     void Controller::onGameUpdate()
     {
         //move camera
-        if (app->keyPressed(Key::Left)) camera->position->x -= 2;
-        if (app->keyPressed(Key::Right)) camera->position->x += 2;
-        if (app->keyPressed(Key::Up)) camera->position->y -= 2;
-        if (app->keyPressed(Key::Down)) camera->position->y += 2;
+        if (g->app->keyPressed(Key::Left)) g->camera->position->x -= 2;
+        if (g->app->keyPressed(Key::Right)) g->camera->position->x += 2;
+        if (g->app->keyPressed(Key::Up)) g->camera->position->y -= 2;
+        if (g->app->keyPressed(Key::Down)) g->camera->position->y += 2;
 
         // this is the game loop
-        world->UpdateChildren();
+        g->world->UpdateChildren();
 
         //when enough time has passed, do this
         if (gcCount > 1000) {
@@ -124,7 +146,7 @@ namespace DsprFrontend
 
     void Controller::onBffServerStart()
     {
-        bffServer->send(New<String>("gameservers/1.0/join"));
+        g->bffServer->send(New<String>("gameservers/1.0/join"));
     }
 
     void Controller::onBffServerUpdate(Ref<String> message)
@@ -145,12 +167,12 @@ namespace DsprFrontend
             sb->Append(addressBody);
             Ref<String> fullAddress = sb->ToString();
 
-            gameServer = app->openWebsocket(fullAddress);
-            gameServer->onOpen(
+            g->gameServer = g->app->openWebsocket(fullAddress);
+            g->gameServer->onOpen(
                     [&](){
                         this->onGameServerStart();
                     });
-            gameServer->onMessage(
+            g->gameServer->onMessage(
                     [&](Ref<String> message){
                         this->onGameServerUpdate(message);
                     });
@@ -164,49 +186,28 @@ namespace DsprFrontend
 
     void Controller::onGameServerUpdate(Ref<String> message)
     {
-        //std::cout << "Gameserver Message: ";
-        //message->PrintChars();
-        //std::cout << std::endl;
-
         message = message->TrimEnd("\r\n")->TrimStart("\n");
-
-//        std::cout << "gsu 1" << std::endl;
 
         Ref<List<String>> splitString = message->Split('|');
 
-//        std::cout << "gsu 2" << std::endl;
-
         if (splitString->Size() != 2) return;
-
-//        std::cout << "gsu 3" << std::endl;
 
         Ref<String> command = splitString->At(0);
 
-//        std::cout << "gsu 4." << std::endl;
-//        command->PrintChars();
-//        std::cout << std::endl;
-
         if (command->Equals("auth/1.0/gametoken"))
         {
-//            std::cout << "gsu 5" << std::endl;
-            gameServer->send(New<String>("auth/1.0/gametoken|game1"));
-//            std::cout << "sent to Gameserver: auth/1.0/gametoken|game1" << std::endl;
+            g->gameServer->send(New<String>("auth/1.0/gametoken|game1"));
             return;
         }
         else if (command->Equals("grid/1.0/give")) {
-//            std::cout << "splitting grid/give" << std::endl;
             Ref<List<String>> gridString = splitString->At(1)->Split(',');
-//            std::cout << "into receiveGrid()" << std::endl;
-            tileManager->receiveGrid(gridString->At(0), gridString->At(1));
+            g->tileManager->receiveGrid(gridString->At(0), gridString->At(1));
             return;
         }
         else if (command->Equals("tile/1.0/give")) {
-//            std::cout << "splitting tile/give" << std::endl;
             Ref<List<String>> tileString = splitString->At(1)->Split(',');
-//            std::cout << "into receiveTile()" << std::endl;
-            tileManager->receiveTile(tileString->At(0), tileString->At(1), tileString->At(2));
+            g->tileManager->receiveTile(tileString->At(0), tileString->At(1), tileString->At(2));
             return;
         }
-        //std::cout << "gsu 6" << std::endl;
     }
 }
