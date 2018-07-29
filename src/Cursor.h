@@ -18,5 +18,12 @@ namespace DsprFrontend
     private:
         void step();
 
+        bool leftButtonDragging = false;
+
+        Ref<Point> leftButtonDragPoint = Null<Point>();
+
+        Ref<Graphic> selectionBoxGraphic = Null<Graphic>();
+
+        void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
     };
 }

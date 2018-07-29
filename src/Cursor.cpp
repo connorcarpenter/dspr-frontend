@@ -27,6 +27,10 @@ namespace DsprFrontend
         this->OnUpdate([&](){ step(); });
         this->imageSpeed = 0;
         this->changeState(1);
+        this->leftButtonDragPoint = New<Point>(0,0);
+        this->selectionBoxGraphic = New<Graphic>();
+
+
 
 #if ORYOL_LINUX
         glfwSetInputMode(Oryol::_priv::glfwDisplayMgr::getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -41,6 +45,24 @@ namespace DsprFrontend
         auto g = (Global*) OryolApp::getSovaApp()->getGlobal();
         this->position->x = (OryolApp::getOryolApp()->getMouseX() / 5) + g->camera->position->x;
         this->position->y = (OryolApp::getOryolApp()->getMouseY() / 5) + g->camera->position->y;
+
+        if (this->leftButtonDragging)
+        {
+            if (!OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
+            {
+                this->leftButtonDragging = false;
+                //selection event
+            }
+        }
+        else
+        {
+            if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
+            {
+                this->leftButtonDragging = true;
+                this->leftButtonDragPoint->set(OryolApp::getOryolApp()->getMouseX(), OryolApp::getOryolApp()->getMouseY());
+            }
+        }
+
     }
 
     void Cursor::changeState(int index)
@@ -83,5 +105,23 @@ namespace DsprFrontend
         {
             return New<Point>(x, y+Sova::Math::Sign(mody));
         }
+    }
+
+    void Cursor::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
+    {
+        if (this->leftButtonDragging)
+        {
+            this->selectionBoxGraphic->clear();
+            this->selectionBoxGraphic->lineStyle(1, Color::Green, 1.0f);
+            this->selectionBoxGraphic->beginFill(Color::Green, 0.5f);
+            this->selectionBoxGraphic->drawRect(this->leftButtonDragPoint->x,
+                                                this->leftButtonDragPoint->y,
+                                                OryolApp::getOryolApp()->getMouseX(),
+                                                OryolApp::getOryolApp()->getMouseY());
+
+            this->selectionBoxGraphic->drawSelf(camera, xoffset, yoffset);
+        }
+
+        AnimatedSprite::drawSelf(camera, xoffset, yoffset);
     }
 }
