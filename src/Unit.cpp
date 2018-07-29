@@ -28,27 +28,29 @@ namespace DsprFrontend
 
     void Unit::step() {
         auto g = (Global*) OryolApp::getSovaApp()->getGlobal();
-        if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
-                             this->position->x - 6, this->position->y - 10,
-                             this->position->x + 4, this->position->y + 1))
+        bool cursorIsHovering = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                              this->position->x - 6, this->position->y - 10,
+                                              this->position->x + 4, this->position->y + 1);
+        if (cursorIsHovering != this->hovering)
         {
-            g->cursor->changeState(0);
-            this->hovering = true;
+            g->cursor->changeState(cursorIsHovering ? 0 : 1);
+            this->hovering = cursorIsHovering;
+        }
 
+        if (this->hovering)
+        {
             if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
                 this->selected = true;
-        }
-        else
-        {
-            g->cursor->changeState(1);
-            this->hovering = false;
-
-            if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
-                this->selected = false;
         }
 
         if (this->selected)
         {
+            if (!this->hovering)
+            {
+                if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
+                    this->selected = false;
+            }
+
             if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Right))
             {
                 this->moveTo = g->cursor->getTilePosition();
@@ -63,6 +65,7 @@ namespace DsprFrontend
             {
                 walkAmount = 0;
                 this->tilePosition->set(this->nextTilePosition->x, this->nextTilePosition->y);
+                this->SetDepth(this->tilePosition->y * -1);
             }
         }
         else
@@ -125,6 +128,6 @@ namespace DsprFrontend
             g->unitHoverCircle->drawSelf(camera, xoffset, yoffset);
         }
 
-        AnimatedSprite::drawSelf(camera, xoffset + (this->scale->x == -1 ? (this->frameWidth - 3) : 0), yoffset);
+        AnimatedSprite::drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);
     }
 }

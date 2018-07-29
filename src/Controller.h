@@ -77,6 +77,7 @@ namespace DsprFrontend
         g->app->addViewport(g->viewport);
 
         g->tileManager = New<TileManager>();
+        g->tileManager->SetDepth(9999);
         g->world->AddChild(g->tileManager);
 
         g->worker1 = New<Unit>();
@@ -103,6 +104,7 @@ namespace DsprFrontend
         g->moveMarker->anchor->set(5, 4);
 
         g->cursor = New<Cursor>();
+        g->cursor->SetDepth(-9999);
         g->world->AddChild(g->cursor);
         /////////////////////////
 
