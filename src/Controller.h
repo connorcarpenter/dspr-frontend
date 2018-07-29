@@ -54,7 +54,8 @@ namespace DsprFrontend
             resources->Add(New<String>("images/moveMarker.png"));
             resources->Add(New<String>("images/tiles.png"));
             resources->Add(New<String>("images/trees.png"));
-            resources->Add(New<String>("images/worker.png"));
+            resources->Add(New<String>("images/workerDown.png"));
+            resources->Add(New<String>("images/workerUp.png"));
 
             g->app->load(resources)
                     ->onFinish(
@@ -78,9 +79,16 @@ namespace DsprFrontend
         g->tileManager = New<TileManager>();
         g->world->AddChild(g->tileManager);
 
-        g->worker = New<Unit>();
-        g->worker->position->set(40, 40);
-        g->world->AddChild(g->worker);
+        g->worker1 = New<Unit>();
+        g->worker1->tilePosition->set(6, 6);
+        g->worker1->moveTo->set(6, 6);
+        g->worker1->nextTilePosition->set(6, 6);
+        g->world->AddChild(g->worker1);
+        g->worker2 = New<Unit>();
+        g->worker2->tilePosition->set(2, 8);
+        g->worker2->moveTo->set(2, 8);
+        g->worker2->nextTilePosition->set(2, 8);
+        g->world->AddChild(g->worker2);
 
         ///UI stuff
         g->unitHoverCircle = New<AnimatedSprite>(New<String>("images/unitHover.png"), 16, 12, 1);
@@ -91,7 +99,8 @@ namespace DsprFrontend
         g->unitSelectCircle->anchor->set(8, 5);
 
         g->moveMarker = New<AnimatedSprite>(New<String>("images/moveMarker.png"), 11, 9, 1);
-        g->moveMarker->imageSpeed = 0.05f;
+        g->moveMarker->imageSpeed = 0.1;
+        g->moveMarker->anchor->set(5, 4);
 
         g->cursor = New<Cursor>();
         g->world->AddChild(g->cursor);

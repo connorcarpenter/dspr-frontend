@@ -26,12 +26,17 @@ namespace DsprFrontend
         void receiveTile(Sova::Ref<Sova::String> x, Sova::Ref<Sova::String> y, Sova::Ref<Sova::String> frame);
         void Draw(Ref<Camera> camera, int xoffset, int yoffset);
 
+        const int tileWidth = 20;
+        const int tileHeight = 10;
+
     private:
 
         Tile **initializeTileArray(int width, int height);
         void destroyTileArray(Tile **tileArray, int width, int height);
         int whichGrid(int x, int y);
         int getIndex(int gridIndex, int x, int y);
+
+
 
         int gridWidth = 0;
         int gridHeight = 0;

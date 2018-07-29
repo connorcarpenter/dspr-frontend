@@ -3,9 +3,10 @@
 //
 
 #include <Sova/Internal/OryolApp.h>
+#include "Global.h"
+#include "Sova/Math/Math.h"
+
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
-#include "Cursor.h"
-#include "Sova/Common/String.h"
 
 #if ORYOL_EMSCRIPTEN
 #include <emscripten/html5.h>
@@ -35,16 +36,15 @@ namespace DsprFrontend
 #endif
     }
 
-    void Cursor::step() {
-
-        this->position->x = (OryolApp::getOryolApp()->getMouseX() / 5);
-        this->position->y = (OryolApp::getOryolApp()->getMouseY() / 5);
-
-        //this->position->x = 40;
-        //this->position->y = 60;
+    void Cursor::step()
+    {
+        auto g = (Global*) OryolApp::getSovaApp()->getGlobal();
+        this->position->x = (OryolApp::getOryolApp()->getMouseX() / 5) + g->camera->position->x;
+        this->position->y = (OryolApp::getOryolApp()->getMouseY() / 5) + g->camera->position->y;
     }
 
-    void Cursor::changeState(int index) {
+    void Cursor::changeState(int index)
+    {
         this->imageIndex = index;
         if (this->imageIndex == 1)
         {
@@ -55,6 +55,33 @@ namespace DsprFrontend
         {
             this->anchor->x = 6;
             this->anchor->y = 5;
+        }
+    }
+
+    Ref<Point> Cursor::getTilePosition()
+    {
+        auto g = (Global*) OryolApp::getSovaApp()->getGlobal();
+        int halfTileW = (g->tileManager->tileWidth/2);
+        int halfTileH = (g->tileManager->tileHeight/2);
+        int quarterTileW = (g->tileManager->tileWidth/4);
+        int quarterTileH = (g->tileManager->tileHeight/4);
+
+
+        int posx = this->position->x - quarterTileW;
+        int posy = this->position->y - quarterTileH;
+
+        int x = (posx) / halfTileW;
+        int y = (posy) / halfTileH;
+        if ((x % 2 == 0 && y % 2 == 0) || ((x+1) % 2 == 0 && (y+1) % 2 == 0)) return New<Point>(x, y);
+        int modx = (posx % halfTileW) - quarterTileW;
+        int mody = ((posy % halfTileH) - quarterTileH)*2;
+        if (Sova::Math::Abs(modx) > Sova::Math::Abs(mody))
+        {
+            return New<Point>(x+Sova::Math::Sign(modx), y);
+        }
+        else
+        {
+            return New<Point>(x, y+Sova::Math::Sign(mody));
         }
     }
 }

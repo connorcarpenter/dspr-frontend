@@ -11,13 +11,18 @@ namespace DsprFrontend
 {
 
     Unit::Unit() : AnimatedSprite() {
-        auto str = New<Sova::String>("images/worker.png");
-        this->setTexture(str);
+        this->spriteDownName = New<Sova::String>("images/workerDown.png");
+        this->spriteUpName = New<Sova::String>("images/workerUp.png");
+        this->setTexture(spriteDownName);
+
+        this->moveTo = New<Point>();
+        this->tilePosition = New<Point>();
+        this->nextTilePosition = New<Point>();
         this->frameWidth = 15;
         this->frameHeight = 20;
         this->padding = 1;
-        this->anchor->x = 7;
-        this->anchor->y = 18;
+        this->anchor->set(7, 18);
+
         this->OnUpdate([&](){ step(); });
     }
 
@@ -41,6 +46,61 @@ namespace DsprFrontend
             if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
                 this->selected = false;
         }
+
+        if (this->selected)
+        {
+            if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Right))
+            {
+                this->moveTo = g->cursor->getTilePosition();
+            }
+        }
+
+        if (!this->tilePosition->Equals(nextTilePosition))
+        {
+            this->imageSpeed = 0.1f;
+            this->walkAmount += this->walkSpeed;
+            if (this->walkAmount >= 100)
+            {
+                walkAmount = 0;
+                this->tilePosition->set(this->nextTilePosition->x, this->nextTilePosition->y);
+            }
+        }
+        else
+        {
+            this->imageSpeed = 0;
+            this->imageIndex = 0;
+        }
+
+        if (this->walkAmount == 0 && !this->tilePosition->Equals(this->moveTo))
+        {
+            int difx = Math::SignOrZero(this->moveTo->x - this->tilePosition->x);
+            int dify = Math::SignOrZero(this->moveTo->y - this->tilePosition->y);
+            if (difx == 0 || dify == 0)
+            {
+                difx *= 2; dify *= 2;
+                walkSpeed = 6;
+            }
+            else
+            {
+                walkSpeed = 10;
+            }
+            if (difx != 0)
+            {
+                this->scale->x = Math::Sign(difx);
+            }
+            if (dify >= 0 && !this->textureName->Equals(this->spriteDownName))
+            {
+                this->setTexture(this->spriteDownName);
+            }
+            if (dify < 0 && !this->textureName->Equals(this->spriteUpName))
+            {
+                this->setTexture(this->spriteUpName);
+            }
+            this->nextTilePosition->set(this->tilePosition->x + difx, this->tilePosition->y + dify);
+        }
+
+        this->position->x = (int) (((Math::Lerp(this->tilePosition->x, this->nextTilePosition->x, walkAmount)/2) + 0.5f) * g->tileManager->tileWidth);
+        this->position->y = (int) (((Math::Lerp(this->tilePosition->y, this->nextTilePosition->y, walkAmount)/2) + 0.5f) * g->tileManager->tileHeight);
     }
 
     void Unit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset) {
@@ -49,6 +109,14 @@ namespace DsprFrontend
         if (selected) {
             g->unitSelectCircle->position->set(this->position->x, this->position->y);
             g->unitSelectCircle->drawSelf(camera, xoffset, yoffset);
+
+            if (!this->tilePosition->Equals(this->moveTo)){
+                g->moveMarker->Update();
+                int x = (int) ((((float) this->moveTo->x / 2) + 0.5f) * g->tileManager->tileWidth);
+                int y = (int) ((((float) this->moveTo->y / 2) + 0.5f) * g->tileManager->tileHeight);
+                g->moveMarker->position->set(x, y);
+                g->moveMarker->drawSelf(camera, xoffset, yoffset);
+            }
         }
 
         if (hovering) {
@@ -57,6 +125,6 @@ namespace DsprFrontend
             g->unitHoverCircle->drawSelf(camera, xoffset, yoffset);
         }
 
-        AnimatedSprite::drawSelf(camera, xoffset, yoffset);
+        AnimatedSprite::drawSelf(camera, xoffset + (this->scale->x == -1 ? (this->frameWidth - 3) : 0), yoffset);
     }
 }

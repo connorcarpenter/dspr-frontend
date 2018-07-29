@@ -13,6 +13,8 @@ namespace DsprFrontend
 
         void changeState(int index);
 
+        Ref<Point> getTilePosition();
+
     private:
         void step();
 

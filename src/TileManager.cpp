@@ -130,8 +130,8 @@ namespace DsprFrontend
         const auto resState = Gfx::QueryResourceInfo(this->texture->textureId).State;
         if (resState == ResourceState::Valid)
         {
-            int a = xoffset / -16;
-            int b = yoffset / -8;
+            int a = xoffset / -tileWidth;
+            int b = yoffset / -tileHeight;
 
             for (int j = 0; j < 18; j++) // j should take into account grid height... right?
             {
@@ -146,12 +146,12 @@ namespace DsprFrontend
                     if (tile == nullptr) return;
                     if (tile->frame == -1) return;
 
-                    drawTile(camera, ((x-1)*20)+xoffset, ((y-1)*10)+yoffset, tile->frame);
+                    drawTile(camera, ((x-1)*tileWidth)+xoffset, ((y-1)*tileHeight)+yoffset, tile->frame);
 
                     tile = this->tileArrayB[(y*this->gridWidth)+x];
                     if (tile == nullptr) return;
 
-                    drawTile(camera, ((x-1+0.5f)*20)+xoffset, ((y-1+0.5f)*10)+yoffset, tile->frame);
+                    drawTile(camera, ((x-1+0.5f)*tileWidth)+xoffset, ((y-1+0.5f)*tileHeight)+yoffset, tile->frame);
                 }
             }
         }
@@ -163,7 +163,7 @@ namespace DsprFrontend
         drawState.FSTexture[0] = this->texture->textureId;
         const void *data = this->updateVertices(xoffset, yoffset, this->texture->width, this->texture->height,
                                                 camera->getInternalCamera()->getWidth(),
-                                                camera->getInternalCamera()->getHeight(), 20, 12, 1, frame);
+                                                camera->getInternalCamera()->getHeight(), tileWidth, tileHeight+2, 1, frame);
         Gfx::UpdateVertices(drawState.Mesh[0], data, OryolApp::numVertexesInQuad);
         Gfx::ApplyDrawState(drawState);
 
