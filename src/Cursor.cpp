@@ -30,8 +30,8 @@ namespace DsprFrontend
         this->changeState(1);
         this->leftButtonDragPoint = New<Point>(0,0);
         this->selectionBox = New<Sova::Rectangle>(0,0);
-        this->selectionBox->setLineStyle(1, Color::Green, 1.0f);
-        this->selectionBox->setFillStyle(Color::Green, 0.25f);
+        this->selectionBox->setLineStyle(1, Color::Green, 0.6f);
+        this->selectionBox->setFillStyle(Color::Green, 0.2f);
 
 
 
