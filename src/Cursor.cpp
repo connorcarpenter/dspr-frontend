@@ -5,6 +5,7 @@
 #include <Sova/Internal/InternalApp.h>
 #include "Global.h"
 #include "Sova/Math/Math.h"
+#include "Sova/Graphics/Color.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 
@@ -28,7 +29,9 @@ namespace DsprFrontend
         this->imageSpeed = 0;
         this->changeState(1);
         this->leftButtonDragPoint = New<Point>(0,0);
-        this->selectionBoxGraphic = New<Graphic>();
+        this->selectionBox = New<Sova::Rectangle>(0,0);
+        this->selectionBox->setLineStyle(1, Color::Green, 1.0f);
+        this->selectionBox->setFillStyle(Color::Green, 0.25f);
 
 
 
@@ -59,7 +62,7 @@ namespace DsprFrontend
             if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left))
             {
                 this->leftButtonDragging = true;
-                this->leftButtonDragPoint->set(InternalApp::getInternalApp()->getMouseX(), InternalApp::getInternalApp()->getMouseY());
+                this->leftButtonDragPoint->set(InternalApp::getInternalApp()->getMouseX()/5, InternalApp::getInternalApp()->getMouseY()/5);
             }
         }
 
@@ -111,17 +114,12 @@ namespace DsprFrontend
     {
         if (this->leftButtonDragging)
         {
-            /*
-            this->selectionBoxGraphic->clear();
-            this->selectionBoxGraphic->lineStyle(1, Color::Green, 1.0f);
-            this->selectionBoxGraphic->beginFill(Color::Green, 0.5f);
-            this->selectionBoxGraphic->drawRect(this->leftButtonDragPoint->x,
-                                                this->leftButtonDragPoint->y,
-                                                InternalApp::getInternalApp()->getMouseX(),
-                                                InternalApp::getInternalApp()->getMouseY());
-
-            this->selectionBoxGraphic->drawSelf(camera, xoffset, yoffset);
-             */
+            this->selectionBox->position->set(this->leftButtonDragPoint->x,
+                                              this->leftButtonDragPoint->y);
+            this->selectionBox->position->set(this->leftButtonDragPoint->x, this->leftButtonDragPoint->y);
+            this->selectionBox->size->set((InternalApp::getMouseX()/5) - this->leftButtonDragPoint->x,
+                                          (InternalApp::getMouseY()/5) - this->leftButtonDragPoint->y);
+            this->selectionBox->drawSelf(camera, xoffset, yoffset);
         }
 
         AnimatedSprite::drawSelf(camera, xoffset, yoffset);

@@ -3,7 +3,7 @@
 //
 
 #include <Sova/Graphics/AnimatedSprite.h>
-#include <Sova/Graphics/Graphic.h>
+#include <Sova/Graphics/Rectangle.h>
 
 namespace DsprFrontend
 {
@@ -23,7 +23,7 @@ namespace DsprFrontend
 
         Ref<Point> leftButtonDragPoint = Null<Point>();
 
-        Ref<Graphic> selectionBoxGraphic = Null<Graphic>();
+        Ref<Rectangle> selectionBox = Null<Rectangle>();
 
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
     };

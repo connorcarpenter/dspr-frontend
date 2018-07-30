@@ -18,5 +18,6 @@ namespace DsprFrontend
         SovaTypeDecl(DsprShaderHandler, ShaderHandler);
         virtual Oryol::Id getNormalShader();
         virtual Oryol::Id getCanvasShader();
+        virtual Oryol::Id getShapeShader();
     };
 }

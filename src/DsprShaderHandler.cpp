@@ -18,4 +18,8 @@ namespace DsprFrontend
     {
         return Gfx::CreateResource(CanvasShader::Setup());
     }
+    Oryol::Id DsprShaderHandler::getShapeShader()
+    {
+        return Gfx::CreateResource(ShapeShader::Setup());
+    }
 }
