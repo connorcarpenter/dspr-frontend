@@ -2,7 +2,7 @@
 // Created by connor on 7/26/18.
 //
 
-#include <Sova/Internal/OryolApp.h>
+#include <Sova/Internal/InternalApp.h>
 #include "Global.h"
 #include "Sova/Math/Math.h"
 
@@ -42,13 +42,13 @@ namespace DsprFrontend
 
     void Cursor::step()
     {
-        auto g = (Global*) OryolApp::getSovaApp()->getGlobal();
-        this->position->x = (OryolApp::getOryolApp()->getMouseX() / 5) + g->camera->position->x;
-        this->position->y = (OryolApp::getOryolApp()->getMouseY() / 5) + g->camera->position->y;
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        this->position->x = (InternalApp::getInternalApp()->getMouseX() / 5) + g->camera->position->x;
+        this->position->y = (InternalApp::getInternalApp()->getMouseY() / 5) + g->camera->position->y;
 
         if (this->leftButtonDragging)
         {
-            if (!OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
+            if (!InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left))
             {
                 this->leftButtonDragging = false;
                 //selection event
@@ -56,10 +56,10 @@ namespace DsprFrontend
         }
         else
         {
-            if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
+            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left))
             {
                 this->leftButtonDragging = true;
-                this->leftButtonDragPoint->set(OryolApp::getOryolApp()->getMouseX(), OryolApp::getOryolApp()->getMouseY());
+                this->leftButtonDragPoint->set(InternalApp::getInternalApp()->getMouseX(), InternalApp::getInternalApp()->getMouseY());
             }
         }
 
@@ -82,7 +82,7 @@ namespace DsprFrontend
 
     Ref<Point> Cursor::getTilePosition()
     {
-        auto g = (Global*) OryolApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         int halfTileW = (g->tileManager->tileWidth/2);
         int halfTileH = (g->tileManager->tileHeight/2);
         int quarterTileW = (g->tileManager->tileWidth/4);
@@ -111,15 +111,17 @@ namespace DsprFrontend
     {
         if (this->leftButtonDragging)
         {
+            /*
             this->selectionBoxGraphic->clear();
             this->selectionBoxGraphic->lineStyle(1, Color::Green, 1.0f);
             this->selectionBoxGraphic->beginFill(Color::Green, 0.5f);
             this->selectionBoxGraphic->drawRect(this->leftButtonDragPoint->x,
                                                 this->leftButtonDragPoint->y,
-                                                OryolApp::getOryolApp()->getMouseX(),
-                                                OryolApp::getOryolApp()->getMouseY());
+                                                InternalApp::getInternalApp()->getMouseX(),
+                                                InternalApp::getInternalApp()->getMouseY());
 
             this->selectionBoxGraphic->drawSelf(camera, xoffset, yoffset);
+             */
         }
 
         AnimatedSprite::drawSelf(camera, xoffset, yoffset);

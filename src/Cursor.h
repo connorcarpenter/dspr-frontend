@@ -3,6 +3,7 @@
 //
 
 #include <Sova/Graphics/AnimatedSprite.h>
+#include <Sova/Graphics/Graphic.h>
 
 namespace DsprFrontend
 {

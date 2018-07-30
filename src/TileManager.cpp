@@ -2,11 +2,11 @@
 // Created by connor on 7/23/18.
 //
 
-#include <Sova/Internal/OryolApp.h>
+#include <Sova/Internal/InternalApp.h>
 #include <iostream>
 #include "TileManager.h"
 #include "Sova/Common/String.h"
-#include "Sova/Internal/OryolTexture.h"
+#include "Sova/Graphics/Internal/InternalTexture.h"
 #include "Sova/Graphics/Internal/InternalCamera.h"
 
 using namespace Sova;
@@ -31,7 +31,7 @@ namespace DsprFrontend
         if (this->receivedGrid) return;
 
         Oryol::String textureString = Oryol::String("images/tiles.png");
-        this->texture = OryolApp::getOryolApp()->resourceManager.textures[textureString];
+        this->texture = InternalApp::getInternalApp()->resourceManager.textures[textureString];
         this->visible = true;
 
         this->gridWidth = atoi(width->AsCStr());
@@ -164,7 +164,7 @@ namespace DsprFrontend
         const void *data = this->updateVertices(xoffset, yoffset, this->texture->width, this->texture->height,
                                                 camera->getInternalCamera()->getWidth(),
                                                 camera->getInternalCamera()->getHeight(), tileWidth, tileHeight+2, 1, frame);
-        Gfx::UpdateVertices(drawState.Mesh[0], data, OryolApp::numVertexesInQuad);
+        Gfx::UpdateVertices(drawState.Mesh[0], data, InternalApp::numVertexesInQuad);
         Gfx::ApplyDrawState(drawState);
 
         Gfx::Draw();
@@ -195,14 +195,14 @@ namespace DsprFrontend
         vIndex = this->writeVertex(vIndex, x1, y1, u1, v1);
         vIndex = this->writeVertex(vIndex, x0, y1, u0, v1);
 
-        return OryolApp::getOryolApp()->vertexBuffer;
+        return InternalApp::getInternalApp()->vertexBuffer;
     }
 
     int TileManager::writeVertex(int index, float x, float y, float u, float v) {
-        OryolApp::getOryolApp()->vertexBuffer[index].x = x;
-        OryolApp::getOryolApp()->vertexBuffer[index].y = y;
-        OryolApp::getOryolApp()->vertexBuffer[index].u = u;
-        OryolApp::getOryolApp()->vertexBuffer[index].v = v;
+        InternalApp::getInternalApp()->vertexBuffer[index].x = x;
+        InternalApp::getInternalApp()->vertexBuffer[index].y = y;
+        InternalApp::getInternalApp()->vertexBuffer[index].u = u;
+        InternalApp::getInternalApp()->vertexBuffer[index].v = v;
         return index + 1;
     }
 }

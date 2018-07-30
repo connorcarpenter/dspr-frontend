@@ -4,7 +4,7 @@
 // Created by connor on 7/9/18.
 //
 
-#include <Sova/Internal/ShaderHandler.h>
+#include <Sova/Graphics/Internal/ShaderHandler.h>
 #include <Sova/References/RefTypes.h>
 
 using namespace Sova;

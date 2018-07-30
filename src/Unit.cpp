@@ -3,7 +3,7 @@
 //
 
 #include "Global.h"
-#include <Sova/Internal/OryolApp.h>
+#include <Sova/Internal/InternalApp.h>
 #include <Sova/Math/Math.h>
 #include "Unit.h"
 
@@ -27,7 +27,7 @@ namespace DsprFrontend
     }
 
     void Unit::step() {
-        auto g = (Global*) OryolApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         bool cursorIsHovering = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
                                               this->position->x - 6, this->position->y - 10,
                                               this->position->x + 4, this->position->y + 1);
@@ -39,7 +39,7 @@ namespace DsprFrontend
 
         if (this->hovering)
         {
-            if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
+            if (InternalApp::mouseButtonPressed(MouseButton::Left))
                 this->selected = true;
         }
 
@@ -47,11 +47,11 @@ namespace DsprFrontend
         {
             if (!this->hovering)
             {
-                if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Left))
+                if (InternalApp::mouseButtonPressed(MouseButton::Left))
                     this->selected = false;
             }
 
-            if (OryolApp::getOryolApp()->mouseButtonPressed(MouseButton::Right))
+            if (InternalApp::mouseButtonPressed(MouseButton::Right))
             {
                 this->moveTo = g->cursor->getTilePosition();
             }
@@ -107,7 +107,7 @@ namespace DsprFrontend
     }
 
     void Unit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset) {
-        auto g = (Global*) OryolApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         if (selected) {
             g->unitSelectCircle->position->set(this->position->x, this->position->y);

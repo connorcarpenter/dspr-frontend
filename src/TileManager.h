@@ -11,7 +11,7 @@ using namespace Sova;
 
 namespace Sova
 {
-    class OryolTexture;
+    class InternalTexture;
 }
 
 namespace DsprFrontend
@@ -46,7 +46,7 @@ namespace DsprFrontend
         Tile** tileArrayA = nullptr;
         Tile** tileArrayB = nullptr;
 
-        Sova::OryolTexture* texture = nullptr;
+        Sova::InternalTexture* texture = nullptr;
 
         const void *updateVertices(float x, float y, int texWidth, int texHeight, int canWidth, int canHeight, int frameWidth,
                                            int frameHeight, int padding, int frameIndex);
