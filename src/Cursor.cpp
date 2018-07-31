@@ -20,7 +20,8 @@
 namespace DsprFrontend
 {
 
-    Cursor::Cursor() : AnimatedSprite() {
+    Cursor::Cursor() : AnimatedSprite()
+    {
         this->setTexture(New<Sova::String>("images/cursor.png"));
         this->frameWidth = 14;
         this->frameHeight = 12;
@@ -32,8 +33,6 @@ namespace DsprFrontend
         this->selectionBox = New<Sova::Rectangle>(0,0);
         this->selectionBox->setLineStyle(1, Color::Green, 0.6f);
         this->selectionBox->setFillStyle(Color::Green, 0.2f);
-
-
 
 #if ORYOL_LINUX
         glfwSetInputMode(Oryol::_priv::glfwDisplayMgr::getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -54,7 +53,6 @@ namespace DsprFrontend
             if (!InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left))
             {
                 this->leftButtonDragging = false;
-                //selection event
             }
         }
         else
@@ -63,9 +61,9 @@ namespace DsprFrontend
             {
                 this->leftButtonDragging = true;
                 this->leftButtonDragPoint->set(InternalApp::getInternalApp()->getMouseX()/5, InternalApp::getInternalApp()->getMouseY()/5);
+                g->unitManager->clearSelectionList();
             }
         }
-
     }
 
     void Cursor::changeState(int index)
@@ -90,7 +88,6 @@ namespace DsprFrontend
         int halfTileH = (g->tileManager->tileHeight/2);
         int quarterTileW = (g->tileManager->tileWidth/4);
         int quarterTileH = (g->tileManager->tileHeight/4);
-
 
         int posx = this->position->x - quarterTileW;
         int posy = this->position->y - quarterTileH;

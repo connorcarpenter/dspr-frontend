@@ -10,7 +10,7 @@
 namespace DsprFrontend
 {
 
-    Unit::Unit() : AnimatedSprite() {
+    Unit::Unit(int id) : AnimatedSprite() {
         this->spriteDownName = New<Sova::String>("images/workerDown.png");
         this->spriteUpName = New<Sova::String>("images/workerUp.png");
         this->setTexture(spriteDownName);
@@ -23,37 +23,63 @@ namespace DsprFrontend
         this->padding = 1;
         this->anchor->set(7, 18);
 
+        this->id = id;
+
         this->OnUpdate([&](){ step(); });
     }
 
     void Unit::step() {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        bool cursorIsHovering = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
-                                              this->position->x - 6, this->position->y - 10,
-                                              this->position->x + 4, this->position->y + 1);
-        if (cursorIsHovering != this->hovering)
-        {
-            g->cursor->changeState(cursorIsHovering ? 0 : 1);
-            this->hovering = cursorIsHovering;
-        }
 
-        if (this->hovering)
+        if (g->cursor->leftButtonDragging)
         {
-            if (InternalApp::mouseButtonPressed(MouseButton::Left))
-                this->selected = true;
+            bool boxIsHovering = Math::BoxesOverlap(g->cursor->leftButtonDragPoint->x,
+                                                    g->cursor->leftButtonDragPoint->y,
+                                                    g->cursor->position->x, g->cursor->position->y,
+                                                     this->position->x - 6, this->position->y - 10,
+                                                     this->position->x + 4, this->position->y + 1);
+            //boxIsHovering = true;
+            if (boxIsHovering != this->hovering) {
+                g->cursor->changeState(boxIsHovering ? 0 : 1);
+                this->hovering = boxIsHovering;
+                this->checkReleaseSelectionBox = this->hovering;
+            }
         }
-
-        if (this->selected)
+        else
         {
-            if (!this->hovering)
+            if (this->checkReleaseSelectionBox)
             {
-                if (InternalApp::mouseButtonPressed(MouseButton::Left))
-                    this->selected = false;
+                this->checkReleaseSelectionBox = false;
+                this->selected = true;
+                g->unitManager->addToSelectionList(id);
             }
 
-            if (InternalApp::mouseButtonPressed(MouseButton::Right))
+            bool cursorIsHovering = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                                     this->position->x - 6, this->position->y - 10,
+                                                     this->position->x + 4, this->position->y + 1);
+            if (cursorIsHovering != this->hovering) {
+                g->cursor->changeState(cursorIsHovering ? 0 : 1);
+                this->hovering = cursorIsHovering;
+            }
+
+            if (this->hovering)
             {
-                this->moveTo = g->cursor->getTilePosition();
+                if (InternalApp::mouseButtonPressed(MouseButton::Left)) {
+                    this->selected = true;
+                    g->unitManager->addToSelectionList(id);
+                }
+            }
+
+            if (this->selected)
+            {
+                if (!this->hovering)
+                {
+                    if (InternalApp::mouseButtonPressed(MouseButton::Left)) {
+                        this->selected = false;
+                    }
+                }
+
+
             }
         }
 

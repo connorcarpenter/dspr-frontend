@@ -9,6 +9,7 @@
 #include <Sova/App.h>
 #include "TileManager.h"
 #include "Cursor.h"
+#include "UnitManager.h"
 
 namespace DsprFrontend
 {
@@ -23,8 +24,7 @@ namespace DsprFrontend
         Ref<Websocket> bffServer = Null<Websocket>();
         Ref<Websocket> gameServer = Null<Websocket>();
         Ref<TileManager> tileManager = Null<TileManager>();
-        Ref<Unit> worker1 = Null<Unit>();
-        Ref<Unit> worker2 = Null<Unit>();
+        Ref<UnitManager> unitManager = Null<UnitManager>();
         Ref<Cursor> cursor = Null<Cursor>();
         Ref<AnimatedSprite> unitHoverCircle = Null<AnimatedSprite>();
         Ref<Sprite> unitSelectCircle = Null<Sprite>();

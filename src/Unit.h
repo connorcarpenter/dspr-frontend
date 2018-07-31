@@ -10,7 +10,7 @@ namespace DsprFrontend
     {
         SovaTypeDecl(Unit, AnimatedSprite);
     public:
-        Unit();
+        Unit(int id);
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
         Ref<Point> moveTo = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();
@@ -23,5 +23,8 @@ namespace DsprFrontend
         int walkSpeed = 10;
         Ref<Sova::String> spriteDownName = Null<Sova::String>();
         Ref<Sova::String> spriteUpName = Null<Sova::String>();
+        bool checkReleaseSelectionBox = false;
+        int selectIndex = 0;
+        int id = -1;
     };
 }

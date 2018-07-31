@@ -5,6 +5,7 @@ fips_begin_app(dspr-frontend windowed)
             Controller.h
             DsprShaderHandler.h DsprShaderHandler.cpp
             TileManager.h TileManager.cpp
+            UnitManager.h UnitManager.cpp
             Tile.h Tile.cpp
             Unit.h Unit.cpp
             Cursor.h Cursor.cpp

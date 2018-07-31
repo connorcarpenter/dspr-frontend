@@ -12,7 +12,7 @@
 
 #include "DsprShaderHandler.h"
 #include "Global.h"
-#include "Unit.h"
+#include "UnitManager.h"
 
 using namespace Sova;
 
@@ -80,16 +80,17 @@ namespace DsprFrontend
         g->tileManager->SetDepth(9999);
         g->world->AddChild(g->tileManager);
 
-        g->worker1 = New<Unit>();
-        g->worker1->tilePosition->set(6, 6);
-        g->worker1->moveTo->set(6, 6);
-        g->worker1->nextTilePosition->set(6, 6);
-        g->world->AddChild(g->worker1);
-        g->worker2 = New<Unit>();
-        g->worker2->tilePosition->set(2, 8);
-        g->worker2->moveTo->set(2, 8);
-        g->worker2->nextTilePosition->set(2, 8);
-        g->world->AddChild(g->worker2);
+        g->unitManager = New<UnitManager>();
+
+        for (int i = 0; i<3;i+=1){
+            for (int j = 0; j<3;j+=1){
+                auto worker = New<Unit>();
+                worker->tilePosition->set(6+i*2, 6+j*2);
+                worker->moveTo->set(6+i*2, 6+j*2);
+                worker->nextTilePosition->set(6+i*2, 6+j*2);
+                g->world->AddChild(worker);
+            }
+        }
 
         ///UI stuff
         g->unitHoverCircle = New<AnimatedSprite>(New<String>("images/unitHover.png"), 16, 12, 1);

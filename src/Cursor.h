@@ -16,12 +16,11 @@ namespace DsprFrontend
 
         Ref<Point> getTilePosition();
 
+        bool leftButtonDragging = false;
+        Ref<Point> leftButtonDragPoint = Null<Point>();
+
     private:
         void step();
-
-        bool leftButtonDragging = false;
-
-        Ref<Point> leftButtonDragPoint = Null<Point>();
 
         Ref<Rectangle> selectionBox = Null<Rectangle>();
 
