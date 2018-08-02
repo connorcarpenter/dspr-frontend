@@ -23,6 +23,7 @@ namespace DsprFrontend
         Ref<Container> world = Null<Container>();
         Ref<Websocket> bffServer = Null<Websocket>();
         Ref<Websocket> gameServer = Null<Websocket>();
+        Ref<Sova::String> gameServerPlayerToken = Null<Sova::String>();
         Ref<TileManager> tileManager = Null<TileManager>();
         Ref<UnitManager> unitManager = Null<UnitManager>();
         Ref<Cursor> cursor = Null<Cursor>();

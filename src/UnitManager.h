@@ -13,18 +13,19 @@ namespace DsprFrontend
 {
     class UnitManager : public Sova::Refable
     {
-
     public:
         UnitManager();
+        void receiveUnit(Ref<Sova::String> id, Ref<Sova::String> x, Ref<Sova::String> y);
 
-        void addToUnitList(Ref<Unit> unit);
         void addToSelectionList(int id);
         void clearSelectionList();
 
+        void step();
+
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
-        Ref<List<Int>> selectionList = Null<List<Int>>();
+        Ref<List<Sova::Int>> selectionList = Null<List<Sova::Int>>();
+        bool rightButtonAlreadyClicked = false;
 
-        void step();
     };
 }

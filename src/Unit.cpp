@@ -2,33 +2,34 @@
 // Created by connor on 7/26/18.
 //
 
-#include "Global.h"
+
 #include <Sova/Internal/InternalApp.h>
 #include <Sova/Math/Math.h>
-#include "Unit.h"
+#include "Global.h"
 
 namespace DsprFrontend
 {
 
-    Unit::Unit(int id) : AnimatedSprite() {
+    Unit::Unit(int id, int x, int y) : AnimatedSprite()
+    {
+        this->id = id;
+        this->moveTo = New<Point>(x, y);
+        this->tilePosition = New<Point>(x,y);
+        this->nextTilePosition = New<Point>(x,y);
+
         this->spriteDownName = New<Sova::String>("images/workerDown.png");
         this->spriteUpName = New<Sova::String>("images/workerUp.png");
         this->setTexture(spriteDownName);
-
-        this->moveTo = New<Point>();
-        this->tilePosition = New<Point>();
-        this->nextTilePosition = New<Point>();
         this->frameWidth = 15;
         this->frameHeight = 20;
         this->padding = 1;
         this->anchor->set(7, 18);
 
-        this->id = id;
-
         this->OnUpdate([&](){ step(); });
     }
 
-    void Unit::step() {
+    void Unit::step()
+    {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
         if (g->cursor->leftButtonDragging)
@@ -36,10 +37,11 @@ namespace DsprFrontend
             bool boxIsHovering = Math::BoxesOverlap(g->cursor->leftButtonDragPoint->x,
                                                     g->cursor->leftButtonDragPoint->y,
                                                     g->cursor->position->x, g->cursor->position->y,
-                                                     this->position->x - 6, this->position->y - 10,
-                                                     this->position->x + 4, this->position->y + 1);
+                                                    this->position->x - 6, this->position->y - 10,
+                                                    this->position->x + 4, this->position->y + 1);
             //boxIsHovering = true;
-            if (boxIsHovering != this->hovering) {
+            if (boxIsHovering != this->hovering)
+            {
                 g->cursor->changeState(boxIsHovering ? 0 : 1);
                 this->hovering = boxIsHovering;
                 this->checkReleaseSelectionBox = this->hovering;
@@ -57,14 +59,16 @@ namespace DsprFrontend
             bool cursorIsHovering = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
                                                      this->position->x - 6, this->position->y - 10,
                                                      this->position->x + 4, this->position->y + 1);
-            if (cursorIsHovering != this->hovering) {
+            if (cursorIsHovering != this->hovering)
+            {
                 g->cursor->changeState(cursorIsHovering ? 0 : 1);
                 this->hovering = cursorIsHovering;
             }
 
             if (this->hovering)
             {
-                if (InternalApp::mouseButtonPressed(MouseButton::Left)) {
+                if (InternalApp::mouseButtonPressed(MouseButton::Left))
+                {
                     this->selected = true;
                     g->unitManager->addToSelectionList(id);
                 }
@@ -74,12 +78,11 @@ namespace DsprFrontend
             {
                 if (!this->hovering)
                 {
-                    if (InternalApp::mouseButtonPressed(MouseButton::Left)) {
+                    if (InternalApp::mouseButtonPressed(MouseButton::Left))
+                    {
                         this->selected = false;
                     }
                 }
-
-
             }
         }
 
@@ -132,7 +135,8 @@ namespace DsprFrontend
         this->position->y = (int) (((Math::Lerp(this->tilePosition->y, this->nextTilePosition->y, walkAmount)/2) + 0.5f) * g->tileManager->tileHeight);
     }
 
-    void Unit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset) {
+    void Unit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
+    {
         auto g = (Global*) InternalApp::getGlobal();
 
         if (selected) {
@@ -148,7 +152,8 @@ namespace DsprFrontend
             }
         }
 
-        if (hovering) {
+        if (hovering)
+        {
             g->unitHoverCircle->Update();
             g->unitHoverCircle->position->set(this->position->x, this->position->y);
             g->unitHoverCircle->drawSelf(camera, xoffset, yoffset);

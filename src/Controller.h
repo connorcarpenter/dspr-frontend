@@ -36,6 +36,8 @@ namespace DsprFrontend
         void onGameServerUpdate(Ref<String> message);
 
         Ref<Global> g = Null<Global>();
+
+        void connectWithGameServer(Ref<String> gameServerAddress);
     };
 
     Controller::Controller() = default;
@@ -81,16 +83,6 @@ namespace DsprFrontend
         g->world->AddChild(g->tileManager);
 
         g->unitManager = New<UnitManager>();
-
-        for (int i = 0; i<3;i+=1){
-            for (int j = 0; j<3;j+=1){
-                auto worker = New<Unit>();
-                worker->tilePosition->set(6+i*2, 6+j*2);
-                worker->moveTo->set(6+i*2, 6+j*2);
-                worker->nextTilePosition->set(6+i*2, 6+j*2);
-                g->world->AddChild(worker);
-            }
-        }
 
         ///UI stuff
         g->unitHoverCircle = New<AnimatedSprite>(New<String>("images/unitHover.png"), 16, 12, 1);
@@ -145,6 +137,7 @@ namespace DsprFrontend
         if (g->app->keyPressed(Key::Down)) g->camera->position->y += 2;
 
         // this is the game loop
+        g->unitManager->step();
         g->world->UpdateChildren();
 
         //when enough time has passed, do this
@@ -167,7 +160,7 @@ namespace DsprFrontend
 
         Ref<List<String>> splitString = message->Split('|');
 
-        if (splitString->Size() != 2) return;
+        if (splitString->Size() != 3) return;
 
         Ref<String> command = splitString->At(0);
         if (command->Equals("gameserver/connect"))
@@ -179,16 +172,22 @@ namespace DsprFrontend
             sb->Append(addressBody);
             Ref<String> fullAddress = sb->ToString();
 
-            g->gameServer = g->app->openWebsocket(fullAddress);
-            g->gameServer->onOpen(
-                    [&](){
-                        this->onGameServerStart();
-                    });
-            g->gameServer->onMessage(
-                    [&](Ref<String> message){
-                        this->onGameServerUpdate(message);
-                    });
+            g->gameServerPlayerToken = splitString->At(2);
+
+            this->connectWithGameServer(fullAddress);
         }
+    }
+
+    void Controller::connectWithGameServer(Ref<String> gameServerAddress){
+        g->gameServer = g->app->openWebsocket(gameServerAddress);
+        g->gameServer->onOpen(
+                [&](){
+                    this->onGameServerStart();
+                });
+        g->gameServer->onMessage(
+                [&](Ref<String> message){
+                    this->onGameServerUpdate(message);
+                });
     }
 
     void Controller::onGameServerStart()
@@ -208,17 +207,25 @@ namespace DsprFrontend
 
         if (command->Equals("auth/1.0/gametoken"))
         {
-            g->gameServer->send(New<String>("auth/1.0/gametoken|game1"));
+            auto sb = New<StringBuilder>();
+            sb->Append(New<String>("auth/1.0/gametoken|"));
+            sb->Append(g->gameServerPlayerToken);
+            g->gameServer->send(sb->ToString());
             return;
         }
-        else if (command->Equals("grid/1.0/give")) {
+        else if (command->Equals("grid/1.0/create")) {
             Ref<List<String>> gridString = splitString->At(1)->Split(',');
             g->tileManager->receiveGrid(gridString->At(0), gridString->At(1));
             return;
         }
-        else if (command->Equals("tile/1.0/give")) {
+        else if (command->Equals("tile/1.0/create")) {
             Ref<List<String>> tileString = splitString->At(1)->Split(',');
             g->tileManager->receiveTile(tileString->At(0), tileString->At(1), tileString->At(2));
+            return;
+        }
+        else if (command->Equals("unit/1.0/create")) {
+            Ref<List<String>> unitString = splitString->At(1)->Split(',');
+            g->unitManager->receiveUnit(unitString->At(0), unitString->At(1), unitString->At(2));
             return;
         }
     }
