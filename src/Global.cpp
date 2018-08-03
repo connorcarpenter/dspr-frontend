@@ -3,3 +3,8 @@
 //
 
 #include "Global.h"
+
+namespace DsprFrontend
+{
+
+}

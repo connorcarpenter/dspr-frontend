@@ -8,7 +8,7 @@
 #include <Sova/References/RefTypes.h>
 
 using namespace Sova;
-using namespace Oryol;
+//using namespace Oryol;
 
 namespace DsprFrontend
 {

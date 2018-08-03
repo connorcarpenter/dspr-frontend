@@ -29,15 +29,7 @@ namespace DsprFrontend
         void onGameStart();
         void onGameUpdate();
 
-        void onBffServerStart();
-        void onBffServerUpdate(Ref<String> message);
-
-        void onGameServerStart();
-        void onGameServerUpdate(Ref<String> message);
-
         Ref<Global> g = Null<Global>();
-
-        void connectWithGameServer(Ref<String> gameServerAddress);
     };
 
     Controller::Controller() = default;
@@ -106,24 +98,7 @@ namespace DsprFrontend
                     onGameUpdate();
                 });
 
-        Ref<HttpRequest> bffReq = g->app->makeHttpRequest(New<String>("GET"), New<String>("http://www.deuspora.com:3170/orchestrator/bff"));
-        bffReq->onResponse(
-                [&](Ref<HttpResponse> response)
-                {
-                    if (response->status == 200 && response->responseText->Length() > 0)
-                    {
-                        g->bffServer = g->app->openWebsocket(response->responseText);
-                        g->bffServer->onOpen(
-                                [&](){
-                                    this->onBffServerStart();
-                                });
-                        g->bffServer->onMessage(
-                                [&](Ref<String> message){
-                                    this->onBffServerUpdate(message);
-                                });
-                    }
-                });
-        bffReq->send();
+        g->networkManager = New<NetworkManager>();
     }
 
     int gcCount = 0;
@@ -147,86 +122,5 @@ namespace DsprFrontend
         }
 
         gcCount += 1;
-    }
-
-    void Controller::onBffServerStart()
-    {
-        g->bffServer->send(New<String>("gameservers/1.0/join"));
-    }
-
-    void Controller::onBffServerUpdate(Ref<String> message)
-    {
-        message = message->TrimEnd("\r\n");
-
-        Ref<List<String>> splitString = message->Split('|');
-
-        if (splitString->Size() != 3) return;
-
-        Ref<String> command = splitString->At(0);
-        if (command->Equals("gameserver/connect"))
-        {
-            auto addressBody = splitString->At(1);
-
-            Ref<StringBuilder> sb = New<StringBuilder>();
-            sb->Append(New<String>("ws://"));
-            sb->Append(addressBody);
-            Ref<String> fullAddress = sb->ToString();
-
-            g->gameServerPlayerToken = splitString->At(2);
-
-            this->connectWithGameServer(fullAddress);
-        }
-    }
-
-    void Controller::connectWithGameServer(Ref<String> gameServerAddress){
-        g->gameServer = g->app->openWebsocket(gameServerAddress);
-        g->gameServer->onOpen(
-                [&](){
-                    this->onGameServerStart();
-                });
-        g->gameServer->onMessage(
-                [&](Ref<String> message){
-                    this->onGameServerUpdate(message);
-                });
-    }
-
-    void Controller::onGameServerStart()
-    {
-        std::cout << "Gameserver Start" << std::endl;
-    }
-
-    void Controller::onGameServerUpdate(Ref<String> message)
-    {
-        message = message->TrimEnd("\r\n")->TrimStart("\n");
-
-        Ref<List<String>> splitString = message->Split('|');
-
-        if (splitString->Size() != 2) return;
-
-        Ref<String> command = splitString->At(0);
-
-        if (command->Equals("auth/1.0/gametoken"))
-        {
-            auto sb = New<StringBuilder>();
-            sb->Append(New<String>("auth/1.0/gametoken|"));
-            sb->Append(g->gameServerPlayerToken);
-            g->gameServer->send(sb->ToString());
-            return;
-        }
-        else if (command->Equals("grid/1.0/create")) {
-            Ref<List<String>> gridString = splitString->At(1)->Split(',');
-            g->tileManager->receiveGrid(gridString->At(0), gridString->At(1));
-            return;
-        }
-        else if (command->Equals("tile/1.0/create")) {
-            Ref<List<String>> tileString = splitString->At(1)->Split(',');
-            g->tileManager->receiveTile(tileString->At(0), tileString->At(1), tileString->At(2));
-            return;
-        }
-        else if (command->Equals("unit/1.0/create")) {
-            Ref<List<String>> unitString = splitString->At(1)->Split(',');
-            g->unitManager->receiveUnit(unitString->At(0), unitString->At(1), unitString->At(2));
-            return;
-        }
     }
 }

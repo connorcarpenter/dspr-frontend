@@ -13,7 +13,7 @@ namespace DsprFrontend
     Unit::Unit(int id, int x, int y) : AnimatedSprite()
     {
         this->id = id;
-        this->moveTo = New<Point>(x, y);
+        this->moveTarget = New<Point>(x, y);
         this->tilePosition = New<Point>(x,y);
         this->nextTilePosition = New<Point>(x,y);
 
@@ -103,10 +103,10 @@ namespace DsprFrontend
             this->imageIndex = 0;
         }
 
-        if (this->walkAmount == 0 && !this->tilePosition->Equals(this->moveTo))
+        if (this->walkAmount == 0 && !this->tilePosition->Equals(this->moveTarget))
         {
-            int difx = Math::SignOrZero(this->moveTo->x - this->tilePosition->x);
-            int dify = Math::SignOrZero(this->moveTo->y - this->tilePosition->y);
+            int difx = Math::SignOrZero(this->moveTarget->x - this->tilePosition->x);
+            int dify = Math::SignOrZero(this->moveTarget->y - this->tilePosition->y);
             if (difx == 0 || dify == 0)
             {
                 difx *= 2; dify *= 2;
@@ -143,10 +143,10 @@ namespace DsprFrontend
             g->unitSelectCircle->position->set(this->position->x, this->position->y);
             g->unitSelectCircle->drawSelf(camera, xoffset, yoffset);
 
-            if (!this->tilePosition->Equals(this->moveTo)){
+            if (!this->tilePosition->Equals(this->moveTarget)){
                 g->moveMarker->Update();
-                int x = (int) ((((float) this->moveTo->x / 2) + 0.5f) * g->tileManager->tileWidth);
-                int y = (int) ((((float) this->moveTo->y / 2) + 0.5f) * g->tileManager->tileHeight);
+                int x = (int) ((((float) this->moveTarget->x / 2) + 0.5f) * g->tileManager->tileWidth);
+                int y = (int) ((((float) this->moveTarget->y / 2) + 0.5f) * g->tileManager->tileHeight);
                 g->moveMarker->position->set(x, y);
                 g->moveMarker->drawSelf(camera, xoffset, yoffset);
             }

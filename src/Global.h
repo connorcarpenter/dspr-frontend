@@ -10,6 +10,7 @@
 #include "TileManager.h"
 #include "Cursor.h"
 #include "UnitManager.h"
+#include "NetworkManager.h"
 
 namespace DsprFrontend
 {
@@ -30,5 +31,6 @@ namespace DsprFrontend
         Ref<AnimatedSprite> unitHoverCircle = Null<AnimatedSprite>();
         Ref<Sprite> unitSelectCircle = Null<Sprite>();
         Ref<AnimatedSprite> moveMarker = Null<AnimatedSprite>();
+        Ref<NetworkManager> networkManager = Null<NetworkManager>();
     };
 }

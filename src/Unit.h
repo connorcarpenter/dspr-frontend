@@ -12,7 +12,8 @@ namespace DsprFrontend
     public:
         Unit(int id, int x, int y);
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
-        Ref<Point> moveTo = Null<Point>();
+        //
+        Ref<Point> moveTarget = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();
         Ref<Point> nextTilePosition = Null<Point>();
     private:
