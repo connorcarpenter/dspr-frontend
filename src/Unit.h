@@ -12,10 +12,12 @@ namespace DsprFrontend
     public:
         Unit(int id, int x, int y);
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
+        void newNextTilePosition(int x, int y);
         //
         Ref<Point> moveTarget = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();
         Ref<Point> nextTilePosition = Null<Point>();
+        int id = -1;
     private:
         void step();
         bool selected = false;
@@ -25,6 +27,7 @@ namespace DsprFrontend
         Ref<Sova::String> spriteDownName = Null<Sova::String>();
         Ref<Sova::String> spriteUpName = Null<Sova::String>();
         bool checkReleaseSelectionBox = false;
-        int id = -1;
+
+
     };
 }

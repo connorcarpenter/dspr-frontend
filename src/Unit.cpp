@@ -86,7 +86,7 @@ namespace DsprFrontend
             }
         }
 
-        if (!this->tilePosition->Equals(nextTilePosition))
+        if (!this->tilePosition->Equals(this->moveTarget))
         {
             this->imageSpeed = 0.1f;
             this->walkAmount += this->walkSpeed;
@@ -103,36 +103,39 @@ namespace DsprFrontend
             this->imageIndex = 0;
         }
 
-        if (this->walkAmount == 0 && !this->tilePosition->Equals(this->moveTarget))
-        {
-            int difx = Math::SignOrZero(this->moveTarget->x - this->tilePosition->x);
-            int dify = Math::SignOrZero(this->moveTarget->y - this->tilePosition->y);
-            if (difx == 0 || dify == 0)
-            {
-                difx *= 2; dify *= 2;
-                walkSpeed = 6;
-            }
-            else
-            {
-                walkSpeed = 10;
-            }
-            if (difx != 0)
-            {
-                this->scale->x = Math::Sign(difx);
-            }
-            if (dify >= 0 && !this->textureName->Equals(this->spriteDownName))
-            {
-                this->setTexture(this->spriteDownName);
-            }
-            if (dify < 0 && !this->textureName->Equals(this->spriteUpName))
-            {
-                this->setTexture(this->spriteUpName);
-            }
-            this->nextTilePosition->set(this->tilePosition->x + difx, this->tilePosition->y + dify);
-        }
-
         this->position->x = (int) (((Math::Lerp(this->tilePosition->x, this->nextTilePosition->x, walkAmount)/2) + 0.5f) * g->tileManager->tileWidth);
         this->position->y = (int) (((Math::Lerp(this->tilePosition->y, this->nextTilePosition->y, walkAmount)/2) + 0.5f) * g->tileManager->tileHeight);
+    }
+
+    void Unit::newNextTilePosition(int x, int y)
+    {
+        this->walkAmount = 0;
+        this->nextTilePosition->set(x, y);
+        this->moveTarget->set(x,y);
+
+        int difx = Math::SignOrZero(this->nextTilePosition->x - this->tilePosition->x);
+        int dify = Math::SignOrZero(this->nextTilePosition->y - this->tilePosition->y);
+        if (difx == 0 || dify == 0)
+        {
+            difx *= 2; dify *= 2;
+            walkSpeed = 6;
+        }
+        else
+        {
+            walkSpeed = 10;
+        }
+        if (difx != 0)
+        {
+            this->scale->x = Math::Sign(difx);
+        }
+        if (dify >= 0 && !this->textureName->Equals(this->spriteDownName))
+        {
+            this->setTexture(this->spriteDownName);
+        }
+        if (dify < 0 && !this->textureName->Equals(this->spriteUpName))
+        {
+            this->setTexture(this->spriteUpName);
+        }
     }
 
     void Unit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)

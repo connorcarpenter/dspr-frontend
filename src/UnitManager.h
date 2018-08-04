@@ -16,6 +16,7 @@ namespace DsprFrontend
     public:
         UnitManager();
         void receiveUnit(Ref<Sova::String> id, Ref<Sova::String> x, Ref<Sova::String> y);
+        void receiveUnitOrder(Ref<Sova::String> id, Ref<List<Sova::String>> propsStrList);
 
         void addToSelectionList(int id);
         void clearSelectionList();

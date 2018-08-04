@@ -61,6 +61,16 @@ namespace DsprFrontend
             sb->Append(New<Int>(tilePosition->y)->ToString());
 
             g->gameServer->send(sb->ToString());
+
+            // make all selected units have a given moveTarget
+//            for (auto iterator = selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+//            {
+//                auto id = iterator->Get();
+//                auto unit = this->unitList->Find([&](Ref<Unit> inspectUnit) { //replace this with a Hash lookup someday!
+//                    return (id->getInt() == inspectUnit->id);
+//                });
+//                unit->moveTarget->set(tilePosition->x, tilePosition->y);
+//            }
         }
 
         if(!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
@@ -77,5 +87,35 @@ namespace DsprFrontend
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         g->world->AddChild(newUnit);
         this->unitList->Add(newUnit);
+    }
+
+    void UnitManager::receiveUnitOrder(Ref<Sova::String> idStr, Ref<List<Sova::String>> propsStrList)
+    {
+        int id = atoi(idStr->AsCStr());
+
+        Ref<Unit> unit = this->unitList->Find([&](Ref<Unit> inspectUnit) { //replace this with a Hash lookup someday!
+            return (inspectUnit->id == id);
+        });
+
+        for (auto iterator = propsStrList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            auto propsStr = iterator->Get();
+            auto propsParts = propsStr->Split(':');
+
+            auto propName = propsParts->At(0);
+
+            if (propName->Equals("nextPosition"))
+            {
+                auto varsParts = propsParts->At(1)->Split(',');
+
+                ///
+                unit->tilePosition->x = unit->nextTilePosition->x;
+                unit->tilePosition->y = unit->nextTilePosition->y;
+                int x = atoi(varsParts->At(0)->AsCStr());
+                int y = atoi(varsParts->At(1)->AsCStr());
+                unit->newNextTilePosition(x, y);
+                break;
+            }
+        }
     }
 }

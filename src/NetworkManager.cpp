@@ -87,7 +87,7 @@ namespace DsprFrontend
 
         Ref<List<Sova::String>> splitString = message->Split('|');
 
-        if (splitString->Size() != 2) return;
+        if (splitString->Size() < 2) return;
 
         Ref<Sova::String> command = splitString->At(0);
 
@@ -112,6 +112,13 @@ namespace DsprFrontend
         else if (command->Equals("unit/1.0/create")) {
             Ref<List<Sova::String>> unitString = splitString->At(1)->Split(',');
             g->unitManager->receiveUnit(unitString->At(0), unitString->At(1), unitString->At(2));
+            return;
+        }
+        else if (command->Equals("unit/1.0/update")) {
+            auto idString = splitString->At(1);
+            auto propsString = splitString->At(2);
+            g->unitManager->receiveUnitOrder(idString, propsString->Split('&'));
+            std::cout << message->AsCStr() << std::endl;
             return;
         }
     }
