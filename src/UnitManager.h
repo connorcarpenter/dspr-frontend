@@ -21,7 +21,7 @@ namespace DsprFrontend
         void addToSelectionList(int id);
         void clearSelectionList();
 
-        void step();
+        void uiUpdate();
 
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();

@@ -27,7 +27,7 @@ namespace DsprFrontend
         selectionList->Clear();
     }
 
-    void UnitManager::step()
+    void UnitManager::uiUpdate()
     {
         if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked)
         {

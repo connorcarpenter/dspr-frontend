@@ -8,6 +8,8 @@
 
 #include <Sova/References/Refable.h>
 #include <Sova/References/Ref.h>
+#include <Modules/Core/Time/TimePoint.h>
+#include <Modules/Core/Time/Clock.h>
 #include "Sova/SovaMain.h"
 
 #include "DsprShaderHandler.h"
@@ -30,6 +32,10 @@ namespace DsprFrontend
         void onGameUpdate();
 
         Ref<Global> g = Null<Global>();
+        Ref<Timer> tickTimer = Null<Timer>();
+        const int tickRateMs = 200;
+
+        void onGameTick();
     };
 
     Controller::Controller() = default;
@@ -98,6 +104,10 @@ namespace DsprFrontend
                     onGameUpdate();
                 });
 
+        tickTimer = g->app->makeTimer([&]() {
+            onGameTick();
+        }, tickRateMs, tickRateMs);
+
         g->networkManager = New<NetworkManager>();
     }
 
@@ -112,7 +122,7 @@ namespace DsprFrontend
         if (g->app->keyPressed(Key::Down)) g->camera->position->y += 2;
 
         // this is the game loop
-        g->unitManager->step();
+        g->unitManager->uiUpdate();
         g->world->UpdateChildren();
 
         //when enough time has passed, do this
@@ -122,5 +132,10 @@ namespace DsprFrontend
         }
 
         gcCount += 1;
+    }
+
+    void Controller::onGameTick()
+    {
+        std::cout << "tick" << gcCount << std::endl;
     }
 }
