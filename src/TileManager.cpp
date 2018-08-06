@@ -4,10 +4,12 @@
 
 #include <Sova/Internal/InternalApp.h>
 #include <iostream>
+#include <Sova/Graphics/Sprite.h>
 #include "TileManager.h"
 #include "Sova/Common/String.h"
 #include "Sova/Graphics/Internal/InternalTexture.h"
 #include "Sova/Graphics/Internal/InternalCamera.h"
+#include "Global.h"
 
 using namespace Sova;
 
@@ -53,11 +55,23 @@ namespace DsprFrontend
         int tileY = atoi(y->AsCStr());
         int tileFrame = atoi(frame->AsCStr());
 
-        int gridIndex = whichGrid(tileX, tileY);
+        int gridIndex = getGridIndex(tileX, tileY);
         if (gridIndex == -1)
             return;
 
-        int tileIndex = getIndex(gridIndex, tileX, tileY);
+        if (tileFrame == -1)
+        {
+            auto newBlock = New<Sprite>(New<Sova::String>("images/block.png"));
+            newBlock->anchor->set(11, 14);
+            newBlock->position->set((tileX+1) * tileWidth / 2, (tileY+1) * tileHeight / 2);
+            newBlock->SetDepth(tileY * -1);
+            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            g->world->AddChild(newBlock);
+
+            return;
+        }
+
+        int tileIndex = getTileIndex(gridIndex, tileX, tileY);
         if (gridIndex == 0)
         {
             this->tileArrayA[tileIndex] = new Tile(tileFrame);
@@ -99,7 +113,7 @@ namespace DsprFrontend
         delete[] tileArray;
     }
 
-    int TileManager::whichGrid(int x, int y) {
+    int TileManager::getGridIndex(int x, int y) {
         if (!this->receivedGrid) return -1;
         if (x < 0 || y < 0 || x >= this->gridWidth*2 || y >= this->gridHeight*2) return -1;
 
@@ -107,7 +121,7 @@ namespace DsprFrontend
         if ((x+1) % 2 == 0 && (y+1) % 2 == 0) return 1;
     }
 
-    int TileManager::getIndex(int gridIndex, int x, int y) {
+    int TileManager::getTileIndex(int gridIndex, int x, int y) {
         if (gridIndex == 0)
         {
             int xsmall = x / 2;
@@ -140,18 +154,29 @@ namespace DsprFrontend
                     int x = a + i;
                     int y = b + j;
 
-                    if (whichGrid(x*2,y*2) == -1)continue;
+                    if (getGridIndex(x * 2, y * 2) == -1)continue;
 
                     auto tile = this->tileArrayA[(y*this->gridWidth)+x];
-                    if (tile == nullptr) return;
-                    if (tile->frame == -1) return;
-
-                    drawTile(camera, ((x-1)*tileWidth)+xoffset, ((y-1)*tileHeight)+yoffset, tile->frame);
+                    if (tile != nullptr)
+                    {
+                        drawTile(camera, ((x) * tileWidth) + xoffset, ((y) * tileHeight) + yoffset,
+                                 tile->frame);
+                    }
+                    else
+                    {
+                        auto i = 12;
+                    }
 
                     tile = this->tileArrayB[(y*this->gridWidth)+x];
-                    if (tile == nullptr) return;
-
-                    drawTile(camera, ((x-1+0.5f)*tileWidth)+xoffset, ((y-1+0.5f)*tileHeight)+yoffset, tile->frame);
+                    if (tile != nullptr)
+                    {
+                        drawTile(camera, ((x + 0.5f) * tileWidth) + xoffset,
+                                 ((y + 0.5f) * tileHeight) + yoffset, tile->frame);
+                    }
+                    else
+                    {
+                        auto i = 12;
+                    }
                 }
             }
         }

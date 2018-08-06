@@ -54,6 +54,7 @@ namespace DsprFrontend
             resources->Add(New<String>("images/moveMarker.png"));
             resources->Add(New<String>("images/tiles.png"));
             resources->Add(New<String>("images/trees.png"));
+            resources->Add(New<String>("images/block.png"));
             resources->Add(New<String>("images/workerDown.png"));
             resources->Add(New<String>("images/workerUp.png"));
 
@@ -136,6 +137,6 @@ namespace DsprFrontend
 
     void Controller::onGameTick()
     {
-        std::cout << "tick" << gcCount << std::endl;
+        //std::cout << "tick" << gcCount << std::endl;
     }
 }

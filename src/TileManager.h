@@ -33,8 +33,8 @@ namespace DsprFrontend
 
         Tile **initializeTileArray(int width, int height);
         void destroyTileArray(Tile **tileArray, int width, int height);
-        int whichGrid(int x, int y);
-        int getIndex(int gridIndex, int x, int y);
+        int getGridIndex(int x, int y);
+        int getTileIndex(int gridIndex, int x, int y);
 
 
 
