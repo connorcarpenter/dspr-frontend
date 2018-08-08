@@ -26,7 +26,7 @@ namespace DsprFrontend
         this->frameWidth = 14;
         this->frameHeight = 12;
         this->padding = 1;
-        this->OnUpdate([&](){ step(); });
+        this->OnUpdate([&](float deltaFrameMs){ step(); });
         this->imageSpeed = 0;
         this->changeState(1);
         this->leftButtonDragPoint = New<Point>(0,0);

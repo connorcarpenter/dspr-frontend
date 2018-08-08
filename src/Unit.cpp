@@ -16,6 +16,7 @@ namespace DsprFrontend
         this->moveTarget = New<Point>(x, y);
         this->tilePosition = New<Point>(x,y);
         this->nextTilePosition = New<Point>(x,y);
+        this->lastPosition = New<Point>(x,y);
 
         this->spriteDownName = New<Sova::String>("images/workerDown.png");
         this->spriteUpName = New<Sova::String>("images/workerUp.png");
@@ -25,10 +26,10 @@ namespace DsprFrontend
         this->padding = 1;
         this->anchor->set(7, 18);
 
-        this->OnUpdate([&](){ step(); });
+        this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
     }
 
-    void Unit::step()
+    void Unit::step(float deltaFrameMs)
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
@@ -70,6 +71,7 @@ namespace DsprFrontend
                 if (InternalApp::mouseButtonPressed(MouseButton::Left))
                 {
                     this->selected = true;
+                    g->unitManager->clearSelectionList();
                     g->unitManager->addToSelectionList(id);
                 }
             }
@@ -80,6 +82,7 @@ namespace DsprFrontend
                 {
                     if (InternalApp::mouseButtonPressed(MouseButton::Left))
                     {
+                        g->unitManager->removeFromSelectionList(id);
                         this->selected = false;
                     }
                 }
@@ -88,9 +91,9 @@ namespace DsprFrontend
 
         if (!this->tilePosition->Equals(this->moveTarget))
         {
-            this->imageSpeed = 0.1f;
-            this->walkAmount += this->walkSpeed;
-            if (this->walkAmount >= 100)
+            this->imageSpeed = walkImageSpeed;
+            this->walkAmount += this->walkSpeed * (deltaFrameMs / gameServerTickMs);
+            if (this->walkAmount >= maxWalkAmount)
             {
                 walkAmount = 0;
                 this->tilePosition->set(this->nextTilePosition->x, this->nextTilePosition->y);
@@ -103,26 +106,46 @@ namespace DsprFrontend
             this->imageIndex = 0;
         }
 
-        this->position->x = (int) (((Math::Lerp(this->tilePosition->x, this->nextTilePosition->x, walkAmount)/2) + 0.5f) * g->tileManager->tileWidth);
-        this->position->y = (int) (((Math::Lerp(this->tilePosition->y, this->nextTilePosition->y, walkAmount)/2) + 0.5f) * g->tileManager->tileHeight);
+        float extrapolatedPositionX = ((Math::Lerp(this->tilePosition->x, this->nextTilePosition->x, walkAmount/maxWalkAmount)/2) + 0.5f) * g->tileManager->tileWidth;
+        float extrapolatedPositionY = ((Math::Lerp(this->tilePosition->y, this->nextTilePosition->y, walkAmount/maxWalkAmount)/2) + 0.5f) * g->tileManager->tileHeight;
+        if (interpolation > 0)
+        {
+            float interpolatedPositionX = Math::Lerp(this->lastPosition->x, extrapolatedPositionX, 1-(interpolation/interpolationMax));
+            float interpolatedPositionY = Math::Lerp(this->lastPosition->y, extrapolatedPositionY, 1-(interpolation/interpolationMax));
+
+            this->position->x = interpolatedPositionX;
+            this->position->y = interpolatedPositionY;
+
+            interpolation-=interpolationStep;
+        }
+        else
+        {
+            this->position->x = extrapolatedPositionX;
+            this->position->y = extrapolatedPositionY;
+        }
     }
 
     void Unit::newNextTilePosition(int x, int y)
     {
+        this->lastPosition->set(this->position);
+        this->interpolation = interpolationMax-interpolationStep;
+
+        this->tilePosition->set(this->nextTilePosition);
+        this->SetDepth(this->tilePosition->y * -1);
+
         this->walkAmount = 0;
         this->nextTilePosition->set(x, y);
-        this->moveTarget->set(x,y);
 
         int difx = Math::SignOrZero(this->nextTilePosition->x - this->tilePosition->x);
         int dify = Math::SignOrZero(this->nextTilePosition->y - this->tilePosition->y);
         if (difx == 0 || dify == 0)
         {
             difx *= 2; dify *= 2;
-            walkSpeed = 6;
+            walkSpeed = walkSpeedDiagonal;
         }
         else
         {
-            walkSpeed = 10;
+            walkSpeed = walkSpeedStraight;
         }
         if (difx != 0)
         {
@@ -147,7 +170,7 @@ namespace DsprFrontend
             g->unitSelectCircle->drawSelf(camera, xoffset, yoffset);
 
             if (!this->tilePosition->Equals(this->moveTarget)){
-                g->moveMarker->Update();
+                g->moveMarker->Update(0);
                 int x = (int) ((((float) this->moveTarget->x / 2) + 0.5f) * g->tileManager->tileWidth);
                 int y = (int) ((((float) this->moveTarget->y / 2) + 0.5f) * g->tileManager->tileHeight);
                 g->moveMarker->position->set(x, y);
@@ -157,7 +180,7 @@ namespace DsprFrontend
 
         if (hovering)
         {
-            g->unitHoverCircle->Update();
+            g->unitHoverCircle->Update(0);
             g->unitHoverCircle->position->set(this->position->x, this->position->y);
             g->unitHoverCircle->drawSelf(camera, xoffset, yoffset);
         }

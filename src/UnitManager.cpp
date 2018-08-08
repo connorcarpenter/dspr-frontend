@@ -109,13 +109,27 @@ namespace DsprFrontend
                 auto varsParts = propsParts->At(1)->Split(',');
 
                 ///
-                unit->tilePosition->x = unit->nextTilePosition->x;
-                unit->tilePosition->y = unit->nextTilePosition->y;
                 int x = atoi(varsParts->At(0)->AsCStr());
                 int y = atoi(varsParts->At(1)->AsCStr());
                 unit->newNextTilePosition(x, y);
-                break;
+                continue;
+            }
+            else
+            if (propName->Equals("moveTarget"))
+            {
+                auto varsParts = propsParts->At(1)->Split(',');
+
+                unit->moveTarget->x = atoi(varsParts->At(0)->AsCStr());
+                unit->moveTarget->y = atoi(varsParts->At(1)->AsCStr());
+                continue;
             }
         }
+    }
+
+    void UnitManager::removeFromSelectionList(int id) {
+        auto theListInt = this->selectionList->Find([&](Ref<Int> theInt){
+            return theInt->getInt() == id;
+        });
+        this->selectionList->Remove(theListInt);
     }
 }

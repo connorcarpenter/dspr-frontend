@@ -29,11 +29,11 @@ namespace DsprFrontend
 
         void onLoadFinish();
         void onGameStart();
-        void onGameUpdate();
+        void onGameUpdate(float deltaFrameMs);
 
         Ref<Global> g = Null<Global>();
         Ref<Timer> tickTimer = Null<Timer>();
-        const int tickRateMs = 200;
+        const int tickRateMs = 100;
 
         void onGameTick();
     };
@@ -73,7 +73,7 @@ namespace DsprFrontend
         // after loading is done
         g->world = New<Container>();
         static const int pixelRatio = 5;
-        g->camera = New<Camera>(0, 0, g->app->width / pixelRatio, g->app->height / pixelRatio, g->world);
+        g->camera = New<Camera>(20, 20, g->app->width / pixelRatio, g->app->height / pixelRatio, g->world);
         g->viewport = New<Viewport>(0, 0, g->app->width, g->app->height, g->camera);
         g->app->addViewport(g->viewport);
 
@@ -101,8 +101,8 @@ namespace DsprFrontend
         /////////////////////////
 
         g->app->onUpdate(
-                [&]() {
-                    onGameUpdate();
+                [&](float deltaFrameMs) {
+                    onGameUpdate(deltaFrameMs);
                 });
 
         tickTimer = g->app->makeTimer([&]() {
@@ -114,7 +114,7 @@ namespace DsprFrontend
 
     int gcCount = 0;
 
-    void Controller::onGameUpdate()
+    void Controller::onGameUpdate(float deltaFrameMs)
     {
         //move camera
         if (g->app->keyPressed(Key::Left)) g->camera->position->x -= 2;
@@ -124,7 +124,7 @@ namespace DsprFrontend
 
         // this is the game loop
         g->unitManager->uiUpdate();
-        g->world->UpdateChildren();
+        g->world->UpdateChildren(deltaFrameMs);
 
         //when enough time has passed, do this
         if (gcCount > 1000) {
