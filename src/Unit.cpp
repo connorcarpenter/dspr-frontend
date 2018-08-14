@@ -32,62 +32,62 @@ namespace DsprFrontend
     void Unit::step(float deltaFrameMs)
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-
-        if (g->cursor->leftButtonDragging)
-        {
-            bool boxIsHovering = Math::BoxesOverlap(g->cursor->leftButtonDragPoint->x,
-                                                    g->cursor->leftButtonDragPoint->y,
-                                                    g->cursor->position->x, g->cursor->position->y,
-                                                    this->position->x - 6, this->position->y - 10,
-                                                    this->position->x + 4, this->position->y + 1);
-            //boxIsHovering = true;
-            if (boxIsHovering != this->hovering)
-            {
-                g->cursor->changeState(boxIsHovering ? 0 : 1);
-                this->hovering = boxIsHovering;
-                this->checkReleaseSelectionBox = this->hovering;
-            }
-        }
-        else
-        {
-            if (this->checkReleaseSelectionBox)
-            {
-                this->checkReleaseSelectionBox = false;
-                this->selected = true;
-                g->unitManager->addToSelectionList(id);
-            }
-
-            bool cursorIsHovering = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
-                                                     this->position->x - 6, this->position->y - 10,
-                                                     this->position->x + 4, this->position->y + 1);
-            if (cursorIsHovering != this->hovering)
-            {
-                g->cursor->changeState(cursorIsHovering ? 0 : 1);
-                this->hovering = cursorIsHovering;
-            }
-
-            if (this->hovering)
-            {
-                if (InternalApp::mouseButtonPressed(MouseButton::Left))
-                {
-                    this->selected = true;
-                    g->unitManager->clearSelectionList();
-                    g->unitManager->addToSelectionList(id);
-                }
-            }
-
-            if (this->selected)
-            {
-                if (!this->hovering)
-                {
-                    if (InternalApp::mouseButtonPressed(MouseButton::Left))
-                    {
-                        g->unitManager->removeFromSelectionList(id);
-                        this->selected = false;
-                    }
-                }
-            }
-        }
+//
+//        if (g->cursor->leftButtonDragging)
+//        {
+//            bool boxIsHovering = Math::BoxesOverlap(g->cursor->leftButtonDragPoint->x,
+//                                                    g->cursor->leftButtonDragPoint->y,
+//                                                    g->cursor->position->x, g->cursor->position->y,
+//                                                    this->position->x - 6, this->position->y - 10,
+//                                                    this->position->x + 4, this->position->y + 1);
+//            //boxIsHovering = true;
+//            if (boxIsHovering != this->hovering)
+//            {
+//                g->cursor->changeState(boxIsHovering ? 0 : 1);
+//                this->hovering = boxIsHovering;
+//                this->checkReleaseSelectionBox = this->hovering;
+//            }
+//        }
+//        else
+//        {
+//            if (this->checkReleaseSelectionBox)
+//            {
+//                this->checkReleaseSelectionBox = false;
+//                this->selected = true;
+//                g->unitManager->addToSelectionList(id);
+//            }
+//
+//            bool cursorIsHovering = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+//                                                     this->position->x - 6, this->position->y - 10,
+//                                                     this->position->x + 4, this->position->y + 1);
+//            if (cursorIsHovering != this->hovering)
+//            {
+//                g->cursor->changeState(cursorIsHovering ? 0 : 1);
+//                this->hovering = cursorIsHovering;
+//            }
+//
+//            if (this->hovering)
+//            {
+//                if (InternalApp::mouseButtonPressed(MouseButton::Left))
+//                {
+//                    this->selected = true;
+//                    g->unitManager->clearSelectionList();
+//                    g->unitManager->addToSelectionList(id);
+//                }
+//            }
+//
+//            if (this->selected)
+//            {
+//                if (!this->hovering)
+//                {
+//                    if (InternalApp::mouseButtonPressed(MouseButton::Left))
+//                    {
+//                        g->unitManager->removeFromSelectionList(id);
+//                        this->selected = false;
+//                    }
+//                }
+//            }
+//        }
 
         if (!this->tilePosition->Equals(this->moveTarget))
         {
@@ -165,11 +165,13 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getGlobal();
 
-        if (selected) {
+        if (this->selected)
+        {
             g->unitSelectCircle->position->set(this->position->x, this->position->y);
             g->unitSelectCircle->drawSelf(camera, xoffset, yoffset);
 
-            if (!this->tilePosition->Equals(this->moveTarget)){
+            if (!this->tilePosition->Equals(this->moveTarget))
+            {
                 g->moveMarker->Update(0);
                 int x = (int) ((((float) this->moveTarget->x / 2) + 0.5f) * g->tileManager->tileWidth);
                 int y = (int) ((((float) this->moveTarget->y / 2) + 0.5f) * g->tileManager->tileHeight);
@@ -178,9 +180,8 @@ namespace DsprFrontend
             }
         }
 
-        if (hovering)
+        if (this->hovering)
         {
-            g->unitHoverCircle->Update(0);
             g->unitHoverCircle->position->set(this->position->x, this->position->y);
             g->unitHoverCircle->drawSelf(camera, xoffset, yoffset);
         }

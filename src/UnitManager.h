@@ -23,6 +23,10 @@ namespace DsprFrontend
         void clearSelectionList();
 
         void uiUpdate();
+        Ref<Unit> getUnitOverlappingWithPoint(int x, int y);
+        Ref<List<Unit>> getNonHoveringUnitsWithinBox(int x1, int y1, int x2, int y2);
+        Ref<List<Unit>> getUnitsOutsideBox(Ref<List<Unit>> hoverList, int x1, int y1, int x2, int y2);
+        void deselectAllUnits();
 
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();

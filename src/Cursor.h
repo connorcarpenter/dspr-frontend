@@ -7,12 +7,14 @@
 
 namespace DsprFrontend
 {
+    class Unit;
+
     class Cursor : public Sova::AnimatedSprite
     {
     public:
         Cursor();
 
-        void changeState(int index);
+        void setImageIndex(int index);
 
         Ref<Point> getTilePosition();
 
@@ -20,10 +22,20 @@ namespace DsprFrontend
         Ref<Point> leftButtonDragPoint = Null<Point>();
 
     private:
+
         void step();
+        void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
 
         Ref<Rectangle> selectionBox = Null<Rectangle>();
+        Ref<List<Unit>> hoverList = Null<List<Unit>>();
 
-        void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
+        int leftButtonPressedTime = 0;
+        const int leftButtonPressedTimeToDrag = 6;
+
+        void clearHoverList();
+
+        void setHoverListUnitsToHover(bool i);
+
+        void setHoverListUnitsToSelected(bool selected);
     };
 }

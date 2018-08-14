@@ -22,6 +22,8 @@ namespace DsprFrontend
         Ref<Point> nextTilePosition = Null<Point>();
         int id = -1;
 
+        bool hovering = false;
+        bool selected = false;
     private:
 
         void step(float deltaMs);
@@ -34,8 +36,6 @@ namespace DsprFrontend
         const float walkImageSpeed = 0.1f;
         const int gameServerTickMs = 100;
 
-        bool selected = false;
-        bool hovering = false;
         float walkAmount = 0;
         int walkSpeed = walkSpeedStraight;
         Ref<Sova::String> spriteDownName = Null<Sova::String>();

@@ -5,6 +5,7 @@
 #include <Sova/Input.h>
 #include <Sova/Internal/InternalApp.h>
 #include <Sova/Common/StringBuilder.h>
+#include <Sova/Math/Math.h>
 #include "UnitManager.h"
 #include "Global.h"
 
@@ -14,17 +15,6 @@ namespace DsprFrontend
     {
         this->unitList = New<List<Unit>>();
         this->selectionList = New<List<Int>>();
-    }
-
-    void UnitManager::addToSelectionList(int id)
-    {
-        auto myInt = New<Int>(id);
-        selectionList->Add(myInt);
-    }
-
-    void UnitManager::clearSelectionList()
-    {
-        selectionList->Clear();
     }
 
     void UnitManager::uiUpdate()
@@ -61,20 +51,84 @@ namespace DsprFrontend
             sb->Append(New<Int>(tilePosition->y)->ToString());
 
             g->gameServer->send(sb->ToString());
-
-            // make all selected units have a given moveTarget
-//            for (auto iterator = selectionList->GetIterator(); iterator->Valid(); iterator->Next())
-//            {
-//                auto id = iterator->Get();
-//                auto unit = this->unitList->Find([&](Ref<Unit> inspectUnit) { //replace this with a Hash lookup someday!
-//                    return (id->getInt() == inspectUnit->id);
-//                });
-//                unit->moveTarget->set(tilePosition->x, tilePosition->y);
-//            }
         }
 
         if(!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
             rightButtonAlreadyClicked = false;
+    }
+
+    Ref<Unit> UnitManager::getUnitOverlappingWithPoint(int x, int y)
+    {
+        for (auto iterator = this->unitList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            auto unit = iterator->Get();
+            if (Math::PointInBox(x, y,
+                                 unit->position->x - 6, unit->position->y - 10,
+                                 unit->position->x + 4, unit->position->y + 1))
+                return unit;
+        }
+
+        return Null<Unit>();
+    }
+
+    Ref<List<Unit>> UnitManager::getNonHoveringUnitsWithinBox(int x1, int y1, int x2, int y2)
+    {
+        auto output = New<List<Unit>>();
+        for (auto iterator = this->unitList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            auto unit = iterator->Get();
+            if (unit->hovering) continue;
+            if (Math::BoxesOverlap(x1, y1, x2, y2,
+                                 unit->position->x - 6, unit->position->y - 10,
+                                 unit->position->x + 4, unit->position->y + 1))
+                output->Add(unit);
+        }
+
+        if (output->Size() == 0)
+            return Null<List<Unit>>();
+
+        return output;
+    }
+
+    Ref<List<Unit>> UnitManager::getUnitsOutsideBox(Ref<List<Unit>> hoverList, int x1, int y1, int x2, int y2)
+    {
+        auto output = New<List<Unit>>();
+        for (auto iterator = hoverList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            auto unit = iterator->Get();
+            if (!Math::BoxesOverlap(x1, y1, x2, y2,
+                                   unit->position->x - 6, unit->position->y - 10,
+                                   unit->position->x + 4, unit->position->y + 1))
+                output->Add(unit);
+        }
+
+        if (output->Size() == 0)
+            return Null<List<Unit>>();
+
+        return output;
+    }
+
+    void UnitManager::deselectAllUnits()
+    {
+        this->selectionList->Clear();
+        for (auto iterator = this->unitList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            auto unit = iterator->Get();
+            unit->selected = false;
+        }
+    }
+
+    void UnitManager::addToSelectionList(int id)
+    {
+        auto myInt = New<Int>(id);
+        selectionList->Add(myInt);
+    }
+
+    void UnitManager::removeFromSelectionList(int id) {
+        auto theListInt = this->selectionList->Find([&](Ref<Int> theInt){
+            return theInt->getInt() == id;
+        });
+        this->selectionList->Remove(theListInt);
     }
 
     void UnitManager::receiveUnit(Ref<Sova::String> idStr, Ref<Sova::String> xStr, Ref<Sova::String> yStr)
@@ -124,12 +178,5 @@ namespace DsprFrontend
                 continue;
             }
         }
-    }
-
-    void UnitManager::removeFromSelectionList(int id) {
-        auto theListInt = this->selectionList->Find([&](Ref<Int> theInt){
-            return theInt->getInt() == id;
-        });
-        this->selectionList->Remove(theListInt);
     }
 }

@@ -16,7 +16,8 @@ namespace DsprFrontend
 {
     class Unit;
 
-    class Global : public Sova::Refable {
+    class Global : public Sova::Refable
+    {
     public:
         Ref<Sova::App> app = Null<Sova::App>();
         Ref<Viewport> viewport = Null<Viewport>();
