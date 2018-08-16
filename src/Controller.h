@@ -110,6 +110,7 @@ namespace DsprFrontend
         }, tickRateMs, tickRateMs);
 
         g->networkManager = New<NetworkManager>();
+        g->fogManager = New<FogManager>();
     }
 
     int gcCount = 0;

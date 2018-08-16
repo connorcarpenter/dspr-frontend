@@ -43,6 +43,9 @@ namespace DsprFrontend
         this->tileArrayA = initializeTileArray(this->gridWidth, this->gridHeight);
         this->tileArrayB = initializeTileArray(this->gridWidth, this->gridHeight);
 
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        g->fogManager->receiveGrid(this->gridWidth, this->gridHeight);
+
         std::cout << "received Grid"<< std::endl;
     }
 

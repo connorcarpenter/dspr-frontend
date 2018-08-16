@@ -11,6 +11,7 @@
 #include "Cursor.h"
 #include "UnitManager.h"
 #include "NetworkManager.h"
+#include "FogManager.h"
 
 namespace DsprFrontend
 {
@@ -33,5 +34,6 @@ namespace DsprFrontend
         Ref<Sprite> unitSelectCircle = Null<Sprite>();
         Ref<AnimatedSprite> moveMarker = Null<AnimatedSprite>();
         Ref<NetworkManager> networkManager = Null<NetworkManager>();
+        Ref<FogManager> fogManager = Null<FogManager>();
     };
 }
