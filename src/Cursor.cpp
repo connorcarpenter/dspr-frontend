@@ -112,7 +112,9 @@ namespace DsprFrontend
             {
                 ///group selection event
                 this->leftButtonDragging = false;
-                g->unitManager->deselectAllUnits();
+                bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) || InternalApp::getInternalApp()->keyPressed(Key::RightShift);
+                if (!shiftPressed)
+                    g->unitManager->deselectAllUnits();
                 this->setHoverListUnitsToSelected(true);
                 this->setHoverListUnitsToHover(false);
                 this->hoverList->Clear();
@@ -132,12 +134,53 @@ namespace DsprFrontend
             {
                 if (this->leftButtonPressedTime > 0)
                 {
-                    ///single unit selection event
-                    g->unitManager->deselectAllUnits();
-                    this->setHoverListUnitsToSelected(true);
+                    bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) ||
+                                        InternalApp::getInternalApp()->keyPressed(Key::RightShift);
+                    bool ctrlPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftControl) ||
+                                        InternalApp::getInternalApp()->keyPressed(Key::RightControl);
+                    if (this->leftButtonDoubleClickCountdown == 0 && !ctrlPressed)
+                    {
+                        ///single unit selection event
+
+                        if (!shiftPressed)
+                            g->unitManager->deselectAllUnits();
+                        if (!shiftPressed) {
+                            this->setHoverListUnitsToSelected(true);
+                        } else {
+                            this->toggleHoverListUnitsSelected();
+                        }
+
+                        this->leftButtonDoubleClickCountdown = this->leftButtonDoubleClickWindow;
+                    }
+                    else
+                    {
+                        ///its a doubleclick!
+
+                        this->setHoverListUnitsToHover(false);
+                        this->hoverList->Clear();
+
+                        //get new non-hovering units
+                        auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(g->camera->position->x, g->camera->position->y,
+                                                                                             g->camera->position->x + g->camera->width, g->camera->position->y + g->camera->height);
+
+                        if (nonHoveringUnits != nullptr && nonHoveringUnits->Size() > 0)
+                        {
+                            for (auto iterator = nonHoveringUnits->GetIterator(); iterator->Valid(); iterator->Next())
+                            {
+                                auto unit = iterator->Get();
+                                this->hoverList->Add(unit);
+                            }
+                        }
+                        if (!shiftPressed)
+                            g->unitManager->deselectAllUnits();
+                        this->setHoverListUnitsToSelected(true);
+                        this->hoverList->Clear();
+                    }
                 }
                 this->leftButtonPressedTime = 0;
             }
+
+            if (this->leftButtonDoubleClickCountdown > 0)this->leftButtonDoubleClickCountdown -= 1;
 
             if (leftButtonPressed && this->leftButtonPressedTime >= this->leftButtonPressedTimeToDrag)
             {
@@ -223,7 +266,32 @@ namespace DsprFrontend
         {
             auto unit = iterator->Get();
             unit->selected = selected;
-            g->unitManager->addToSelectionList(unit->id);
+            if (selected)
+            {
+                g->unitManager->addToSelectionList(unit->id);
+            }
+            else
+            {
+                g->unitManager->removeFromSelectionList(unit->id);
+            }
+        }
+    }
+
+    void Cursor::toggleHoverListUnitsSelected() {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        for (auto iterator = this->hoverList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            auto unit = iterator->Get();
+            unit->selected = !unit->selected;
+            if (unit->selected)
+            {
+                g->unitManager->addToSelectionList(unit->id);
+            }
+            else
+            {
+                g->unitManager->removeFromSelectionList(unit->id);
+            }
         }
     }
 }

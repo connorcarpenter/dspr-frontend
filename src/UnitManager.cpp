@@ -120,15 +120,24 @@ namespace DsprFrontend
 
     void UnitManager::addToSelectionList(int id)
     {
-        auto myInt = New<Int>(id);
-        selectionList->Add(myInt);
+        auto foundInt = this->selectionList->Find([&](Ref<Int> theInt){
+            return theInt->getInt() == id;
+        });
+
+        if (foundInt == nullptr) {
+            auto myInt = New<Int>(id);
+            selectionList->Add(myInt);
+        }
     }
 
     void UnitManager::removeFromSelectionList(int id) {
         auto theListInt = this->selectionList->Find([&](Ref<Int> theInt){
             return theInt->getInt() == id;
         });
-        this->selectionList->Remove(theListInt);
+
+        if (theListInt != nullptr) {
+            this->selectionList->Remove(theListInt);
+        }
     }
 
     void UnitManager::receiveUnit(Ref<Sova::String> idStr, Ref<Sova::String> xStr, Ref<Sova::String> yStr)

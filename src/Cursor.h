@@ -37,5 +37,10 @@ namespace DsprFrontend
         void setHoverListUnitsToHover(bool i);
 
         void setHoverListUnitsToSelected(bool selected);
+
+        void toggleHoverListUnitsSelected();
+
+        int leftButtonDoubleClickCountdown = 0;
+        const int leftButtonDoubleClickWindow = 20;
     };
 }

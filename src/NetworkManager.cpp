@@ -4,11 +4,11 @@
 
 #include <Sova/Common/StringBuilder.h>
 #include <Sova/Common/String.h>
-#include <iostream>
 #include <Sova/Network/HttpRequest.h>
 #include <Sova/Internal/InternalApp.h>
 #include "NetworkManager.h"
 #include "Global.h"
+#include <iostream>
 
 using Sova::String;
 using Sova::StringBuilder;
@@ -118,7 +118,7 @@ namespace DsprFrontend
             auto idString = splitString->At(1);
             auto propsString = splitString->At(2);
             g->unitManager->receiveUnitOrder(idString, propsString->Split('&'));
-            std::cout << message->AsCStr() << std::endl;
+//            std::cout << message->AsCStr() << std::endl;
             return;
         }
     }
