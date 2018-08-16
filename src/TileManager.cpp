@@ -10,6 +10,8 @@
 #include "Sova/Graphics/Internal/InternalTexture.h"
 #include "Sova/Graphics/Internal/InternalCamera.h"
 #include "Global.h"
+#include "Block.h"
+#include "FogManager.h"
 
 using namespace Sova;
 
@@ -64,10 +66,8 @@ namespace DsprFrontend
 
         if (tileFrame == -1)
         {
-            auto newBlock = New<Sprite>(New<Sova::String>("images/block.png"));
-            newBlock->anchor->set(11, 14);
-            newBlock->position->set((tileX+1) * tileWidth / 2, (tileY+1) * tileHeight / 2);
-            newBlock->SetDepth(tileY * -1);
+            auto newBlock = New<Block>(tileX, tileY);
+
             auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
             g->world->AddChild(newBlock);
 
@@ -141,6 +141,7 @@ namespace DsprFrontend
 
     void TileManager::Draw(Ref<Camera> camera, int xoffset, int yoffset)
     {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         if (this->destroyed) return;
         if (!this->visible) return;
 
@@ -157,28 +158,23 @@ namespace DsprFrontend
                     int x = a + i;
                     int y = b + j;
 
-                    if (getGridIndex(x * 2, y * 2) == -1)continue;
+                    if (getGridIndex(x * 2, y * 2) == -1)continue; // checking if out of bounds
 
-                    auto tile = this->tileArrayA[(y*this->gridWidth)+x];
-                    if (tile != nullptr)
+                    if (!g->fogManager->tileIsInShroud(x * 2, y * 2))
                     {
-                        drawTile(camera, ((x) * tileWidth) + xoffset, ((y) * tileHeight) + yoffset,
-                                 tile->frame);
-                    }
-                    else
-                    {
-                        auto i = 12;
+                        auto tile = this->tileArrayA[(y * this->gridWidth) + x];
+                        if (tile != nullptr) {
+                            drawTile(camera, ((x) * tileWidth) + xoffset, ((y) * tileHeight) + yoffset,
+                                     tile->frame);
+                        }
                     }
 
-                    tile = this->tileArrayB[(y*this->gridWidth)+x];
-                    if (tile != nullptr)
-                    {
-                        drawTile(camera, ((x + 0.5f) * tileWidth) + xoffset,
-                                 ((y + 0.5f) * tileHeight) + yoffset, tile->frame);
-                    }
-                    else
-                    {
-                        auto i = 12;
+                    if (!g->fogManager->tileIsInShroud((x * 2)+1, (y * 2)+1)) {
+                        auto tile = this->tileArrayB[(y * this->gridWidth) + x];
+                        if (tile != nullptr) {
+                            drawTile(camera, ((x + 0.5f) * tileWidth) + xoffset,
+                                     ((y + 0.5f) * tileHeight) + yoffset, tile->frame);
+                        }
                     }
                 }
             }

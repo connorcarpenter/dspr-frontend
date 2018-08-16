@@ -15,6 +15,7 @@
 #include "DsprShaderHandler.h"
 #include "Global.h"
 #include "UnitManager.h"
+#include "FogManager.h"
 
 using namespace Sova;
 
@@ -55,6 +56,7 @@ namespace DsprFrontend
             resources->Add(New<String>("images/tiles.png"));
             resources->Add(New<String>("images/trees.png"));
             resources->Add(New<String>("images/block.png"));
+            resources->Add(New<String>("images/fogTile.png"));
             resources->Add(New<String>("images/workerDown.png"));
             resources->Add(New<String>("images/workerUp.png"));
 
@@ -100,6 +102,10 @@ namespace DsprFrontend
         g->world->AddChild(g->cursor);
         /////////////////////////
 
+        g->fogManager = New<FogManager>();
+        g->fogManager->SetDepth(-8888);
+        g->world->AddChild(g->fogManager);
+
         g->app->onUpdate(
                 [&](float deltaFrameMs) {
                     onGameUpdate(deltaFrameMs);
@@ -110,7 +116,6 @@ namespace DsprFrontend
         }, tickRateMs, tickRateMs);
 
         g->networkManager = New<NetworkManager>();
-        g->fogManager = New<FogManager>();
     }
 
     int gcCount = 0;

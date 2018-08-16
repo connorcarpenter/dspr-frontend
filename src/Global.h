@@ -11,11 +11,11 @@
 #include "Cursor.h"
 #include "UnitManager.h"
 #include "NetworkManager.h"
-#include "FogManager.h"
 
 namespace DsprFrontend
 {
     class Unit;
+    class FogManager;
 
     class Global : public Sova::Refable
     {

@@ -6,6 +6,7 @@
 #include <Sova/Internal/InternalApp.h>
 #include <Sova/Math/Math.h>
 #include "Global.h"
+#include "FogManager.h"
 
 namespace DsprFrontend
 {
@@ -27,6 +28,9 @@ namespace DsprFrontend
         this->anchor->set(7, 18);
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, true);
     }
 
     void Unit::step(float deltaFrameMs)
@@ -40,6 +44,8 @@ namespace DsprFrontend
             if (this->walkAmount >= maxWalkAmount)
             {
                 walkAmount = 0;
+                g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
+                g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
                 this->tilePosition->set(this->nextTilePosition->x, this->nextTilePosition->y);
                 this->SetDepth(this->tilePosition->y * -1);
             }
@@ -71,6 +77,10 @@ namespace DsprFrontend
 
     void Unit::newNextTilePosition(int x, int y)
     {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
+        g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+
         this->lastPosition->set(this->position);
         this->interpolation = interpolationMax-interpolationStep;
 

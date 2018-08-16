@@ -9,6 +9,7 @@ fips_begin_app(dspr-frontend windowed)
             NetworkManager.h NetworkManager.cpp
             FogManager.h FogManager.cpp
             Tile.h Tile.cpp
+            Block.h Block.cpp
             Unit.h Unit.cpp
             Cursor.h Cursor.cpp
             Global.h Global.cpp
