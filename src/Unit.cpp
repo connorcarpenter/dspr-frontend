@@ -116,7 +116,6 @@ namespace DsprFrontend
 
             if (!this->tilePosition->Equals(this->moveTarget))
             {
-                g->moveMarker->Update(0);
                 int x = (int) ((((float) this->moveTarget->x / 2) + 0.5f) * g->tileManager->tileWidth);
                 int y = (int) ((((float) this->moveTarget->y / 2) + 0.5f) * g->tileManager->tileHeight);
                 g->moveMarker->position->set(x, y);

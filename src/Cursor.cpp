@@ -202,6 +202,7 @@ namespace DsprFrontend
         }
 
         g->unitHoverCircle->Update(0);
+        g->moveMarker->Update(0);
         AnimatedSprite::drawSelf(camera, xoffset, yoffset);
     }
 
