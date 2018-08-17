@@ -151,7 +151,7 @@ namespace DsprFrontend
             int a = xoffset / -tileWidth;
             int b = yoffset / -tileHeight;
 
-            for (int j = -1; j < 16; j++) // j should take into account grid height... right?
+            for (int j = -1; j < 13; j++) // j should take into account grid height... right?
             {
                 for (int i = -1; i < 14; i += 1) // j should take into account grid height... right?
                 {

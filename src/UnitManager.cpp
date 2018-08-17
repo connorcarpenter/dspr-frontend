@@ -188,4 +188,8 @@ namespace DsprFrontend
             }
         }
     }
+
+    int UnitManager::getNumberSelectedUnits() {
+        return this->selectionList->Size();
+    }
 }

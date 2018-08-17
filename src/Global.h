@@ -16,6 +16,7 @@ namespace DsprFrontend
 {
     class Unit;
     class FogManager;
+    class UiManager;
 
     class Global : public Sova::Refable
     {
@@ -35,5 +36,6 @@ namespace DsprFrontend
         Ref<AnimatedSprite> moveMarker = Null<AnimatedSprite>();
         Ref<NetworkManager> networkManager = Null<NetworkManager>();
         Ref<FogManager> fogManager = Null<FogManager>();
+        Ref<UiManager> uiManager = Null<UiManager>();
     };
 }

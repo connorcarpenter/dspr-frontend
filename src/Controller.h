@@ -16,6 +16,7 @@
 #include "Global.h"
 #include "UnitManager.h"
 #include "FogManager.h"
+#include "UiManager.h"
 
 using namespace Sova;
 
@@ -59,6 +60,12 @@ namespace DsprFrontend
             resources->Add(New<String>("images/fogTile.png"));
             resources->Add(New<String>("images/workerDown.png"));
             resources->Add(New<String>("images/workerUp.png"));
+            resources->Add(New<String>("images/armybar.png"));
+            resources->Add(New<String>("images/commandcard.png"));
+            resources->Add(New<String>("images/minimap.png"));
+            resources->Add(New<String>("images/unitPortrait.png"));
+            resources->Add(New<String>("images/commandActionsHover.png"));
+            resources->Add(New<String>("images/commandActionsUp.png"));
 
             g->app->load(resources)
                     ->onFinish(
@@ -85,22 +92,9 @@ namespace DsprFrontend
 
         g->unitManager = New<UnitManager>();
 
-        ///UI stuff
-        g->unitHoverCircle = New<AnimatedSprite>(New<String>("images/unitHover.png"), 16, 12, 1);
-        g->unitHoverCircle->imageSpeed = 0.1f;
-        g->unitHoverCircle->anchor->set(8, 6);
-
-        g->unitSelectCircle = New<Sprite>(New<String>("images/unitSelection.png"));
-        g->unitSelectCircle->anchor->set(8, 5);
-
-        g->moveMarker = New<AnimatedSprite>(New<String>("images/moveMarker.png"), 11, 9, 1);
-        g->moveMarker->imageSpeed = 0.1;
-        g->moveMarker->anchor->set(5, 4);
-
-        g->cursor = New<Cursor>();
-        g->cursor->SetDepth(-9999);
-        g->world->AddChild(g->cursor);
-        /////////////////////////
+        g->uiManager = New<UiManager>();
+        g->uiManager->SetDepth(-9990);
+        g->world->AddChild(g->uiManager);
 
         g->fogManager = New<FogManager>();
         g->fogManager->SetDepth(-8888);
