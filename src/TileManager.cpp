@@ -72,8 +72,6 @@ namespace DsprFrontend
 
             g->world->AddChild(newBlock);
 
-            g->minimap->DrawTile(tileX, tileY, Color::Gray);
-
             return;
         }
 
@@ -86,10 +84,6 @@ namespace DsprFrontend
         {
             this->tileArrayB[tileIndex] = new Tile(tileFrame);
         }
-
-        if (tileFrame >= 0 && tileFrame <=2) g->minimap->DrawTile(tileX, tileY, Color::Green);
-        if (tileFrame >= 3 && tileFrame <=5) g->minimap->DrawTile(tileX, tileY, Color::Blue);
-        if (tileFrame >= 6 && tileFrame <=8) g->minimap->DrawTile(tileX, tileY, Color::Brown);
 
         //std::cout << "received tile: "<<tileX<<", "<<tileY<<", "<<tileFrame<< std::endl;
     }
@@ -144,6 +138,18 @@ namespace DsprFrontend
             int ysmall = (y-1) / 2;
             return (ysmall * this->gridWidth) + xsmall;
         }
+    }
+
+    int TileManager::getTileFrame(int x, int y)
+    {
+        auto gridIndex = getGridIndex(x,y);
+        if (gridIndex == -1) return -1;
+        auto tileIndex = getTileIndex(gridIndex, x, y);
+        Tile* tile = nullptr;
+        if (gridIndex == 0) tile = this->tileArrayA[tileIndex];
+        if (gridIndex == 1) tile = this->tileArrayB[tileIndex];
+        if (tile != nullptr) return tile->frame;
+        return -1;
     }
 
     void TileManager::Draw(Ref<Camera> camera, int xoffset, int yoffset)

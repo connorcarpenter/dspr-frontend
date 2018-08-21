@@ -10,8 +10,9 @@ namespace DsprFrontend
     {
     public:
         Block(int x, int y);
-        void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
-
         Ref<Point> tilePosition = Null<Point>();
+    private:
+
+        void step();
     };
 }

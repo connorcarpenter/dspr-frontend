@@ -13,7 +13,8 @@
 namespace DsprFrontend
 {
     FogManager::FogManager() {
-
+        this->minimapPixel = New<Pixel>();
+        this->minimapPixel->setLineStyle(1, Color::Gray, 0.5f);
     }
 
     FogManager::~FogManager() {
@@ -77,6 +78,8 @@ namespace DsprFrontend
     {
         if (!this->receivedGrid) return;
 
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
         for (int i = 0; i < radius*2; i+= 1)
         {
             for (int j = 0;j < radius*2;j+=1)
@@ -91,12 +94,20 @@ namespace DsprFrontend
                 int tileIndex = getTileIndex(gridIndex, tx, ty);
                 if (gridIndex == 0)
                 {
-                    if (reveal && this->fogArrayA[tileIndex] == 0) inc += 1;
+                    if (reveal && this->fogArrayA[tileIndex] == 0)
+                    {
+                        inc += 1;
+                        g->minimap->DrawTile(tx,ty);
+                    }
                     this->fogArrayA[tileIndex] += inc;
                 }
                 else
                 {
-                    if (reveal && this->fogArrayB[tileIndex] == 0) inc += 1;
+                    if (reveal && this->fogArrayB[tileIndex] == 0)
+                    {
+                        inc += 1;
+                        g->minimap->DrawTile(tx,ty);
+                    }
                     this->fogArrayB[tileIndex] += inc;
                 }
             }
@@ -216,5 +227,9 @@ namespace DsprFrontend
         InternalApp::getInternalApp()->vertexBuffer[index].u = u;
         InternalApp::getInternalApp()->vertexBuffer[index].v = v;
         return index + 1;
+    }
+
+    void FogManager::minimapDrawFog() {
+
     }
 }

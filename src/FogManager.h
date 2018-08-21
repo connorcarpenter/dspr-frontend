@@ -4,6 +4,7 @@
 
 #include <Sova/Graphics/Container.h>
 #include <Sova/Graphics/Internal/InternalTexture.h>
+#include <Sova/Graphics/Pixel.h>
 
 namespace DsprFrontend
 {
@@ -18,6 +19,8 @@ namespace DsprFrontend
         bool tileIsInShroud(int x, int y);
 
         void Draw(Ref<Camera> camera, int xoffset, int yoffset);
+
+        void minimapDrawFog();
 
     private:
         int gridWidth = 0;
@@ -47,5 +50,7 @@ namespace DsprFrontend
         int writeVertex(int index, float x, float y, float u, float v);
 
         void drawFogTile(Ref<Camera> camera, float xoffset, float yoffset);
+
+        Ref<Sova::Pixel> minimapPixel = Null<Pixel>();
     };
 }

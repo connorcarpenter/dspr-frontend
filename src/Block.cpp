@@ -9,9 +9,10 @@
 
 namespace DsprFrontend
 {
-    DsprFrontend::Block::Block(int x, int y) : Sprite()
+    Block::Block(int x, int y) : Sprite()
     {
         this->setTexture(New<Sova::String>("images/block.png"));
+        this->setVisible(false);
         this->tilePosition = New<Point>(x,y);
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
@@ -19,14 +20,21 @@ namespace DsprFrontend
         this->position->set((this->tilePosition->x+1) * g->tileManager->tileWidth / 2,
                             (this->tilePosition->y+1) * g->tileManager->tileHeight / 2);
         this->SetDepth(this->tilePosition->y * -1);
+
+        this->OnUpdate([&](float deltaFrameMs){ step(); });
     }
 
-    void Block::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
+    void Block::step()
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        if (g->fogManager->tileIsInShroud(this->tilePosition->x, this->tilePosition->y)) return;
-
-        Sprite::drawSelf(camera, xoffset, yoffset);
+        if (!this->getVisible())
+        {
+            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            if (!g->fogManager->tileIsInShroud(this->tilePosition->x, this->tilePosition->y))
+            {
+                this->setVisible(true);
+                g->minimap->DrawTile(this->tilePosition->x, this->tilePosition->y, Color::Gray);
+            }
+        }
     }
 }
 

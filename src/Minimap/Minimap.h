@@ -14,6 +14,9 @@ namespace DsprFrontend
     public:
         Minimap();
         void DrawTile(int x, int y, Color color);
+
+        void DrawTile(int x, int y);
+
     private:
         Global* g = nullptr;
         Ref<Camera> terrainCamera = Null<Camera>();

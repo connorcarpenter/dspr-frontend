@@ -15,6 +15,8 @@ namespace DsprFrontend
     {
         this->unitList = New<List<Unit>>();
         this->selectionList = New<List<Int>>();
+        this->minimapPixel = New<Pixel>();
+        this->minimapPixel->setLineStyle(1, Color::White);
     }
 
     void UnitManager::uiUpdate()
@@ -191,5 +193,9 @@ namespace DsprFrontend
 
     int UnitManager::getNumberSelectedUnits() {
         return this->selectionList->Size();
+    }
+
+    Ref<List<Unit>> UnitManager::getUnits() {
+        return this->unitList;
     }
 }

@@ -83,8 +83,7 @@ namespace DsprFrontend
         g->world = New<Container>();
         static const int pixelRatio = 5;
         g->camera = New<Camera>(20, 20, g->app->width / pixelRatio, g->app->height / pixelRatio, g->world);
-        //g->viewport = New<Viewport>(0, 0, g->app->width, g->app->height, g->camera);
-        g->viewport = New<Viewport>(g->app->width/10, g->app->height/10, g->app->width/2, g->app->height/2, g->camera);
+        g->viewport = New<Viewport>(0, 0, g->app->width, g->app->height, g->camera);
         g->app->addViewport(g->viewport);
 
         g->tileManager = New<TileManager>();

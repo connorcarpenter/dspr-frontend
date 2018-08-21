@@ -5,6 +5,7 @@
 //
 
 #include <Sova/References/Refable.h>
+#include <Sova/Graphics/Pixel.h>
 #include "Sova/Common/Int.h"
 
 #include "Unit.h"
@@ -29,10 +30,12 @@ namespace DsprFrontend
         void deselectAllUnits();
         int getNumberSelectedUnits();
 
+        Ref<List<Unit>> getUnits();
+
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
         Ref<List<Sova::Int>> selectionList = Null<List<Sova::Int>>();
         bool rightButtonAlreadyClicked = false;
-
+        Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
     };
 }

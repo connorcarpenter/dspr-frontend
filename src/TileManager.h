@@ -29,6 +29,8 @@ namespace DsprFrontend
         const int tileWidth = 20;
         const int tileHeight = 10;
 
+        int getTileFrame(int x, int y);
+
     private:
 
         Tile **initializeTileArray(int width, int height);
@@ -54,5 +56,6 @@ namespace DsprFrontend
         int writeVertex(int index, float x, float y, float u, float v);
 
         void drawTile(Ref<Camera> camera, float xoffset, float yoffset, int frame);
+
     };
 }
