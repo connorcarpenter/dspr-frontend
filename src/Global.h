@@ -11,6 +11,7 @@
 #include "Cursor.h"
 #include "UnitManager.h"
 #include "NetworkManager.h"
+#include "Minimap/Minimap.h"
 
 namespace DsprFrontend
 {
@@ -37,5 +38,6 @@ namespace DsprFrontend
         Ref<NetworkManager> networkManager = Null<NetworkManager>();
         Ref<FogManager> fogManager = Null<FogManager>();
         Ref<UiManager> uiManager = Null<UiManager>();
+        Ref<Minimap> minimap = Null<Minimap>();
     };
 }

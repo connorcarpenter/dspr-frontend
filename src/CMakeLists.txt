@@ -15,6 +15,9 @@ fips_begin_app(dspr-frontend windowed)
             Cursor.h Cursor.cpp
             Global.h Global.cpp
             TestClass.h TestClass.cpp
+            Minimap/Minimap.h Minimap/Minimap.cpp
+            Minimap/MinimapUnits.h Minimap/MinimapUnits.cpp
+            Minimap/MinimapFog.h Minimap/MinimapFog.cpp
     )
     oryol_shader(shaders.shd)
     fips_deps(Sova)

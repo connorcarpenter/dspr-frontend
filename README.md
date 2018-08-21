@@ -10,5 +10,6 @@ Notes:
 
 TODO:
 
-- Assets/Gfx/TextureLoader.cc is a child of ResourceLoader, and loads dds files.
-We gotta make one of those that loads PNG files
+Future Optimizations:
+
+    - Only redraw fog when FogManager

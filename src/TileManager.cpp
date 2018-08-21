@@ -56,6 +56,8 @@ namespace DsprFrontend
         if (!this->receivedGrid)
             return;
 
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
         int tileX = atoi(x->AsCStr());
         int tileY = atoi(y->AsCStr());
         int tileFrame = atoi(frame->AsCStr());
@@ -68,8 +70,9 @@ namespace DsprFrontend
         {
             auto newBlock = New<Block>(tileX, tileY);
 
-            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
             g->world->AddChild(newBlock);
+
+            g->minimap->DrawTile(tileX, tileY, Color::Gray);
 
             return;
         }
@@ -83,6 +86,10 @@ namespace DsprFrontend
         {
             this->tileArrayB[tileIndex] = new Tile(tileFrame);
         }
+
+        if (tileFrame >= 0 && tileFrame <=2) g->minimap->DrawTile(tileX, tileY, Color::Green);
+        if (tileFrame >= 3 && tileFrame <=5) g->minimap->DrawTile(tileX, tileY, Color::Blue);
+        if (tileFrame >= 6 && tileFrame <=8) g->minimap->DrawTile(tileX, tileY, Color::Brown);
 
         //std::cout << "received tile: "<<tileX<<", "<<tileY<<", "<<tileFrame<< std::endl;
     }

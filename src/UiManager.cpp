@@ -45,7 +45,6 @@ namespace DsprFrontend
         this->minimap->position->set(0, 100);
         this->minimap->drawSelf(camera, 0, 0);
 
-
         //draw armybar
         this->armybar->position->set(48, 116);
         this->armybar->drawSelf(camera, 0, 0);
