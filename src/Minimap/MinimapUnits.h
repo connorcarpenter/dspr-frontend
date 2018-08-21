@@ -4,6 +4,7 @@
 
 #include <Sova/Graphics/Container.h>
 #include <Sova/Graphics/Pixel.h>
+#include <Sova/Graphics/Rectangle.h>
 
 namespace DsprFrontend
 {
@@ -17,5 +18,6 @@ namespace DsprFrontend
     private:
         Global* g = nullptr;
         Ref<Sova::Pixel> pixel = Null<Sova::Pixel>();
+        Ref<Sova::Rectangle> rectangle = Null<Sova::Rectangle>();
     };
 }

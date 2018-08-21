@@ -16,6 +16,6 @@ namespace DsprFrontend {
 
     void MinimapFog::drawSelf(Sova::Ref<Camera> camera, int xoffset, int yoffset)
     {
-        this->g->fogManager->minimapDrawFog();
+        this->g->fogManager->minimapDrawFog(camera, xoffset, yoffset);
     }
 }

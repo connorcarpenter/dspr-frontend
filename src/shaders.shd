@@ -39,7 +39,7 @@ uniform sampler2D canvas;
 in vec2 uv;
 out vec4 fragColor;
 void main() {
-    fragColor = vec4(texture(canvas, uv).xyz, 1.0);
+    fragColor = vec4(texture(canvas, uv).xyzw);
 }
 @end 
 

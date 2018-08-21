@@ -19,16 +19,18 @@ namespace DsprFrontend {
         auto terrainViewport = New<Viewport>(5*5,103*5,38*5,38*5, this->terrainCamera);
         g->app->addViewport(terrainViewport);
 
+        auto minimapFog = New<MinimapFog>();
+        auto fogCamera = New<Camera>(0,0,128,128,minimapFog, Color::Black, 0.0f, true);
+        fogCamera->SkipFramesToDrawFramesRatio = 25;
+        auto fogViewport = New<Viewport>(5*5,103*5,38*5,38*5,fogCamera);
+        g->app->addViewport(fogViewport);
+
         auto minimapUnits = New<MinimapUnits>();
-        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.0f, true);
-        auto unitsViewport = New<Viewport>(10*5,108*5,43*5,43*5, unitsCamera);
+        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.2f, true);
+        unitsCamera->SkipFramesToDrawFramesRatio = 8;
+        auto unitsViewport = New<Viewport>(5*5,103*5,38*5,38*5, unitsCamera);
         g->app->addViewport(unitsViewport);
-//
-//        auto minimapFog = New<MinimapFog>();
-//        auto fogCamera = New<Camera>(0,0,64,64,minimapFog);
-//        auto fogViewport = New<Viewport>(0,0,64,64,fogCamera);
-//        g->app->addViewport(fogViewport);
-//
+
         this->pixel = New<Pixel>();
     }
 

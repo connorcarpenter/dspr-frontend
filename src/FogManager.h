@@ -20,7 +20,7 @@ namespace DsprFrontend
 
         void Draw(Ref<Camera> camera, int xoffset, int yoffset);
 
-        void minimapDrawFog();
+        void minimapDrawFog(Sova::Ref<Camera> camera, int xoffset, int yoffset);
 
     private:
         int gridWidth = 0;
