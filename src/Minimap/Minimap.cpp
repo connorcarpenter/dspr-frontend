@@ -26,12 +26,25 @@ namespace DsprFrontend {
         g->app->addViewport(fogViewport);
 
         auto minimapUnits = New<MinimapUnits>();
-        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.2f, true);
+        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.0f, true);
         unitsCamera->SkipFramesToDrawFramesRatio = 8;
         auto unitsViewport = New<Viewport>(5*5,103*5,38*5,38*5, unitsCamera);
         g->app->addViewport(unitsViewport);
 
+        g->cursor = New<Cursor>();
+        auto cursorCamera = New<Camera>(0,0,g->app->width/5,g->app->height/5, g->cursor, Color::Black, 0.0f, true);
+        auto cursorViewport = New<Viewport>(0,0,g->app->width,g->app->height, cursorCamera);
+        g->app->addViewport(cursorViewport);
+
         this->pixel = New<Pixel>();
+
+        this->OnUpdate([&](float deltaFrameMs){ Step(deltaFrameMs); });
+
+        g->world->AddChild(ThisRef<Minimap>());
+    }
+
+    void Minimap::Step(float deltaFrameMs) {
+        g->cursor->Update(deltaFrameMs);
     }
 
     void Minimap::DrawTile(int x, int y, Color color)

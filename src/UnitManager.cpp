@@ -8,6 +8,7 @@
 #include <Sova/Math/Math.h>
 #include "UnitManager.h"
 #include "Global.h"
+#include "UiManager.h"
 
 namespace DsprFrontend
 {
@@ -27,6 +28,10 @@ namespace DsprFrontend
 
             auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
             auto tilePosition = g->cursor->getTilePosition();
+
+            auto mmPosition = g->uiManager->getMinimapPosition(g->cursor->position);
+            if (mmPosition != nullptr)
+                tilePosition->set(mmPosition);
 
             auto sb = New<Sova::StringBuilder>();
             sb->Append(New<Sova::String>("unit/1.0/order|"));

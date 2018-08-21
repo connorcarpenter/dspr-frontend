@@ -3,6 +3,7 @@
 //
 
 #include <Sova/Internal/InternalApp.h>
+#include <Sova/Math/Math.h>
 #include "UiManager.h"
 #include "Global.h"
 
@@ -23,10 +24,6 @@ namespace DsprFrontend
         g->moveMarker = New<AnimatedSprite>(New<Sova::String>("images/moveMarker.png"), 11, 9, 1);
         g->moveMarker->imageSpeed = 0.1;
         g->moveMarker->anchor->set(5, 4);
-
-        g->cursor = New<Cursor>();
-        g->cursor->SetDepth(-9999);
-        g->world->AddChild(g->cursor);
         /////////////////////////
 
         this->minimap = New<Sprite>(New<Sova::String>("images/minimap.png"));
@@ -86,5 +83,42 @@ namespace DsprFrontend
         }
 
         Container::Draw(camera, xoffset, yoffset);
+    }
+
+    bool UiManager::captureLeftClickEvent(Ref<Point> clickPoint) {
+        if (Math::PointInBox(clickPoint->x,clickPoint->y,0,100,48,144))
+        {
+            //clicking within minimap container
+            if (Math::PointInBox(clickPoint->x,clickPoint->y,5,103,43,141))
+            {
+                //clicking within actual minimap
+                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                auto gridSize = g->tileManager->getGridSize();
+                g->camera->position->set(
+                        (int) (((((float) clickPoint->x - 5)/38)*gridSize->x*g->tileManager->tileWidth) - g->camera->width/2),
+                        (int) (((((float) clickPoint->y -103)/38)*gridSize->y*g->tileManager->tileHeight) - (g->camera->height-32)/2)
+                );
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    Ref<Point> UiManager::getMinimapPosition(Ref<Point> clickPoint)
+    {
+        //clicking within minimap container
+        if (Math::PointInBox(clickPoint->x,clickPoint->y,5,103,43,141))
+        {
+            //clicking within actual minimap
+            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            auto gridSize = g->tileManager->getGridSize();
+            return New<Point>(
+                    ((int) ((((float) clickPoint->x - 5)/38)*gridSize->x))*2,
+                    ((int) ((((float) clickPoint->y -103)/38)*gridSize->y))*2
+            );
+        }
+
+        return Null<Point>();
     }
 }

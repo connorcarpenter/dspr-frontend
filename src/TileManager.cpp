@@ -242,4 +242,8 @@ namespace DsprFrontend
         InternalApp::getInternalApp()->vertexBuffer[index].v = v;
         return index + 1;
     }
+
+    Ref<Point> TileManager::getGridSize() {
+        return New<Point>(gridWidth, gridHeight);
+    }
 }

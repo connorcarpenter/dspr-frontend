@@ -30,6 +30,7 @@ namespace DsprFrontend
         const int tileHeight = 10;
 
         int getTileFrame(int x, int y);
+        Ref<Point> getGridSize();
 
     private:
 

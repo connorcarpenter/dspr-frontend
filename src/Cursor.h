@@ -20,6 +20,7 @@ namespace DsprFrontend
 
         bool leftButtonDragging = false;
         Ref<Point> leftButtonDragPoint = Null<Point>();
+        Ref<Point> worldPosition = Null<Point>();
 
     private:
 

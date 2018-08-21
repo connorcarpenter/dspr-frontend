@@ -9,7 +9,7 @@ namespace DsprFrontend
 {
     class Global;
 
-    class Minimap : public Sova::Refable
+    class Minimap : public Sova::Container
     {
     public:
         Minimap();
@@ -21,5 +21,7 @@ namespace DsprFrontend
         Global* g = nullptr;
         Ref<Camera> terrainCamera = Null<Camera>();
         Ref<Sova::Pixel> pixel = Null<Sova::Pixel>();
+
+        void Step(float deltaFrameMs);
     };
 }

@@ -14,6 +14,10 @@ namespace DsprFrontend
     public:
         UiManager();
         void Draw(Ref<Camera> camera, int xoffset, int yoffset);
+        bool captureLeftClickEvent(Ref<Point> clickPoint);
+
+        Ref<Point> getMinimapPosition(Ref<Point> clickPoint);
+
     private:
         Ref<Sprite> minimap = Null<Sprite>();
         Ref<Sprite> armybar = Null<Sprite>();
@@ -22,5 +26,6 @@ namespace DsprFrontend
         Ref<Sova::Line> healthBarLine = Null<Sova::Line>();
         Ref<AnimatedSprite> commandActionsUp = Null<AnimatedSprite>();
         Ref<AnimatedSprite> commandActionsHover = Null<AnimatedSprite>();
+
     };
 }

@@ -6,6 +6,7 @@
 #include "Global.h"
 #include "Sova/Math/Math.h"
 #include "Sova/Graphics/Color.h"
+#include "UiManager.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 
@@ -31,9 +32,10 @@ namespace DsprFrontend
         this->setImageIndex(1);
         this->leftButtonDragPoint = New<Point>(0,0);
         this->selectionBox = New<Sova::Rectangle>(0,0);
-        this->selectionBox->setLineStyle(1, Color::Green, 0.6f);
-        this->selectionBox->setFillStyle(Color::Green, 0.2f);
+        this->selectionBox->setLineStyle(1, Color::Green, 0.8f);
+        this->selectionBox->setFillStyle(Color::Green, 0.5f);
         this->hoverList = New<List<Unit>>();
+        this->worldPosition = New<Point>(0,0);
 
 #if ORYOL_LINUX
         glfwSetInputMode(Oryol::_priv::glfwDisplayMgr::getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -46,20 +48,25 @@ namespace DsprFrontend
     void Cursor::step()
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        this->position->x = (InternalApp::getInternalApp()->getMouseX() / 5) + g->camera->position->x;
-        this->position->y = (InternalApp::getInternalApp()->getMouseY() / 5) + g->camera->position->y;
+        this->position->x = (InternalApp::getInternalApp()->getMouseX() / 5);
+        this->position->y = (InternalApp::getInternalApp()->getMouseY() / 5);
+
+        this->worldPosition->x = this->position->x  + g->camera->position->x;
+        this->worldPosition->y = this->position->y  + g->camera->position->y;
 
         //Hovering over units
         if (this->leftButtonDragging)
         {
             //get new non-hovering units
-            auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(this->leftButtonDragPoint->x, this->leftButtonDragPoint->y,
-                                                                                 this->position->x, this->position->y);
+            auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(this->leftButtonDragPoint->x + g->camera->position->x,
+                                                                                 this->leftButtonDragPoint->y + g->camera->position->y,
+                                                                                 this->worldPosition->x, this->worldPosition->y);
 
             //currently hovered units, if outside the box, should be set back to non-hovering
             auto unitsOutsideBox = g->unitManager->getUnitsOutsideBox(this->hoverList,
-                                                                      this->leftButtonDragPoint->x, this->leftButtonDragPoint->y,
-                                                                      this->position->x, this->position->y);
+                                                                      this->leftButtonDragPoint->x + g->camera->position->x,
+                                                                      this->leftButtonDragPoint->y + g->camera->position->y,
+                                                                      this->worldPosition->x, this->worldPosition->y);
 
             if (unitsOutsideBox != nullptr && unitsOutsideBox->Size() > 0)
             {
@@ -83,7 +90,7 @@ namespace DsprFrontend
         }
         else
         {
-            auto unitHovering = g->unitManager->getUnitOverlappingWithPoint(this->position->x, this->position->y);
+            auto unitHovering = g->unitManager->getUnitOverlappingWithPoint(this->worldPosition->x, this->worldPosition->y);
             bool cursorIsHovering = (imageIndex == 0);
 
             if (unitHovering == nullptr && cursorIsHovering)
@@ -105,10 +112,16 @@ namespace DsprFrontend
             }
         }
 
+        bool leftButtonPressed = InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left);
         //Left button clicking + dragging
+        if (leftButtonPressed)
+        {
+            leftButtonPressed = g->uiManager->captureLeftClickEvent(this->position);
+        }
+
         if (this->leftButtonDragging)
         {
-            if (!InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left))
+            if (!leftButtonPressed)
             {
                 ///group selection event
                 this->leftButtonDragging = false;
@@ -122,7 +135,6 @@ namespace DsprFrontend
         }
         else
         {
-            bool leftButtonPressed = InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left);
             if (leftButtonPressed)
             {
                 if (this->leftButtonPressedTime == 0)
@@ -213,8 +225,8 @@ namespace DsprFrontend
         int quarterTileW = (g->tileManager->tileWidth/4);
         int quarterTileH = (g->tileManager->tileHeight/4);
 
-        int posx = this->position->x - quarterTileW;
-        int posy = this->position->y - quarterTileH;
+        int posx = this->worldPosition->x - quarterTileW;
+        int posy = this->worldPosition->y - quarterTileH;
 
         int x = (posx) / halfTileW;
         int y = (posy) / halfTileH;
@@ -235,6 +247,8 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
+        AnimatedSprite::drawSelf(camera, xoffset, yoffset);
+
         if (this->leftButtonDragging)
         {
             this->selectionBox->position->set(this->leftButtonDragPoint->x, this->leftButtonDragPoint->y);
@@ -246,7 +260,6 @@ namespace DsprFrontend
 
         g->unitHoverCircle->Update(0);
         g->moveMarker->Update(0);
-        AnimatedSprite::drawSelf(camera, xoffset, yoffset);
     }
 
     void Cursor::setHoverListUnitsToHover(bool hovering)
