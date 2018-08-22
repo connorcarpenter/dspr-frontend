@@ -5,6 +5,7 @@
 #include <Sova/Graphics/Container.h>
 #include <Sova/Graphics/Internal/InternalTexture.h>
 #include <Sova/Graphics/Pixel.h>
+#include <Sova/Graphics/Rectangle.h>
 
 namespace DsprFrontend
 {
@@ -20,7 +21,7 @@ namespace DsprFrontend
 
         void Draw(Ref<Camera> camera, int xoffset, int yoffset);
 
-        void minimapDrawFog(Sova::Ref<Camera> camera, int xoffset, int yoffset);
+        void minimapDrawFog(Sova::Ref<Camera> camera, int x, int y, int w, int h);
 
     private:
         int gridWidth = 0;
@@ -52,5 +53,6 @@ namespace DsprFrontend
         void drawFogTile(Ref<Camera> camera, float xoffset, float yoffset);
 
         Ref<Sova::Pixel> minimapPixel = Null<Pixel>();
+        Ref<Sova::Rectangle> minimapRect = Null<Rectangle>();
     };
 }

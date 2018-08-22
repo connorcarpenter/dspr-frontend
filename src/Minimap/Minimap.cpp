@@ -15,24 +15,24 @@ namespace DsprFrontend {
     {
         this->g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
-        this->terrainCamera = New<Camera>(0,0,128,128,Null<Container>(), Color::Black, 1.0f, false);
+        this->terrainCamera = New<Camera>(0,0,128,128,Null<Container>(), Color::Black, 1.0f, false, false);
         auto terrainViewport = New<Viewport>(5*5,103*5,38*5,38*5, this->terrainCamera);
         g->app->addViewport(terrainViewport);
 
         auto minimapFog = New<MinimapFog>();
-        auto fogCamera = New<Camera>(0,0,128,128,minimapFog, Color::Black, 0.0f, true);
-        fogCamera->SkipFramesToDrawFramesRatio = 25;
+        auto fogCamera = New<Camera>(0,0,128,128,minimapFog, Color::Black, 0.0f, true, false);
+        fogCamera->SkipFramesToDrawFramesRatio = 1;
         auto fogViewport = New<Viewport>(5*5,103*5,38*5,38*5,fogCamera);
         g->app->addViewport(fogViewport);
 
         auto minimapUnits = New<MinimapUnits>();
-        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.0f, true);
-        unitsCamera->SkipFramesToDrawFramesRatio = 8;
+        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.0f);
+        unitsCamera->SkipFramesToDrawFramesRatio = 5;
         auto unitsViewport = New<Viewport>(5*5,103*5,38*5,38*5, unitsCamera);
         g->app->addViewport(unitsViewport);
 
         g->cursor = New<Cursor>();
-        auto cursorCamera = New<Camera>(0,0,g->app->width/5,g->app->height/5, g->cursor, Color::Black, 0.0f, true);
+        auto cursorCamera = New<Camera>(0,0,g->app->width/5,g->app->height/5, g->cursor, Color::Black, 0.0f);
         auto cursorViewport = New<Viewport>(0,0,g->app->width,g->app->height, cursorCamera);
         g->app->addViewport(cursorViewport);
 

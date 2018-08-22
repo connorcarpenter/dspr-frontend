@@ -15,6 +15,11 @@ namespace DsprFrontend
     FogManager::FogManager() {
         this->minimapPixel = New<Pixel>();
         this->minimapPixel->setLineStyle(1, Color::Gray, 0.75f);
+
+        this->minimapRect = New<Rectangle>(0,0);
+        this->minimapRect->setLineStyle(false);
+        this->minimapRect->setFillStyle(Color::Black, 0.0f);
+        this->minimapRect->position->x = -1;
     }
 
     FogManager::~FogManager() {
@@ -228,37 +233,45 @@ namespace DsprFrontend
         return index + 1;
     }
 
-    void FogManager::minimapDrawFog(Sova::Ref<Camera> camera, int xoffset, int yoffset) {
+    void FogManager::minimapDrawFog(Sova::Ref<Camera> camera, int xs, int ys, int w, int h)
+    {
         if (this->destroyed) return;
         if (!this->receivedGrid) return;
 
-        for (int x = 0; x < this->gridWidth; x++) // j should take into account grid height... right?
+        //clear section
+        if (this->minimapRect->position->x == -1){
+            this->minimapRect->size->set((w*2)+2,(h*2)+2);
+        }
+        this->minimapRect->position->set((xs*2),(ys*2));
+        this->minimapRect->drawSelf(camera, 0, 0);
+
+        for (int i = 0; i <= w; i++)
         {
-            for (int y = 0; y < this->gridHeight; y += 1) // j should take into account grid height... right?
+            for (int j = 0; j <= h; j += 1)
             {
-                if (getGridIndex(x * 2, y * 2) == -1)continue; // checking if out of bounds
+                int x = xs + i;
+                int y = ys + j;
+
+                if (getGridIndex(x * 2, y * 2) == -1) continue; // checking if out of bounds
 
                 if (tileIsInFog(x * 2, y * 2))
                 {
                     this->minimapPixel->position->set(x*2, y*2);
-                    this->minimapPixel->drawSelf(camera, xoffset, yoffset);
+                    this->minimapPixel->drawSelf(camera, 0, 0);
 
                     this->minimapPixel->position->set((x*2)+1, y*2);
-                    this->minimapPixel->drawSelf(camera, xoffset, yoffset);
+                    this->minimapPixel->drawSelf(camera, 0, 0);
                 }
 
                 if (tileIsInFog((x * 2)+1, (y * 2)+1))
                 {
                     this->minimapPixel->position->set((x * 2)+1, (y * 2)+1);
-                    this->minimapPixel->drawSelf(camera, xoffset, yoffset);
+                    this->minimapPixel->drawSelf(camera, 0, 0);
 
                     this->minimapPixel->position->set((x * 2)+2, (y * 2)+1);
-                    this->minimapPixel->drawSelf(camera, xoffset, yoffset);
+                    this->minimapPixel->drawSelf(camera, 0, 0);
                 }
             }
         }
-
-
-
     }
 }
