@@ -12,7 +12,7 @@ namespace DsprFrontend
     Block::Block(int x, int y) : Sprite()
     {
         this->setTexture(New<Sova::String>("images/block.png"));
-        this->setVisible(false);
+        this->visible = false;
         this->tilePosition = New<Point>(x,y);
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
@@ -22,16 +22,18 @@ namespace DsprFrontend
         this->SetDepth(this->tilePosition->y * -1);
 
         this->OnUpdate([&](float deltaFrameMs){ step(); });
+
+        this->tint = Color::Blue;
     }
 
     void Block::step()
     {
-        if (!this->getVisible())
+        if (!this->visible)
         {
             auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
             if (!g->fogManager->tileIsInShroud(this->tilePosition->x, this->tilePosition->y))
             {
-                this->setVisible(true);
+                this->visible = true;
                 g->minimap->DrawTile(this->tilePosition->x, this->tilePosition->y, Color::Gray);
             }
         }
