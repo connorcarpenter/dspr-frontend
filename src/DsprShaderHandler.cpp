@@ -10,9 +10,13 @@ using namespace Oryol;
 
 namespace DsprFrontend
 {
-    Oryol::Id DsprShaderHandler::getNormalShader()
+    Oryol::Id DsprShaderHandler::getScreenShader()
     {
-        return Gfx::CreateResource(NormalShader::Setup());
+        return Gfx::CreateResource(ScreenShader::Setup());
+    }
+    Oryol::Id DsprShaderHandler::getBackScreenShader()
+    {
+        return Gfx::CreateResource(BackScreenShader::Setup());
     }
     Oryol::Id DsprShaderHandler::getCanvasShader()
     {

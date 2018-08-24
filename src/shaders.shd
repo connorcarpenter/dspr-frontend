@@ -5,26 +5,30 @@
 @vs canvasVS
 in vec2 position;
 in vec2 texcoord0;
+in vec3 color0;
 out vec2 uv;
+out vec4 color1;
 void main() {
     gl_Position = vec4(((position.xy * 2.0) - 1.0), 0.0, 1.0);
     gl_Position.y = -gl_Position.y;
     uv = texcoord0;
+    color1 = vec4(color0.xyz, 1.0);
 }
 @end
 
 @fs canvasFS
 uniform sampler2D tex;
 in vec2 uv;
+in vec4 color1;
 out vec4 fragColor;
 void main() {
-    fragColor = texture(tex, uv);
+    fragColor = texture(tex, uv) * color1;
 }
 @end
 
 @program CanvasShader canvasVS canvasFS
 
-@vs crtVS
+@vs screenVS
 in vec4 position;
 in vec2 texcoord0;
 out vec2 uv;
@@ -34,16 +38,37 @@ void main() {
 }
 @end
 
-@fs nocrtFS
+@fs screenFS
 uniform sampler2D canvas;
 in vec2 uv;
 out vec4 fragColor;
 void main() {
-    fragColor = vec4(texture(canvas, uv).xyzw);
+    fragColor = texture(canvas, uv);
+}
+@end
+
+@program ScreenShader screenVS screenFS
+
+@vs backScreenVS
+in vec4 position;
+in vec2 texcoord0;
+out vec2 uv;
+void main() {
+    gl_Position = position;
+    uv = texcoord0;
+}
+@end
+
+@fs backScreenFS
+uniform sampler2D canvas;
+in vec2 uv;
+out vec4 fragColor;
+void main() {
+    fragColor = vec4(texture(canvas, uv).xyz, 1.0);
 }
 @end 
 
-@program NormalShader crtVS nocrtFS
+@program BackScreenShader backScreenVS backScreenFS
 
 @vs shapeVS
 in vec2 position;

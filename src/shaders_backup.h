@@ -15,7 +15,11 @@ namespace CanvasShader {
     static const int tex = 0;
     extern Oryol::ShaderSetup Setup();
 }
-namespace NormalShader {
+namespace ScreenShader {
+    static const int canvas = 0;
+    extern Oryol::ShaderSetup Setup();
+}
+namespace BackScreenShader {
     static const int canvas = 0;
     extern Oryol::ShaderSetup Setup();
 }

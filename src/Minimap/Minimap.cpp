@@ -16,31 +16,29 @@ namespace DsprFrontend {
         this->g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
         this->terrainCamera = New<Camera>(0,0,128,128,Null<Container>(), Color::Black, 1.0f, false, false);
-        auto terrainViewport = New<Viewport>(5*5,103*5,38*5,38*5, this->terrainCamera);
-        g->app->addViewport(terrainViewport);
+        auto terrainViewport = g->app->createViewport(5*5,103*5,38*5,38*5, this->terrainCamera);
+
 
         auto minimapFog = New<MinimapFog>();
         auto fogCamera = New<Camera>(0,0,128,128,minimapFog, Color::Black, 0.0f, true, false);
         fogCamera->SkipFramesToDrawFramesRatio = 1;
-        auto fogViewport = New<Viewport>(5*5,103*5,38*5,38*5,fogCamera);
-        g->app->addViewport(fogViewport);
+        auto fogViewport = g->app->createViewport(5*5,103*5,38*5,38*5,fogCamera);
 
         auto minimapUnits = New<MinimapUnits>();
-        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.0f);
+        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.0f, true);
         unitsCamera->SkipFramesToDrawFramesRatio = 5;
-        auto unitsViewport = New<Viewport>(5*5,103*5,38*5,38*5, unitsCamera);
-        g->app->addViewport(unitsViewport);
+        auto unitsViewport = g->app->createViewport(5*5,103*5,38*5,38*5, unitsCamera);
 
         g->cursor = New<Cursor>();
-        auto cursorCamera = New<Camera>(0,0,g->app->width/5,g->app->height/5, g->cursor, Color::Black, 0.0f);
-        auto cursorViewport = New<Viewport>(0,0,g->app->width,g->app->height, cursorCamera);
-        g->app->addViewport(cursorViewport);
+        auto cursorCamera = New<Camera>(0,0,g->app->width/5,g->app->height/5, g->cursor, Color::Black, 0.0f, true, true);
+        auto cursorViewport = g->app->createViewport(0,0,g->app->width,g->app->height, cursorCamera);
 
         this->pixel = New<Pixel>();
 
         this->OnUpdate([&](float deltaFrameMs){ Step(deltaFrameMs); });
 
-        g->world->AddChild(ThisRef<Minimap>());
+        fogCamera->clearCamera();
+        this->terrainCamera->clearCamera();
     }
 
     void Minimap::Step(float deltaFrameMs) {

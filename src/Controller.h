@@ -83,8 +83,7 @@ namespace DsprFrontend
         g->world = New<Container>();
         static const int pixelRatio = 5;
         g->camera = New<Camera>(20, 20, g->app->width / pixelRatio, g->app->height / pixelRatio, g->world);
-        g->viewport = New<Viewport>(0, 0, g->app->width, g->app->height, g->camera);
-        g->app->addViewport(g->viewport);
+        g->viewport = g->app->createViewport(0, 0, g->app->width, g->app->height, g->camera);
 
         g->tileManager = New<TileManager>();
         g->tileManager->SetDepth(9999);
@@ -95,8 +94,6 @@ namespace DsprFrontend
         g->uiManager = New<UiManager>();
         g->uiManager->SetDepth(-9990);
         g->world->AddChild(g->uiManager);
-
-        g->minimap = New<Minimap>();
 
         g->fogManager = New<FogManager>();
         g->fogManager->SetDepth(-8888);
@@ -112,6 +109,9 @@ namespace DsprFrontend
         }, tickRateMs, tickRateMs);
 
         g->networkManager = New<NetworkManager>();
+
+        g->minimap = New<Minimap>();
+        g->world->AddChild(g->minimap);
     }
 
     int gcCount = 0;
