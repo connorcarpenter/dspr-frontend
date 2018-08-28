@@ -35,7 +35,7 @@ namespace DsprFrontend
         const int walkSpeedDiagonal = maxWalkAmount / 3;
         const float walkImageSpeed = 0.1f;
         const int gameServerTickMs = 100;
-        const int sight = 8; // 12 will be a circle that touches the edges of the screen if centered on the unit
+        const int sight = 8; // 12 will be a circle that touches the edges of the screen if centered on the unit, 8 is standard
 
         float walkAmount = 0;
         int walkSpeed = walkSpeedStraight;

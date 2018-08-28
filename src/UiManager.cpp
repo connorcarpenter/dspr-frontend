@@ -14,24 +14,24 @@ namespace DsprFrontend
     {
         ///global stuff
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        g->unitHoverCircle = New<AnimatedSprite>(New<Sova::String>("images/unitHover.png"), 16, 12, 1);
+        g->unitHoverCircle = New<AnimatedSprite>(New<Sova::String>("images/ui/unitHover.png"), 16, 12, 1);
         g->unitHoverCircle->imageSpeed = 0.1f;
         g->unitHoverCircle->anchor->set(8, 6);
 
-        g->unitSelectCircle = New<Sprite>(New<Sova::String>("images/unitSelection.png"));
+        g->unitSelectCircle = New<Sprite>(New<Sova::String>("images/ui/unitSelection.png"));
         g->unitSelectCircle->anchor->set(8, 5);
 
-        g->moveMarker = New<AnimatedSprite>(New<Sova::String>("images/moveMarker.png"), 11, 9, 1);
+        g->moveMarker = New<AnimatedSprite>(New<Sova::String>("images/ui/moveMarker.png"), 11, 9, 1);
         g->moveMarker->imageSpeed = 0.1;
         g->moveMarker->anchor->set(5, 4);
         /////////////////////////
 
-        this->minimap = New<Sprite>(New<Sova::String>("images/minimap.png"));
-        this->armybar = New<Sprite>(New<Sova::String>("images/armybar.png"));
-        this->command = New<Sprite>(New<Sova::String>("images/commandcard.png"));
-        this->unitPortrait = New<Sprite>(New<Sova::String>("images/unitPortrait.png"));
-        this->commandActionsUp = New<AnimatedSprite>(New<Sova::String>("images/commandActionsUp.png"), 10, 12, 0);
-        this->commandActionsHover = New<AnimatedSprite>(New<Sova::String>("images/commandActionsHover.png"), 10, 12, 0);
+        this->minimap = New<Sprite>(New<Sova::String>("images/ui/minimap.png"));
+        this->armybar = New<Sprite>(New<Sova::String>("images/ui/armybar.png"));
+        this->command = New<Sprite>(New<Sova::String>("images/ui/commandcard.png"));
+        this->unitPortrait = New<Sprite>(New<Sova::String>("images/worker/unitPortrait.png"));
+        this->commandActionsUp = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActionsUp.png"), 10, 12, 0);
+        this->commandActionsHover = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActionsHover.png"), 10, 12, 0);
 
         this->healthBarLine = New<Sova::Line>();
         this->healthBarLine->setLineStyle(1, Color::Green);

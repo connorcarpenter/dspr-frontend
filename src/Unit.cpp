@@ -19,8 +19,8 @@ namespace DsprFrontend
         this->nextTilePosition = New<Point>(x,y);
         this->lastPosition = New<Point>(x,y);
 
-        this->spriteDownName = New<Sova::String>("images/workerDown.png");
-        this->spriteUpName = New<Sova::String>("images/workerUp.png");
+        this->spriteDownName = New<Sova::String>("images/worker/workerDown.png");
+        this->spriteUpName = New<Sova::String>("images/worker/workerUp.png");
         this->setTexture(spriteDownName);
         this->frameWidth = 15;
         this->frameHeight = 20;

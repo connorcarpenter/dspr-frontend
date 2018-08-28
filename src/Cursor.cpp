@@ -23,7 +23,7 @@ namespace DsprFrontend
 
     Cursor::Cursor() : AnimatedSprite()
     {
-        this->setTexture(New<Sova::String>("images/cursor.png"));
+        this->setTexture(New<Sova::String>("images/ui/cursor.png"));
         this->frameWidth = 14;
         this->frameHeight = 12;
         this->padding = 1;

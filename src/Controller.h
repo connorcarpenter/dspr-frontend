@@ -50,22 +50,30 @@ namespace DsprFrontend
             g->app->setGlobal(g.obj);
 
             Ref<List<String>> resources = New<List<String>>();
-            resources->Add(New<String>("images/cursor.png"));
-            resources->Add(New<String>("images/unitHover.png"));
-            resources->Add(New<String>("images/unitSelection.png"));
-            resources->Add(New<String>("images/moveMarker.png"));
+
             resources->Add(New<String>("images/tiles.png"));
             resources->Add(New<String>("images/trees.png"));
             resources->Add(New<String>("images/block.png"));
             resources->Add(New<String>("images/fogTile.png"));
-            resources->Add(New<String>("images/workerDown.png"));
-            resources->Add(New<String>("images/workerUp.png"));
-            resources->Add(New<String>("images/armybar.png"));
-            resources->Add(New<String>("images/commandcard.png"));
-            resources->Add(New<String>("images/minimap.png"));
-            resources->Add(New<String>("images/unitPortrait.png"));
-            resources->Add(New<String>("images/commandActionsHover.png"));
-            resources->Add(New<String>("images/commandActionsUp.png"));
+
+            resources->Add(New<String>("images/worker/workerDown.png"));
+            resources->Add(New<String>("images/worker/workerUp.png"));
+            resources->Add(New<String>("images/worker/workerAttackUp.png"));
+            resources->Add(New<String>("images/worker/workerAttackUpRight.png"));
+            resources->Add(New<String>("images/worker/workerAttackRight.png"));
+            resources->Add(New<String>("images/worker/workerAttackDownRight.png"));
+            resources->Add(New<String>("images/worker/workerAttackDown.png"));
+            resources->Add(New<String>("images/worker/unitPortrait.png"));
+
+            resources->Add(New<String>("images/ui/armybar.png"));
+            resources->Add(New<String>("images/ui/commandcard.png"));
+            resources->Add(New<String>("images/ui/minimap.png"));
+            resources->Add(New<String>("images/ui/commandActionsHover.png"));
+            resources->Add(New<String>("images/ui/commandActionsUp.png"));
+            resources->Add(New<String>("images/ui/cursor.png"));
+            resources->Add(New<String>("images/ui/unitHover.png"));
+            resources->Add(New<String>("images/ui/unitSelection.png"));
+            resources->Add(New<String>("images/ui/moveMarker.png"));
 
             g->app->load(resources)
                     ->onFinish(
