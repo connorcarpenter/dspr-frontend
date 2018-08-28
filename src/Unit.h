@@ -12,7 +12,7 @@ namespace DsprFrontend
 
     public:
 
-        Unit(int id, int x, int y);
+        Unit(int id, int x, int y, int tribeIndex);
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
         void newNextTilePosition(int x, int y);
         //
@@ -41,7 +41,11 @@ namespace DsprFrontend
         int walkSpeed = walkSpeedStraight;
         Ref<Sova::String> spriteDownName = Null<Sova::String>();
         Ref<Sova::String> spriteUpName = Null<Sova::String>();
+        Ref<Sova::String> spriteDownTCName = Null<Sova::String>();
+        Ref<Sova::String> spriteUpTCName = Null<Sova::String>();
         bool checkReleaseSelectionBox = false;
         float interpolation = 0;
+        int tribeIndex = -1;
+        Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
     };
 }

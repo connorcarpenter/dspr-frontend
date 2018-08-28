@@ -22,8 +22,6 @@ namespace DsprFrontend
         this->SetDepth(this->tilePosition->y * -1);
 
         this->OnUpdate([&](float deltaFrameMs){ step(); });
-
-        this->tint = Color::Blue;
     }
 
     void Block::step()

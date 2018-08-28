@@ -147,13 +147,14 @@ namespace DsprFrontend
         }
     }
 
-    void UnitManager::receiveUnit(Ref<Sova::String> idStr, Ref<Sova::String> xStr, Ref<Sova::String> yStr)
+    void UnitManager::receiveUnit(Ref<Sova::String> idStr, Ref<Sova::String> xStr, Ref<Sova::String> yStr, Ref<Sova::String> tribeIndexStr)
     {
         int id = atoi(idStr->AsCStr());
         int x = atoi(xStr->AsCStr());
         int y = atoi(yStr->AsCStr());
+        int tribeIndex = atoi(tribeIndexStr->AsCStr());
 
-        auto newUnit = New<Unit>(id, x, y);
+        auto newUnit = New<Unit>(id, x, y, tribeIndex);
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         g->world->AddChild(newUnit);
         this->unitList->Add(newUnit);

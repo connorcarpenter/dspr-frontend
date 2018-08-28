@@ -111,7 +111,7 @@ namespace DsprFrontend
         }
         else if (command->Equals("unit/1.0/create")) {
             Ref<List<Sova::String>> unitString = splitString->At(1)->Split(',');
-            g->unitManager->receiveUnit(unitString->At(0), unitString->At(1), unitString->At(2));
+            g->unitManager->receiveUnit(unitString->At(0), unitString->At(1), unitString->At(2), unitString->At(3));
             return;
         }
         else if (command->Equals("unit/1.0/update")) {

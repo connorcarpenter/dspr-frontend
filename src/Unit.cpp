@@ -11,7 +11,7 @@
 namespace DsprFrontend
 {
 
-    Unit::Unit(int id, int x, int y) : AnimatedSprite()
+    Unit::Unit(int id, int x, int y, int tribeIndex) : AnimatedSprite()
     {
         this->id = id;
         this->moveTarget = New<Point>(x, y);
@@ -21,11 +21,29 @@ namespace DsprFrontend
 
         this->spriteDownName = New<Sova::String>("images/worker/workerDown.png");
         this->spriteUpName = New<Sova::String>("images/worker/workerUp.png");
+        this->spriteDownTCName = New<Sova::String>("images/worker/TC/workerDown_TC.png");
+        this->spriteUpTCName = New<Sova::String>("images/worker/TC/workerUp_TC.png");
         this->setTexture(spriteDownName);
         this->frameWidth = 15;
         this->frameHeight = 20;
         this->padding = 1;
         this->anchor->set(7, 18);
+        this->tribeIndex = tribeIndex;
+        this->tcSprite = New<AnimatedSprite>();
+        switch (tribeIndex)
+        {
+            case 0:
+                this->tcSprite->tint = Color::Red;
+                break;
+            case 1:
+                this->tcSprite->tint = Color::Blue;
+                break;
+        }
+        this->tcSprite->padding = 1;
+        this->tcSprite->frameWidth = 14;
+        this->tcSprite->frameHeight = 11;
+        this->tcSprite->setTexture(spriteDownTCName);
+        this->tcSprite->anchor->set(7, 13);
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
@@ -108,10 +126,12 @@ namespace DsprFrontend
         if (dify >= 0 && !this->textureName->Equals(this->spriteDownName))
         {
             this->setTexture(this->spriteDownName);
+            this->tcSprite->setTexture(this->spriteDownTCName);
         }
         if (dify < 0 && !this->textureName->Equals(this->spriteUpName))
         {
             this->setTexture(this->spriteUpName);
+            this->tcSprite->setTexture(this->spriteUpTCName);
         }
     }
 
@@ -140,5 +160,11 @@ namespace DsprFrontend
         }
 
         AnimatedSprite::drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);
+
+        //TC
+
+        this->tcSprite->imageIndex = imageIndex;
+        this->tcSprite->position->set(this->position);
+        this->tcSprite->drawSelf(camera, xoffset, yoffset);
     }
 }
