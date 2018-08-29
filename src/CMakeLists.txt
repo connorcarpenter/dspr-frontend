@@ -6,6 +6,7 @@ fips_begin_app(dspr-frontend windowed)
             DsprShaderHandler.h DsprShaderHandler.cpp
             TileManager.h TileManager.cpp
             UnitManager.h UnitManager.cpp
+            UnitOrder.h
             NetworkManager.h NetworkManager.cpp
             UiManager.h UiManager.cpp
             FogManager.h FogManager.cpp

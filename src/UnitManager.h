@@ -37,5 +37,7 @@ namespace DsprFrontend
         Ref<List<Sova::Int>> selectionList = Null<List<Sova::Int>>();
         bool rightButtonAlreadyClicked = false;
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
+
+        Ref<Unit> getUnitWithId(int id);
     };
 }

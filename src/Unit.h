@@ -24,6 +24,8 @@ namespace DsprFrontend
 
         bool hovering = false;
         bool selected = false;
+        Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
+        int tribeIndex = -1;
     private:
 
         void step(float deltaMs);
@@ -45,7 +47,8 @@ namespace DsprFrontend
         Ref<Sova::String> spriteUpTCName = Null<Sova::String>();
         bool checkReleaseSelectionBox = false;
         float interpolation = 0;
-        int tribeIndex = -1;
-        Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
+
+        int health = 100;
+        int stamina = 100;
     };
 }

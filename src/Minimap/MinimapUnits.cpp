@@ -26,6 +26,8 @@ namespace DsprFrontend
         {
             auto unit = iterator->Get();
 
+            this->pixel->setLineStyle(1, unit->selected ? Color::White : unit->tcSprite->tint);
+
             this->pixel->position->set(unit->tilePosition->x, unit->tilePosition->y);
             this->pixel->drawSelf(camera, xoffset, yoffset);
 

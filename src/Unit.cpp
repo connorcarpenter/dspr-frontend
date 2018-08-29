@@ -18,6 +18,7 @@ namespace DsprFrontend
         this->tilePosition = New<Point>(x,y);
         this->nextTilePosition = New<Point>(x,y);
         this->lastPosition = New<Point>(x,y);
+        this->tribeIndex = tribeIndex;
 
         this->spriteDownName = New<Sova::String>("images/worker/workerDown.png");
         this->spriteUpName = New<Sova::String>("images/worker/workerUp.png");
@@ -28,7 +29,6 @@ namespace DsprFrontend
         this->frameHeight = 20;
         this->padding = 1;
         this->anchor->set(7, 18);
-        this->tribeIndex = tribeIndex;
         this->tcSprite = New<AnimatedSprite>();
         switch (tribeIndex)
         {

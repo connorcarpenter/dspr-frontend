@@ -9,6 +9,7 @@
 #include "UnitManager.h"
 #include "Global.h"
 #include "UiManager.h"
+#include "UnitOrder.h"
 
 namespace DsprFrontend
 {
@@ -27,11 +28,26 @@ namespace DsprFrontend
             this->rightButtonAlreadyClicked = true;
 
             auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-            auto tilePosition = g->cursor->getTilePosition();
 
-            auto mmPosition = g->uiManager->getMinimapPosition(g->cursor->position);
-            if (mmPosition != nullptr)
-                tilePosition->set(mmPosition);
+            UnitOrder orderIndex = Move;
+
+            auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
+            int targetedUnitId = -1;
+            if (targetedUnit != nullptr){
+                targetedUnitId = targetedUnit->id;
+                Ref<Unit> firstSelectedUnit = this->getUnitWithId(this->selectionList->At(0)->getInt());
+                orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
+                             Follow : AttackTarget;
+            }
+
+            Ref<Point> tilePosition = Null<Point>();
+
+            if (orderIndex == Move || orderIndex == AttackMove) {
+                tilePosition = g->cursor->getTilePosition();
+                auto mmPosition = g->uiManager->getMinimapPosition(g->cursor->position);
+                if (mmPosition != nullptr)
+                    tilePosition->set(mmPosition);
+            }
 
             auto sb = New<Sova::StringBuilder>();
             sb->Append(New<Sova::String>("unit/1.0/order|"));
@@ -53,9 +69,16 @@ namespace DsprFrontend
                 sb->Append(intObj->ToString());
             }
             sb->Append(New<Sova::String>("|"));
-            sb->Append(New<Int>(tilePosition->x)->ToString());
+            sb->Append(New<Int>(orderIndex)->ToString());
             sb->Append(New<Sova::String>(","));
-            sb->Append(New<Int>(tilePosition->y)->ToString());
+            if (orderIndex == Move || orderIndex == AttackMove) {
+                sb->Append(New<Int>(tilePosition->x)->ToString());
+                sb->Append(New<Sova::String>(","));
+                sb->Append(New<Int>(tilePosition->y)->ToString());
+            }
+            if (orderIndex == Follow || orderIndex == AttackTarget){
+                sb->Append(New<Int>(targetedUnitId)->ToString());
+            }
 
             g->gameServer->send(sb->ToString());
         }
@@ -203,5 +226,11 @@ namespace DsprFrontend
 
     Ref<List<Unit>> UnitManager::getUnits() {
         return this->unitList;
+    }
+
+    Ref<Unit> UnitManager::getUnitWithId(int id) {
+        return this->unitList->Find([&](Ref<Unit> evalUnit){
+            return evalUnit->id ==  id;
+        });
     }
 }
