@@ -7,12 +7,15 @@
 #include <Sova/Math/Math.h>
 #include "Global.h"
 #include "FogManager.h"
+#include "SpriteCatalog.h"
 
 namespace DsprFrontend
 {
 
     Unit::Unit(int id, int x, int y, int tribeIndex) : AnimatedSprite()
     {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
         this->id = id;
         this->moveTarget = New<Point>(x, y);
         this->tilePosition = New<Point>(x,y);
@@ -20,16 +23,10 @@ namespace DsprFrontend
         this->lastPosition = New<Point>(x,y);
         this->tribeIndex = tribeIndex;
 
-        this->spriteDownName = New<Sova::String>("images/worker/workerDown.png");
-        this->spriteUpName = New<Sova::String>("images/worker/workerUp.png");
-        this->spriteDownTCName = New<Sova::String>("images/worker/TC/workerDown_TC.png");
-        this->spriteUpTCName = New<Sova::String>("images/worker/TC/workerUp_TC.png");
-        this->setTexture(spriteDownName);
-        this->frameWidth = 15;
-        this->frameHeight = 20;
-        this->padding = 1;
-        this->anchor->set(7, 18);
+        this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDown);
+
         this->tcSprite = New<AnimatedSprite>();
+        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDownTC);
         switch (tribeIndex)
         {
             case 0:
@@ -39,20 +36,26 @@ namespace DsprFrontend
                 this->tcSprite->tint = Color::Blue;
                 break;
         }
-        this->tcSprite->padding = 1;
-        this->tcSprite->frameWidth = 14;
-        this->tcSprite->frameHeight = 11;
-        this->tcSprite->setTexture(spriteDownTCName);
-        this->tcSprite->anchor->set(7, 13);
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, true);
     }
 
     void Unit::step(float deltaFrameMs)
     {
+        switch(this->animationState)
+        {
+            case Walking:
+                walkingStep(deltaFrameMs);
+                break;
+            case Attacking:
+                attackingStep(deltaFrameMs);
+                break;
+        }
+    }
+
+    void Unit::walkingStep(float deltaFrameMs) {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
         if (!this->tilePosition->Equals(this->nextTilePosition))
@@ -93,6 +96,10 @@ namespace DsprFrontend
         }
     }
 
+    void Unit::attackingStep(float deltaFrameMs) {
+        this->imageSpeed = attackImageSpeed;
+    }
+
     void Unit::newNextTilePosition(int x, int y)
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
@@ -123,15 +130,15 @@ namespace DsprFrontend
         {
             this->scale->x = Math::Sign(difx);
         }
-        if (dify >= 0 && !this->textureName->Equals(this->spriteDownName))
+        if (dify >= 0 && !this->textureName->Equals(g->spriteCatalog->workerWalkDown->filename))
         {
-            this->setTexture(this->spriteDownName);
-            this->tcSprite->setTexture(this->spriteDownTCName);
+            this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDown);
+            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDownTC);
         }
-        if (dify < 0 && !this->textureName->Equals(this->spriteUpName))
+        if (dify < 0 && !this->textureName->Equals(g->spriteCatalog->workerWalkUp->filename))
         {
-            this->setTexture(this->spriteUpName);
-            this->tcSprite->setTexture(this->spriteUpTCName);
+            this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUp);
+            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUpTC);
         }
     }
 
@@ -165,6 +172,79 @@ namespace DsprFrontend
 
         this->tcSprite->imageIndex = imageIndex;
         this->tcSprite->position->set(this->position);
-        this->tcSprite->drawSelf(camera, xoffset, yoffset);
+        this->tcSprite->scale->x = this->scale->x;
+        this->tcSprite->drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);
+    }
+
+    void Unit::setAnimationState(AnimationState newState, int heading) {
+        auto g = (Global*) InternalApp::getGlobal();
+
+        this->animationState = newState;
+
+        switch (newState)
+        {
+            case Walking:
+            {
+                this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDown);
+                this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDownTC);
+            }
+            break;
+            case Attacking:
+            {
+                this->imageIndex = 0;
+
+                switch(heading)
+                {
+                    case 0: {
+                        this->scale->x = 1;
+                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackRight);
+                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackRightTC);
+                        }
+                        break;
+                    case 1: {
+                        this->scale->x = 1;
+                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpRight);
+                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpRightTC);
+                    }
+                        break;
+                    case 2: {
+                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUp);
+                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpTC);
+                    }
+                        break;
+                    case 3: {
+                        this->scale->x = -1;
+                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpRight);
+                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpRightTC);
+                    }
+                        break;
+                    case 4: {
+                        this->scale->x = -1;
+                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackRight);
+                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackRightTC);
+                    }
+                        break;
+                    case 5: {
+                        this->scale->x = -1;
+                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownRight);
+                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownRightTC);
+                    }
+                        break;
+                    case 6: {
+                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDown);
+                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownTC);
+                    }
+                        break;
+                    case 7: {
+                        this->scale->x = 1;
+                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownRight);
+                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownRightTC);
+                    }
+                        break;
+
+                }
+            }
+                break;
+        }
     }
 }

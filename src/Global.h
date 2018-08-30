@@ -18,6 +18,7 @@ namespace DsprFrontend
     class Unit;
     class FogManager;
     class UiManager;
+    class SpriteCatalog;
 
     class Global : public Sova::Refable
     {
@@ -39,5 +40,6 @@ namespace DsprFrontend
         Ref<FogManager> fogManager = Null<FogManager>();
         Ref<UiManager> uiManager = Null<UiManager>();
         Ref<Minimap> minimap = Null<Minimap>();
+        Ref<SpriteCatalog> spriteCatalog = Null<SpriteCatalog>();
     };
 }

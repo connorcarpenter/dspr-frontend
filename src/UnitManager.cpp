@@ -183,7 +183,7 @@ namespace DsprFrontend
         this->unitList->Add(newUnit);
     }
 
-    void UnitManager::receiveUnitOrder(Ref<Sova::String> idStr, Ref<List<Sova::String>> propsStrList)
+    void UnitManager::receiveUnitUpdate(Ref<Sova::String> idStr, Ref<List<Sova::String>> propsStrList)
     {
         int id = atoi(idStr->AsCStr());
 
@@ -215,6 +215,15 @@ namespace DsprFrontend
 
                 unit->moveTarget->x = atoi(varsParts->At(0)->AsCStr());
                 unit->moveTarget->y = atoi(varsParts->At(1)->AsCStr());
+                continue;
+            }
+            else
+            if (propName->Equals("animationState"))
+            {
+                auto varsParts = propsParts->At(1)->Split(',');
+
+                unit->setAnimationState(static_cast<AnimationState >(atoi(varsParts->At(0)->AsCStr())),
+                                        atoi(varsParts->At(1)->AsCStr()));
                 continue;
             }
         }

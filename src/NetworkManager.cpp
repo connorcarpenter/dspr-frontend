@@ -117,7 +117,7 @@ namespace DsprFrontend
         else if (command->Equals("unit/1.0/update")) {
             auto idString = splitString->At(1);
             auto propsString = splitString->At(2);
-            g->unitManager->receiveUnitOrder(idString, propsString->Split('&'));
+            g->unitManager->receiveUnitUpdate(idString, propsString->Split('&'));
 //            std::cout << message->AsCStr() << std::endl;
             return;
         }

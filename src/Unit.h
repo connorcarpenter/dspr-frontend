@@ -6,6 +6,8 @@
 
 namespace DsprFrontend
 {
+    enum AnimationState { Walking, Attacking };
+
     class Unit : public Sova::AnimatedSprite
     {
         SovaTypeDecl(Unit, AnimatedSprite);
@@ -15,6 +17,7 @@ namespace DsprFrontend
         Unit(int id, int x, int y, int tribeIndex);
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
         void newNextTilePosition(int x, int y);
+        void setAnimationState(AnimationState newState, int heading);
         //
         Ref<Point> moveTarget = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();
@@ -26,6 +29,7 @@ namespace DsprFrontend
         bool selected = false;
         Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
         int tribeIndex = -1;
+        AnimationState animationState = Walking;
     private:
 
         void step(float deltaMs);
@@ -36,19 +40,19 @@ namespace DsprFrontend
         const int walkSpeedStraight = maxWalkAmount / 2;
         const int walkSpeedDiagonal = maxWalkAmount / 3;
         const float walkImageSpeed = 0.1f;
+        float attackImageSpeed = 0.2f;
         const int gameServerTickMs = 100;
         const int sight = 8; // 12 will be a circle that touches the edges of the screen if centered on the unit, 8 is standard
 
         float walkAmount = 0;
         int walkSpeed = walkSpeedStraight;
-        Ref<Sova::String> spriteDownName = Null<Sova::String>();
-        Ref<Sova::String> spriteUpName = Null<Sova::String>();
-        Ref<Sova::String> spriteDownTCName = Null<Sova::String>();
-        Ref<Sova::String> spriteUpTCName = Null<Sova::String>();
         bool checkReleaseSelectionBox = false;
         float interpolation = 0;
 
         int health = 100;
         int stamina = 100;
+
+        void walkingStep(float deltaFrameMs);
+        void attackingStep(float deltaFrameMs);
     };
 }

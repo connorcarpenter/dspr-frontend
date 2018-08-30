@@ -17,6 +17,7 @@
 #include "UnitManager.h"
 #include "FogManager.h"
 #include "UiManager.h"
+#include "SpriteCatalog.h"
 
 using namespace Sova;
 
@@ -100,6 +101,8 @@ namespace DsprFrontend
         static const int pixelRatio = 5;
         g->camera = New<Camera>(20, 20, g->app->width / pixelRatio, g->app->height / pixelRatio, g->world);
         g->viewport = g->app->createViewport(0, 0, g->app->width, g->app->height, g->camera);
+
+        g->spriteCatalog = New<SpriteCatalog>();
 
         g->tileManager = New<TileManager>();
         g->tileManager->SetDepth(9999);
