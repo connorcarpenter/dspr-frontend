@@ -40,6 +40,8 @@ namespace DsprFrontend
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
         g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, true);
+
+        this->updatePosition();
     }
 
     void Unit::step(float deltaFrameMs)
@@ -70,29 +72,38 @@ namespace DsprFrontend
                 this->tilePosition->set(this->nextTilePosition->x, this->nextTilePosition->y);
                 this->SetDepth(this->tilePosition->y * -1);
             }
+
+            this->updatePosition();
+
+            this->stillFrames = 0;
         }
         else
         {
             this->imageSpeed = 0;
             this->imageIndex = 0;
-        }
+            this->stillFrames += 1;
+            //idling
 
-        float extrapolatedPositionX = ((Math::Lerp(this->tilePosition->x, this->nextTilePosition->x, walkAmount/maxWalkAmount)/2) + 0.5f) * g->tileManager->tileWidth;
-        float extrapolatedPositionY = ((Math::Lerp(this->tilePosition->y, this->nextTilePosition->y, walkAmount/maxWalkAmount)/2) + 0.5f) * g->tileManager->tileHeight;
-        if (interpolation > 0)
-        {
-            float interpolatedPositionX = Math::Lerp(this->lastPosition->x, extrapolatedPositionX, 1-(interpolation/interpolationMax));
-            float interpolatedPositionY = Math::Lerp(this->lastPosition->y, extrapolatedPositionY, 1-(interpolation/interpolationMax));
+            if(this->stillFrames > 30) {
+                this->stillFrames = 0;
+                if (Math::Random(0, 20) < 1) {
 
-            this->position->x = interpolatedPositionX;
-            this->position->y = interpolatedPositionY;
+                    //this->position->x += Math::Random(-1,1);
+                    //this->position->y += Math::Random(-1,1);
 
-            interpolation-=interpolationStep;
-        }
-        else
-        {
-            this->position->x = extrapolatedPositionX;
-            this->position->y = extrapolatedPositionY;
+                    if (Math::Random(0, 2) < 1) {
+                        this->scale->x = this->scale->x * -1;
+                    } else {
+                        if (this->textureName->Equals(g->spriteCatalog->workerWalkUp->filename)) {
+                            this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDown);
+                            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDownTC);
+                        } else {
+                            this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUp);
+                            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUpTC);
+                        }
+                    }
+                }
+            }
         }
     }
 
@@ -245,6 +256,28 @@ namespace DsprFrontend
                 }
             }
                 break;
+        }
+    }
+
+    void Unit::updatePosition() {
+        auto g = (Global*) InternalApp::getGlobal();
+
+        float extrapolatedPositionX = ((Math::Lerp(this->tilePosition->x, this->nextTilePosition->x, walkAmount/maxWalkAmount)/2) + 0.5f) * g->tileManager->tileWidth;
+        float extrapolatedPositionY = ((Math::Lerp(this->tilePosition->y, this->nextTilePosition->y, walkAmount/maxWalkAmount)/2) + 0.5f) * g->tileManager->tileHeight;
+        if (interpolation > 0)
+        {
+            float interpolatedPositionX = Math::Lerp(this->lastPosition->x, extrapolatedPositionX, 1-(interpolation/interpolationMax));
+            float interpolatedPositionY = Math::Lerp(this->lastPosition->y, extrapolatedPositionY, 1-(interpolation/interpolationMax));
+
+            this->position->x = interpolatedPositionX;
+            this->position->y = interpolatedPositionY;
+
+            interpolation-=interpolationStep;
+        }
+        else
+        {
+            this->position->x = extrapolatedPositionX;
+            this->position->y = extrapolatedPositionY;
         }
     }
 }

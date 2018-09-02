@@ -54,5 +54,9 @@ namespace DsprFrontend
 
         void walkingStep(float deltaFrameMs);
         void attackingStep(float deltaFrameMs);
+
+        int stillFrames = 0;
+
+        void updatePosition();
     };
 }
