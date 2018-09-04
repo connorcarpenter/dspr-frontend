@@ -204,6 +204,15 @@ namespace DsprFrontend
             {
                 this->imageIndex = 0;
 
+                g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
+                g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+
+                this->lastPosition->set(this->position);
+                this->interpolation = interpolationMax-interpolationStep;
+                this->tilePosition->set(this->nextTilePosition);
+                this->SetDepth(this->tilePosition->y * -1);
+                this->walkAmount = 0;
+
                 switch(heading)
                 {
                     case 0: {

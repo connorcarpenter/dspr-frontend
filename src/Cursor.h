@@ -22,10 +22,15 @@ namespace DsprFrontend
         Ref<Point> leftButtonDragPoint = Null<Point>();
         Ref<Point> worldPosition = Null<Point>();
 
+        bool attackOrderSelected = false;
     private:
 
         void step();
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
+        void clearHoverList();
+        void setHoverListUnitsToHover(bool i);
+        void setHoverListUnitsToSelected(bool selected);
+        void toggleHoverListUnitsSelected();
 
         Ref<Rectangle> selectionBox = Null<Rectangle>();
         Ref<List<Unit>> hoverList = Null<List<Unit>>();
@@ -33,15 +38,8 @@ namespace DsprFrontend
         int leftButtonPressedTime = 0;
         const int leftButtonPressedTimeToDrag = 6;
 
-        void clearHoverList();
-
-        void setHoverListUnitsToHover(bool i);
-
-        void setHoverListUnitsToSelected(bool selected);
-
-        void toggleHoverListUnitsSelected();
-
         int leftButtonDoubleClickCountdown = 0;
         const int leftButtonDoubleClickWindow = 20;
+
     };
 }

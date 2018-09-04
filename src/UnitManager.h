@@ -32,6 +32,8 @@ namespace DsprFrontend
 
         Ref<List<Unit>> getUnits();
 
+        void issueUnitOrder(bool attackOrderSelected);
+
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
         Ref<List<Sova::Int>> selectionList = Null<List<Sova::Int>>();
@@ -39,5 +41,6 @@ namespace DsprFrontend
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
 
         Ref<Unit> getUnitWithId(int id);
+
     };
 }

@@ -114,7 +114,7 @@ namespace DsprFrontend
 
         bool leftButtonPressed = InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left);
         //Left button clicking + dragging
-        if (leftButtonPressed)
+        if (leftButtonPressed && !this->attackOrderSelected)
         {
             leftButtonPressed = g->uiManager->captureLeftClickEvent(this->position);
         }
@@ -135,70 +135,77 @@ namespace DsprFrontend
         }
         else
         {
-            if (leftButtonPressed)
-            {
-                if (this->leftButtonPressedTime == 0)
-                    this->leftButtonDragPoint->set(this->position->x, this->position->y);
+            if (!this->attackOrderSelected)
+                if (InternalApp::getInternalApp()->keyPressed(Key::A))
+                    this->attackOrderSelected = true;
 
-                if (this->leftButtonPressedTime < this->leftButtonPressedTimeToDrag) this->leftButtonPressedTime += 1;
-            }
-            else
-            {
-                if (this->leftButtonPressedTime > 0)
-                {
-                    bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) ||
-                                        InternalApp::getInternalApp()->keyPressed(Key::RightShift);
-                    bool ctrlPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftControl) ||
-                                        InternalApp::getInternalApp()->keyPressed(Key::RightControl);
-                    if (this->leftButtonDoubleClickCountdown == 0 && !ctrlPressed)
-                    {
-                        ///single unit selection event
 
-                        if (!shiftPressed)
-                            g->unitManager->deselectAllUnits();
-                        if (!shiftPressed) {
-                            this->setHoverListUnitsToSelected(true);
-                        } else {
-                            this->toggleHoverListUnitsSelected();
+                if (leftButtonPressed) {
+                    if (this->leftButtonPressedTime == 0)
+                        this->leftButtonDragPoint->set(this->position->x, this->position->y);
+
+                    if (this->leftButtonPressedTime < this->leftButtonPressedTimeToDrag)
+                        this->leftButtonPressedTime += 1;
+                } else {
+                    if (this->leftButtonPressedTime > 0) {
+                        if (this->attackOrderSelected){
+                            this->attackOrderSelected = false;
+                            g->unitManager->issueUnitOrder(true);
+                            this->leftButtonPressedTime = 0;
+                            return;
                         }
+                        bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) ||
+                                            InternalApp::getInternalApp()->keyPressed(Key::RightShift);
+                        bool ctrlPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftControl) ||
+                                           InternalApp::getInternalApp()->keyPressed(Key::RightControl);
+                        if (this->leftButtonDoubleClickCountdown == 0 && !ctrlPressed) {
+                            ///single unit selection event
 
-                        this->leftButtonDoubleClickCountdown = this->leftButtonDoubleClickWindow;
-                    }
-                    else
-                    {
-                        ///its a doubleclick!
-
-                        this->setHoverListUnitsToHover(false);
-                        this->hoverList->Clear();
-
-                        //get new non-hovering units
-                        auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(g->camera->position->x, g->camera->position->y,
-                                                                                             g->camera->position->x + g->camera->width, g->camera->position->y + g->camera->height);
-
-                        if (nonHoveringUnits != nullptr && nonHoveringUnits->Size() > 0)
-                        {
-                            for (auto iterator = nonHoveringUnits->GetIterator(); iterator->Valid(); iterator->Next())
-                            {
-                                auto unit = iterator->Get();
-                                this->hoverList->Add(unit);
+                            if (!shiftPressed)
+                                g->unitManager->deselectAllUnits();
+                            if (!shiftPressed) {
+                                this->setHoverListUnitsToSelected(true);
+                            } else {
+                                this->toggleHoverListUnitsSelected();
                             }
+
+                            this->leftButtonDoubleClickCountdown = this->leftButtonDoubleClickWindow;
+                        } else {
+                            ///its a doubleclick!
+
+                            this->setHoverListUnitsToHover(false);
+                            this->hoverList->Clear();
+
+                            //get new non-hovering units
+                            auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(g->camera->position->x,
+                                                                                                 g->camera->position->y,
+                                                                                                 g->camera->position->x +
+                                                                                                 g->camera->width,
+                                                                                                 g->camera->position->y +
+                                                                                                 g->camera->height);
+
+                            if (nonHoveringUnits != nullptr && nonHoveringUnits->Size() > 0) {
+                                for (auto iterator = nonHoveringUnits->GetIterator(); iterator->Valid(); iterator->Next()) {
+                                    auto unit = iterator->Get();
+                                    this->hoverList->Add(unit);
+                                }
+                            }
+                            if (!shiftPressed)
+                                g->unitManager->deselectAllUnits();
+                            this->setHoverListUnitsToSelected(true);
+                            this->hoverList->Clear();
                         }
-                        if (!shiftPressed)
-                            g->unitManager->deselectAllUnits();
-                        this->setHoverListUnitsToSelected(true);
-                        this->hoverList->Clear();
                     }
+                    this->leftButtonPressedTime = 0;
                 }
-                this->leftButtonPressedTime = 0;
-            }
 
-            if (this->leftButtonDoubleClickCountdown > 0)this->leftButtonDoubleClickCountdown -= 1;
+                if (this->leftButtonDoubleClickCountdown > 0)this->leftButtonDoubleClickCountdown -= 1;
 
-            if (leftButtonPressed && this->leftButtonPressedTime >= this->leftButtonPressedTimeToDrag)
-            {
-                this->leftButtonDragging = true;
-                this->leftButtonPressedTime = 0;
-            }
+                if (leftButtonPressed && this->leftButtonPressedTime >= this->leftButtonPressedTimeToDrag) {
+                    if (!this->attackOrderSelected) this->leftButtonDragging = true;
+                    this->leftButtonPressedTime = 0;
+                }
+
         }
     }
 

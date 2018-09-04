@@ -23,64 +23,17 @@ namespace DsprFrontend
 
     void UnitManager::uiUpdate()
     {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
         if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked)
         {
             this->rightButtonAlreadyClicked = true;
 
-            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-
-            UnitOrder orderIndex = Move;
-
-            auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
-            int targetedUnitId = -1;
-            if (targetedUnit != nullptr){
-                targetedUnitId = targetedUnit->id;
-                Ref<Unit> firstSelectedUnit = this->getUnitWithId(this->selectionList->At(0)->getInt());
-                orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
-                             Follow : AttackTarget;
+            if (g->cursor->attackOrderSelected){
+                g->cursor->attackOrderSelected = false;
+            } else {
+                this->issueUnitOrder(false);
             }
-
-            Ref<Point> tilePosition = Null<Point>();
-
-            if (orderIndex == Move || orderIndex == AttackMove) {
-                tilePosition = g->cursor->getTilePosition();
-                auto mmPosition = g->uiManager->getMinimapPosition(g->cursor->position);
-                if (mmPosition != nullptr)
-                    tilePosition->set(mmPosition);
-            }
-
-            auto sb = New<Sova::StringBuilder>();
-            sb->Append(New<Sova::String>("unit/1.0/order|"));
-            sb->Append(g->gameServerPlayerToken);
-            sb->Append(New<Sova::String>("|"));
-            bool first = true;
-            for (Ref<ListIterator<Int>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
-            {
-                if (first)
-                {
-                    first = false;
-                }
-                else
-                {
-                    sb->Append(New<Sova::String>(","));
-                }
-
-                Ref<Int> intObj = iterator->Get();
-                sb->Append(intObj->ToString());
-            }
-            sb->Append(New<Sova::String>("|"));
-            sb->Append(New<Int>(orderIndex)->ToString());
-            sb->Append(New<Sova::String>(","));
-            if (orderIndex == Move || orderIndex == AttackMove) {
-                sb->Append(New<Int>(tilePosition->x)->ToString());
-                sb->Append(New<Sova::String>(","));
-                sb->Append(New<Int>(tilePosition->y)->ToString());
-            }
-            if (orderIndex == Follow || orderIndex == AttackTarget){
-                sb->Append(New<Int>(targetedUnitId)->ToString());
-            }
-
-            g->gameServer->send(sb->ToString());
         }
 
         if(!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
@@ -241,5 +194,65 @@ namespace DsprFrontend
         return this->unitList->Find([&](Ref<Unit> evalUnit){
             return evalUnit->id ==  id;
         });
+    }
+
+    void UnitManager::issueUnitOrder(bool attackOrderSelected) {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        UnitOrder orderIndex = Move;
+
+        auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
+        int targetedUnitId = -1;
+        if (targetedUnit != nullptr){
+            targetedUnitId = targetedUnit->id;
+            Ref<Unit> firstSelectedUnit = this->getUnitWithId(this->selectionList->At(0)->getInt());
+            orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
+                         Follow : AttackTarget;
+        }
+
+        if (attackOrderSelected)
+            orderIndex = (orderIndex == Move) ? AttackMove : AttackTarget;
+
+        Ref<Point> tilePosition = Null<Point>();
+
+        if (orderIndex == Move || orderIndex == AttackMove) {
+            tilePosition = g->cursor->getTilePosition();
+            auto mmPosition = g->uiManager->getMinimapPosition(g->cursor->position);
+            if (mmPosition != nullptr)
+                tilePosition->set(mmPosition);
+        }
+
+        auto sb = New<Sova::StringBuilder>();
+        sb->Append(New<Sova::String>("unit/1.0/order|"));
+        sb->Append(g->gameServerPlayerToken);
+        sb->Append(New<Sova::String>("|"));
+        bool first = true;
+        for (Ref<ListIterator<Int>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                sb->Append(New<Sova::String>(","));
+            }
+
+            Ref<Int> intObj = iterator->Get();
+            sb->Append(intObj->ToString());
+        }
+        sb->Append(New<Sova::String>("|"));
+        sb->Append(New<Int>(orderIndex)->ToString());
+        sb->Append(New<Sova::String>(","));
+        if (orderIndex == Move || orderIndex == AttackMove) {
+            sb->Append(New<Int>(tilePosition->x)->ToString());
+            sb->Append(New<Sova::String>(","));
+            sb->Append(New<Int>(tilePosition->y)->ToString());
+        }
+        if (orderIndex == Follow || orderIndex == AttackTarget){
+            sb->Append(New<Int>(targetedUnitId)->ToString());
+        }
+
+        g->gameServer->send(sb->ToString());
     }
 }
