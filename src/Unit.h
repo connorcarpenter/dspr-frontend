@@ -35,6 +35,8 @@ namespace DsprFrontend
         Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
         int tribeIndex = -1;
         AnimationState animationState = Walking;
+        int health = 100;
+        int maxHealth = 100;
     private:
 
         void step(float deltaMs);
@@ -54,7 +56,6 @@ namespace DsprFrontend
         bool checkReleaseSelectionBox = false;
         float interpolation = 0;
 
-        int health = 100;
         int stamina = 100;
 
         void walkingStep(float deltaFrameMs);

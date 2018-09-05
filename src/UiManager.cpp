@@ -37,54 +37,6 @@ namespace DsprFrontend
         this->healthBarLine->setLineStyle(1, Color::Green);
     }
 
-    void UiManager::Draw(Ref<Camera> camera, int xoffset, int yoffset) {
-
-        this->minimap->position->set(0, 100);
-        this->minimap->drawSelf(camera, 0, 0);
-
-        //draw armybar
-        this->armybar->position->set(48, 116);
-        this->armybar->drawSelf(camera, 0, 0);
-
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        int selectedUnitNumber = g->unitManager->getNumberSelectedUnits();
-        for (int i = 0; i<selectedUnitNumber; i++)
-        {
-            this->unitPortrait->position->set(48 + 6 + (i*12), 116 + 5);
-            this->unitPortrait->drawSelf(camera, 0, 0);
-
-            this->healthBarLine->setLineStyle(1, Color::Green);
-            this->healthBarLine->position->set(48 + 6 + (i*12), 116 + 5 + 15);
-            this->healthBarLine->endPosition->set(48 + 6 + 11 + (i*12), 116 + 5 + 15);
-            this->healthBarLine->drawSelf(camera, xoffset, yoffset);
-
-            this->healthBarLine->setLineStyle(1, Color::White);
-            this->healthBarLine->position->y += 2;
-            this->healthBarLine->endPosition->y += 2;
-            this->healthBarLine->drawSelf(camera, xoffset, yoffset);
-        }
-
-        //draw command card
-        this->command->position->set(204, 106);
-        this->command->drawSelf(camera, 0, 0);
-
-        for (int i = 0; i<4; i+=1)
-        {
-            this->commandActionsUp->position->set(204 + 3 + (12*i), 106 + 5);
-            this->commandActionsUp->imageIndex = i;
-            this->commandActionsUp->drawSelf(camera, 0, 0);
-        }
-
-        for (int i = 0; i<4; i+=1)
-        {
-            this->commandActionsUp->position->set(204 + 3 + (12*i), 106 + 21);
-            this->commandActionsUp->imageIndex = i+4;
-            this->commandActionsUp->drawSelf(camera, 0, 0);
-        }
-
-        Container::Draw(camera, xoffset, yoffset);
-    }
-
     bool UiManager::captureLeftClickEvent(Ref<Point> clickPoint) {
         if (Math::PointInBox(clickPoint->x,clickPoint->y,0,100,48,144))
         {
@@ -120,5 +72,61 @@ namespace DsprFrontend
         }
 
         return Null<Point>();
+    }
+
+    void UiManager::Draw(Ref<Camera> camera, int xoffset, int yoffset) {
+
+        this->minimap->position->set(0, 100);
+        this->minimap->drawSelf(camera, 0, 0);
+
+        //draw armybar
+        this->armybar->position->set(48, 116);
+        this->armybar->drawSelf(camera, 0, 0);
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        {
+            auto selectedUnitList = g->unitManager->getSelectedUnits();
+            int i = 0;
+            for (auto iterator = selectedUnitList->GetIterator(); iterator->Valid(); iterator->Next())
+            {
+                auto unit = g->unitManager->getUnitWithId(iterator->Get()->getInt());
+
+                this->unitPortrait->position->set(48 + 6 + (i * 12), 116 + 5);
+                this->unitPortrait->drawSelf(camera, 0, 0);
+
+                this->healthBarLine->setLineStyle(1, Color::Green);
+                this->healthBarLine->position->set(48 + 6 + (i * 12), 116 + 5 + 15);
+                int healthBarLineLength = (unit->health>=0) ? (int) (((float) unit->health / unit->maxHealth) * 11) : 0;
+                this->healthBarLine->endPosition->set(48 + 6 + (i * 12) + healthBarLineLength, 116 + 5 + 15);
+                this->healthBarLine->drawSelf(camera, xoffset, yoffset);
+
+                this->healthBarLine->setLineStyle(1, Color::White);
+                this->healthBarLine->position->y += 2;
+                this->healthBarLine->endPosition->set(48 + 6 + 11 + (i * 12), 116 + 5 + 15);
+                this->healthBarLine->drawSelf(camera, xoffset, yoffset);
+
+                i++;
+            }
+        }
+
+        //draw command card
+        this->command->position->set(204, 106);
+        this->command->drawSelf(camera, 0, 0);
+
+        for (int i = 0; i<4; i+=1)
+        {
+            this->commandActionsUp->position->set(204 + 3 + (12*i), 106 + 5);
+            this->commandActionsUp->imageIndex = i;
+            this->commandActionsUp->drawSelf(camera, 0, 0);
+        }
+
+        for (int i = 0; i<4; i+=1)
+        {
+            this->commandActionsUp->position->set(204 + 3 + (12*i), 106 + 21);
+            this->commandActionsUp->imageIndex = i+4;
+            this->commandActionsUp->drawSelf(camera, 0, 0);
+        }
+
+        Container::Draw(camera, xoffset, yoffset);
     }
 }

@@ -179,11 +179,17 @@ namespace DsprFrontend
                                         atoi(varsParts->At(1)->AsCStr()));
                 continue;
             }
+            else
+            if (propName->Equals("health"))
+            {
+                unit->health = atoi(propsParts->At(1)->AsCStr());
+                continue;
+            }
         }
     }
 
-    int UnitManager::getNumberSelectedUnits() {
-        return this->selectionList->Size();
+    Ref<List<Int>> UnitManager::getSelectedUnits() {
+        return this->selectionList;
     }
 
     Ref<List<Unit>> UnitManager::getUnits() {

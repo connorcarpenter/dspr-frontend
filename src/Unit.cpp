@@ -112,9 +112,9 @@ namespace DsprFrontend
 
     void Unit::attackingStep(float deltaFrameMs) {
         this->imageSpeed = attackImageSpeed;
-        if (Math::Floor(this->imageIndex) == 3){
-            this->hitSound->PlayAndDisable();
-        } else this->hitSound->Enable();
+//        if (Math::Floor(this->imageIndex) == 3){
+//            this->hitSound->PlayAndDisable();
+//        } else this->hitSound->Enable();
     }
 
     void Unit::newNextTilePosition(int x, int y)
