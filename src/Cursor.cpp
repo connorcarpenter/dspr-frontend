@@ -7,6 +7,7 @@
 #include "Sova/Math/Math.h"
 #include "Sova/Graphics/Color.h"
 #include "UiManager.h"
+#include <Sova/Audio/Sound.h>
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 
@@ -36,6 +37,7 @@ namespace DsprFrontend
         this->selectionBox->setFillStyle(Color::Green, 0.5f);
         this->hoverList = New<List<Unit>>();
         this->worldPosition = New<Point>(0,0);
+        this->helloSound = New<Sound>(New<Sova::String>("sounds/hello.wav"));
 
 #if ORYOL_LINUX
         glfwSetInputMode(Oryol::_priv::glfwDisplayMgr::getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -164,6 +166,8 @@ namespace DsprFrontend
                             if (!shiftPressed)
                                 g->unitManager->deselectAllUnits();
                             if (!shiftPressed) {
+                                if (this->hoverList->Size() > 0)
+                                    this->helloSound->Play();
                                 this->setHoverListUnitsToSelected(true);
                             } else {
                                 this->toggleHoverListUnitsSelected();

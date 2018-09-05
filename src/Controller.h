@@ -84,6 +84,9 @@ namespace DsprFrontend
             resources->Add(New<String>("images/ui/unitSelection.png"));
             resources->Add(New<String>("images/ui/moveMarker.png"));
 
+            resources->Add(New<String>("sounds/hello.wav"));
+            resources->Add(New<String>("sounds/hit.wav"));
+
             g->app->load(resources)
                     ->onFinish(
                             [&]() {

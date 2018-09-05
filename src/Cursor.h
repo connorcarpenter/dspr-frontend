@@ -5,6 +5,11 @@
 #include <Sova/Graphics/AnimatedSprite.h>
 #include <Sova/Graphics/Rectangle.h>
 
+namespace Sova
+{
+    class Sound;
+}
+
 namespace DsprFrontend
 {
     class Unit;
@@ -34,6 +39,8 @@ namespace DsprFrontend
 
         Ref<Rectangle> selectionBox = Null<Rectangle>();
         Ref<List<Unit>> hoverList = Null<List<Unit>>();
+
+        Ref<Sova::Sound> helloSound = Null<Sova::Sound>();
 
         int leftButtonPressedTime = 0;
         const int leftButtonPressedTimeToDrag = 6;

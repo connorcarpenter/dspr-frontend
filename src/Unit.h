@@ -4,6 +4,11 @@
 
 #include <Sova/Graphics/AnimatedSprite.h>
 
+namespace Sova
+{
+    class Sound;
+}
+
 namespace DsprFrontend
 {
     enum AnimationState { Walking, Attacking };
@@ -58,5 +63,7 @@ namespace DsprFrontend
         int stillFrames = 0;
 
         void updatePosition();
+
+        Ref<Sova::Sound> hitSound = Null<Sova::Sound>();
     };
 }

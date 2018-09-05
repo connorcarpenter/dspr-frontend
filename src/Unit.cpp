@@ -8,6 +8,7 @@
 #include "Global.h"
 #include "FogManager.h"
 #include "SpriteCatalog.h"
+#include <Sova/Audio/Sound.h>
 
 namespace DsprFrontend
 {
@@ -42,6 +43,8 @@ namespace DsprFrontend
         g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, true);
 
         this->updatePosition();
+
+        this->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
     }
 
     void Unit::step(float deltaFrameMs)
@@ -109,6 +112,9 @@ namespace DsprFrontend
 
     void Unit::attackingStep(float deltaFrameMs) {
         this->imageSpeed = attackImageSpeed;
+        if (Math::Floor(this->imageIndex) == 3){
+            this->hitSound->PlayAndDisable();
+        } else this->hitSound->Enable();
     }
 
     void Unit::newNextTilePosition(int x, int y)
