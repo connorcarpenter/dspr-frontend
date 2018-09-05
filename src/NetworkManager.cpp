@@ -118,7 +118,12 @@ namespace DsprFrontend
             auto idString = splitString->At(1);
             auto propsString = splitString->At(2);
             g->unitManager->receiveUnitUpdate(idString, propsString->Split('&'));
-//            std::cout << message->AsCStr() << std::endl;
+            return;
+        }
+        else if (command->Equals("unit/1.0/delete")) {
+            auto idString = splitString->At(1);
+            auto propsString = splitString->At(2);
+            g->unitManager->receiveUnitDelete(idString, propsString);
             return;
         }
     }

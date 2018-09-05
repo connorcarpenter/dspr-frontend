@@ -91,21 +91,24 @@ namespace DsprFrontend
             {
                 auto unit = g->unitManager->getUnitWithId(iterator->Get()->getInt());
 
-                this->unitPortrait->position->set(48 + 6 + (i * 12), 116 + 5);
-                this->unitPortrait->drawSelf(camera, 0, 0);
+                if (unit != nullptr) {
+                    this->unitPortrait->position->set(48 + 6 + (i * 12), 116 + 5);
+                    this->unitPortrait->drawSelf(camera, 0, 0);
 
-                this->healthBarLine->setLineStyle(1, Color::Green);
-                this->healthBarLine->position->set(48 + 6 + (i * 12), 116 + 5 + 15);
-                int healthBarLineLength = (unit->health>=0) ? (int) (((float) unit->health / unit->maxHealth) * 11) : 0;
-                this->healthBarLine->endPosition->set(48 + 6 + (i * 12) + healthBarLineLength, 116 + 5 + 15);
-                this->healthBarLine->drawSelf(camera, xoffset, yoffset);
+                    this->healthBarLine->setLineStyle(1, Color::Green);
+                    this->healthBarLine->position->set(48 + 6 + (i * 12), 116 + 5 + 15);
+                    int healthBarLineLength = (unit->health >= 0) ? (int) (((float) unit->health / unit->maxHealth) *
+                                                                           11) : 0;
+                    this->healthBarLine->endPosition->set(48 + 6 + (i * 12) + healthBarLineLength, 116 + 5 + 15);
+                    this->healthBarLine->drawSelf(camera, xoffset, yoffset);
 
-                this->healthBarLine->setLineStyle(1, Color::White);
-                this->healthBarLine->position->y += 2;
-                this->healthBarLine->endPosition->set(48 + 6 + 11 + (i * 12), 116 + 5 + 15);
-                this->healthBarLine->drawSelf(camera, xoffset, yoffset);
+                    this->healthBarLine->setLineStyle(1, Color::White);
+                    this->healthBarLine->position->y += 2;
+                    this->healthBarLine->endPosition->set(48 + 6 + 11 + (i * 12), 116 + 5 + 2 + 15);
+                    this->healthBarLine->drawSelf(camera, xoffset, yoffset);
 
-                i++;
+                    i++;
+                }
             }
         }
 

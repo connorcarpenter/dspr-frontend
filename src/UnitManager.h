@@ -37,11 +37,12 @@ namespace DsprFrontend
 
         Ref<Unit> getUnitWithId(int id);
 
+        void receiveUnitDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr);
+
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
         Ref<List<Sova::Int>> selectionList = Null<List<Sova::Int>>();
         bool rightButtonAlreadyClicked = false;
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
-
     };
 }

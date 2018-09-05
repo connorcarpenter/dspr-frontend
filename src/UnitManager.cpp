@@ -188,6 +188,22 @@ namespace DsprFrontend
         }
     }
 
+    void UnitManager::receiveUnitDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr)
+    {
+        int id = atoi(idStr->AsCStr());
+
+        Ref<Unit> unit = this->unitList->Find([&](Ref<Unit> inspectUnit) { //replace this with a Hash lookup someday!
+            return (inspectUnit->id == id);
+        });
+
+        auto deleteModifier = atoi(propsStr->AsCStr());
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        g->world->RemoveChild(unit);
+        this->unitList->Remove(unit);
+        this->selectionList->Remove(New<Int>(id));
+    }
+
     Ref<List<Int>> UnitManager::getSelectedUnits() {
         return this->selectionList;
     }
