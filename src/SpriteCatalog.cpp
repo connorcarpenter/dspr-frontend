@@ -6,7 +6,8 @@
 
 namespace DsprFrontend
 {
-    SpriteCatalog::SpriteCatalog() {
+    SpriteCatalog::SpriteCatalog()
+    {
         this->workerWalkDown = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerDown.png"), 15, 20, 1, 7, 18);
         this->workerWalkUp = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerUp.png"), 15, 20, 1, 7, 18);
 
@@ -24,5 +25,11 @@ namespace DsprFrontend
         this->workerAttackRightTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackRight_TC.png"), 12, 12, 1, 4, 15);
         this->workerAttackDownRightTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackDownRight_TC.png"), 11, 11, 1, 4, 14);
         this->workerAttackDownTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackDown_TC.png"), 10, 15, 1, 4, 16);
+
+        this->workerDieDown = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerDieDown.png"), 18, 16, 1, 8, 14);
+        this->workerDieUp = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerDieUp.png"), 19, 16, 1, 9, 13);
+
+        this->workerDieDownTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerDieDown_TC.png"), 11, 14, 1, 5, 13);
+        this->workerDieUpTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerDieUp_TC.png"), 11, 16, 1, 6, 13);
     }
 }

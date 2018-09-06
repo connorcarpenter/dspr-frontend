@@ -13,6 +13,7 @@ fips_begin_app(dspr-frontend windowed)
             Tile.h Tile.cpp
             Block.h Block.cpp
             Unit.h Unit.cpp
+            DyingUnit.h DyingUnit.cpp
             Cursor.h Cursor.cpp
             Global.h Global.cpp
             TestClass.h TestClass.cpp

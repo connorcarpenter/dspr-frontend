@@ -11,8 +11,6 @@ namespace Sova
 
 namespace DsprFrontend
 {
-    enum AnimationState { Walking, Attacking };
-
     class Unit : public Sova::AnimatedSprite
     {
         SovaTypeDecl(Unit, AnimatedSprite);
@@ -20,9 +18,12 @@ namespace DsprFrontend
     public:
 
         Unit(int id, int x, int y, int tribeIndex);
+
+        enum UnitAnimationState { Walking, Attacking };
+
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
         void newNextTilePosition(int x, int y);
-        void setAnimationState(AnimationState newState, int heading);
+        void setAnimationState(UnitAnimationState newState, int heading);
         //
         Ref<Point> moveTarget = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();
@@ -34,9 +35,10 @@ namespace DsprFrontend
         bool selected = false;
         Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
         int tribeIndex = -1;
-        AnimationState animationState = Walking;
+        UnitAnimationState animationState = Walking;
         int health = 100;
         int maxHealth = 100;
+        bool facingDown = true;
     private:
 
         void step(float deltaMs);

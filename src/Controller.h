@@ -64,6 +64,8 @@ namespace DsprFrontend
             resources->Add(New<String>("images/worker/workerAttackRight.png"));
             resources->Add(New<String>("images/worker/workerAttackDownRight.png"));
             resources->Add(New<String>("images/worker/workerAttackDown.png"));
+            resources->Add(New<String>("images/worker/workerDieUp.png"));
+            resources->Add(New<String>("images/worker/workerDieDown.png"));
             resources->Add(New<String>("images/worker/unitPortrait.png"));
             resources->Add(New<String>("images/worker/TC/workerDown_TC.png"));
             resources->Add(New<String>("images/worker/TC/workerUp_TC.png"));
@@ -72,6 +74,8 @@ namespace DsprFrontend
             resources->Add(New<String>("images/worker/TC/workerAttackRight_TC.png"));
             resources->Add(New<String>("images/worker/TC/workerAttackDownRight_TC.png"));
             resources->Add(New<String>("images/worker/TC/workerAttackDown_TC.png"));
+            resources->Add(New<String>("images/worker/TC/workerDieUp_TC.png"));
+            resources->Add(New<String>("images/worker/TC/workerDieDown_TC.png"));
             resources->Add(New<String>("images/worker/TC/unitPortrait_TC.png"));
 
             resources->Add(New<String>("images/ui/armybar.png"));
@@ -86,6 +90,7 @@ namespace DsprFrontend
 
             resources->Add(New<String>("sounds/hello.wav"));
             resources->Add(New<String>("sounds/hit.wav"));
+            resources->Add(New<String>("sounds/die.wav"));
 
             g->app->load(resources)
                     ->onFinish(

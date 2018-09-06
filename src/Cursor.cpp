@@ -8,6 +8,7 @@
 #include "Sova/Graphics/Color.h"
 #include "UiManager.h"
 #include <Sova/Audio/Sound.h>
+#include "Unit.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 

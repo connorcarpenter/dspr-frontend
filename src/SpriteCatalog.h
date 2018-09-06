@@ -12,6 +12,7 @@ namespace DsprFrontend {
         SpriteCatalog();
         Ref<Sova::AnimatedSpriteInfo> workerWalkDown = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerWalkUp = Null<Sova::AnimatedSpriteInfo>();
+
         Ref<Sova::AnimatedSpriteInfo> workerWalkDownTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerWalkUpTC = Null<Sova::AnimatedSpriteInfo>();
 
@@ -20,10 +21,17 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> workerAttackRight = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerAttackDownRight = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerAttackDown = Null<Sova::AnimatedSpriteInfo>();
+
         Ref<Sova::AnimatedSpriteInfo> workerAttackUpTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerAttackUpRightTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerAttackRightTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerAttackDownRightTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerAttackDownTC = Null<Sova::AnimatedSpriteInfo>();
+
+        Ref<Sova::AnimatedSpriteInfo> workerDieDown = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerDieUp = Null<Sova::AnimatedSpriteInfo>();
+
+        Ref<Sova::AnimatedSpriteInfo> workerDieDownTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerDieUpTC = Null<Sova::AnimatedSpriteInfo>();
     };
 }

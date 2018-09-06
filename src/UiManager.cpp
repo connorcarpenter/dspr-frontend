@@ -6,6 +6,7 @@
 #include <Sova/Math/Math.h>
 #include "UiManager.h"
 #include "Global.h"
+#include "Unit.h"
 
 namespace DsprFrontend
 {

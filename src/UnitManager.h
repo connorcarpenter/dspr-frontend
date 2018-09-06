@@ -8,10 +8,10 @@
 #include <Sova/Graphics/Pixel.h>
 #include "Sova/Common/Int.h"
 
-#include "Unit.h"
-
 namespace DsprFrontend
 {
+    class Unit;
+
     class UnitManager : public Sova::Refable
     {
     public:

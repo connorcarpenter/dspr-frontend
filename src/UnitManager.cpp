@@ -10,6 +10,8 @@
 #include "Global.h"
 #include "UiManager.h"
 #include "UnitOrder.h"
+#include "DyingUnit.h"
+#include "Unit.h"
 
 namespace DsprFrontend
 {
@@ -175,7 +177,7 @@ namespace DsprFrontend
             {
                 auto varsParts = propsParts->At(1)->Split(',');
 
-                unit->setAnimationState(static_cast<AnimationState >(atoi(varsParts->At(0)->AsCStr())),
+                unit->setAnimationState(static_cast<Unit::UnitAnimationState >(atoi(varsParts->At(0)->AsCStr())),
                                         atoi(varsParts->At(1)->AsCStr()));
                 continue;
             }
@@ -196,12 +198,18 @@ namespace DsprFrontend
             return (inspectUnit->id == id);
         });
 
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
         auto deleteModifier = atoi(propsStr->AsCStr());
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        g->world->RemoveChild(unit);
+        if (deleteModifier == 1){
+            auto dieSprite = New<DyingUnit>(unit);
+            g->world->AddChild(dieSprite);
+        }
+
         this->unitList->Remove(unit);
         this->selectionList->Remove(New<Int>(id));
+        unit->Destroy();
     }
 
     Ref<List<Int>> UnitManager::getSelectedUnits() {
@@ -219,6 +227,9 @@ namespace DsprFrontend
     }
 
     void UnitManager::issueUnitOrder(bool attackOrderSelected) {
+
+        if (this->selectionList->Size() <= 0) return;
+
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
         UnitOrder orderIndex = Move;

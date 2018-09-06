@@ -5,6 +5,7 @@
 #include <Sova/Internal/InternalApp.h>
 #include <Global.h>
 #include "MinimapUnits.h"
+#include "Unit.h"
 
 namespace DsprFrontend
 {
