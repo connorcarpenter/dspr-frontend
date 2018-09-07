@@ -99,6 +99,10 @@ namespace DsprFrontend
             g->gameServer->send(sb->ToString());
             return;
         }
+        else if (command->Equals("tribe/1.0/set")) {
+            g->playersTribeIndex = atoi(splitString->At(1)->AsCStr());
+            return;
+        }
         else if (command->Equals("grid/1.0/create")) {
             Ref<List<Sova::String>> gridString = splitString->At(1)->Split(',');
             g->tileManager->receiveGrid(gridString->At(0), gridString->At(1));
