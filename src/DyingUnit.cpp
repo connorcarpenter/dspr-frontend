@@ -44,10 +44,12 @@ namespace DsprFrontend
         this->position = unit->position;
         this->scale = unit->scale;
 
-        auto dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
-        dieSound->Play();
+//        auto dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
+//        dieSound->Play();
 
-        this->disappearTimer = 30;
+        this->disappearTimer = 1200;
+
+        this->depth = unit->depth;
     }
 
     void DyingUnit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)

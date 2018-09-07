@@ -39,6 +39,7 @@ namespace DsprFrontend
         int health = 100;
         int maxHealth = 100;
         bool facingDown = true;
+        const int sight = 8;
     private:
 
         void step(float deltaMs);
@@ -51,7 +52,7 @@ namespace DsprFrontend
         const float walkImageSpeed = 0.1f;
         float attackImageSpeed = 0.2f;
         const int gameServerTickMs = 100;
-        const int sight = 8; // 12 will be a circle that touches the edges of the screen if centered on the unit, 8 is standard
+        // 12 will be a circle that touches the edges of the screen if centered on the unit, 8 is standard
 
         float walkAmount = 0;
         int walkSpeed = walkSpeedStraight;

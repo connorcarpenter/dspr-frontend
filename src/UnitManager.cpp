@@ -12,6 +12,8 @@
 #include "UnitOrder.h"
 #include "DyingUnit.h"
 #include "Unit.h"
+#include "BloodParticle.h"
+#include "FogManager.h"
 
 namespace DsprFrontend
 {
@@ -184,7 +186,11 @@ namespace DsprFrontend
             else
             if (propName->Equals("health"))
             {
+                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
                 unit->health = atoi(propsParts->At(1)->AsCStr());
+                auto bloodPartNum = Math::Random(1,4);
+                for (int i = 0;i<bloodPartNum;i++)
+                    g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth));
                 continue;
             }
         }
@@ -205,7 +211,13 @@ namespace DsprFrontend
         if (deleteModifier == 1){
             auto dieSprite = New<DyingUnit>(unit);
             g->world->AddChild(dieSprite);
+
+            auto bloodPartNum = 6;
+            for (int i = 0;i<bloodPartNum;i++)
+                g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth));
         }
+
+        g->fogManager->revealFog(unit->tilePosition->x, unit->tilePosition->y, unit->sight, false);
 
         this->unitList->Remove(unit);
         this->selectionList->Remove(New<Int>(id));
