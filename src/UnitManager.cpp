@@ -217,7 +217,9 @@ namespace DsprFrontend
                 g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth));
         }
 
-        g->fogManager->revealFog(unit->tilePosition->x, unit->tilePosition->y, unit->sight, false);
+        if (unit->tribeIndex == g->playersTribeIndex){
+            g->fogManager->revealFog(unit->tilePosition->x, unit->tilePosition->y, unit->sight, false);
+        }
 
         this->unitList->Remove(unit);
         this->selectionList->Remove(New<Int>(id));

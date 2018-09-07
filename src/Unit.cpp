@@ -41,7 +41,8 @@ namespace DsprFrontend
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
-        g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, true);
+        if (this->tribeIndex == g->playersTribeIndex)
+            g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, true);
 
         this->updatePosition();
 
@@ -71,8 +72,10 @@ namespace DsprFrontend
             if (this->walkAmount >= maxWalkAmount)
             {
                 walkAmount = 0;
-                g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
-                g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+                if (this->tribeIndex == g->playersTribeIndex) {
+                    g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
+                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+                }
                 this->tilePosition->set(this->nextTilePosition->x, this->nextTilePosition->y);
                 this->SetDepth(this->tilePosition->y * -1);
             }
@@ -123,8 +126,10 @@ namespace DsprFrontend
     void Unit::newNextTilePosition(int x, int y)
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
-        g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+        if (this->tribeIndex == g->playersTribeIndex) {
+            g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
+            g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+        }
 
         this->lastPosition->set(this->position);
         this->interpolation = interpolationMax-interpolationStep;
@@ -215,8 +220,10 @@ namespace DsprFrontend
             {
                 this->imageIndex = 0;
 
-                g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
-                g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+                if (this->tribeIndex == g->playersTribeIndex) {
+                    g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
+                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+                }
 
                 this->lastPosition->set(this->position);
                 this->interpolation = interpolationMax-interpolationStep;

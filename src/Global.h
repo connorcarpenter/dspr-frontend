@@ -41,5 +41,6 @@ namespace DsprFrontend
         Ref<UiManager> uiManager = Null<UiManager>();
         Ref<Minimap> minimap = Null<Minimap>();
         Ref<SpriteCatalog> spriteCatalog = Null<SpriteCatalog>();
+        int playersTribeIndex = 0;
     };
 }
