@@ -218,7 +218,7 @@ namespace DsprFrontend
         }
 
         if (unit->tribeIndex == g->playersTribeIndex){
-            g->fogManager->revealFog(unit->tilePosition->x, unit->tilePosition->y, unit->sight, false);
+            g->fogManager->conceilFog(unit->tilePosition->x, unit->tilePosition->y, unit->sight);
         }
 
         this->unitList->Remove(unit);

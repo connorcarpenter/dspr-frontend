@@ -79,7 +79,16 @@ namespace DsprFrontend
         }
     }
 
-    void FogManager::revealFog(int x, int y, int radius, bool reveal)
+    void FogManager::revealFog(int x, int y, int radius)
+    {
+        this->updateFog(x,y,radius, true);
+    }
+
+    void FogManager::conceilFog(int x, int y, int radius) {
+        this->updateFog(x,y,radius, false);
+    }
+
+    void FogManager::updateFog(int x, int y, int radius, bool reveal)
     {
         if (!this->receivedGrid) return;
 
@@ -96,6 +105,7 @@ namespace DsprFrontend
                 if (Sova::Math::Distance(x,y,tx,ty) > radius) continue;
 
                 int inc = reveal ? 1 : -1;
+
                 int tileIndex = getTileIndex(gridIndex, tx, ty);
                 if (gridIndex == 0)
                 {
@@ -274,4 +284,6 @@ namespace DsprFrontend
             }
         }
     }
+
+
 }

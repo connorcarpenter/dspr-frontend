@@ -42,7 +42,7 @@ namespace DsprFrontend
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
         if (this->tribeIndex == g->playersTribeIndex)
-            g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, true);
+            g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight);
 
         this->updatePosition();
 
@@ -73,8 +73,8 @@ namespace DsprFrontend
             {
                 walkAmount = 0;
                 if (this->tribeIndex == g->playersTribeIndex) {
-                    g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
-                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+                    g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->sight);
+                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight);
                 }
                 this->tilePosition->set(this->nextTilePosition->x, this->nextTilePosition->y);
                 this->SetDepth(this->tilePosition->y * -1);
@@ -127,8 +127,8 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         if (this->tribeIndex == g->playersTribeIndex) {
-            g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
-            g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+            g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->sight);
+            g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight);
         }
 
         this->lastPosition->set(this->position);
@@ -221,8 +221,8 @@ namespace DsprFrontend
                 this->imageIndex = 0;
 
                 if (this->tribeIndex == g->playersTribeIndex) {
-                    g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight, false);
-                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight, true);
+                    g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->sight);
+                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight);
                 }
 
                 this->lastPosition->set(this->position);
