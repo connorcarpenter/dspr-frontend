@@ -20,6 +20,7 @@ namespace DsprFrontend
         void receiveGrid(int w, int h);
         void revealFog(int x, int y, int radius);
         void conceilFog(int x, int y, int radius);
+        void shroudToFog(int x, int y);
         bool tileIsInShroud(int x, int y);
 
         void Draw(Ref<Camera> camera, int xoffset, int yoffset);

@@ -48,6 +48,8 @@ namespace DsprFrontend
         this->updatePosition();
 
         this->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
+
+        this->SetDepth(this->tilePosition->y * -1);
     }
 
     void Unit::step(float deltaFrameMs)

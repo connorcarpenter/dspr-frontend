@@ -12,6 +12,7 @@
 #include "Global.h"
 #include "Block.h"
 #include "FogManager.h"
+#include "Minimap/Minimap.h"
 
 using namespace Sova;
 using namespace Oryol;
@@ -67,15 +68,6 @@ namespace DsprFrontend
         if (gridIndex == -1)
             return;
 
-        if (tileFrame == -1)
-        {
-            auto newBlock = New<Block>(tileX, tileY);
-
-            g->world->AddChild(newBlock);
-
-            return;
-        }
-
         int tileIndex = getTileIndex(gridIndex, tileX, tileY);
         if (gridIndex == 0)
         {
@@ -84,6 +76,16 @@ namespace DsprFrontend
         else
         {
             this->tileArrayB[tileIndex] = new Tile(tileFrame);
+        }
+
+        g->minimap->DrawTile(tileX,tileY);
+        g->fogManager->shroudToFog(tileX, tileY);
+
+        if (tileFrame == -1)
+        {
+            auto newBlock = New<Block>(tileX, tileY);
+
+            g->world->AddChild(newBlock);
         }
 
         //std::cout << "received tile: "<<tileX<<", "<<tileY<<", "<<tileFrame<< std::endl;

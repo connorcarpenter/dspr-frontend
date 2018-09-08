@@ -112,7 +112,6 @@ namespace DsprFrontend
                     if (reveal && this->fogArrayA[tileIndex] == 0)
                     {
                         inc += 1;
-                        g->minimap->DrawTile(tx,ty);
                     }
                     this->fogArrayA[tileIndex] += inc;
                 }
@@ -121,7 +120,6 @@ namespace DsprFrontend
                     if (reveal && this->fogArrayB[tileIndex] == 0)
                     {
                         inc += 1;
-                        g->minimap->DrawTile(tx,ty);
                     }
                     this->fogArrayB[tileIndex] += inc;
                 }
@@ -285,5 +283,26 @@ namespace DsprFrontend
         }
     }
 
-
+    void FogManager::shroudToFog(int x, int y) {
+        if (this->getFogAmount(x, y) == 0)
+        {
+            int gridIndex = getGridIndex(x, y);
+            if (gridIndex == -1) return;
+            int tileIndex = getTileIndex(gridIndex, x, y);
+            if (gridIndex == 0)
+            {
+                if (this->fogArrayA[tileIndex] == 0)
+                {
+                    this->fogArrayA[tileIndex] = 1;
+                }
+            }
+            else
+            {
+                if (this->fogArrayB[tileIndex] == 0)
+                {
+                    this->fogArrayB[tileIndex] = 1;
+                }
+            }
+        }
+    }
 }

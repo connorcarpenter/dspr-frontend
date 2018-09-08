@@ -12,6 +12,7 @@ fips_begin_app(dspr-frontend windowed)
             FogManager.h FogManager.cpp
             Tile.h Tile.cpp
             BloodParticle.h BloodParticle.cpp
+            DsprColors.h DsprColors.cpp
             Block.h Block.cpp
             Unit.h Unit.cpp
             DyingUnit.h DyingUnit.cpp
