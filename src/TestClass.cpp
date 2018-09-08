@@ -3,6 +3,12 @@
 //
 
 #include "TestClass.h"
+#include <Sova/Math/Math.h>
+
+//#include <Sova/Internal/InternalApp.h>
+#include "UiManager.h"
+#include "Global.h"
+//#include "Unit.h"
 
 namespace DsprFrontend {
     void TestClass::something() {

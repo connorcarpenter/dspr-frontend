@@ -26,6 +26,5 @@ namespace DsprFrontend
         Ref<Sova::Line> healthBarLine = Null<Sova::Line>();
         Ref<AnimatedSprite> commandActionsUp = Null<AnimatedSprite>();
         Ref<AnimatedSprite> commandActionsHover = Null<AnimatedSprite>();
-
     };
 }

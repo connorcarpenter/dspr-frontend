@@ -10,6 +10,7 @@
 #include "SpriteCatalog.h"
 #include <Sova/Audio/Sound.h>
 #include "Unit.h"
+#include "TileManager.h"
 
 namespace DsprFrontend
 {

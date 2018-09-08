@@ -6,6 +6,7 @@
 #include <Global.h>
 #include "MinimapFog.h"
 #include "FogManager.h"
+#include "TileManager.h"
 
 namespace DsprFrontend {
 

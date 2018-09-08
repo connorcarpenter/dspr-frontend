@@ -18,6 +18,10 @@
 #include "FogManager.h"
 #include "UiManager.h"
 #include "SpriteCatalog.h"
+#include "TileManager.h"
+#include "Minimap/Minimap.h"
+#include "NetworkManager.h"
+#include "Cursor.h"
 
 using namespace Sova;
 

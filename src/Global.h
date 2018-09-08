@@ -7,11 +7,12 @@
 #include <Sova/References/Ref.h>
 #include <Sova/References/Refable.h>
 #include <Sova/App.h>
-#include "TileManager.h"
-#include "Cursor.h"
-#include "UnitManager.h"
-#include "NetworkManager.h"
-#include "Minimap/Minimap.h"
+
+namespace Sova
+{
+    class Sprite;
+    class AnimatedSprite;
+}
 
 namespace DsprFrontend
 {
@@ -19,6 +20,11 @@ namespace DsprFrontend
     class FogManager;
     class UiManager;
     class SpriteCatalog;
+    class Minimap;
+    class NetworkManager;
+    class UnitManager;
+    class Cursor;
+    class TileManager;
 
     class Global : public Sova::Refable
     {

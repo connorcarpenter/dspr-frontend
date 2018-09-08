@@ -3,11 +3,14 @@
 //
 
 #include <Sova/Internal/InternalApp.h>
+#include "Sova/Graphics/Internal/InternalCamera.h"
+
 #include "MinimapFog.h"
 #include "MinimapUnits.h"
 #include "Global.h"
-
-#include "Sova/Graphics/Internal/InternalCamera.h"
+#include "Minimap.h"
+#include "Cursor.h"
+#include "TileManager.h"
 
 namespace DsprFrontend {
 

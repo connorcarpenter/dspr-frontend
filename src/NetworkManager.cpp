@@ -9,6 +9,8 @@
 #include "NetworkManager.h"
 #include "Global.h"
 #include <iostream>
+#include "TileManager.h"
+#include "UnitManager.h"
 
 using Sova::String;
 using Sova::StringBuilder;

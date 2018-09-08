@@ -6,9 +6,9 @@
 #include <Modules/Core/String/String.h>
 #include <Sova/Internal/InternalApp.h>
 #include "FogManager.h"
-#include "Sova/Graphics/Internal/InternalTexture.h"
 #include "Sova/Graphics/Internal/InternalCamera.h"
 #include "Global.h"
+#include "Minimap/Minimap.h"
 
 namespace DsprFrontend
 {
@@ -167,8 +167,8 @@ namespace DsprFrontend
         if (this->destroyed) return;
         if (!this->receivedGrid) return;
 
-        const auto resState = Gfx::QueryResourceInfo(this->texture->textureId).State;
-        if (resState == ResourceState::Valid)
+        const auto resState = Oryol::Gfx::QueryResourceInfo(this->texture->textureId).State;
+        if (resState == Oryol::ResourceState::Valid)
         {
             int a = xoffset / -tileWidth;
             int b = yoffset / -tileHeight;
@@ -202,10 +202,10 @@ namespace DsprFrontend
         const void *data = this->updateVertices(xoffset, yoffset, this->texture->width, this->texture->height,
                                                 camera->getInternalCamera()->getWidth(),
                                                 camera->getInternalCamera()->getHeight(), 1);
-        Gfx::UpdateVertices(drawState.Mesh[0], data, InternalApp::numVertexesInQuad);
-        Gfx::ApplyDrawState(drawState);
+        Oryol::Gfx::UpdateVertices(drawState.Mesh[0], data, InternalApp::numVertexesInQuad);
+        Oryol::Gfx::ApplyDrawState(drawState);
 
-        Gfx::Draw();
+        Oryol::Gfx::Draw();
     }
 
     const void * FogManager::updateVertices(float x, float y, int texWidth, int texHeight, int canWidth, int canHeight, int padding) {

@@ -14,6 +14,8 @@
 #include "Unit.h"
 #include "BloodParticle.h"
 #include "FogManager.h"
+#include "Cursor.h"
+#include "Minimap/Minimap.h"
 
 namespace DsprFrontend
 {

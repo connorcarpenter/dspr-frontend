@@ -14,6 +14,7 @@
 #include "FogManager.h"
 
 using namespace Sova;
+using namespace Oryol;
 
 namespace DsprFrontend
 {

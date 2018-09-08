@@ -7,6 +7,8 @@
 #include "UiManager.h"
 #include "Global.h"
 #include "Unit.h"
+#include "TileManager.h"
+#include "UnitManager.h"
 
 namespace DsprFrontend
 {

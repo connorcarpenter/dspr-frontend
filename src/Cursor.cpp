@@ -3,12 +3,16 @@
 //
 
 #include <Sova/Internal/InternalApp.h>
-#include "Global.h"
 #include "Sova/Math/Math.h"
 #include "Sova/Graphics/Color.h"
-#include "UiManager.h"
 #include <Sova/Audio/Sound.h>
+
+#include "Global.h"
+#include "Cursor.h"
+#include "UiManager.h"
 #include "Unit.h"
+#include "UnitManager.h"
+#include "TileManager.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 

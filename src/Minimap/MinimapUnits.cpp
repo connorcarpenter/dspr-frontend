@@ -3,9 +3,12 @@
 //
 
 #include <Sova/Internal/InternalApp.h>
+
 #include <Global.h>
 #include "MinimapUnits.h"
 #include "Unit.h"
+#include "UnitManager.h"
+#include "TileManager.h"
 
 namespace DsprFrontend
 {
