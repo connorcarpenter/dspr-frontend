@@ -148,6 +148,8 @@ namespace DsprFrontend
             return (inspectUnit->id == id);
         });
 
+        if (unit == nullptr) return;
+
         for (auto iterator = propsStrList->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto propsStr = iterator->Get();
@@ -203,6 +205,8 @@ namespace DsprFrontend
         Ref<Unit> unit = this->unitList->Find([&](Ref<Unit> inspectUnit) { //replace this with a Hash lookup someday!
             return (inspectUnit->id == id);
         });
+
+        if (unit == nullptr) return;
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
