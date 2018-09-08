@@ -23,6 +23,9 @@ fips_begin_app(dspr-frontend windowed)
             Minimap/Minimap.h Minimap/Minimap.cpp
             Minimap/MinimapUnits.h Minimap/MinimapUnits.cpp
             Minimap/MinimapFog.h Minimap/MinimapFog.cpp
+
+            Circle/Circle.h Circle/Circle.cpp
+            Circle/CircleCache.h Circle/CircleCache.cpp
     )
     oryol_shader(shaders.shd)
     fips_deps(Sova)

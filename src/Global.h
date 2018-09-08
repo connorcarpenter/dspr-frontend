@@ -25,6 +25,7 @@ namespace DsprFrontend
     class UnitManager;
     class Cursor;
     class TileManager;
+    class CircleCache;
 
     class Global : public Sova::Refable
     {
@@ -47,6 +48,7 @@ namespace DsprFrontend
         Ref<UiManager> uiManager = Null<UiManager>();
         Ref<Minimap> minimap = Null<Minimap>();
         Ref<SpriteCatalog> spriteCatalog = Null<SpriteCatalog>();
+        Ref<CircleCache> circleCache = Null<CircleCache>();
         int playersTribeIndex = -1;
     };
 }

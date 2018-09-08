@@ -9,6 +9,7 @@
 #include "Sova/Graphics/Internal/InternalCamera.h"
 #include "Global.h"
 #include "Minimap/Minimap.h"
+#include "Circle/CircleCache.h"
 
 namespace DsprFrontend
 {
@@ -88,39 +89,46 @@ namespace DsprFrontend
         this->updateFog(x,y,radius, false);
     }
 
-    void FogManager::updateFog(int x, int y, int radius, bool reveal)
+    void FogManager::updateFog(int centerX, int centerY, int radius, bool reveal)
     {
         if (!this->receivedGrid) return;
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
-        for (int i = 0; i < radius*2; i+= 1)
+        auto sightCircle = g->circleCache->getCircle(radius);
+
+        int inc = reveal ? 1 : -1;
+
+        for (auto iterator = sightCircle->coordList->GetIterator(); iterator->Valid(); iterator->Next())
         {
-            for (int j = 0;j < radius*2;j+=1)
+            auto coord = iterator->Get();
+            int x = centerX + coord->x;
+            int y = centerY + coord->y;
+
+            int gridIndex = getGridIndex(x, y);
+            if (gridIndex == -1) continue;
+
+            int tileIndex = getTileIndex(gridIndex, x, y);
+            if (gridIndex == 0)
             {
-                int tx = x - radius + i;
-                int ty = y - radius + j;
-                int gridIndex = getGridIndex(tx, ty);
-                if (gridIndex == -1) continue;
-                if (Sova::Math::Distance(x,y,tx,ty) > radius) continue;
-
-                int inc = reveal ? 1 : -1;
-
-                int tileIndex = getTileIndex(gridIndex, tx, ty);
-                if (gridIndex == 0)
+                if (reveal && this->fogArrayA[tileIndex] == 0)
                 {
-                    if (reveal && this->fogArrayA[tileIndex] == 0)
-                    {
-                        inc += 1;
-                    }
-                    this->fogArrayA[tileIndex] += inc;
+                    this->fogArrayA[tileIndex] += 2;
                 }
                 else
                 {
-                    if (reveal && this->fogArrayB[tileIndex] == 0)
-                    {
-                        inc += 1;
-                    }
+                    this->fogArrayA[tileIndex] += inc;
+                }
+
+            }
+            else
+            {
+                if (reveal && this->fogArrayB[tileIndex] == 0)
+                {
+                    this->fogArrayB[tileIndex] += 2;
+                }
+                else
+                {
                     this->fogArrayB[tileIndex] += inc;
                 }
             }

@@ -22,6 +22,7 @@
 #include "Minimap/Minimap.h"
 #include "NetworkManager.h"
 #include "Cursor.h"
+#include "Circle/CircleCache.h"
 
 using namespace Sova;
 
@@ -116,6 +117,7 @@ namespace DsprFrontend
         g->viewport = g->app->createViewport(0, 0, g->app->width, g->app->height, g->camera);
 
         g->spriteCatalog = New<SpriteCatalog>();
+        g->circleCache = New<CircleCache>();
 
         g->tileManager = New<TileManager>();
         g->tileManager->SetDepth(9999);
