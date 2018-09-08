@@ -192,7 +192,7 @@ namespace DsprFrontend
             {
                 auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
                 unit->health = atoi(propsParts->At(1)->AsCStr());
-                auto bloodPartNum = Math::Random(1,4);
+                auto bloodPartNum = Math::Random(1,2);
                 for (int i = 0;i<bloodPartNum;i++)
                     g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth));
                 continue;

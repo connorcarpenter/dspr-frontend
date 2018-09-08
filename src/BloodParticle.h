@@ -16,7 +16,7 @@ namespace DsprFrontend {
         float zVelocity = 0;
         const float zGravity = 0.1f;
         const float friction = 1.0f - 0.125f;
-        int disappearTimer = 1200;
+        int disappearTimer = 1000;
 
         Ref<FloatPoint> velocity = Null<FloatPoint>();
         Ref<FloatPoint> floatPos = Null<FloatPoint>();
