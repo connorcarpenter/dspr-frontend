@@ -44,8 +44,8 @@ namespace DsprFrontend
         this->position = unit->position;
         this->scale = unit->scale;
 
-//        auto dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
-//        dieSound->Play();
+        auto dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
+        dieSound->Play();
 
         this->disappearTimer = 1000;
 

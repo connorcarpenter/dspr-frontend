@@ -39,7 +39,7 @@ namespace DsprFrontend
         int health = 100;
         int maxHealth = 100;
         bool facingDown = true;
-        const int sight = 8;
+        const int sight = 6;
     private:
 
         void step(float deltaMs);
@@ -50,9 +50,16 @@ namespace DsprFrontend
         const int walkSpeedStraight = maxWalkAmount / 2;
         const int walkSpeedDiagonal = maxWalkAmount / 3;
         const float walkImageSpeed = 0.1f;
-        float attackImageSpeed = 0.2f;
         const int gameServerTickMs = 100;
-        // 12 will be a circle that touches the edges of the screen if centered on the unit, 8 is standard
+
+        float attackFrameIndex = 0;
+        float attackWaitIndex = 0;
+        const float attackAnimationSpeed = 1;
+        const int attackFramesNumber = 5;
+        const int attackWaitFrames = 5;
+
+        const int acquisition = 6; // 12 will be a circle that touches the edges of the screen if centered on the unit, 8 is standard
+
 
         float walkAmount = 0;
         int walkSpeed = walkSpeedStraight;

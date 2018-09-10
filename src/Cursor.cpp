@@ -171,8 +171,8 @@ namespace DsprFrontend
                             if (!shiftPressed)
                                 g->unitManager->deselectAllUnits();
                             if (!shiftPressed) {
-//                                if (this->hoverList->Size() > 0)
-//                                    this->helloSound->Play();
+                                if (this->hoverList->Size() > 0)
+                                    this->helloSound->Play();
                                 this->setHoverListUnitsToSelected(true);
                             } else {
                                 this->toggleHoverListUnitsSelected();

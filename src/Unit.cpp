@@ -120,10 +120,21 @@ namespace DsprFrontend
     }
 
     void Unit::attackingStep(float deltaFrameMs) {
-        this->imageSpeed = attackImageSpeed;
-//        if (Math::Floor(this->imageIndex) == 3){
-//            this->hitSound->PlayAndDisable();
-//        } else this->hitSound->Enable();
+        if (this->attackWaitIndex <= 0) {
+            this->attackFrameIndex += attackAnimationSpeed * deltaFrameMs / gameServerTickMs;
+            if (this->attackFrameIndex >= this->attackFramesNumber) {
+                this->attackFrameIndex = 0;
+                this->attackWaitIndex = this->attackWaitFrames;
+            }
+            this->imageIndex = this->attackFrameIndex;
+            if (Math::Floor(this->imageIndex) == 3){
+                this->hitSound->PlayAndDisable();
+            } else this->hitSound->Enable();
+        }
+        else {
+            this->attackWaitIndex -= attackAnimationSpeed * deltaFrameMs / gameServerTickMs;
+            this->imageIndex = 0;
+        }
     }
 
     void Unit::newNextTilePosition(int x, int y)
@@ -222,6 +233,7 @@ namespace DsprFrontend
             case Attacking:
             {
                 this->imageIndex = 0;
+                this->imageSpeed = 0;
 
                 if (this->tribeIndex == g->playersTribeIndex) {
                     g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->sight);
