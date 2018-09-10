@@ -243,6 +243,9 @@ namespace DsprFrontend
         InternalApp::getInternalApp()->vertexBuffer[index].y = y;
         InternalApp::getInternalApp()->vertexBuffer[index].u = u;
         InternalApp::getInternalApp()->vertexBuffer[index].v = v;
+        InternalApp::getInternalApp()->vertexBuffer[index].r = 1.0f;
+        InternalApp::getInternalApp()->vertexBuffer[index].g = 1.0f;
+        InternalApp::getInternalApp()->vertexBuffer[index].b = 1.0f;
         return index + 1;
     }
 

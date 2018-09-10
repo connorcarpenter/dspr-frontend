@@ -19,8 +19,8 @@ namespace DsprFrontend
         void receiveUnit(Ref<Sova::String> id, Ref<Sova::String> x, Ref<Sova::String> y, Ref<Sova::String> tribeIndex);
         void receiveUnitUpdate(Ref<Sova::String> id, Ref<List<Sova::String>> propsStrList);
 
-        void addToSelectionList(int id);
-        void removeFromSelectionList(int id);
+        void addToSelectionList(Ref<Unit> unit);
+        void removeFromSelectionList(Ref<Unit> unit);
         void clearSelectionList();
 
         void uiUpdate();
@@ -33,15 +33,16 @@ namespace DsprFrontend
 
         void issueUnitOrder(bool attackOrderSelected);
 
-        Ref<List<Int>> getSelectedUnits();
+        Ref<List<Unit>> getSelectedUnits();
 
         Ref<Unit> getUnitWithId(int id);
 
         void receiveUnitDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr);
 
+        Ref<List<Unit>> selectionList = Null<List<Unit>>();
+        const int maxSelectedUnits = 12;
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
-        Ref<List<Sova::Int>> selectionList = Null<List<Sova::Int>>();
         bool rightButtonAlreadyClicked = false;
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
     };

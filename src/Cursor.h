@@ -19,8 +19,6 @@ namespace DsprFrontend
     public:
         Cursor();
 
-        void setImageIndex(int index);
-
         Ref<Point> getTilePosition();
 
         bool leftButtonDragging = false;
@@ -48,5 +46,7 @@ namespace DsprFrontend
         int leftButtonDoubleClickCountdown = 0;
         const int leftButtonDoubleClickWindow = 20;
 
+        bool cursorIsHovering = false;
+        int ignoreNextLeftButtonClicked = 0;
     };
 }

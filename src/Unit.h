@@ -3,6 +3,7 @@
 //
 
 #include <Sova/Graphics/AnimatedSprite.h>
+#include "UnitOrder.h"
 
 namespace Sova
 {
@@ -36,10 +37,13 @@ namespace DsprFrontend
         Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
         int tribeIndex = -1;
         UnitAnimationState animationState = Walking;
-        int health = 100;
-        int maxHealth = 100;
+
+        const int maxHealth = 420;
+        int health = maxHealth;
         bool facingDown = true;
         const int sight = 6;
+
+        UnitOrder currentOrder = Move;
     private:
 
         void step(float deltaMs);
@@ -55,6 +59,7 @@ namespace DsprFrontend
         float attackFrameIndex = 0;
         float attackWaitIndex = 0;
         const float attackAnimationSpeed = 1;
+        const float attackWaitSpeed = 1.0f / 1.7f;
         const int attackFramesNumber = 5;
         const int attackWaitFrames = 5;
 

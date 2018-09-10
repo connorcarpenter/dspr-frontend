@@ -9,7 +9,6 @@
 #include "UnitManager.h"
 #include "Global.h"
 #include "UiManager.h"
-#include "UnitOrder.h"
 #include "DyingUnit.h"
 #include "Unit.h"
 #include "BloodParticle.h"
@@ -34,12 +33,7 @@ namespace DsprFrontend
         if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked)
         {
             this->rightButtonAlreadyClicked = true;
-
-            if (g->cursor->attackOrderSelected){
-                g->cursor->attackOrderSelected = false;
-            } else {
-                this->issueUnitOrder(false);
-            }
+            this->issueUnitOrder(false);
         }
 
         if(!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
@@ -107,25 +101,16 @@ namespace DsprFrontend
         }
     }
 
-    void UnitManager::addToSelectionList(int id)
+    void UnitManager::addToSelectionList(Ref<Unit> unit)
     {
-        auto foundInt = this->selectionList->Find([&](Ref<Int> theInt){
-            return theInt->getInt() == id;
-        });
-
-        if (foundInt == nullptr) {
-            auto myInt = New<Int>(id);
-            selectionList->Add(myInt);
+        if (!this->selectionList->Contains(unit)) {
+            selectionList->Add(unit);
         }
     }
 
-    void UnitManager::removeFromSelectionList(int id) {
-        auto theListInt = this->selectionList->Find([&](Ref<Int> theInt){
-            return theInt->getInt() == id;
-        });
-
-        if (theListInt != nullptr) {
-            this->selectionList->Remove(theListInt);
+    void UnitManager::removeFromSelectionList(Ref<Unit> unit) {
+        if (this->selectionList->Contains(unit)) {
+            selectionList->Remove(unit);
         }
     }
 
@@ -228,11 +213,11 @@ namespace DsprFrontend
         }
 
         this->unitList->Remove(unit);
-        this->selectionList->Remove(New<Int>(id));
+        this->selectionList->Remove(unit);
         unit->Destroy();
     }
 
-    Ref<List<Int>> UnitManager::getSelectedUnits() {
+    Ref<List<Unit>> UnitManager::getSelectedUnits() {
         return this->selectionList;
     }
 
@@ -258,7 +243,7 @@ namespace DsprFrontend
         int targetedUnitId = -1;
         if (targetedUnit != nullptr){
             targetedUnitId = targetedUnit->id;
-            Ref<Unit> firstSelectedUnit = this->getUnitWithId(this->selectionList->At(0)->getInt());
+            Ref<Unit> firstSelectedUnit = this->selectionList->At(0);
             orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
                          Follow : AttackTarget;
         }
@@ -280,7 +265,7 @@ namespace DsprFrontend
         sb->Append(g->gameServerPlayerToken);
         sb->Append(New<Sova::String>("|"));
         bool first = true;
-        for (Ref<ListIterator<Int>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+        for (Ref<ListIterator<Unit>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
         {
             if (first)
             {
@@ -291,8 +276,11 @@ namespace DsprFrontend
                 sb->Append(New<Sova::String>(","));
             }
 
-            Ref<Int> intObj = iterator->Get();
+            auto unit = iterator->Get();
+            Ref<Int> intObj = New<Int>(unit->id);
             sb->Append(intObj->ToString());
+
+            unit->currentOrder = orderIndex;
         }
         sb->Append(New<Sova::String>("|"));
         sb->Append(New<Int>(orderIndex)->ToString());

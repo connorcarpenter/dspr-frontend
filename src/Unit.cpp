@@ -11,6 +11,7 @@
 #include <Sova/Audio/Sound.h>
 #include "Unit.h"
 #include "TileManager.h"
+#include "DsprColors.h"
 
 namespace DsprFrontend
 {
@@ -132,7 +133,7 @@ namespace DsprFrontend
             } else this->hitSound->Enable();
         }
         else {
-            this->attackWaitIndex -= attackAnimationSpeed * deltaFrameMs / gameServerTickMs;
+            this->attackWaitIndex -= this->attackWaitSpeed * deltaFrameMs / gameServerTickMs;
             this->imageIndex = 0;
         }
     }
@@ -181,40 +182,6 @@ namespace DsprFrontend
             this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUp);
             this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUpTC);
         }
-    }
-
-    void Unit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
-    {
-        auto g = (Global*) InternalApp::getGlobal();
-
-        if (this->selected)
-        {
-            g->unitSelectCircle->position->set(this->position->x, this->position->y);
-            g->unitSelectCircle->drawSelf(camera, xoffset, yoffset);
-
-            if (!this->tilePosition->Equals(this->moveTarget))
-            {
-                int x = (int) ((((float) this->moveTarget->x / 2) + 0.5f) * g->tileManager->tileWidth);
-                int y = (int) ((((float) this->moveTarget->y / 2) + 0.5f) * g->tileManager->tileHeight);
-                g->moveMarker->position->set(x, y);
-                g->moveMarker->drawSelf(camera, xoffset, yoffset);
-            }
-        }
-
-        if (this->hovering)
-        {
-            g->unitHoverCircle->position->set(this->position->x, this->position->y);
-            g->unitHoverCircle->drawSelf(camera, xoffset, yoffset);
-        }
-
-        AnimatedSprite::drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);
-
-        //TC
-
-        this->tcSprite->imageIndex = imageIndex;
-        this->tcSprite->position->set(this->position);
-        this->tcSprite->scale->x = this->scale->x;
-        this->tcSprite->drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);
     }
 
     void Unit::setAnimationState(UnitAnimationState newState, int heading) {
@@ -329,5 +296,44 @@ namespace DsprFrontend
             this->position->x = extrapolatedPositionX;
             this->position->y = extrapolatedPositionY;
         }
+    }
+
+
+    void Unit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
+    {
+        auto g = (Global*) InternalApp::getGlobal();
+
+        if (this->selected)
+        {
+            g->unitSelectCircle->tint = (this->tribeIndex == g->playersTribeIndex) ? DsprColors::LightGreen : DsprColors::LightRed;
+            g->unitSelectCircle->position->set(this->position->x, this->position->y);
+            g->unitSelectCircle->drawSelf(camera, xoffset, yoffset);
+
+            if (!this->tilePosition->Equals(this->moveTarget))
+            {
+                int x = (int) ((((float) this->moveTarget->x / 2) + 0.5f) * g->tileManager->tileWidth);
+                int y = (int) ((((float) this->moveTarget->y / 2) + 0.5f) * g->tileManager->tileHeight);
+
+                g->moveMarker->tint = (this->currentOrder == AttackTarget || this->currentOrder == AttackMove) ? DsprColors::LightRed : DsprColors::LightGreen;
+                g->moveMarker->position->set(x, y);
+                g->moveMarker->drawSelf(camera, xoffset, yoffset);
+            }
+        }
+
+        if (this->hovering)
+        {
+            g->unitHoverCircle->tint = (this->tribeIndex == g->playersTribeIndex) ? DsprColors::LightGreen : DsprColors::LightRed;
+            g->unitHoverCircle->position->set(this->position->x, this->position->y);
+            g->unitHoverCircle->drawSelf(camera, xoffset, yoffset);
+        }
+
+        AnimatedSprite::drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);
+
+        //TC
+
+        this->tcSprite->imageIndex = imageIndex;
+        this->tcSprite->position->set(this->position);
+        this->tcSprite->scale->x = this->scale->x;
+        this->tcSprite->drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);
     }
 }

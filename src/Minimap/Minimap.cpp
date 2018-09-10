@@ -28,7 +28,7 @@ namespace DsprFrontend {
         auto fogViewport = g->app->createViewport(5*5,103*5,38*5,38*5,fogCamera);
 
         auto minimapUnits = New<MinimapUnits>();
-        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.0f, true);
+        auto unitsCamera = New<Camera>(0,0,128,128, minimapUnits, Color::Black, 0.0f, true, true);
         unitsCamera->SkipFramesToDrawFramesRatio = 5;
         auto unitsViewport = g->app->createViewport(5*5,103*5,38*5,38*5, unitsCamera);
 

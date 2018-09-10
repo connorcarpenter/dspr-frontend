@@ -6,6 +6,7 @@
 
 namespace DsprFrontend {
     class DsprColors {
+    public:
         static Sova::Color LightRed;
         static Sova::Color Red;
         static Sova::Color DarkRed;

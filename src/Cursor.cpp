@@ -22,6 +22,8 @@
 #endif
 #if ORYOL_LINUX
 #include "GLFW/glfw3.h"
+#include "DsprColors.h"
+
 #endif
 
 namespace DsprFrontend
@@ -30,12 +32,12 @@ namespace DsprFrontend
     Cursor::Cursor() : AnimatedSprite()
     {
         this->setTexture(New<Sova::String>("images/ui/cursor.png"));
-        this->frameWidth = 14;
-        this->frameHeight = 12;
+        this->frameWidth = 15;
+        this->frameHeight = 16;
         this->padding = 1;
         this->OnUpdate([&](float deltaFrameMs){ step(); });
         this->imageSpeed = 0;
-        this->setImageIndex(1);
+        this->imageIndex = 1;
         this->leftButtonDragPoint = New<Point>(0,0);
         this->selectionBox = New<Sova::Rectangle>(0,0);
         this->selectionBox->setLineStyle(1, Color::Green, 0.8f);
@@ -43,6 +45,9 @@ namespace DsprFrontend
         this->hoverList = New<List<Unit>>();
         this->worldPosition = New<Point>(0,0);
         this->helloSound = New<Sound>(New<Sova::String>("sounds/hello.wav"));
+        //this->tint = DsprColors::Yellow;
+        this->anchor->x = 8;
+        this->anchor->y = 7;
 
 #if ORYOL_LINUX
         glfwSetInputMode(Oryol::_priv::glfwDisplayMgr::getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -61,91 +66,108 @@ namespace DsprFrontend
         this->worldPosition->x = this->position->x  + g->camera->position->x;
         this->worldPosition->y = this->position->y  + g->camera->position->y;
 
+        this->tint = DsprColors::Yellow;
+
         //Hovering over units
-        if (this->leftButtonDragging)
-        {
+        if (this->leftButtonDragging) {
             //get new non-hovering units
-            auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(this->leftButtonDragPoint->x + g->camera->position->x,
-                                                                                 this->leftButtonDragPoint->y + g->camera->position->y,
-                                                                                 this->worldPosition->x, this->worldPosition->y);
+            auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(
+                    this->leftButtonDragPoint->x + g->camera->position->x,
+                    this->leftButtonDragPoint->y + g->camera->position->y,
+                    this->worldPosition->x, this->worldPosition->y);
 
             //currently hovered units, if outside the box, should be set back to non-hovering
             auto unitsOutsideBox = g->unitManager->getUnitsOutsideBox(this->hoverList,
-                                                                      this->leftButtonDragPoint->x + g->camera->position->x,
-                                                                      this->leftButtonDragPoint->y + g->camera->position->y,
-                                                                      this->worldPosition->x, this->worldPosition->y);
+                                                                      this->leftButtonDragPoint->x +
+                                                                      g->camera->position->x,
+                                                                      this->leftButtonDragPoint->y +
+                                                                      g->camera->position->y,
+                                                                      this->worldPosition->x,
+                                                                      this->worldPosition->y);
 
-            if (unitsOutsideBox != nullptr && unitsOutsideBox->Size() > 0)
-            {
-                for (auto iterator = unitsOutsideBox->GetIterator(); iterator->Valid(); iterator->Next())
-                {
+            if (unitsOutsideBox != nullptr && unitsOutsideBox->Size() > 0) {
+                for (auto iterator = unitsOutsideBox->GetIterator(); iterator->Valid(); iterator->Next()) {
                     auto unit = iterator->Get();
                     unit->hovering = false;
                     this->hoverList->Remove(unit);
                 }
             }
 
-            if (nonHoveringUnits != nullptr && nonHoveringUnits->Size() > 0)
-            {
-                for (auto iterator = nonHoveringUnits->GetIterator(); iterator->Valid(); iterator->Next())
-                {
+            if (nonHoveringUnits != nullptr && nonHoveringUnits->Size() > 0) {
+                for (auto iterator = nonHoveringUnits->GetIterator(); iterator->Valid(); iterator->Next()) {
                     auto unit = iterator->Get();
                     unit->hovering = true;
                     this->hoverList->Add(unit);
                 }
             }
-        }
-        else
-        {
-            auto unitHovering = g->unitManager->getUnitOverlappingWithPoint(this->worldPosition->x, this->worldPosition->y);
-            bool cursorIsHovering = (imageIndex == 0);
+        } else {
+            auto unitHovering = g->unitManager->getUnitOverlappingWithPoint(this->worldPosition->x,
+                                                                            this->worldPosition->y);
 
-            if (unitHovering == nullptr && cursorIsHovering)
-            {
-                this->setImageIndex(1);
-                if (this->hoverList->Size() > 0)
-                {
+            if (unitHovering == nullptr && this->cursorIsHovering) {
+                this->cursorIsHovering = false;
+                this->imageIndex = 1;
+                if (this->hoverList->Size() > 0) {
                     this->setHoverListUnitsToHover(false);
                     this->hoverList->Clear();
                 }
             }
 
-            if (unitHovering != nullptr && !cursorIsHovering)
-            {
-                this->setImageIndex(0);
-                this->hoverList->Clear();
-                this->hoverList->Add(unitHovering);
-                this->setHoverListUnitsToHover(true);
+            if (unitHovering != nullptr) {
+                this->tint = (unitHovering->tribeIndex == g->playersTribeIndex) ? DsprColors::Green : DsprColors::Red;
+
+                if (this->cursorIsHovering)
+                {
+                    if (!this->hoverList->Contains(unitHovering)){
+
+                        if (this->hoverList->Size() > 0) {
+                            this->setHoverListUnitsToHover(false);
+                        }
+
+                        this->hoverList->Clear();
+                        this->hoverList->Add(unitHovering);
+                        this->setHoverListUnitsToHover(true);
+                    }
+                }
+                else
+                {
+                    this->imageIndex = 0;
+                    this->cursorIsHovering = true;
+                    this->hoverList->Clear();
+                    this->hoverList->Add(unitHovering);
+                    this->setHoverListUnitsToHover(true);
+                }
+
             }
         }
 
-        bool leftButtonPressed = InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left);
-        //Left button clicking + dragging
-        if (leftButtonPressed && !this->attackOrderSelected)
-        {
-            leftButtonPressed = g->uiManager->captureLeftClickEvent(this->position);
-        }
+        if (!this->attackOrderSelected) {
 
-        if (this->leftButtonDragging)
-        {
-            if (!leftButtonPressed)
-            {
-                ///group selection event
-                this->leftButtonDragging = false;
-                bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) || InternalApp::getInternalApp()->keyPressed(Key::RightShift);
-                if (!shiftPressed)
-                    g->unitManager->deselectAllUnits();
-                this->setHoverListUnitsToSelected(true);
-                this->setHoverListUnitsToHover(false);
-                this->hoverList->Clear();
+            bool leftButtonPressed = InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left);
+            //Left button clicking + dragging
+            if (leftButtonPressed) {
+                leftButtonPressed = g->uiManager->captureLeftClickEvent(this->position);
             }
-        }
-        else
-        {
-            if (!this->attackOrderSelected)
+            if (this->ignoreNextLeftButtonClicked > 0){
+                this->ignoreNextLeftButtonClicked -= 1;
+                leftButtonPressed = false;
+            }
+
+            if (this->leftButtonDragging) {
+                if (!leftButtonPressed) {
+                    ///group selection event
+                    this->leftButtonDragging = false;
+                    bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) ||
+                                        InternalApp::getInternalApp()->keyPressed(Key::RightShift);
+                    if (!shiftPressed)
+                        g->unitManager->deselectAllUnits();
+                    this->setHoverListUnitsToSelected(true);
+                    this->setHoverListUnitsToHover(false);
+                    this->hoverList->Clear();
+                }
+            } else {
                 if (InternalApp::getInternalApp()->keyPressed(Key::A))
                     this->attackOrderSelected = true;
-
 
                 if (leftButtonPressed) {
                     if (this->leftButtonPressedTime == 0)
@@ -155,12 +177,7 @@ namespace DsprFrontend
                         this->leftButtonPressedTime += 1;
                 } else {
                     if (this->leftButtonPressedTime > 0) {
-                        if (this->attackOrderSelected){
-                            this->attackOrderSelected = false;
-                            g->unitManager->issueUnitOrder(true);
-                            this->leftButtonPressedTime = 0;
-                            return;
-                        }
+
                         bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) ||
                                             InternalApp::getInternalApp()->keyPressed(Key::RightShift);
                         bool ctrlPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftControl) ||
@@ -211,25 +228,23 @@ namespace DsprFrontend
                 if (this->leftButtonDoubleClickCountdown > 0)this->leftButtonDoubleClickCountdown -= 1;
 
                 if (leftButtonPressed && this->leftButtonPressedTime >= this->leftButtonPressedTimeToDrag) {
-                    if (!this->attackOrderSelected) this->leftButtonDragging = true;
+                    this->leftButtonDragging = true;
                     this->leftButtonPressedTime = 0;
                 }
 
-        }
-    }
-
-    void Cursor::setImageIndex(int index)
-    {
-        this->imageIndex = index;
-        if (this->imageIndex == 1)
-        {
-            this->anchor->x = 0;
-            this->anchor->y = 0;
-        }
-        if (this->imageIndex == 0)
-        {
-            this->anchor->x = 6;
-            this->anchor->y = 5;
+            }
+        } else {
+            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left)){
+                this->attackOrderSelected = false;
+                g->unitManager->issueUnitOrder(true);
+                this->leftButtonPressedTime = 0;
+                this->ignoreNextLeftButtonClicked = 10;
+                return;
+            }
+            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Right)){
+                this->attackOrderSelected = false;
+                return;
+            }
         }
     }
 
@@ -259,25 +274,6 @@ namespace DsprFrontend
         }
     }
 
-    void Cursor::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
-    {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-
-        AnimatedSprite::drawSelf(camera, xoffset, yoffset);
-
-        if (this->leftButtonDragging)
-        {
-            this->selectionBox->position->set(this->leftButtonDragPoint->x, this->leftButtonDragPoint->y);
-
-            this->selectionBox->size->set(this->position->x - this->leftButtonDragPoint->x,
-                                          this->position->y - this->leftButtonDragPoint->y);
-            this->selectionBox->drawSelf(camera, xoffset, yoffset);
-        }
-
-        g->unitHoverCircle->Update(0);
-        g->moveMarker->Update(0);
-    }
-
     void Cursor::setHoverListUnitsToHover(bool hovering)
     {
         for (auto iterator = this->hoverList->GetIterator(); iterator->Valid(); iterator->Next())
@@ -294,14 +290,16 @@ namespace DsprFrontend
         for (auto iterator = this->hoverList->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto unit = iterator->Get();
+            if (unit->tribeIndex != g->playersTribeIndex) continue;
+            if (g->unitManager->selectionList->Size() < g->unitManager->maxSelectedUnits)
             unit->selected = selected;
             if (selected)
             {
-                g->unitManager->addToSelectionList(unit->id);
+                g->unitManager->addToSelectionList(unit);
             }
             else
             {
-                g->unitManager->removeFromSelectionList(unit->id);
+                g->unitManager->removeFromSelectionList(unit);
             }
         }
     }
@@ -312,15 +310,41 @@ namespace DsprFrontend
         for (auto iterator = this->hoverList->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto unit = iterator->Get();
+            if (unit->tribeIndex != g->playersTribeIndex) continue;
             unit->selected = !unit->selected;
             if (unit->selected)
             {
-                g->unitManager->addToSelectionList(unit->id);
+                g->unitManager->addToSelectionList(unit);
             }
             else
             {
-                g->unitManager->removeFromSelectionList(unit->id);
+                g->unitManager->removeFromSelectionList(unit);
             }
         }
+    }
+
+    void Cursor::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
+    {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        if (this->attackOrderSelected) {
+            this->imageIndex = 2;
+        } else {
+            this->imageIndex = this->cursorIsHovering ? 0 : 1;
+        }
+
+        AnimatedSprite::drawSelf(camera, xoffset, yoffset);
+
+        if (this->leftButtonDragging)
+        {
+            this->selectionBox->position->set(this->leftButtonDragPoint->x, this->leftButtonDragPoint->y);
+
+            this->selectionBox->size->set(this->position->x - this->leftButtonDragPoint->x,
+                                          this->position->y - this->leftButtonDragPoint->y);
+            this->selectionBox->drawSelf(camera, xoffset, yoffset);
+        }
+
+        g->unitHoverCircle->Update(0);
+        g->moveMarker->Update(0);
     }
 }

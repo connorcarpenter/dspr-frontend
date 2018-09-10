@@ -92,7 +92,7 @@ namespace DsprFrontend
             int i = 0;
             for (auto iterator = selectedUnitList->GetIterator(); iterator->Valid(); iterator->Next())
             {
-                auto unit = g->unitManager->getUnitWithId(iterator->Get()->getInt());
+                auto unit = iterator->Get();
 
                 if (unit != nullptr) {
                     this->unitPortrait->position->set(48 + 6 + (i * 12), 116 + 5);
