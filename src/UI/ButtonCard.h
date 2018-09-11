@@ -14,7 +14,7 @@ namespace DsprFrontend {
     public:
         ButtonCard();
         void AddButton(Ref<Button> button);
-    private:
+
         Ref<List<Button>> buttonList = Null<List<Button>>();
     };
 }

@@ -4,12 +4,13 @@
 
 #include "ButtonCardCatalog.h"
 #include "ButtonCard.h"
+#include "ButtonActions.h"
 
 namespace DsprFrontend
 {
 
-    ButtonCardCatalog::ButtonCardCatalog() {
-
+    ButtonCardCatalog::ButtonCardCatalog()
+    {
         auto moveButton = New<Button>(0);
         auto stopButton = New<Button>(1);
         auto holdButton = New<Button>(2);
@@ -22,5 +23,19 @@ namespace DsprFrontend
         this->basicCommandCard->AddButton(holdButton);
         this->basicCommandCard->AddButton(attackButton);
         this->basicCommandCard->AddButton(dashButton);
+
+        this->buttonActions = New<ButtonActions>();
+        moveButton->setAction([&](){
+            this->buttonActions->moveAction();
+        });
+        stopButton->setAction([&](){
+            this->buttonActions->stopAction();
+        });
+        holdButton->setAction([&](){
+            this->buttonActions->holdAction();
+        });
+        attackButton->setAction([&](){
+            this->buttonActions->attackAction();
+        });
     }
 }

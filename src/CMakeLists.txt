@@ -23,6 +23,7 @@ fips_begin_app(dspr-frontend windowed)
             UI/Cursor.h UI/Cursor.cpp
             UI/ButtonCardCatalog.h UI/ButtonCardCatalog.cpp
             UI/ButtonCard.h UI/ButtonCard.cpp
+            UI/ButtonActions.h UI/ButtonActions.cpp
             UI/Button.h UI/Button.cpp
 
             Minimap/Minimap.h Minimap/Minimap.cpp

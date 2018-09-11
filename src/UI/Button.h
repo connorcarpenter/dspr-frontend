@@ -4,6 +4,7 @@
 
 #include <Sova/References/Refable.h>
 #include <Sova/Graphics/Color.h>
+#include <functional>
 
 using namespace Sova;
 
@@ -11,8 +12,12 @@ namespace DsprFrontend {
     class Button : public Sova::Refable {
     public:
         Button(int imageIndex);
-    private:
+
+        void executeAction();
+        void setAction(std::function<void()> actionFunction);
+
         int imageIndex;
-        Color tint = Color::White;
+    private:
+        std::function<void()> action = nullptr;
     };
 }

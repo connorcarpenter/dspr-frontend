@@ -9,10 +9,13 @@ using namespace Sova;
 
 namespace DsprFrontend {
     class ButtonCard;
+    class ButtonActions;
 
     class ButtonCardCatalog : public Sova::Refable {
     public:
         ButtonCardCatalog();
         Ref<ButtonCard> basicCommandCard = Null<ButtonCard>();
+    private:
+        Ref<ButtonActions> buttonActions = Null<ButtonActions>();
     };
 }

@@ -9,6 +9,7 @@
 #include "Unit.h"
 #include "TileManager.h"
 #include "UnitManager.h"
+#include "Cursor.h"
 
 namespace DsprFrontend
 {
@@ -52,6 +53,44 @@ namespace DsprFrontend
                         (int) (((((float) clickPoint->x - 5)/38)*gridSize->x*g->tileManager->tileWidth) - g->camera->width/2),
                         (int) (((((float) clickPoint->y -103)/38)*gridSize->y*g->tileManager->tileHeight) - (g->camera->height-32)/2)
                 );
+            }
+            return false;
+        }
+
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 116, 204, 144))
+        {
+            //clicking within armybar
+            return false;
+        }
+
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 106, 256, 144))
+        {
+            //clicking on command card
+            if (this->currentButttonCard != nullptr)
+            {
+                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                auto iterator = this->currentButttonCard->buttonList->GetIterator();
+
+                for (int j = 0; j < 2; j += 1)
+                {
+                    for (int i = 0; i < 4; i += 1)
+                    {
+                        if (!iterator->Valid()) break;
+
+                        auto button = iterator->Get();
+
+                        int leftX = 207 + (12 * i);
+                        int upY = 111 + 16*j;
+
+                        if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                             leftX, upY,
+                                             leftX + 10, upY + 12)) {
+                            button->executeAction();
+                        }
+
+                        iterator->Next();
+                    }
+                }
             }
             return false;
         }
@@ -120,16 +159,33 @@ namespace DsprFrontend
 
         if (this->currentButttonCard != nullptr)
         {
-            for (int i = 0; i < 4; i += 1) {
-                this->commandActions->position->set(204 + 3 + (12 * i), 106 + 5);
-                this->commandActions->imageIndex = i;
-                this->commandActions->drawSelf(camera, 0, 0);
-            }
+            auto iterator = this->currentButttonCard->buttonList->GetIterator();
 
-            for (int i = 0; i < 4; i += 1) {
-                this->commandActions->position->set(204 + 3 + (12 * i), 106 + 21);
-                this->commandActions->imageIndex = i + 4;
-                this->commandActions->drawSelf(camera, 0, 0);
+            for (int j = 0; j < 2; j += 1)
+            {
+                for (int i = 0; i < 4; i += 1)
+                {
+                    if (!iterator->Valid()) break;
+
+                    auto button = iterator->Get();
+
+                    int leftX = 207 + (12 * i);
+                    int upY = 111 + 16*j;
+
+                    if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                         leftX, upY,
+                                         leftX + 10, upY + 12)) {
+                        this->commandActions->tint = Color::White;
+                    } else {
+                        this->commandActions->tint = Color::LightGray;
+                    }
+
+                    this->commandActions->position->set(leftX, upY);
+                    this->commandActions->imageIndex = button->imageIndex;
+                    this->commandActions->drawSelf(camera, 0, 0);
+
+                    iterator->Next();
+                }
             }
         }
 
