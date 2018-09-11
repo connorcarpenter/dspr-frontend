@@ -9,7 +9,7 @@
 #include "MinimapUnits.h"
 #include "Global.h"
 #include "Minimap.h"
-#include "Cursor.h"
+#include "UI/Cursor.h"
 #include "TileManager.h"
 
 namespace DsprFrontend {

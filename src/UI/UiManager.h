@@ -6,6 +6,7 @@
 #include <Sova/Graphics/Sprite.h>
 #include <Sova/Graphics/AnimatedSprite.h>
 #include <Sova/Graphics/Line.h>
+#include "ButtonCard.h"
 
 namespace DsprFrontend
 {
@@ -18,13 +19,14 @@ namespace DsprFrontend
 
         Ref<Point> getMinimapPosition(Ref<Point> clickPoint);
 
+        Ref<ButtonCard> currentButttonCard = Null<ButtonCard>();
     private:
         Ref<Sprite> minimap = Null<Sprite>();
         Ref<Sprite> armybar = Null<Sprite>();
         Ref<Sprite> command = Null<Sprite>();
         Ref<Sprite> unitPortrait = Null<Sprite>();
         Ref<Sova::Line> healthBarLine = Null<Sova::Line>();
-        Ref<AnimatedSprite> commandActionsUp = Null<AnimatedSprite>();
+        Ref<AnimatedSprite> commandActions = Null<AnimatedSprite>();
         Ref<AnimatedSprite> commandActionsHover = Null<AnimatedSprite>();
     };
 }

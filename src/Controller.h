@@ -16,12 +16,13 @@
 #include "Global.h"
 #include "UnitManager.h"
 #include "FogManager.h"
-#include "UiManager.h"
+#include "UI/UiManager.h"
 #include "SpriteCatalog.h"
 #include "TileManager.h"
 #include "Minimap/Minimap.h"
 #include "NetworkManager.h"
-#include "Cursor.h"
+#include "UI/Cursor.h"
+#include "UI/ButtonCardCatalog.h"
 #include "Circle/CircleCache.h"
 
 using namespace Sova;
@@ -87,8 +88,7 @@ namespace DsprFrontend
             resources->Add(New<String>("images/ui/armybar.png"));
             resources->Add(New<String>("images/ui/commandcard.png"));
             resources->Add(New<String>("images/ui/minimap.png"));
-            resources->Add(New<String>("images/ui/commandActionsHover.png"));
-            resources->Add(New<String>("images/ui/commandActionsUp.png"));
+            resources->Add(New<String>("images/ui/commandActions.png"));
             resources->Add(New<String>("images/ui/cursor.png"));
             resources->Add(New<String>("images/ui/unitHover.png"));
             resources->Add(New<String>("images/ui/unitSelection.png"));
@@ -146,6 +146,8 @@ namespace DsprFrontend
 
         g->minimap = New<Minimap>();
         g->world->AddChild(g->minimap);
+
+        g->buttonCardCatalog = New<ButtonCardCatalog>();
     }
 
     int gcCount = 0;

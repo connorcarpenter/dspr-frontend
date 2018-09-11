@@ -8,7 +8,6 @@ fips_begin_app(dspr-frontend windowed)
             UnitManager.h UnitManager.cpp
             UnitOrder.h
             NetworkManager.h NetworkManager.cpp
-            UiManager.h UiManager.cpp
             FogManager.h FogManager.cpp
             Tile.h Tile.cpp
             BloodParticle.h BloodParticle.cpp
@@ -16,10 +15,15 @@ fips_begin_app(dspr-frontend windowed)
             Block.h Block.cpp
             Unit.h Unit.cpp
             DyingUnit.h DyingUnit.cpp
-            Cursor.h Cursor.cpp
             Global.h Global.cpp
             TestClass.h TestClass.cpp
             SpriteCatalog.h SpriteCatalog.cpp
+
+            UI/UiManager.h UI/UiManager.cpp
+            UI/Cursor.h UI/Cursor.cpp
+            UI/ButtonCardCatalog.h UI/ButtonCardCatalog.cpp
+            UI/ButtonCard.h UI/ButtonCard.cpp
+            UI/Button.h UI/Button.cpp
 
             Minimap/Minimap.h Minimap/Minimap.cpp
             Minimap/MinimapUnits.h Minimap/MinimapUnits.cpp

@@ -33,8 +33,7 @@ namespace DsprFrontend
         this->armybar = New<Sprite>(New<Sova::String>("images/ui/armybar.png"));
         this->command = New<Sprite>(New<Sova::String>("images/ui/commandcard.png"));
         this->unitPortrait = New<Sprite>(New<Sova::String>("images/worker/unitPortrait.png"));
-        this->commandActionsUp = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActionsUp.png"), 10, 12, 0);
-        this->commandActionsHover = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActionsHover.png"), 10, 12, 0);
+        this->commandActions = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActions.png"), 10, 12, 0);
 
         this->healthBarLine = New<Sova::Line>();
         this->healthBarLine->setLineStyle(1, Color::Green);
@@ -119,18 +118,19 @@ namespace DsprFrontend
         this->command->position->set(204, 106);
         this->command->drawSelf(camera, 0, 0);
 
-        for (int i = 0; i<4; i+=1)
+        if (this->currentButttonCard != nullptr)
         {
-            this->commandActionsUp->position->set(204 + 3 + (12*i), 106 + 5);
-            this->commandActionsUp->imageIndex = i;
-            this->commandActionsUp->drawSelf(camera, 0, 0);
-        }
+            for (int i = 0; i < 4; i += 1) {
+                this->commandActions->position->set(204 + 3 + (12 * i), 106 + 5);
+                this->commandActions->imageIndex = i;
+                this->commandActions->drawSelf(camera, 0, 0);
+            }
 
-        for (int i = 0; i<4; i+=1)
-        {
-            this->commandActionsUp->position->set(204 + 3 + (12*i), 106 + 21);
-            this->commandActionsUp->imageIndex = i+4;
-            this->commandActionsUp->drawSelf(camera, 0, 0);
+            for (int i = 0; i < 4; i += 1) {
+                this->commandActions->position->set(204 + 3 + (12 * i), 106 + 21);
+                this->commandActions->imageIndex = i + 4;
+                this->commandActions->drawSelf(camera, 0, 0);
+            }
         }
 
         Container::Draw(camera, xoffset, yoffset);

@@ -8,13 +8,14 @@
 #include <Sova/Math/Math.h>
 #include "UnitManager.h"
 #include "Global.h"
-#include "UiManager.h"
+#include "UI/UiManager.h"
 #include "DyingUnit.h"
 #include "Unit.h"
 #include "BloodParticle.h"
 #include "FogManager.h"
-#include "Cursor.h"
+#include "UI/Cursor.h"
 #include "Minimap/Minimap.h"
+#include "UI/ButtonCardCatalog.h"
 
 namespace DsprFrontend
 {
@@ -99,6 +100,9 @@ namespace DsprFrontend
             auto unit = iterator->Get();
             unit->selected = false;
         }
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        g->uiManager->currentButttonCard = Null<ButtonCard>();
     }
 
     void UnitManager::addToSelectionList(Ref<Unit> unit)
@@ -106,11 +110,23 @@ namespace DsprFrontend
         if (!this->selectionList->Contains(unit)) {
             selectionList->Add(unit);
         }
+
+        if (this->selectionList->Size() > 0)
+        {
+            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            g->uiManager->currentButttonCard = g->buttonCardCatalog->basicCommandCard;
+        }
     }
 
     void UnitManager::removeFromSelectionList(Ref<Unit> unit) {
         if (this->selectionList->Contains(unit)) {
             selectionList->Remove(unit);
+        }
+
+        if (this->selectionList->Size() == 0)
+        {
+            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            g->uiManager->currentButttonCard = Null<ButtonCard>();
         }
     }
 
