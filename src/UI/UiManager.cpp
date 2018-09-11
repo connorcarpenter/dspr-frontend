@@ -41,21 +41,6 @@ namespace DsprFrontend
     }
 
     bool UiManager::captureLeftClickEvent(Ref<Point> clickPoint) {
-        if (Math::PointInBox(clickPoint->x,clickPoint->y,0,100,48,144))
-        {
-            //clicking within minimap container
-            if (Math::PointInBox(clickPoint->x,clickPoint->y,5,103,43,141))
-            {
-                //clicking within actual minimap
-                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-                auto gridSize = g->tileManager->getGridSize();
-                g->camera->position->set(
-                        (int) (((((float) clickPoint->x - 5)/38)*gridSize->x*g->tileManager->tileWidth) - g->camera->width/2),
-                        (int) (((((float) clickPoint->y -103)/38)*gridSize->y*g->tileManager->tileHeight) - (g->camera->height-32)/2)
-                );
-            }
-            return false;
-        }
 
         if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 116, 204, 144))
         {
@@ -91,6 +76,33 @@ namespace DsprFrontend
                         iterator->Next();
                     }
                 }
+            }
+            return false;
+        }
+
+        return true;
+    }
+
+    bool UiManager::isInGameArea(Ref<Point> clickPoint){
+        if (Math::PointInBox(clickPoint->x,clickPoint->y,0,100,48,144)) return false;
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 116, 204, 144)) return false;
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 106, 256, 144)) return false;
+        return true;
+    }
+
+    bool UiManager::captureLeftClickMinimapEvent(Ref<Point> clickPoint) {
+        if (Math::PointInBox(clickPoint->x,clickPoint->y,0,100,48,144))
+        {
+            //clicking within minimap container
+            if (Math::PointInBox(clickPoint->x,clickPoint->y,5,103,43,141))
+            {
+                //clicking within actual minimap
+                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                auto gridSize = g->tileManager->getGridSize();
+                g->camera->position->set(
+                        (int) (((((float) clickPoint->x - 5)/38)*gridSize->x*g->tileManager->tileWidth) - g->camera->width/2),
+                        (int) (((((float) clickPoint->y -103)/38)*gridSize->y*g->tileManager->tileHeight) - (g->camera->height-32)/2)
+                );
             }
             return false;
         }

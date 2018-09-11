@@ -247,8 +247,8 @@ namespace DsprFrontend
         });
     }
 
-    void UnitManager::issueUnitOrder(bool attackOrderSelected) {
-
+    void UnitManager::issueUnitOrder(bool attackOrderSelected)
+    {
         if (this->selectionList->Size() <= 0) return;
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
@@ -311,5 +311,44 @@ namespace DsprFrontend
         }
 
         g->gameServer->send(sb->ToString());
+    }
+
+    void UnitManager::orderCurrentlySelectedUnits(UnitOrder orderIndex)
+    {
+        if (this->selectionList->Size() <= 0) return;
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        auto sb = New<Sova::StringBuilder>();
+        sb->Append(New<Sova::String>("unit/1.0/order|"));
+        sb->Append(g->gameServerPlayerToken);
+        sb->Append(New<Sova::String>("|"));
+        bool first = true;
+        for (Ref<ListIterator<Unit>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                sb->Append(New<Sova::String>(","));
+            }
+
+            auto unit = iterator->Get();
+            Ref<Int> intObj = New<Int>(unit->id);
+            sb->Append(intObj->ToString());
+
+            unit->currentOrder = orderIndex;
+        }
+        sb->Append(New<Sova::String>("|"));
+        sb->Append(New<Int>(orderIndex)->ToString());
+
+        g->gameServer->send(sb->ToString());
+    }
+
+    void UnitManager::holdCurrentlySelectedUnits()
+    {
+
     }
 }

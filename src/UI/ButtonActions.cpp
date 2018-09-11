@@ -3,7 +3,10 @@
 //
 
 #include <Sova/Internal/InternalApp.h>
+#include <Global.h>
+#include <UnitOrder.h>
 #include "ButtonActions.h"
+#include "UnitManager.h"
 
 namespace DsprFrontend
 {
@@ -21,10 +24,10 @@ namespace DsprFrontend
     }
 
     void ButtonActions::holdAction() {
-        int i = 12;
+        this->g->unitManager->orderCurrentlySelectedUnits(UnitOrder::Hold);
     }
 
     void ButtonActions::stopAction() {
-        int i = 12;
+        this->g->unitManager->orderCurrentlySelectedUnits(UnitOrder::Stop);
     }
 }

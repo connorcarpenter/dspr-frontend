@@ -1,3 +1,5 @@
+#pragma once
+
 //
 // Created by connor on 8/29/18.
 //
@@ -7,6 +9,8 @@ namespace DsprFrontend {
         Move,
         AttackMove,
         Follow,
-        AttackTarget
+        AttackTarget,
+        Stop,
+        Hold
     };
 }
