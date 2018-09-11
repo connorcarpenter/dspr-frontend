@@ -102,6 +102,7 @@ namespace DsprFrontend
                 }
             }
         } else {
+
             auto unitHovering = g->unitManager->getUnitOverlappingWithPoint(this->worldPosition->x,
                                                                             this->worldPosition->y);
 
@@ -144,6 +145,8 @@ namespace DsprFrontend
 
         if (this->buttonOrder == nullptr) {
 
+            this->buttonOrder = g->uiManager->getButtonFromKeyboardShortcut();
+
             bool leftButtonPressed = InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left);
             //Left button clicking + dragging
 
@@ -169,9 +172,6 @@ namespace DsprFrontend
                     this->hoverList->Clear();
                 }
             } else {
-                if (InternalApp::getInternalApp()->keyPressed(Key::A))
-                    this->buttonOrder = g->buttonCardCatalog->attackButton;
-
                 if (leftButtonPressed) {
                     if (this->leftButtonPressedTime == 0)
                         this->leftButtonDragPoint->set(this->position->x, this->position->y);

@@ -51,10 +51,10 @@ namespace DsprFrontend
         if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 106, 256, 144))
         {
             //clicking on command card
-            if (this->currentButttonCard != nullptr)
+            if (this->currentButtonCard != nullptr)
             {
                 auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-                auto iterator = this->currentButttonCard->buttonList->GetIterator();
+                auto iterator = this->currentButtonCard->buttonList->GetIterator();
 
                 for (int j = 0; j < 2; j += 1)
                 {
@@ -176,9 +176,9 @@ namespace DsprFrontend
         this->command->position->set(204, 106);
         this->command->drawSelf(camera, 0, 0);
 
-        if (this->currentButttonCard != nullptr)
+        if (this->currentButtonCard != nullptr)
         {
-            auto iterator = this->currentButttonCard->buttonList->GetIterator();
+            auto iterator = this->currentButtonCard->buttonList->GetIterator();
 
             for (int j = 0; j < 2; j += 1)
             {
@@ -209,5 +209,24 @@ namespace DsprFrontend
         }
 
         Container::Draw(camera, xoffset, yoffset);
+    }
+
+    Ref<Button> UiManager::getButtonFromKeyboardShortcut() {
+
+        if (this->currentButtonCard != nullptr) {
+            for (auto iterator = this->currentButtonCard->buttonList->GetIterator(); iterator->Valid(); iterator->Next()) {
+                auto button = iterator->Get();
+                if (InternalApp::getInternalApp()->keyPressed(button->keyboardShortcut)){
+                    if (button->requiresClickOnGameArea){
+                        return button;
+                    } else {
+                        button->executeAction();
+                        return Null<Button>();
+                    }
+                }
+            }
+        }
+
+        return Null<Button>();
     }
 }

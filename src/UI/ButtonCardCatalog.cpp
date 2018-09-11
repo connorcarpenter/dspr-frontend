@@ -11,11 +11,11 @@ namespace DsprFrontend
 
     ButtonCardCatalog::ButtonCardCatalog()
     {
-        auto moveButton = New<Button>(0, true);
-        auto stopButton = New<Button>(1, false);
-        auto holdButton = New<Button>(2, false);
-        this->attackButton = New<Button>(3, true);
-        auto dashButton = New<Button>(4, true);
+        auto moveButton = New<Button>(0, true, Key::M);
+        auto stopButton = New<Button>(1, false, Key::S);
+        auto holdButton = New<Button>(2, false, Key::H);
+        this->attackButton = New<Button>(3, true, Key::A);
+        auto dashButton = New<Button>(4, true, Key::D);
 
         this->basicCommandCard = New<ButtonCard>();
         this->basicCommandCard->AddButton(moveButton);

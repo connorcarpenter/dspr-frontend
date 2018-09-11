@@ -102,7 +102,7 @@ namespace DsprFrontend
         }
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        g->uiManager->currentButttonCard = Null<ButtonCard>();
+        g->uiManager->currentButtonCard = Null<ButtonCard>();
     }
 
     void UnitManager::addToSelectionList(Ref<Unit> unit)
@@ -114,7 +114,7 @@ namespace DsprFrontend
         if (this->selectionList->Size() > 0)
         {
             auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-            g->uiManager->currentButttonCard = g->buttonCardCatalog->basicCommandCard;
+            g->uiManager->currentButtonCard = g->buttonCardCatalog->basicCommandCard;
         }
     }
 
@@ -126,7 +126,7 @@ namespace DsprFrontend
         if (this->selectionList->Size() == 0)
         {
             auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-            g->uiManager->currentButttonCard = Null<ButtonCard>();
+            g->uiManager->currentButtonCard = Null<ButtonCard>();
         }
     }
 

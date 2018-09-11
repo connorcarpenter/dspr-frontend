@@ -6,9 +6,10 @@
 
 namespace DsprFrontend {
 
-    Button::Button(int imageIndex, bool requiresClickOnGameArea) {
+    Button::Button(int imageIndex, bool requiresClickOnGameArea, Key::Code keyboardShortcut) {
         this->imageIndex = imageIndex;
         this->requiresClickOnGameArea = requiresClickOnGameArea;
+        this->keyboardShortcut = keyboardShortcut;
     }
 
     void Button::setAction(std::function<void()> actionFunction) {

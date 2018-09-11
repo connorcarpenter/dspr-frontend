@@ -23,9 +23,11 @@ namespace DsprFrontend
 
         Ref<Point> getMinimapPosition(Ref<Point> clickPoint);
 
-        Ref<ButtonCard> currentButttonCard = Null<ButtonCard>();
+        Ref<ButtonCard> currentButtonCard = Null<ButtonCard>();
 
         bool isInGameArea(Ref<Point> clickPoint);
+
+        Ref<Button> getButtonFromKeyboardShortcut();
 
     private:
         Ref<Sprite> minimap = Null<Sprite>();
