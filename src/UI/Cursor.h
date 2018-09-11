@@ -15,6 +15,7 @@ namespace Sova
 namespace DsprFrontend
 {
     class Unit;
+    class Button;
 
     class Cursor : public Sova::AnimatedSprite
     {
@@ -27,7 +28,7 @@ namespace DsprFrontend
         Ref<Point> leftButtonDragPoint = Null<Point>();
         Ref<Point> worldPosition = Null<Point>();
 
-        bool attackOrderSelected = false;
+        Ref<Button> buttonOrder = Null<Button>();
     private:
 
         void step();

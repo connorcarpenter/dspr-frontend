@@ -10,6 +10,7 @@
 using namespace Sova;
 
 namespace DsprFrontend {
+    class Button;
     class ButtonCard;
     class ButtonActions;
 
@@ -17,6 +18,7 @@ namespace DsprFrontend {
     public:
         ButtonCardCatalog();
         Ref<ButtonCard> basicCommandCard = Null<ButtonCard>();
+        Ref<Button> attackButton = Null<Button>();
     private:
         Ref<ButtonActions> buttonActions = Null<ButtonActions>();
     };

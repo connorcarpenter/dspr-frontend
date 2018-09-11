@@ -11,17 +11,17 @@ namespace DsprFrontend
 
     ButtonCardCatalog::ButtonCardCatalog()
     {
-        auto moveButton = New<Button>(0);
-        auto stopButton = New<Button>(1);
-        auto holdButton = New<Button>(2);
-        auto attackButton = New<Button>(3);
-        auto dashButton = New<Button>(4);
+        auto moveButton = New<Button>(0, true);
+        auto stopButton = New<Button>(1, false);
+        auto holdButton = New<Button>(2, false);
+        this->attackButton = New<Button>(3, true);
+        auto dashButton = New<Button>(4, true);
 
         this->basicCommandCard = New<ButtonCard>();
         this->basicCommandCard->AddButton(moveButton);
         this->basicCommandCard->AddButton(stopButton);
         this->basicCommandCard->AddButton(holdButton);
-        this->basicCommandCard->AddButton(attackButton);
+        this->basicCommandCard->AddButton(this->attackButton);
         this->basicCommandCard->AddButton(dashButton);
 
         this->buttonActions = New<ButtonActions>();
@@ -34,7 +34,7 @@ namespace DsprFrontend
         holdButton->setAction([&](){
             this->buttonActions->holdAction();
         });
-        attackButton->setAction([&](){
+        this->attackButton->setAction([&](){
             this->buttonActions->attackAction();
         });
     }

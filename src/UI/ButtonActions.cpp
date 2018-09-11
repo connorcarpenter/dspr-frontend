@@ -16,11 +16,11 @@ namespace DsprFrontend
     }
 
     void ButtonActions::moveAction() {
-        int i = 12;
+        this->g->unitManager->issueUnitOrder(false);
     }
 
     void ButtonActions::attackAction() {
-        int i = 12;
+        this->g->unitManager->issueUnitOrder(true);
     }
 
     void ButtonActions::holdAction() {

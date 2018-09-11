@@ -19,6 +19,7 @@ namespace DsprFrontend
         void Draw(Ref<Camera> camera, int xoffset, int yoffset);
         bool captureLeftClickEvent(Ref<Point> clickPoint);
         bool captureLeftClickMinimapEvent(Ref<Point> clickPoint);
+        Ref<Button> getButtonWithLeftClick(Ref<Point> clickPoint);
 
         Ref<Point> getMinimapPosition(Ref<Point> clickPoint);
 

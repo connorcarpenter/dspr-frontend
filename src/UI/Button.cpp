@@ -6,8 +6,9 @@
 
 namespace DsprFrontend {
 
-    Button::Button(int imageIndex) {
+    Button::Button(int imageIndex, bool requiresClickOnGameArea) {
         this->imageIndex = imageIndex;
+        this->requiresClickOnGameArea = requiresClickOnGameArea;
     }
 
     void Button::setAction(std::function<void()> actionFunction) {

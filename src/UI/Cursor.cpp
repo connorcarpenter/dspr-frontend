@@ -13,6 +13,7 @@
 #include "Unit.h"
 #include "UnitManager.h"
 #include "TileManager.h"
+#include "ButtonCardCatalog.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 
@@ -141,7 +142,7 @@ namespace DsprFrontend
             }
         }
 
-        if (!this->attackOrderSelected) {
+        if (this->buttonOrder == nullptr) {
 
             bool leftButtonPressed = InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left);
             //Left button clicking + dragging
@@ -169,7 +170,7 @@ namespace DsprFrontend
                 }
             } else {
                 if (InternalApp::getInternalApp()->keyPressed(Key::A))
-                    this->attackOrderSelected = true;
+                    this->buttonOrder = g->buttonCardCatalog->attackButton;
 
                 if (leftButtonPressed) {
                     if (this->leftButtonPressedTime == 0)
@@ -185,9 +186,8 @@ namespace DsprFrontend
                         bool ctrlPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftControl) ||
                                            InternalApp::getInternalApp()->keyPressed(Key::RightControl);
 
-                        bool clickedOnGameArea = g->uiManager->captureLeftClickEvent(this->position);
-
-                        if (clickedOnGameArea) {
+                        bool clickedInGameArea = g->uiManager->isInGameArea(this->position);
+                        if (clickedInGameArea) {
                             if (this->leftButtonDoubleClickCountdown == 0 && !ctrlPressed) {
                                 ///single unit selection event
 
@@ -229,6 +229,9 @@ namespace DsprFrontend
                                 this->hoverList->Clear();
                             }
                         }
+                        else{
+                            this->buttonOrder = g->uiManager->getButtonWithLeftClick(this->position);
+                        }
                     }
                     this->leftButtonPressedTime = 0;
                 }
@@ -243,14 +246,14 @@ namespace DsprFrontend
             }
         } else {
             if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left)){
-                this->attackOrderSelected = false;
-                g->unitManager->issueUnitOrder(true);
+                this->buttonOrder->executeAction();
+                this->buttonOrder = Null<Button>();
                 this->leftButtonPressedTime = 0;
                 this->ignoreNextLeftButtonClicked = 10;
                 return;
             }
             if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Right)){
-                this->attackOrderSelected = false;
+                this->buttonOrder = Null<Button>();
                 return;
             }
         }
@@ -335,7 +338,7 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
-        if (this->attackOrderSelected) {
+        if (this->buttonOrder != nullptr) {
             this->imageIndex = 2;
         } else {
             this->imageIndex = this->cursorIsHovering ? 0 : 1;

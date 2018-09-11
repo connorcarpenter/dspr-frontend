@@ -40,12 +40,12 @@ namespace DsprFrontend
         this->healthBarLine->setLineStyle(1, Color::Green);
     }
 
-    bool UiManager::captureLeftClickEvent(Ref<Point> clickPoint) {
+    Ref<Button> UiManager::getButtonWithLeftClick(Ref<Point> clickPoint) {
 
         if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 116, 204, 144))
         {
             //clicking within armybar
-            return false;
+            return Null<Button>();
         }
 
         if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 106, 256, 144))
@@ -70,17 +70,24 @@ namespace DsprFrontend
                         if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
                                              leftX, upY,
                                              leftX + 10, upY + 12)) {
-                            button->executeAction();
+                            if (button->requiresClickOnGameArea)
+                            {
+                                return button;
+                            }
+                            else
+                            {
+                                button->executeAction();
+                                return Null<Button>();
+                            }
                         }
 
                         iterator->Next();
                     }
                 }
             }
-            return false;
         }
 
-        return true;
+        return Null<Button>();
     }
 
     bool UiManager::isInGameArea(Ref<Point> clickPoint){
