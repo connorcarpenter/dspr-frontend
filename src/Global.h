@@ -51,6 +51,7 @@ namespace DsprFrontend
         Ref<SpriteCatalog> spriteCatalog = Null<SpriteCatalog>();
         Ref<CircleCache> circleCache = Null<CircleCache>();
         Ref<ButtonCardCatalog> buttonCardCatalog = Null<ButtonCardCatalog>();
+        Ref<UnitTemplateCatalog> unitTemplateCatalog = Null<UnitTemplateCatalog>();
         int playersTribeIndex = -1;
     };
 }

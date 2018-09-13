@@ -4,15 +4,12 @@ fips_begin_app(dspr-frontend windowed)
             Main.cpp
             Controller.h
             DsprShaderHandler.h DsprShaderHandler.cpp
+            Tile.h Tile.cpp
             TileManager.h TileManager.cpp
-
             NetworkManager.h NetworkManager.cpp
             FogManager.h FogManager.cpp
-            Tile.h Tile.cpp
-
             DsprColors.h DsprColors.cpp
             Block.h Block.cpp
-
             Global.h Global.cpp
             TestClass.h TestClass.cpp
             SpriteCatalog.h SpriteCatalog.cpp

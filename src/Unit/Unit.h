@@ -1,3 +1,5 @@
+#pragma once
+
 //
 // Created by connor on 7/26/18.
 //
