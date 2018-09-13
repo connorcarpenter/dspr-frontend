@@ -4,8 +4,11 @@
 // Created by connor on 9/12/18.
 //
 
-namespace DsprFrontend {
-    class UnitTemplate {
+#include <Sova/References/Refable.h>
 
+namespace DsprFrontend {
+    class UnitTemplate : public Sova::Refable {
+    public:
+        UnitTemplate();
     };
 }

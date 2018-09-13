@@ -24,6 +24,7 @@
 #include "UI/Cursor.h"
 #include "UI/ButtonCardCatalog.h"
 #include "Circle/CircleCache.h"
+#include "Unit/UnitTemplateCatalog.h"
 
 using namespace Sova;
 
@@ -119,6 +120,7 @@ namespace DsprFrontend
 
         g->spriteCatalog = New<SpriteCatalog>();
         g->circleCache = New<CircleCache>();
+        g->unitTemplateCatalog = New<UnitTemplateCatalog>();
 
         g->tileManager = New<TileManager>();
         g->tileManager->SetDepth(9999);
@@ -149,11 +151,6 @@ namespace DsprFrontend
         g->world->AddChild(g->minimap);
 
         g->buttonCardCatalog = New<ButtonCardCatalog>();
-
-        auto templeSprite = New<Sprite>(New<String>("images/temple.png"));
-        templeSprite->position->x += 80;
-        templeSprite->position->y += 80;
-        g->world->AddChild(templeSprite);
     }
 
     int gcCount = 0;

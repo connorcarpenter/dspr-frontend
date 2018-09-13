@@ -16,7 +16,7 @@
 namespace DsprFrontend
 {
 
-    Unit::Unit(int id, int x, int y, int tribeIndex) : AnimatedSprite()
+    Unit::Unit(int id, int x, int y, int tribeIndex, Ref<UnitTemplate> unitTemplate) : AnimatedSprite()
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 

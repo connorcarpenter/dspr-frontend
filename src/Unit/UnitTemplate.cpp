@@ -6,4 +6,7 @@
 
 namespace DsprFrontend {
 
+    UnitTemplate::UnitTemplate() {
+
+    }
 }

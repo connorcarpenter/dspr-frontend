@@ -27,6 +27,7 @@ namespace DsprFrontend
     class TileManager;
     class CircleCache;
     class ButtonCardCatalog;
+    class UnitTemplateCatalog;
 
     class Global : public Sova::Refable
     {

@@ -16,6 +16,7 @@
 #include "UI/Cursor.h"
 #include "Minimap/Minimap.h"
 #include "UI/ButtonCardCatalog.h"
+#include "Unit/UnitTemplateCatalog.h"
 
 namespace DsprFrontend
 {
@@ -137,8 +138,10 @@ namespace DsprFrontend
         int y = atoi(yStr->AsCStr());
         int tribeIndex = atoi(tribeIndexStr->AsCStr());
 
-        auto newUnit = New<Unit>(id, x, y, tribeIndex);
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        auto newUnit = New<Unit>(id, x, y, tribeIndex, g->unitTemplateCatalog->worker);
+
         g->world->AddChild(newUnit);
         this->unitList->Add(newUnit);
     }

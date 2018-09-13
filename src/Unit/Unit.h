@@ -14,13 +14,15 @@ namespace Sova
 
 namespace DsprFrontend
 {
+    class UnitTemplate;
+
     class Unit : public Sova::AnimatedSprite
     {
         SovaTypeDecl(Unit, AnimatedSprite);
 
     public:
 
-        Unit(int id, int x, int y, int tribeIndex);
+        Unit(int id, int x, int y, int tribeIndex, Ref<UnitTemplate> unitTemplate);
 
         enum UnitAnimationState { Walking, Attacking };
 

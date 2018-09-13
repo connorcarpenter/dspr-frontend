@@ -6,4 +6,8 @@
 
 namespace DsprFrontend {
 
+    UnitTemplateCatalog::UnitTemplateCatalog() {
+        this->worker = New<UnitTemplate>();
+        this->temple = New<UnitTemplate>();
+    }
 }
