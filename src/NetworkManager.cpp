@@ -10,7 +10,7 @@
 #include "Global.h"
 #include <iostream>
 #include "TileManager.h"
-#include "UnitManager.h"
+#include "Unit/UnitManager.h"
 
 using Sova::String;
 using Sova::StringBuilder;

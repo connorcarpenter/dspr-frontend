@@ -6,9 +6,9 @@
 #include <Sova/Math/Math.h>
 #include "UiManager.h"
 #include "Global.h"
-#include "Unit.h"
+#include "Unit/Unit.h"
 #include "TileManager.h"
-#include "UnitManager.h"
+#include "Unit/UnitManager.h"
 #include "Cursor.h"
 
 namespace DsprFrontend
@@ -217,12 +217,17 @@ namespace DsprFrontend
             for (auto iterator = this->currentButtonCard->buttonList->GetIterator(); iterator->Valid(); iterator->Next()) {
                 auto button = iterator->Get();
                 if (InternalApp::getInternalApp()->keyPressed(button->keyboardShortcut)){
-                    if (button->requiresClickOnGameArea){
-                        return button;
-                    } else {
-                        button->executeAction();
-                        return Null<Button>();
+                    if (!button->needKeyUp) {
+                        if (button->requiresClickOnGameArea) {
+                            return button;
+                        } else {
+                            button->needKeyUp = true;
+                            button->executeAction();
+                            return Null<Button>();
+                        }
                     }
+                } else {
+                    if (button->needKeyUp) button->needKeyUp = false;
                 }
             }
         }

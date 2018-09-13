@@ -5,19 +5,25 @@ fips_begin_app(dspr-frontend windowed)
             Controller.h
             DsprShaderHandler.h DsprShaderHandler.cpp
             TileManager.h TileManager.cpp
-            UnitManager.h UnitManager.cpp
-            UnitOrder.h
+
             NetworkManager.h NetworkManager.cpp
             FogManager.h FogManager.cpp
             Tile.h Tile.cpp
-            BloodParticle.h BloodParticle.cpp
+
             DsprColors.h DsprColors.cpp
             Block.h Block.cpp
-            Unit.h Unit.cpp
-            DyingUnit.h DyingUnit.cpp
+
             Global.h Global.cpp
             TestClass.h TestClass.cpp
             SpriteCatalog.h SpriteCatalog.cpp
+
+            Unit/Unit.h Unit/Unit.cpp
+            Unit/DyingUnit.h Unit/DyingUnit.cpp
+            Unit/UnitManager.h Unit/UnitManager.cpp
+            Unit/UnitOrder.h
+            Unit/BloodParticle.h Unit/BloodParticle.cpp
+            Unit/UnitTemplate.h Unit/UnitTemplate.cpp
+            Unit/UnitTemplateCatalog.h Unit/UnitTemplateCatalog.cpp
 
             UI/UiManager.h UI/UiManager.cpp
             UI/Cursor.h UI/Cursor.cpp

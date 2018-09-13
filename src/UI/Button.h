@@ -22,6 +22,7 @@ namespace DsprFrontend {
         int imageIndex;
         bool requiresClickOnGameArea = false;
         Key::Code keyboardShortcut;
+        bool needKeyUp = false;
     private:
         std::function<void()> action = nullptr;
     };

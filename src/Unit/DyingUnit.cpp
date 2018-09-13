@@ -7,7 +7,7 @@
 #include "DyingUnit.h"
 #include "Global.h"
 #include "SpriteCatalog.h"
-#include "Unit.h"
+#include "Unit/Unit.h"
 #include "Sova/Audio/Sound.h"
 
 namespace DsprFrontend

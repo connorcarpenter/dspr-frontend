@@ -14,7 +14,7 @@
 
 #include "DsprShaderHandler.h"
 #include "Global.h"
-#include "UnitManager.h"
+#include "Unit/UnitManager.h"
 #include "FogManager.h"
 #include "UI/UiManager.h"
 #include "SpriteCatalog.h"
@@ -63,6 +63,7 @@ namespace DsprFrontend
             resources->Add(New<String>("images/block.png"));
             resources->Add(New<String>("images/fogTile.png"));
             resources->Add(New<String>("images/bloodParticle.png"));
+            resources->Add(New<String>("images/temple.png"));
 
             resources->Add(New<String>("images/worker/workerDown.png"));
             resources->Add(New<String>("images/worker/workerUp.png"));
@@ -148,6 +149,11 @@ namespace DsprFrontend
         g->world->AddChild(g->minimap);
 
         g->buttonCardCatalog = New<ButtonCardCatalog>();
+
+        auto templeSprite = New<Sprite>(New<String>("images/temple.png"));
+        templeSprite->position->x += 80;
+        templeSprite->position->y += 80;
+        g->world->AddChild(templeSprite);
     }
 
     int gcCount = 0;

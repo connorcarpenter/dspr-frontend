@@ -6,8 +6,8 @@
 
 #include <Global.h>
 #include "MinimapUnits.h"
-#include "Unit.h"
-#include "UnitManager.h"
+#include "Unit/Unit.h"
+#include "Unit/UnitManager.h"
 #include "TileManager.h"
 
 namespace DsprFrontend

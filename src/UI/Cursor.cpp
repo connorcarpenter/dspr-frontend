@@ -10,8 +10,8 @@
 #include "Global.h"
 #include "Cursor.h"
 #include "UiManager.h"
-#include "Unit.h"
-#include "UnitManager.h"
+#include "Unit/Unit.h"
+#include "Unit/UnitManager.h"
 #include "TileManager.h"
 #include "ButtonCardCatalog.h"
 

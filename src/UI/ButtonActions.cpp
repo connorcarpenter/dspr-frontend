@@ -4,9 +4,9 @@
 
 #include <Sova/Internal/InternalApp.h>
 #include <Global.h>
-#include <UnitOrder.h>
+#include <Unit/UnitOrder.h>
 #include "ButtonActions.h"
-#include "UnitManager.h"
+#include "Unit/UnitManager.h"
 
 namespace DsprFrontend
 {

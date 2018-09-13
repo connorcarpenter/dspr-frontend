@@ -62,21 +62,18 @@ namespace DsprFrontend
         const float attackWaitSpeed = 1.0f / 1.7f;
         const int attackFramesNumber = 5;
         const int attackWaitFrames = 5;
-
         const int acquisition = 6; // 12 will be a circle that touches the edges of the screen if centered on the unit, 8 is standard
-
-
         float walkAmount = 0;
         int walkSpeed = walkSpeedStraight;
         bool checkReleaseSelectionBox = false;
         float interpolation = 0;
-
         int stamina = 100;
+        int stillFrames = 0;
 
         void walkingStep(float deltaFrameMs);
         void attackingStep(float deltaFrameMs);
 
-        int stillFrames = 0;
+
 
         void updatePosition();
 
