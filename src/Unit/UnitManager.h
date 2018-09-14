@@ -18,7 +18,8 @@ namespace DsprFrontend
     public:
 
         UnitManager();
-        void receiveUnit(Ref<Sova::String> id, Ref<Sova::String> x, Ref<Sova::String> y, Ref<Sova::String> tribeIndex);
+        void receiveUnit(Ref<Sova::String> id, Ref<Sova::String> x, Ref<Sova::String> y, Ref<Sova::String> tribeIndex,
+                                 Ref<Sova::String> templateIndexStr);
         void receiveUnitUpdate(Ref<Sova::String> id, Ref<List<Sova::String>> propsStrList);
         void addToSelectionList(Ref<Unit> unit);
         void removeFromSelectionList(Ref<Unit> unit);

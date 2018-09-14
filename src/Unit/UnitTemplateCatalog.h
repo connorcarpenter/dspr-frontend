@@ -6,6 +6,7 @@
 
 #include <Sova/References/Refable.h>
 #include <Sova/References/Ref.h>
+#include <Sova/Common/List.h>
 #include "UnitTemplate.h"
 
 using namespace Sova;
@@ -16,5 +17,9 @@ namespace DsprFrontend {
         UnitTemplateCatalog();
         Ref<UnitTemplate> worker = Null<UnitTemplate>();
         Ref<UnitTemplate> temple = Null<UnitTemplate>();
+
+        Ref<UnitTemplate> findTemplateByIndex(int index);
+    private:
+        Ref<List<UnitTemplate>> templateList = Null<List<UnitTemplate>>();
     };
 }

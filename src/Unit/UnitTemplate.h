@@ -9,6 +9,7 @@
 namespace DsprFrontend {
     class UnitTemplate : public Sova::Refable {
     public:
-        UnitTemplate();
+        UnitTemplate(int index);
+        int index;
     };
 }
