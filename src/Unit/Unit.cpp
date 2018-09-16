@@ -12,6 +12,8 @@
 #include "Unit.h"
 #include "TileManager.h"
 #include "DsprColors.h"
+#include "UnitTemplate.h"
+#include "UnitTemplateCatalog.h"
 
 namespace DsprFrontend
 {
@@ -26,11 +28,17 @@ namespace DsprFrontend
         this->nextTilePosition = New<Point>(x,y);
         this->lastPosition = New<Point>(x,y);
         this->tribeIndex = tribeIndex;
+        this->unitTemplate = unitTemplate;
 
-        this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDown);
+        this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
+
+        if (this->unitTemplate->index == 1)
+        {
+            int i = 12;
+        }
 
         this->tcSprite = New<AnimatedSprite>();
-        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDownTC);
+        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
         switch (tribeIndex)
         {
             case 0:
@@ -105,14 +113,15 @@ namespace DsprFrontend
                     if (Math::Random(0, 2) < 1) {
                         this->scale->x = this->scale->x * -1;
                     } else {
-                        if (this->textureName->Equals(g->spriteCatalog->workerWalkUp->filename)) {
+                        if (this->unitTemplate != g->unitTemplateCatalog->temple)
+                        if (this->textureName->Equals(this->unitTemplate->sprWalkUp->filename)) {
                             this->facingDown = true;
-                            this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDown);
-                            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDownTC);
+                            this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
+                            this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
                         } else {
                             this->facingDown = false;
-                            this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUp);
-                            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUpTC);
+                            this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUp);
+                            this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUpTC);
                         }
                     }
                 }
@@ -170,17 +179,17 @@ namespace DsprFrontend
         {
             this->scale->x = Math::Sign(difx);
         }
-        if (dify >= 0 && !this->textureName->Equals(g->spriteCatalog->workerWalkDown->filename))
+        if (dify >= 0 && !this->textureName->Equals(this->unitTemplate->sprWalkDown->filename))
         {
             this->facingDown = true;
-            this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDown);
-            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDownTC);
+            this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
+            this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
         }
-        if (dify < 0 && !this->textureName->Equals(g->spriteCatalog->workerWalkUp->filename))
+        if (dify < 0 && !this->textureName->Equals(this->unitTemplate->sprWalkUp->filename))
         {
             this->facingDown = false;
-            this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUp);
-            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkUpTC);
+            this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUp);
+            this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUpTC);
         }
     }
 
@@ -193,8 +202,8 @@ namespace DsprFrontend
         {
             case Walking:
             {
-                this->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDown);
-                this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerWalkDownTC);
+                this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
+                this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
             }
             break;
             case Attacking:
@@ -218,55 +227,55 @@ namespace DsprFrontend
                     case 0: {
                         this->facingDown = true;
                         this->scale->x = 1;
-                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackRight);
-                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackRightTC);
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRight);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRightTC);
                         }
                         break;
                     case 1: {
                         this->facingDown = false;
                         this->scale->x = 1;
-                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpRight);
-                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpRightTC);
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRight);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRightTC);
                     }
                         break;
                     case 2: {
                         this->facingDown = false;
-                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUp);
-                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpTC);
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUp);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpTC);
                     }
                         break;
                     case 3: {
                         this->facingDown = false;
                         this->scale->x = -1;
-                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpRight);
-                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackUpRightTC);
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRight);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRightTC);
                     }
                         break;
                     case 4: {
                         this->facingDown = true;
                         this->scale->x = -1;
-                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackRight);
-                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackRightTC);
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRight);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRightTC);
                     }
                         break;
                     case 5: {
                         this->facingDown = true;
                         this->scale->x = -1;
-                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownRight);
-                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownRightTC);
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRight);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRightTC);
                     }
                         break;
                     case 6: {
                         this->facingDown = true;
-                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDown);
-                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownTC);
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDown);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownTC);
                     }
                         break;
                     case 7: {
                         this->facingDown = true;
                         this->scale->x = 1;
-                        this->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownRight);
-                        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerAttackDownRightTC);
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRight);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRightTC);
                     }
                         break;
 

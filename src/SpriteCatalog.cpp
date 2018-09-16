@@ -32,6 +32,8 @@ namespace DsprFrontend
         this->workerDieDownTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerDieDown_TC.png"), 11, 14, 1, 5, 13);
         this->workerDieUpTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerDieUp_TC.png"), 11, 16, 1, 6, 13);
 
+        this->temple = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple.png"), 100, 84, 1, 50, 76);
+
         this->bloodParticle = New<AnimatedSpriteInfo>(New<Sova::String>("images/bloodParticle.png"), 5, 5, 1, 2, 2);
     }
 }

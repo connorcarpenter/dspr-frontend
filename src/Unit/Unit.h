@@ -48,6 +48,9 @@ namespace DsprFrontend
         const int sight = 6;
 
         UnitOrder currentOrder = Move;
+
+        Ref<UnitTemplate> unitTemplate = Null<UnitTemplate>();
+
     private:
 
         void step(float deltaMs);

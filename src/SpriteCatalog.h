@@ -36,6 +36,8 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> workerDieDownTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerDieUpTC = Null<Sova::AnimatedSpriteInfo>();
 
+        Ref<Sova::AnimatedSpriteInfo> temple = Null<Sova::AnimatedSpriteInfo>();
+
         Ref<Sova::AnimatedSpriteInfo> bloodParticle = Null<Sova::AnimatedSpriteInfo>();
     };
 }

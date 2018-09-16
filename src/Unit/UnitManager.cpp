@@ -138,7 +138,7 @@ namespace DsprFrontend
         int x = atoi(xStr->AsCStr());
         int y = atoi(yStr->AsCStr());
         int tribeIndex = atoi(tribeIndexStr->AsCStr());
-        int templateIndex = atoi(tribeIndexStr->AsCStr());
+        int templateIndex = atoi(templateIndexStr->AsCStr());
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
