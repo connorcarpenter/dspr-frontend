@@ -45,7 +45,7 @@ namespace DsprFrontend
         this->selectionBox->setFillStyle(Color::Green, 0.5f);
         this->hoverList = New<List<Unit>>();
         this->worldPosition = New<Point>(0,0);
-        this->helloSound = New<Sound>(New<Sova::String>("sounds/hello.wav"));
+
         //this->tint = DsprColors::Yellow;
         this->anchor->x = 8;
         this->anchor->y = 7;
@@ -167,7 +167,7 @@ namespace DsprFrontend
                                         InternalApp::getInternalApp()->keyPressed(Key::RightShift);
                     if (!shiftPressed)
                         g->unitManager->deselectAllUnits();
-                    this->setHoverListUnitsToSelected(true);
+                    this->setHoverListUnitsToSelected(true, false);
                     this->setHoverListUnitsToHover(false);
                     this->hoverList->Clear();
                 }
@@ -193,13 +193,8 @@ namespace DsprFrontend
 
                                 if (!shiftPressed)
                                     g->unitManager->deselectAllUnits();
-                                if (!shiftPressed) {
-                                    if (this->hoverList->Size() > 0)
-                                        this->helloSound->Play();
-                                    this->setHoverListUnitsToSelected(true);
-                                } else {
-                                    this->toggleHoverListUnitsSelected();
-                                }
+
+                                this->setHoverListUnitsToSelected(true, shiftPressed);
 
                                 this->leftButtonDoubleClickCountdown = this->leftButtonDoubleClickWindow;
                             } else {
@@ -225,7 +220,7 @@ namespace DsprFrontend
                                 }
                                 if (!shiftPressed)
                                     g->unitManager->deselectAllUnits();
-                                this->setHoverListUnitsToSelected(true);
+                                this->setHoverListUnitsToSelected(true, false);
                                 this->hoverList->Clear();
                             }
                         }
@@ -294,41 +289,37 @@ namespace DsprFrontend
         }
     }
 
-    void Cursor::setHoverListUnitsToSelected(bool selected)
+    void Cursor::setHoverListUnitsToSelected(bool selected, bool toggle)
     {
+        if (this->hoverList->Size() == 0) return;
+
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        bool playedSoundYet = false;
 
         for (auto iterator = this->hoverList->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto unit = iterator->Get();
             if (unit->tribeIndex != g->playersTribeIndex) continue;
-            if (g->unitManager->selectionList->Size() < g->unitManager->maxSelectedUnits)
-            unit->selected = selected;
-            if (selected)
+
+            bool shouldSelect = (toggle) ? (!unit->selected) : selected;
+
+            if (shouldSelect)
             {
+                if (g->unitManager->selectionList->Size() >= g->unitManager->maxSelectedUnits) continue;
+
+                unit->selected = true;
+
+                if (!playedSoundYet){
+                    playedSoundYet = true;
+                    unit->playSelectedSound();
+                }
+
                 g->unitManager->addToSelectionList(unit);
             }
             else
             {
-                g->unitManager->removeFromSelectionList(unit);
-            }
-        }
-    }
+                unit->selected = false;
 
-    void Cursor::toggleHoverListUnitsSelected() {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-
-        for (auto iterator = this->hoverList->GetIterator(); iterator->Valid(); iterator->Next())
-        {
-            auto unit = iterator->Get();
-            if (unit->tribeIndex != g->playersTribeIndex) continue;
-            unit->selected = !unit->selected;
-            if (unit->selected)
-            {
-                g->unitManager->addToSelectionList(unit);
-            }
-            else
-            {
                 g->unitManager->removeFromSelectionList(unit);
             }
         }

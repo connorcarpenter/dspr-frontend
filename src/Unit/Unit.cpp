@@ -52,11 +52,9 @@ namespace DsprFrontend
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
         if (this->tribeIndex == g->playersTribeIndex)
-            g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->sight);
+            g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
 
         this->updatePosition();
-
-        this->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
 
         this->SetDepth(this->tilePosition->y * -1);
     }
@@ -85,8 +83,8 @@ namespace DsprFrontend
             {
                 walkAmount = 0;
                 if (this->tribeIndex == g->playersTribeIndex) {
-                    g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->sight);
-                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight);
+                    g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
+                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);
                 }
                 this->tilePosition->set(this->nextTilePosition->x, this->nextTilePosition->y);
                 this->SetDepth(this->tilePosition->y * -1);
@@ -100,33 +98,41 @@ namespace DsprFrontend
         {
             this->imageSpeed = 0;
             this->imageIndex = 0;
-            this->stillFrames += 1;
-            //idling
+            if (!this->isATemple()) {
+                this->stillFrames += 1;
+                //idling
 
-            if(this->stillFrames > 30) {
-                this->stillFrames = 0;
-                if (Math::Random(0, 20) < 1) {
+                if (this->stillFrames > 30) {
+                    this->stillFrames = 0;
+                    if (Math::Random(0, 20) < 1) {
 
-                    //this->position->x += Math::Random(-1,1);
-                    //this->position->y += Math::Random(-1,1);
+                        //this->position->x += Math::Random(-1,1);
+                        //this->position->y += Math::Random(-1,1);
 
-                    if (Math::Random(0, 2) < 1) {
-                        this->scale->x = this->scale->x * -1;
-                    } else {
-                        if (this->unitTemplate != g->unitTemplateCatalog->temple)
-                        if (this->textureName->Equals(this->unitTemplate->sprWalkUp->filename)) {
-                            this->facingDown = true;
-                            this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
-                            this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
+                        if (Math::Random(0, 2) < 1) {
+                            this->scale->x = this->scale->x * -1;
                         } else {
-                            this->facingDown = false;
-                            this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUp);
-                            this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUpTC);
+                            if (!this->isATemple()) {
+                                if (this->textureName->Equals(this->unitTemplate->sprWalkUp->filename)) {
+                                    this->facingDown = true;
+                                    this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
+                                    this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
+                                } else {
+                                    this->facingDown = false;
+                                    this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUp);
+                                    this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUpTC);
+                                }
+                            }
                         }
                     }
                 }
             }
         }
+    }
+
+    bool Unit::isATemple(){
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        return this->unitTemplate == g->unitTemplateCatalog->temple;
     }
 
     void Unit::attackingStep(float deltaFrameMs) {
@@ -137,9 +143,11 @@ namespace DsprFrontend
                 this->attackWaitIndex = this->attackWaitFrames;
             }
             this->imageIndex = this->attackFrameIndex;
-            if (Math::Floor(this->imageIndex) == 3){
-                this->hitSound->PlayAndDisable();
-            } else this->hitSound->Enable();
+            if (this->unitTemplate->hitSound != nullptr) {
+                if (Math::Floor(this->imageIndex) == 3) {
+                    this->unitTemplate->hitSound->PlayAndDisable();
+                } else this->unitTemplate->hitSound->Enable();
+            }
         }
         else {
             this->attackWaitIndex -= this->attackWaitSpeed * deltaFrameMs / gameServerTickMs;
@@ -151,8 +159,8 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         if (this->tribeIndex == g->playersTribeIndex) {
-            g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->sight);
-            g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight);
+            g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
+            g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);
         }
 
         this->lastPosition->set(this->position);
@@ -175,6 +183,9 @@ namespace DsprFrontend
         {
             walkSpeed = walkSpeedStraight;
         }
+
+        if (this->isATemple())return;
+
         if (difx != 0)
         {
             this->scale->x = Math::Sign(difx);
@@ -212,8 +223,8 @@ namespace DsprFrontend
                 this->imageSpeed = 0;
 
                 if (this->tribeIndex == g->playersTribeIndex) {
-                    g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->sight);
-                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->sight);
+                    g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
+                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);
                 }
 
                 this->lastPosition->set(this->position);
@@ -336,13 +347,27 @@ namespace DsprFrontend
             g->unitHoverCircle->drawSelf(camera, xoffset, yoffset);
         }
 
-        AnimatedSprite::drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);
+        int newOffset = xoffset;
+        if (!this->isATemple()) newOffset += (this->scale->x == -1 ? -2 : 0);
+        AnimatedSprite::drawSelf(camera, newOffset, yoffset);
 
         //TC
 
         this->tcSprite->imageIndex = imageIndex;
         this->tcSprite->position->set(this->position);
         this->tcSprite->scale->x = this->scale->x;
-        this->tcSprite->drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);
+        this->tcSprite->drawSelf(camera, newOffset, yoffset);
+    }
+
+    void Unit::playSelectedSound() {
+        if (this->unitTemplate->selectedSound != nullptr){
+            this->unitTemplate->selectedSound->Play();
+        }
+    }
+
+    void Unit::playDeathSound() {
+        if (this->unitTemplate->dieSound != nullptr){
+            this->unitTemplate->dieSound->Play();
+        }
     }
 }

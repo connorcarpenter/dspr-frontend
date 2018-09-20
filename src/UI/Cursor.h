@@ -35,13 +35,10 @@ namespace DsprFrontend
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
         void clearHoverList();
         void setHoverListUnitsToHover(bool i);
-        void setHoverListUnitsToSelected(bool selected);
-        void toggleHoverListUnitsSelected();
+        void setHoverListUnitsToSelected(bool selected, bool toggle = false);
 
         Ref<Rectangle> selectionBox = Null<Rectangle>();
         Ref<List<Unit>> hoverList = Null<List<Unit>>();
-
-        Ref<Sova::Sound> helloSound = Null<Sova::Sound>();
 
         int leftButtonPressedTime = 0;
         const int leftButtonPressedTimeToDrag = 6;

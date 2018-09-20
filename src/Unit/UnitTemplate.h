@@ -6,6 +6,7 @@
 
 #include <Sova/References/Refable.h>
 #include <Sova/Graphics/AnimatedSpriteInfo.h>
+#include <Sova/Audio/Sound.h>
 
 namespace DsprFrontend {
     class UnitTemplate : public Sova::Refable {
@@ -13,6 +14,10 @@ namespace DsprFrontend {
         UnitTemplate(int index);
         int index;
 
+        //stats
+        int sight;
+
+        //sprites
         Ref<Sova::AnimatedSpriteInfo> sprWalkDown = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprWalkUp = Null<Sova::AnimatedSpriteInfo>();
 
@@ -36,5 +41,10 @@ namespace DsprFrontend {
 
         Ref<Sova::AnimatedSpriteInfo> sprDieDownTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprDieUpTC = Null<Sova::AnimatedSpriteInfo>();
+
+        //sounds
+        Ref<Sova::Sound> hitSound = Null<Sova::Sound>();
+        Ref<Sova::Sound> selectedSound = Null<Sova::Sound>();
+        Ref<Sova::Sound> dieSound = Null<Sova::Sound>();
     };
 }

@@ -225,13 +225,15 @@ namespace DsprFrontend
             auto dieSprite = New<DyingUnit>(unit);
             g->world->AddChild(dieSprite);
 
+            unit->playDeathSound();
+
             auto bloodPartNum = 6;
             for (int i = 0;i<bloodPartNum;i++)
                 g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth));
         }
 
         if (unit->tribeIndex == g->playersTribeIndex){
-            g->fogManager->conceilFog(unit->tilePosition->x, unit->tilePosition->y, unit->sight);
+            g->fogManager->conceilFog(unit->tilePosition->x, unit->tilePosition->y, unit->unitTemplate->sight);
         }
 
         this->unitList->Remove(unit);

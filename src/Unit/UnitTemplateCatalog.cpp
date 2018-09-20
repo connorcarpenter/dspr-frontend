@@ -8,7 +8,13 @@ namespace DsprFrontend {
 
     UnitTemplateCatalog::UnitTemplateCatalog() {
         this->worker = New<UnitTemplate>(0);
+        this->worker->sight = 6;
+        this->worker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
+        this->worker->selectedSound = New<Sound>(New<Sova::String>("sounds/hello.wav"));
+        this->worker->dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
+
         this->temple = New<UnitTemplate>(1);
+        this->temple->sight = 12;
 
         this->templateList = New<List<UnitTemplate>>();
         this->templateList->Add(this->worker);

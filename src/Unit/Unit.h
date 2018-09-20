@@ -29,6 +29,7 @@ namespace DsprFrontend
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
         void newNextTilePosition(int x, int y);
         void setAnimationState(UnitAnimationState newState, int heading);
+        void playSelectedSound();
         //
         Ref<Point> moveTarget = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();
@@ -45,7 +46,6 @@ namespace DsprFrontend
         const int maxHealth = 420;
         int health = maxHealth;
         bool facingDown = true;
-        const int sight = 6;
 
         UnitOrder currentOrder = Move;
 
@@ -84,6 +84,8 @@ namespace DsprFrontend
 
         void updatePosition();
 
-        Ref<Sova::Sound> hitSound = Null<Sova::Sound>();
+        bool isATemple();
+
+        void playDeathSound();
     };
 }
