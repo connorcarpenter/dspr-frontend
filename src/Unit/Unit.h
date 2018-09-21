@@ -51,6 +51,8 @@ namespace DsprFrontend
 
         Ref<UnitTemplate> unitTemplate = Null<UnitTemplate>();
 
+        void playDeathSound();
+
     private:
 
         void step(float deltaMs);
@@ -86,6 +88,5 @@ namespace DsprFrontend
 
         bool isATemple();
 
-        void playDeathSound();
     };
 }
