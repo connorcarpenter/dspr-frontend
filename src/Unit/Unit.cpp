@@ -325,9 +325,9 @@ namespace DsprFrontend
 
         if (this->selected)
         {
-            g->unitSelectCircle->tint = (this->tribeIndex == g->playersTribeIndex) ? DsprColors::LightGreen : DsprColors::LightRed;
-            g->unitSelectCircle->position->set(this->position->x, this->position->y);
-            g->unitSelectCircle->drawSelf(camera, xoffset, yoffset);
+            this->unitTemplate->sprSelectCircle->tint = (this->tribeIndex == g->playersTribeIndex) ? DsprColors::LightGreen : DsprColors::LightRed;
+            this->unitTemplate->sprSelectCircle->position->set(this->position->x, this->position->y);
+            this->unitTemplate->sprSelectCircle->drawSelf(camera, xoffset, yoffset);
 
             if (!this->tilePosition->Equals(this->moveTarget))
             {
@@ -342,9 +342,9 @@ namespace DsprFrontend
 
         if (this->hovering)
         {
-            g->unitHoverCircle->tint = (this->tribeIndex == g->playersTribeIndex) ? DsprColors::LightGreen : DsprColors::LightRed;
-            g->unitHoverCircle->position->set(this->position->x, this->position->y);
-            g->unitHoverCircle->drawSelf(camera, xoffset, yoffset);
+            this->unitTemplate->sprHoverCircle->tint = (this->tribeIndex == g->playersTribeIndex) ? DsprColors::LightGreen : DsprColors::LightRed;
+            this->unitTemplate->sprHoverCircle->position->set(this->position->x, this->position->y);
+            this->unitTemplate->sprHoverCircle->drawSelf(camera, xoffset, yoffset);
         }
 
         int newOffset = xoffset;

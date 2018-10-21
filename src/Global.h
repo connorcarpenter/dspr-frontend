@@ -42,8 +42,10 @@ namespace DsprFrontend
         Ref<TileManager> tileManager = Null<TileManager>();
         Ref<UnitManager> unitManager = Null<UnitManager>();
         Ref<Cursor> cursor = Null<Cursor>();
-        Ref<AnimatedSprite> unitHoverCircle = Null<AnimatedSprite>();
-        Ref<Sprite> unitSelectCircle = Null<Sprite>();
+        Ref<AnimatedSprite> unitHoverCircle_1x1 = Null<AnimatedSprite>();
+        Ref<Sprite> unitSelectCircle_1x1 = Null<Sprite>();
+        Ref<AnimatedSprite> unitHoverCircle_5x5 = Null<AnimatedSprite>();
+        Ref<Sprite> unitSelectCircle_5x5 = Null<Sprite>();
         Ref<AnimatedSprite> moveMarker = Null<AnimatedSprite>();
         Ref<NetworkManager> networkManager = Null<NetworkManager>();
         Ref<FogManager> fogManager = Null<FogManager>();

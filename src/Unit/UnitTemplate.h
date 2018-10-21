@@ -46,5 +46,9 @@ namespace DsprFrontend {
         Ref<Sova::Sound> hitSound = Null<Sova::Sound>();
         Ref<Sova::Sound> selectedSound = Null<Sova::Sound>();
         Ref<Sova::Sound> dieSound = Null<Sova::Sound>();
+
+        //ui
+        Ref<Sova::Sprite> sprSelectCircle = Null<Sova::Sprite>();
+        Ref<Sova::AnimatedSprite> sprHoverCircle = Null<Sova::AnimatedSprite>();
     };
 }

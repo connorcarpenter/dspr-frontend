@@ -346,7 +346,8 @@ namespace DsprFrontend
             this->selectionBox->drawSelf(camera, xoffset, yoffset);
         }
 
-        g->unitHoverCircle->Update(0);
+        g->unitHoverCircle_1x1->Update(0);
+        g->unitHoverCircle_5x5->Update(0);
         g->moveMarker->Update(0);
     }
 }

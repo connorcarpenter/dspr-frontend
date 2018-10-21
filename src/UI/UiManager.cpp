@@ -18,12 +18,19 @@ namespace DsprFrontend
     {
         ///global stuff
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        g->unitHoverCircle = New<AnimatedSprite>(New<Sova::String>("images/ui/unitHover.png"), 16, 12, 1);
-        g->unitHoverCircle->imageSpeed = 0.1f;
-        g->unitHoverCircle->anchor->set(8, 6);
+        g->unitHoverCircle_1x1 = New<AnimatedSprite>(New<Sova::String>("images/ui/unitHover.png"), 16, 12, 1);
+        g->unitHoverCircle_1x1->imageSpeed = 0.1f;
+        g->unitHoverCircle_1x1->anchor->set(8, 6);
 
-        g->unitSelectCircle = New<Sprite>(New<Sova::String>("images/ui/unitSelection.png"));
-        g->unitSelectCircle->anchor->set(8, 5);
+        g->unitSelectCircle_1x1 = New<Sprite>(New<Sova::String>("images/ui/unitSelection.png"));
+        g->unitSelectCircle_1x1->anchor->set(8, 5);
+
+        g->unitHoverCircle_5x5 = New<AnimatedSprite>(New<Sova::String>("images/ui/5x5_hovercircle.png"), 106, 58, 1);
+        g->unitHoverCircle_5x5->imageSpeed = 0.1f;
+        g->unitHoverCircle_5x5->anchor->set(53, 28);
+
+        g->unitSelectCircle_5x5 = New<Sprite>(New<Sova::String>("images/ui/5x5_selectioncircle.png"));
+        g->unitSelectCircle_5x5->anchor->set(52, 27);
 
         g->moveMarker = New<AnimatedSprite>(New<Sova::String>("images/ui/moveMarker.png"), 11, 9, 1);
         g->moveMarker->imageSpeed = 0.1;

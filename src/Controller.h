@@ -94,6 +94,8 @@ namespace DsprFrontend
             resources->Add(New<String>("images/ui/cursor.png"));
             resources->Add(New<String>("images/ui/unitHover.png"));
             resources->Add(New<String>("images/ui/unitSelection.png"));
+            resources->Add(New<String>("images/ui/5x5_hovercircle.png"));
+            resources->Add(New<String>("images/ui/5x5_selectioncircle.png"));
             resources->Add(New<String>("images/ui/moveMarker.png"));
 
             resources->Add(New<String>("sounds/hello.wav"));
@@ -120,7 +122,6 @@ namespace DsprFrontend
 
         g->spriteCatalog = New<SpriteCatalog>();
         g->circleCache = New<CircleCache>();
-        g->unitTemplateCatalog = New<UnitTemplateCatalog>();
 
         g->tileManager = New<TileManager>();
         g->tileManager->SetDepth(9999);
@@ -131,6 +132,8 @@ namespace DsprFrontend
         g->uiManager = New<UiManager>();
         g->uiManager->SetDepth(-9990);
         g->world->AddChild(g->uiManager);
+
+        g->unitTemplateCatalog = New<UnitTemplateCatalog>();
 
         g->fogManager = New<FogManager>();
         g->fogManager->SetDepth(-8888);
