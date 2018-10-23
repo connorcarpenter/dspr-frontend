@@ -22,6 +22,8 @@ namespace DsprFrontend
         void receiveUnit(Ref<Sova::String> id, Ref<Sova::String> x, Ref<Sova::String> y, Ref<Sova::String> tribeIndex,
                                  Ref<Sova::String> templateIndexStr);
         void receiveUnitUpdate(Ref<Sova::String> id, Ref<List<Sova::String>> propsStrList);
+        void receiveUnitDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr);
+
         void addToSelectionList(Ref<Unit> unit);
         void removeFromSelectionList(Ref<Unit> unit);
         void clearSelectionList();
@@ -34,9 +36,6 @@ namespace DsprFrontend
         void issueUnitOrder(bool attackOrderSelected);
         Ref<List<Unit>> getSelectedUnits();
         Ref<Unit> getUnitWithId(int id);
-        void receiveUnitDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr);
-        void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
-
         void orderCurrentlySelectedUnits(DsprFrontend::UnitOrder orderIndex);
         void receiveGrid(int w, int h);
 
@@ -50,5 +49,7 @@ namespace DsprFrontend
         bool receivedGrid = false;
         int gridWidth;
         int gridHeight;
+
+        void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
     };
 }

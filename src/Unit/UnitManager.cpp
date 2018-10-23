@@ -200,7 +200,7 @@ namespace DsprFrontend
         g->world->AddChild(newUnit);
         this->unitList->Add(newUnit);
 
-        this->unitGrid->set(newUnit->tilePosition->x, newUnit->tilePosition->y, newUnit);
+        this->updateUnitPosition(newUnit, Null<Point>(), newUnit->nextTilePosition);
     }
 
     void UnitManager::receiveUnitUpdate(Ref<Sova::String> idStr, Ref<List<Sova::String>> propsStrList)
@@ -227,6 +227,7 @@ namespace DsprFrontend
                 ///
                 int x = atoi(varsParts->At(0)->AsCStr());
                 int y = atoi(varsParts->At(1)->AsCStr());
+                this->updateUnitPosition(unit, unit->nextTilePosition, New<Point>(x, y));
                 unit->newNextTilePosition(x, y);
                 continue;
             }
@@ -292,7 +293,7 @@ namespace DsprFrontend
 
         this->unitList->Remove(unit);
         this->selectionList->Remove(unit);
-        this->unitGrid->set(unit->tilePosition->x, unit->tilePosition->y, Null<Unit>());
+        this->updateUnitPosition(unit, unit->nextTilePosition, Null<Point>());
         unit->Destroy();
     }
 
@@ -415,8 +416,11 @@ namespace DsprFrontend
     {
         if (!this->receivedGrid) return;
 
-        this->unitGrid->set(oldPosition->x, oldPosition->y, Null<Unit>());
-        this->unitGrid->set(newPosition->x, newPosition->y, unit);
+        if (oldPosition != nullptr)
+            this->unitGrid->set(oldPosition->x, oldPosition->y, Null<Unit>());
+
+        if (newPosition != nullptr)
+            this->unitGrid->set(newPosition->x, newPosition->y, unit);
     }
 
     void UnitManager::receiveGrid(int w, int h)

@@ -205,8 +205,6 @@ namespace DsprFrontend
 
     void Unit::updateTilePosition(Ref<Point> newPosition)
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        g->unitManager->updateUnitPosition(ThisRef<Unit>(), this->tilePosition, newPosition);
         this->tilePosition->set(newPosition);
         this->SetDepth(this->tilePosition->y * -1);
         this->walkAmount = 0;
