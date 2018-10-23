@@ -99,7 +99,7 @@ namespace DsprFrontend
         {
             this->imageSpeed = 0;
             this->imageIndex = 0;
-            if (!this->isATemple()) {
+            if (this->unitTemplate->hasIdleTurnBehavior) {
                 this->stillFrames += 1;
                 //idling
 
@@ -113,7 +113,6 @@ namespace DsprFrontend
                         if (Math::Random(0, 2) < 1) {
                             this->scale->x = this->scale->x * -1;
                         } else {
-                            if (!this->isATemple()) {
                                 if (this->textureName->Equals(this->unitTemplate->sprWalkUp->filename)) {
                                     this->facingDown = true;
                                     this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
@@ -123,17 +122,11 @@ namespace DsprFrontend
                                     this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUp);
                                     this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUpTC);
                                 }
-                            }
                         }
                     }
                 }
             }
         }
-    }
-
-    bool Unit::isATemple(){
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        return this->unitTemplate == g->unitTemplateCatalog->temple;
     }
 
     void Unit::attackingStep(float deltaFrameMs) {
@@ -158,6 +151,8 @@ namespace DsprFrontend
 
     void Unit::newNextTilePosition(int x, int y)
     {
+        if (!this->unitTemplate->canMove) return;
+
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         if (this->tribeIndex == g->playersTribeIndex) {
             g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
@@ -182,8 +177,6 @@ namespace DsprFrontend
         {
             walkSpeed = walkSpeedStraight;
         }
-
-        if (this->isATemple())return;
 
         if (difx != 0)
         {
@@ -351,8 +344,7 @@ namespace DsprFrontend
             this->unitTemplate->sprHoverCircle->drawSelf(camera, xoffset, yoffset);
         }
 
-        int newOffset = xoffset;
-        if (!this->isATemple()) newOffset += (this->scale->x == -1 ? -2 : 0);
+        int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
         AnimatedSprite::drawSelf(camera, newOffset, yoffset);
 
         //TC

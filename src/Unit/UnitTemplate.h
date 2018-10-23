@@ -50,5 +50,10 @@ namespace DsprFrontend {
         //ui
         Ref<Sova::Sprite> sprSelectCircle = Null<Sova::Sprite>();
         Ref<Sova::AnimatedSprite> sprHoverCircle = Null<Sova::AnimatedSprite>();
+
+        //other
+        bool hasIdleTurnBehavior = false;
+        bool canMove = true;
+        short spriteFaceLeftXoffset = 0;
     };
 }

@@ -19,11 +19,14 @@ namespace DsprFrontend {
         this->worker->dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
         this->worker->sprSelectCircle = g->unitSelectCircle_1x1;
         this->worker->sprHoverCircle = g->unitHoverCircle_1x1;
+        this->worker->hasIdleTurnBehavior = true;
+        this->worker->spriteFaceLeftXoffset = -2;
 
         this->temple = New<UnitTemplate>(1);
         this->temple->sight = 12;
         this->temple->sprSelectCircle = g->unitSelectCircle_5x5;
         this->temple->sprHoverCircle = g->unitHoverCircle_5x5;
+        this->temple->canMove = false;
 
         this->templateList = New<List<UnitTemplate>>();
         this->templateList->Add(this->worker);

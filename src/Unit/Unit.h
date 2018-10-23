@@ -82,11 +82,7 @@ namespace DsprFrontend
         void walkingStep(float deltaFrameMs);
         void attackingStep(float deltaFrameMs);
 
-
-
         void updatePosition();
-
-        bool isATemple();
 
         void updateTilePosition(Ref<Point> newPosition);
     };
