@@ -18,6 +18,7 @@
 #include "UI/ButtonCardCatalog.h"
 #include "Unit/UnitTemplateCatalog.h"
 #include "TileManager.h"
+#include "IsoBox/IsoBoxCache.h"
 
 namespace DsprFrontend
 {
@@ -416,11 +417,37 @@ namespace DsprFrontend
     {
         if (!this->receivedGrid) return;
 
-        if (oldPosition != nullptr)
-            this->unitGrid->set(oldPosition->x, oldPosition->y, Null<Unit>());
+        if (unit->unitTemplate->tileWidth == 1 && unit->unitTemplate->tileHeight == 1)
+        {
+            if (oldPosition != nullptr)
+                this->unitGrid->set(oldPosition->x, oldPosition->y, Null<Unit>());
 
-        if (newPosition != nullptr)
-            this->unitGrid->set(newPosition->x, newPosition->y, unit);
+            if (newPosition != nullptr)
+                this->unitGrid->set(newPosition->x, newPosition->y, unit);
+        }
+        else
+        {
+            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            auto unitIsoBoxBase = g->isoBoxCache->getIsoBox(unit->unitTemplate->tileWidth, unit->unitTemplate->tileHeight);
+
+            if (oldPosition != nullptr)
+            {
+                for (auto iterator = unitIsoBoxBase->coordList->GetIterator(); iterator->Valid(); iterator->Next())
+                {
+                    auto coord = iterator->Get();
+                    this->unitGrid->set(oldPosition->x + coord->x, oldPosition->y + coord->y, Null<Unit>());
+                }
+            }
+
+            if (newPosition != nullptr)
+            {
+                for (auto iterator = unitIsoBoxBase->coordList->GetIterator(); iterator->Valid(); iterator->Next())
+                {
+                    auto coord = iterator->Get();
+                    this->unitGrid->set(newPosition->x + coord->x, newPosition->y + coord->y, unit);
+                }
+            }
+        }
     }
 
     void UnitManager::receiveGrid(int w, int h)

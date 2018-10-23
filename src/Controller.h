@@ -24,6 +24,7 @@
 #include "UI/Cursor.h"
 #include "UI/ButtonCardCatalog.h"
 #include "Circle/CircleCache.h"
+#include "IsoBox/IsoBoxCache.h"
 #include "Unit/UnitTemplateCatalog.h"
 
 using namespace Sova;
@@ -122,6 +123,7 @@ namespace DsprFrontend
 
         g->spriteCatalog = New<SpriteCatalog>();
         g->circleCache = New<CircleCache>();
+        g->isoBoxCache = New<IsoBoxCache>();
 
         g->tileManager = New<TileManager>();
         g->tileManager->SetDepth(9999);

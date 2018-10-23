@@ -27,6 +27,8 @@ namespace DsprFrontend {
         this->temple->sprSelectCircle = g->unitSelectCircle_5x5;
         this->temple->sprHoverCircle = g->unitHoverCircle_5x5;
         this->temple->canMove = false;
+        this->temple->tileWidth = 5;
+        this->temple->tileHeight = 5;
 
         this->templateList = New<List<UnitTemplate>>();
         this->templateList->Add(this->worker);

@@ -28,6 +28,7 @@ namespace DsprFrontend
     class CircleCache;
     class ButtonCardCatalog;
     class UnitTemplateCatalog;
+    class IsoBoxCache;
 
     class Global : public Sova::Refable
     {
@@ -53,6 +54,7 @@ namespace DsprFrontend
         Ref<Minimap> minimap = Null<Minimap>();
         Ref<SpriteCatalog> spriteCatalog = Null<SpriteCatalog>();
         Ref<CircleCache> circleCache = Null<CircleCache>();
+        Ref<IsoBoxCache> isoBoxCache = Null<IsoBoxCache>();
         Ref<ButtonCardCatalog> buttonCardCatalog = Null<ButtonCardCatalog>();
         Ref<UnitTemplateCatalog> unitTemplateCatalog = Null<UnitTemplateCatalog>();
         int playersTribeIndex = -1;

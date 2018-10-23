@@ -11,14 +11,15 @@
 
 namespace DsprFrontend
 {
-    class Circle : public Sova::Refable
+    class IsoBox : public Sova::Refable
     {
 
     public:
 
-        Circle(int radius);
+        IsoBox(unsigned int width, unsigned int height);
 
         Sova::Ref<Sova::List<Sova::Point>> coordList = Null<Sova::List<Sova::Point>>();
-        int radius;
+        unsigned int width;
+        unsigned int height;
     };
 }

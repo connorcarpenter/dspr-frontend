@@ -16,6 +16,8 @@ namespace DsprFrontend {
 
         //stats
         int sight;
+        unsigned tileWidth = 1;
+        unsigned tileHeight = 1;
 
         //sprites
         Ref<Sova::AnimatedSpriteInfo> sprWalkDown = Null<Sova::AnimatedSpriteInfo>();

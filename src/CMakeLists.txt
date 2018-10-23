@@ -36,6 +36,9 @@ fips_begin_app(dspr-frontend windowed)
 
             Circle/Circle.h Circle/Circle.cpp
             Circle/CircleCache.h Circle/CircleCache.cpp
+
+            IsoBox/IsoBox.h IsoBox/IsoBox.cpp
+            IsoBox/IsoBoxCache.h IsoBox/IsoBoxCache.cpp
     )
     oryol_shader(shaders.shd)
     fips_deps(Sova)
