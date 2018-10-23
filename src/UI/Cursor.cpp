@@ -14,6 +14,7 @@
 #include "Unit/UnitManager.h"
 #include "TileManager.h"
 #include "ButtonCardCatalog.h"
+#include "DsprColors.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 
@@ -23,8 +24,6 @@
 #endif
 #if ORYOL_LINUX
 #include "GLFW/glfw3.h"
-#include "DsprColors.h"
-
 #endif
 
 namespace DsprFrontend

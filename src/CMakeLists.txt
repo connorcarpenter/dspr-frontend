@@ -13,6 +13,7 @@ fips_begin_app(dspr-frontend windowed)
             Global.h Global.cpp
             TestClass.h TestClass.cpp
             SpriteCatalog.h SpriteCatalog.cpp
+            RefIsoGrid.h
 
             Unit/Unit.h Unit/Unit.cpp
             Unit/DyingUnit.h Unit/DyingUnit.cpp

@@ -25,11 +25,6 @@ namespace DsprFrontend
 
     TileManager::~TileManager()
     {
-        if (this->receivedGrid)
-        {
-            destroyTileArray(this->tileArrayA, this->gridWidth, this->gridHeight);
-            destroyTileArray(this->tileArrayB, this->gridWidth, this->gridHeight);
-        }
     }
 
     void TileManager::receiveGrid(Ref<Sova::String> width, Ref<Sova::String> height)
@@ -44,8 +39,8 @@ namespace DsprFrontend
         this->gridHeight = atoi(height->AsCStr());
         this->receivedGrid = true;
 
-        this->tileArrayA = initializeTileArray(this->gridWidth, this->gridHeight);
-        this->tileArrayB = initializeTileArray(this->gridWidth, this->gridHeight);
+        this->tileGrid = New<RefIsoGrid<Tile>>();
+        this->tileGrid->initialize(this->gridWidth, this->gridHeight);
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         g->fogManager->receiveGrid(this->gridWidth, this->gridHeight);
@@ -64,19 +59,8 @@ namespace DsprFrontend
         int tileY = atoi(y->AsCStr());
         int tileFrame = atoi(frame->AsCStr());
 
-        int gridIndex = getGridIndex(tileX, tileY);
-        if (gridIndex == -1)
-            return;
-
-        int tileIndex = getTileIndex(gridIndex, tileX, tileY);
-        if (gridIndex == 0)
-        {
-            this->tileArrayA[tileIndex] = new Tile(tileFrame);
-        }
-        else
-        {
-            this->tileArrayB[tileIndex] = new Tile(tileFrame);
-        }
+        auto newTile = New<Tile>(tileFrame);
+        this->tileGrid->set(tileX, tileY, newTile);
 
         g->minimap->DrawTile(tileX,tileY);
         g->fogManager->shroudToFog(tileX, tileY);
@@ -91,67 +75,10 @@ namespace DsprFrontend
         //std::cout << "received tile: "<<tileX<<", "<<tileY<<", "<<tileFrame<< std::endl;
     }
 
-    Tile** TileManager::initializeTileArray(int width, int height)
-    {
-        Tile** output = new Tile*[width * height];
-        for (int j = 0; j < height; j += 1)
-        {
-            for (int i = 0;i< width; i+=1)
-            {
-                output[(j*width)+i] = nullptr;
-            }
-        }
-        return output;
-    }
-
-    void TileManager::destroyTileArray(Tile** tileArray, int width, int height)
-    {
-        for (int j = 0; j < height; j += 1)
-        {
-            for (int i = 0;i< width; i+=1) {
-                int index = (j * width) + i;
-                if (tileArray[index] != nullptr) {
-                    delete tileArray[index];
-                    tileArray[index] = nullptr;
-                }
-            }
-        }
-
-        delete[] tileArray;
-    }
-
-    int TileManager::getGridIndex(int x, int y) {
-        if (!this->receivedGrid) return -1;
-        if (x < 0 || y < 0 || x >= this->gridWidth*2 || y >= this->gridHeight*2) return -1;
-
-        if (x % 2 == 0 && y % 2 == 0) return 0;
-        if ((x+1) % 2 == 0 && (y+1) % 2 == 0) return 1;
-    }
-
-    int TileManager::getTileIndex(int gridIndex, int x, int y) {
-        if (gridIndex == 0)
-        {
-            int xsmall = x / 2;
-            int ysmall = y / 2;
-            return (ysmall * this->gridWidth) + xsmall;
-        }
-        else
-        {
-            int xsmall = (x-1) / 2;
-            int ysmall = (y-1) / 2;
-            return (ysmall * this->gridWidth) + xsmall;
-        }
-    }
-
     int TileManager::getTileFrame(int x, int y)
     {
-        auto gridIndex = getGridIndex(x,y);
-        if (gridIndex == -1) return -1;
-        auto tileIndex = getTileIndex(gridIndex, x, y);
-        Tile* tile = nullptr;
-        if (gridIndex == 0) tile = this->tileArrayA[tileIndex];
-        if (gridIndex == 1) tile = this->tileArrayB[tileIndex];
-        if (tile != nullptr) return tile->frame;
+        Ref<Tile> foundTile = this->tileGrid->get(x,y);
+        if (foundTile != nullptr) return foundTile->frame;
         return -1;
     }
 
@@ -174,23 +101,22 @@ namespace DsprFrontend
                     int x = a + i;
                     int y = b + j;
 
-                    if (getGridIndex(x * 2, y * 2) == -1)continue; // checking if out of bounds
-
                     if (!g->fogManager->tileIsInShroud(x * 2, y * 2))
                     {
-                        auto tile = this->tileArrayA[(y * this->gridWidth) + x];
-                        if (tile != nullptr) {
-                            drawTile(camera, ((x) * tileWidth) + xoffset, ((y) * tileHeight) + yoffset,
-                                     tile->frame);
-                        }
+                        Ref<Tile> tile = this->tileGrid->get(x * 2, y * 2);
+                        if (tile == nullptr) continue;
+
+                        drawTile(camera, ((x) * tileWidth) + xoffset, ((y) * tileHeight) + yoffset,
+                                 tile->frame);
                     }
 
-                    if (!g->fogManager->tileIsInShroud((x * 2)+1, (y * 2)+1)) {
-                        auto tile = this->tileArrayB[(y * this->gridWidth) + x];
-                        if (tile != nullptr) {
-                            drawTile(camera, ((x + 0.5f) * tileWidth) + xoffset,
-                                     ((y + 0.5f) * tileHeight) + yoffset, tile->frame);
-                        }
+                    if (!g->fogManager->tileIsInShroud((x * 2)+1, (y * 2)+1))
+                    {
+                        Ref<Tile> tile = this->tileGrid->get((x * 2)+1, (y * 2)+1);
+                        if (tile == nullptr) continue;
+
+                        drawTile(camera, ((x + 0.5f) * tileWidth) + xoffset, ((y + 0.5f) * tileHeight) + yoffset,
+                                 tile->frame);
                     }
                 }
             }

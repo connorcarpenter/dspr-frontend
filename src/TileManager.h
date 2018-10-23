@@ -6,6 +6,7 @@
 
 #include <Sova/Graphics/Container.h>
 #include "Tile.h"
+#include "RefIsoGrid.h"
 
 using namespace Sova;
 
@@ -34,20 +35,12 @@ namespace DsprFrontend
 
     private:
 
-        Tile **initializeTileArray(int width, int height);
-        void destroyTileArray(Tile **tileArray, int width, int height);
-        int getGridIndex(int x, int y);
-        int getTileIndex(int gridIndex, int x, int y);
-
-
-
         int gridWidth = 0;
         int gridHeight = 0;
         bool receivedGrid = false;
         bool visible = false;
 
-        Tile** tileArrayA = nullptr;
-        Tile** tileArrayB = nullptr;
+        Ref<RefIsoGrid<Tile>> tileGrid = Null<RefIsoGrid<Tile>>();
 
         Sova::InternalTexture* texture = nullptr;
 
