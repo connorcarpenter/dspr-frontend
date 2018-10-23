@@ -33,6 +33,8 @@ namespace DsprFrontend
         int getTileFrame(int x, int y);
         Ref<Point> getGridSize();
 
+        Ref<Point> getTilePosition(int x, int y);
+
     private:
 
         int gridWidth = 0;

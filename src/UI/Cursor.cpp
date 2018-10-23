@@ -253,32 +253,6 @@ namespace DsprFrontend
         }
     }
 
-    Ref<Point> Cursor::getTilePosition()
-    {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        int halfTileW = (g->tileManager->tileWidth/2);
-        int halfTileH = (g->tileManager->tileHeight/2);
-        int quarterTileW = (g->tileManager->tileWidth/4);
-        int quarterTileH = (g->tileManager->tileHeight/4);
-
-        int posx = this->worldPosition->x - quarterTileW;
-        int posy = this->worldPosition->y - quarterTileH;
-
-        int x = (posx) / halfTileW;
-        int y = (posy) / halfTileH;
-        if ((x % 2 == 0 && y % 2 == 0) || ((x+1) % 2 == 0 && (y+1) % 2 == 0)) return New<Point>(x, y);
-        int modx = (posx % halfTileW) - quarterTileW;
-        int mody = ((posy % halfTileH) - quarterTileH)*2;
-        if (Sova::Math::Abs(modx) > Sova::Math::Abs(mody))
-        {
-            return New<Point>(x+Sova::Math::Sign(modx), y);
-        }
-        else
-        {
-            return New<Point>(x, y+Sova::Math::Sign(mody));
-        }
-    }
-
     void Cursor::setHoverListUnitsToHover(bool hovering)
     {
         for (auto iterator = this->hoverList->GetIterator(); iterator->Valid(); iterator->Next())

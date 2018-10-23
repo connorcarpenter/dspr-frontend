@@ -5,6 +5,7 @@
 #include <Sova/Internal/InternalApp.h>
 #include <iostream>
 #include <Sova/Graphics/Sprite.h>
+#include <Sova/Math/Math.h>
 #include "TileManager.h"
 #include "Sova/Common/String.h"
 #include "Sova/Graphics/Internal/InternalTexture.h"
@@ -13,6 +14,7 @@
 #include "Block.h"
 #include "FogManager.h"
 #include "Minimap/Minimap.h"
+#include "Unit/UnitManager.h"
 
 using namespace Sova;
 using namespace Oryol;
@@ -40,10 +42,11 @@ namespace DsprFrontend
         this->receivedGrid = true;
 
         this->tileGrid = New<RefIsoGrid<Tile>>();
-        this->tileGrid->initialize(this->gridWidth, this->gridHeight);
+        this->tileGrid->initialize(this->gridWidth * 2, this->gridHeight * 2);
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         g->fogManager->receiveGrid(this->gridWidth, this->gridHeight);
+        g->unitManager->receiveGrid(this->gridWidth, this->gridHeight);
 
         std::cout << "received Grid"<< std::endl;
     }
@@ -80,6 +83,31 @@ namespace DsprFrontend
         Ref<Tile> foundTile = this->tileGrid->get(x,y);
         if (foundTile != nullptr) return foundTile->frame;
         return -1;
+    }
+
+    Ref<Point> TileManager::getTilePosition(int inX, int inY)
+    {
+        int halfTileW = (this->tileWidth/2);
+        int halfTileH = (this->tileHeight/2);
+        int quarterTileW = (this->tileWidth/4);
+        int quarterTileH = (this->tileHeight/4);
+
+        int posx = inX - quarterTileW;
+        int posy = inY - quarterTileH;
+
+        int x = (posx) / halfTileW;
+        int y = (posy) / halfTileH;
+        if ((x % 2 == 0 && y % 2 == 0) || ((x+1) % 2 == 0 && (y+1) % 2 == 0)) return New<Point>(x, y);
+        int modx = (posx % halfTileW) - quarterTileW;
+        int mody = ((posy % halfTileH) - quarterTileH)*2;
+        if (Sova::Math::Abs(modx) > Sova::Math::Abs(mody))
+        {
+            return New<Point>(x+Sova::Math::Sign(modx), y);
+        }
+        else
+        {
+            return New<Point>(x, y+Sova::Math::Sign(mody));
+        }
     }
 
     void TileManager::Draw(Ref<Camera> camera, int xoffset, int yoffset)

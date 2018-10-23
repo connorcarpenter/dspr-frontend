@@ -88,5 +88,6 @@ namespace DsprFrontend
 
         bool isATemple();
 
+        void updateTilePosition(Ref<Point> newPosition);
     };
 }

@@ -22,8 +22,6 @@ namespace DsprFrontend
     public:
         Cursor();
 
-        Ref<Point> getTilePosition();
-
         bool leftButtonDragging = false;
         Ref<Point> leftButtonDragPoint = Null<Point>();
         Ref<Point> worldPosition = Null<Point>();

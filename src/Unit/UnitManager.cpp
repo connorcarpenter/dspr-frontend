@@ -17,6 +17,7 @@
 #include "Minimap/Minimap.h"
 #include "UI/ButtonCardCatalog.h"
 #include "Unit/UnitTemplateCatalog.h"
+#include "TileManager.h"
 
 namespace DsprFrontend
 {
@@ -42,23 +43,57 @@ namespace DsprFrontend
             rightButtonAlreadyClicked = false;
     }
 
+    /* CHANGE HERE*/
     Ref<Unit> UnitManager::getUnitOverlappingWithPoint(int x, int y)
     {
-        for (auto iterator = this->unitList->GetIterator(); iterator->Valid(); iterator->Next())
-        {
-            auto unit = iterator->Get();
-            if (Math::PointInBox(x, y,
-                                 unit->position->x - 6, unit->position->y - 10,
-                                 unit->position->x + 4, unit->position->y + 1))
-                return unit;
-        }
+        if (!this->receivedGrid) return Null<Unit>();
 
-        return Null<Unit>();
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        auto tilePos = g->tileManager->getTilePosition(x, y);
+
+        return this->unitGrid->get(tilePos->x, tilePos->y);
+
+//        for (auto iterator = this->unitList->GetIterator(); iterator->Valid(); iterator->Next())
+//        {
+//            auto unit = iterator->Get();
+//            if (Math::PointInBox(x, y,
+//                                 unit->position->x - 6, unit->position->y - 10,
+//                                 unit->position->x + 4, unit->position->y + 1))
+//                return unit;
+//        }
+//
+//        return Null<Unit>();
     }
 
     Ref<List<Unit>> UnitManager::getNonHoveringUnitsWithinBox(int x1, int y1, int x2, int y2)
     {
+        if (!this->receivedGrid) return Null<List<Unit>>();
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
         auto output = New<List<Unit>>();
+
+        auto minX = Math::Min(x1, x2);
+        auto minY = Math::Min(y1, y2);
+        auto maxX = Math::Max(x1, x2)+12;
+        auto maxY = Math::Max(y1, y2)+6;
+
+        auto minTilePos = g->tileManager->getTilePosition(minX, minY);
+        auto maxTilePos = g->tileManager->getTilePosition(maxX, maxY);
+
+        for (int x = minTilePos->x; x < maxTilePos->x; x++)
+        {
+            for (int y = minTilePos->y; y < maxTilePos->y; y++)
+            {
+                auto unit = this->unitGrid->get(x,y);
+                if (unit == nullptr) continue;
+                if (unit->hovering) continue;
+                output->Add(unit);
+            }
+        }
+
+        /*
         for (auto iterator = this->unitList->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto unit = iterator->Get();
@@ -68,6 +103,7 @@ namespace DsprFrontend
                                  unit->position->x + 4, unit->position->y + 1))
                 output->Add(unit);
         }
+         */
 
         if (output->Size() == 0)
             return Null<List<Unit>>();
@@ -77,14 +113,29 @@ namespace DsprFrontend
 
     Ref<List<Unit>> UnitManager::getUnitsOutsideBox(Ref<List<Unit>> hoverList, int x1, int y1, int x2, int y2)
     {
-        auto output = New<List<Unit>>();
-        for (auto iterator = hoverList->GetIterator(); iterator->Valid(); iterator->Next())
+        if (!this->receivedGrid) return Null<List<Unit>>();
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        auto output = New<List<Unit>>(hoverList);
+
+        auto minX = Math::Min(x1, x2);
+        auto minY = Math::Min(y1, y2);
+        auto maxX = Math::Max(x1, x2)+12;
+        auto maxY = Math::Max(y1, y2)+6;
+
+        auto minTilePos = g->tileManager->getTilePosition(minX, minY);
+        auto maxTilePos = g->tileManager->getTilePosition(maxX, maxY);
+
+        for (int x = minTilePos->x; x < maxTilePos->x; x++)
         {
-            auto unit = iterator->Get();
-            if (!Math::BoxesOverlap(x1, y1, x2, y2,
-                                   unit->position->x - 6, unit->position->y - 10,
-                                   unit->position->x + 4, unit->position->y + 1))
-                output->Add(unit);
+            for (int y = minTilePos->y; y < maxTilePos->y; y++)
+            {
+                auto unit = this->unitGrid->get(x,y);
+                if (unit == nullptr) continue;
+                if (output->Contains(unit))
+                    output->Remove(unit);
+            }
         }
 
         if (output->Size() == 0)
@@ -92,6 +143,7 @@ namespace DsprFrontend
 
         return output;
     }
+    /* CHANGE HERE*/
 
     void UnitManager::deselectAllUnits()
     {
@@ -147,6 +199,8 @@ namespace DsprFrontend
 
         g->world->AddChild(newUnit);
         this->unitList->Add(newUnit);
+
+        this->unitGrid->set(newUnit->tilePosition->x, newUnit->tilePosition->y, newUnit);
     }
 
     void UnitManager::receiveUnitUpdate(Ref<Sova::String> idStr, Ref<List<Sova::String>> propsStrList)
@@ -238,6 +292,7 @@ namespace DsprFrontend
 
         this->unitList->Remove(unit);
         this->selectionList->Remove(unit);
+        this->unitGrid->set(unit->tilePosition->x, unit->tilePosition->y, Null<Unit>());
         unit->Destroy();
     }
 
@@ -265,7 +320,8 @@ namespace DsprFrontend
 
         auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
         int targetedUnitId = -1;
-        if (targetedUnit != nullptr){
+        if (targetedUnit != nullptr)
+        {
             targetedUnitId = targetedUnit->id;
             Ref<Unit> firstSelectedUnit = this->selectionList->At(0);
             orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
@@ -277,11 +333,11 @@ namespace DsprFrontend
 
         Ref<Point> tilePosition = Null<Point>();
 
-        if (orderIndex == Move || orderIndex == AttackMove) {
-            tilePosition = g->cursor->getTilePosition();
+        if (orderIndex == Move || orderIndex == AttackMove)
+        {
             auto mmPosition = g->uiManager->getMinimapPosition(g->cursor->position);
-            if (mmPosition != nullptr)
-                tilePosition->set(mmPosition);
+            tilePosition = (mmPosition == nullptr) ?
+                           g->tileManager->getTilePosition(g->cursor->worldPosition->x, g->cursor->worldPosition->y) : mmPosition;
         }
 
         auto sb = New<Sova::StringBuilder>();
@@ -355,8 +411,21 @@ namespace DsprFrontend
         g->gameServer->send(sb->ToString());
     }
 
-    void UnitManager::holdCurrentlySelectedUnits()
+    void UnitManager::updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition)
     {
+        if (!this->receivedGrid) return;
 
+        this->unitGrid->set(oldPosition->x, oldPosition->y, Null<Unit>());
+        this->unitGrid->set(newPosition->x, newPosition->y, unit);
+    }
+
+    void UnitManager::receiveGrid(int w, int h)
+    {
+        this->receivedGrid = true;
+        this->gridWidth = w;
+        this->gridHeight = h;
+
+        this->unitGrid = New<RefIsoGrid<Unit>>();
+        this->unitGrid->initialize(this->gridWidth * 2, this->gridHeight * 2);
     }
 }

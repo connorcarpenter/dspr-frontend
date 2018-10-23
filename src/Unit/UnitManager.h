@@ -8,6 +8,7 @@
 #include <Sova/Graphics/Pixel.h>
 #include "Sova/Common/Int.h"
 #include "UnitOrder.h"
+#include "RefIsoGrid.h"
 
 namespace DsprFrontend
 {
@@ -34,9 +35,10 @@ namespace DsprFrontend
         Ref<List<Unit>> getSelectedUnits();
         Ref<Unit> getUnitWithId(int id);
         void receiveUnitDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr);
+        void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
 
         void orderCurrentlySelectedUnits(DsprFrontend::UnitOrder orderIndex);
-        void holdCurrentlySelectedUnits();
+        void receiveGrid(int w, int h);
 
         Ref<List<Unit>> selectionList = Null<List<Unit>>();
         const int maxSelectedUnits = 12;
@@ -44,5 +46,9 @@ namespace DsprFrontend
         Ref<List<Unit>> unitList = Null<List<Unit>>();
         bool rightButtonAlreadyClicked = false;
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
+        Ref<RefIsoGrid<Unit>> unitGrid = Null<RefIsoGrid<Unit>>();
+        bool receivedGrid = false;
+        int gridWidth;
+        int gridHeight;
     };
 }

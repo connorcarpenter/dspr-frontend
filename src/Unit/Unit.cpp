@@ -14,6 +14,7 @@
 #include "DsprColors.h"
 #include "UnitTemplate.h"
 #include "UnitTemplateCatalog.h"
+#include "UnitManager.h"
 
 namespace DsprFrontend
 {
@@ -81,13 +82,13 @@ namespace DsprFrontend
             this->walkAmount += this->walkSpeed * (deltaFrameMs / gameServerTickMs);
             if (this->walkAmount >= maxWalkAmount)
             {
-                walkAmount = 0;
+                //update fog
                 if (this->tribeIndex == g->playersTribeIndex) {
                     g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
                     g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);
                 }
-                this->tilePosition->set(this->nextTilePosition->x, this->nextTilePosition->y);
-                this->SetDepth(this->tilePosition->y * -1);
+
+                this->updateTilePosition(this->nextTilePosition);
             }
 
             this->updatePosition();
@@ -166,10 +167,8 @@ namespace DsprFrontend
         this->lastPosition->set(this->position);
         this->interpolation = interpolationMax-interpolationStep;
 
-        this->tilePosition->set(this->nextTilePosition);
-        this->SetDepth(this->tilePosition->y * -1);
+        this->updateTilePosition(this->nextTilePosition);
 
-        this->walkAmount = 0;
         this->nextTilePosition->set(x, y);
 
         int difx = Math::SignOrZero(this->nextTilePosition->x - this->tilePosition->x);
@@ -204,6 +203,15 @@ namespace DsprFrontend
         }
     }
 
+    void Unit::updateTilePosition(Ref<Point> newPosition)
+    {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        g->unitManager->updateUnitPosition(ThisRef<Unit>(), this->tilePosition, newPosition);
+        this->tilePosition->set(newPosition);
+        this->SetDepth(this->tilePosition->y * -1);
+        this->walkAmount = 0;
+    }
+
     void Unit::setAnimationState(UnitAnimationState newState, int heading) {
         auto g = (Global*) InternalApp::getGlobal();
 
@@ -229,9 +237,7 @@ namespace DsprFrontend
 
                 this->lastPosition->set(this->position);
                 this->interpolation = interpolationMax-interpolationStep;
-                this->tilePosition->set(this->nextTilePosition);
-                this->SetDepth(this->tilePosition->y * -1);
-                this->walkAmount = 0;
+                this->updateTilePosition(this->nextTilePosition);
 
                 switch(heading)
                 {
