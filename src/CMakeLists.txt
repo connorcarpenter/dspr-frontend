@@ -14,6 +14,7 @@ fips_begin_app(dspr-frontend windowed)
             TestClass.h TestClass.cpp
             SpriteCatalog.h SpriteCatalog.cpp
             RefIsoGrid.h
+            ResourceList.h
 
             Unit/Unit.h Unit/Unit.cpp
             Unit/DyingUnit.h Unit/DyingUnit.cpp

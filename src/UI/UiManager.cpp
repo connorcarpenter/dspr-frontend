@@ -158,7 +158,8 @@ namespace DsprFrontend
             {
                 auto unit = iterator->Get();
 
-                if (unit != nullptr) {
+                if (unit != nullptr)
+                {
                     this->unitPortrait->position->set(48 + 6 + (i * 12), 116 + 5);
                     this->unitPortrait->drawSelf(camera, 0, 0);
 
