@@ -10,10 +10,10 @@
 #include "TileManager.h"
 #include "Unit/UnitManager.h"
 #include "Cursor.h"
+#include "Unit/UnitTemplate.h"
 
 namespace DsprFrontend
 {
-
     UiManager::UiManager() : Container()
     {
         ///global stuff
@@ -164,7 +164,7 @@ namespace DsprFrontend
 
                     this->healthBarLine->setLineStyle(1, Color::Green);
                     this->healthBarLine->position->set(48 + 6 + (i * 12), 116 + 5 + 15);
-                    int healthBarLineLength = (unit->health >= 0) ? (int) (((float) unit->health / unit->maxHealth) *
+                    int healthBarLineLength = (unit->health >= 0) ? (int) (((float) unit->health / unit->unitTemplate->maxHealth) *
                                                                            11) : 0;
                     this->healthBarLine->endPosition->set(48 + 6 + (i * 12) + healthBarLineLength, 116 + 5 + 15);
                     this->healthBarLine->drawSelf(camera, xoffset, yoffset);

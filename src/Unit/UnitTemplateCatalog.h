@@ -21,5 +21,9 @@ namespace DsprFrontend {
         Ref<UnitTemplate> findTemplateByIndex(int index);
     private:
         Ref<List<UnitTemplate>> templateList = Null<List<UnitTemplate>>();
+
+        void initWorker();
+
+        void initTemple();
     };
 }

@@ -255,9 +255,12 @@ namespace DsprFrontend
             {
                 auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
                 unit->health = atoi(propsParts->At(1)->AsCStr());
-                auto bloodPartNum = Math::Random(1,2);
-                for (int i = 0;i<bloodPartNum;i++)
-                    g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth));
+                if (unit->unitTemplate->bleeds)
+                {
+                    auto bloodPartNum = Math::Random(1, 2);
+                    for (int i = 0; i < bloodPartNum; i++)
+                        g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0, 6), unit->depth));
+                }
                 continue;
             }
         }
@@ -277,18 +280,25 @@ namespace DsprFrontend
 
         auto deleteModifier = atoi(propsStr->AsCStr());
 
-        if (deleteModifier == 1){
-            auto dieSprite = New<DyingUnit>(unit);
-            g->world->AddChild(dieSprite);
-
+        if (deleteModifier == 1)
+        {
             unit->playDeathSound();
 
-            auto bloodPartNum = 6;
-            for (int i = 0;i<bloodPartNum;i++)
-                g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth));
+            if (unit->unitTemplate->hasDeathAnimation)
+            {
+                auto dieSprite = New<DyingUnit>(unit);
+                g->world->AddChild(dieSprite);
+            }
+
+            if (unit->unitTemplate->bleeds)
+            {
+                for (int i = 0;i<6;i++)
+                    g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth));
+            }
         }
 
-        if (unit->tribeIndex == g->playersTribeIndex){
+        if (unit->tribeIndex == g->playersTribeIndex)
+        {
             g->fogManager->conceilFog(unit->tilePosition->x, unit->tilePosition->y, unit->unitTemplate->sight);
         }
 

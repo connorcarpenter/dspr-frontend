@@ -43,8 +43,7 @@ namespace DsprFrontend
         int tribeIndex = -1;
         UnitAnimationState animationState = Walking;
 
-        const int maxHealth = 420;
-        int health = maxHealth;
+        int health;
         bool facingDown = true;
 
         UnitOrder currentOrder = Move;

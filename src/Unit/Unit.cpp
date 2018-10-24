@@ -31,12 +31,9 @@ namespace DsprFrontend
         this->tribeIndex = tribeIndex;
         this->unitTemplate = unitTemplate;
 
-        this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
+        this->health = this->unitTemplate->maxHealth;
 
-        if (this->unitTemplate->index == 1)
-        {
-            int i = 12;
-        }
+        this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
 
         this->tcSprite = New<AnimatedSprite>();
         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);

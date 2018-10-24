@@ -7,6 +7,8 @@
 #include <Sova/References/Refable.h>
 #include <Sova/Graphics/AnimatedSpriteInfo.h>
 #include <Sova/Audio/Sound.h>
+#include <Sova/Graphics/Sprite.h>
+#include <Sova/Graphics/AnimatedSprite.h>
 
 namespace DsprFrontend {
     class UnitTemplate : public Sova::Refable {
@@ -16,8 +18,16 @@ namespace DsprFrontend {
 
         //stats
         int sight;
-        unsigned tileWidth = 1;
-        unsigned tileHeight = 1;
+        int maxHealth;
+        unsigned int tileWidth = 1;
+        unsigned int tileHeight = 1;
+
+        //other
+        bool hasIdleTurnBehavior = false;
+        bool canMove = true;
+        short spriteFaceLeftXoffset = 0;
+        bool bleeds;
+        bool hasDeathAnimation;
 
         //sprites
         Ref<Sova::AnimatedSpriteInfo> sprWalkDown = Null<Sova::AnimatedSpriteInfo>();
@@ -52,10 +62,5 @@ namespace DsprFrontend {
         //ui
         Ref<Sova::Sprite> sprSelectCircle = Null<Sova::Sprite>();
         Ref<Sova::AnimatedSprite> sprHoverCircle = Null<Sova::AnimatedSprite>();
-
-        //other
-        bool hasIdleTurnBehavior = false;
-        bool canMove = true;
-        short spriteFaceLeftXoffset = 0;
     };
 }
