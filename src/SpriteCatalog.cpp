@@ -32,13 +32,13 @@ namespace DsprFrontend
         this->workerDieDownTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerDieDown_TC.png"), 11, 14, 1, 5, 13);
         this->workerDieUpTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerDieUp_TC.png"), 11, 16, 1, 6, 13);
 
-        this->workerUnitPortrait = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/unitPortrait.png"), 11, 14, 0, 0, 0);
-        this->workerUnitPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/unitPortrait_TC.png"), 11, 6, 0, 0, -8);
+        this->workerUnitPortrait = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerPortrait.png"), 10, 12, 0, 0, 0);
+        this->workerUnitPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerPortrait_TC.png"), 12, 6, 0, 1, -7);
 
         this->temple = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple/temple.png"), 100, 84, 1, 50, 57);
         this->templeTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple/temple_TC.png"), 100, 65, 1, 50, 59);
-        this->templeUnitPortrait = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple/temple_unitPortrait.png"), 11, 14, 0, 0, 0);
-        this->templeUnitPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple/temple_unitPortrait_TC.png"), 11, 8, 0, 0, -2);
+        this->templeUnitPortrait = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple/temple_unitPortrait.png"), 10, 12, 0, 0, 0);
+        this->templeUnitPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple/temple_unitPortrait_TC.png"), 12, 8, 0, 1, -1);
 
         this->bloodParticle = New<AnimatedSpriteInfo>(New<Sova::String>("images/bloodParticle.png"), 5, 5, 1, 2, 2);
     }

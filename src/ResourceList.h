@@ -35,7 +35,7 @@ namespace DsprFrontend
             resources->Add(New<String>("images/worker/workerAttackDown.png"));
             resources->Add(New<String>("images/worker/workerDieUp.png"));
             resources->Add(New<String>("images/worker/workerDieDown.png"));
-            resources->Add(New<String>("images/worker/unitPortrait.png"));
+            resources->Add(New<String>("images/worker/workerPortrait.png"));
             resources->Add(New<String>("images/worker/TC/workerDown_TC.png"));
             resources->Add(New<String>("images/worker/TC/workerUp_TC.png"));
             resources->Add(New<String>("images/worker/TC/workerAttackUp_TC.png"));
@@ -45,7 +45,7 @@ namespace DsprFrontend
             resources->Add(New<String>("images/worker/TC/workerAttackDown_TC.png"));
             resources->Add(New<String>("images/worker/TC/workerDieUp_TC.png"));
             resources->Add(New<String>("images/worker/TC/workerDieDown_TC.png"));
-            resources->Add(New<String>("images/worker/TC/unitPortrait_TC.png"));
+            resources->Add(New<String>("images/worker/TC/workerPortrait_TC.png"));
 
             resources->Add(New<String>("images/ui/armybar.png"));
             resources->Add(New<String>("images/ui/commandcard.png"));

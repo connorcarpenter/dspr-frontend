@@ -17,9 +17,13 @@ namespace DsprFrontend {
     class ButtonCardCatalog : public Sova::Refable {
     public:
         ButtonCardCatalog();
-        Ref<ButtonCard> basicCommandCard = Null<ButtonCard>();
+        Ref<ButtonCard> workerCommandCard = Null<ButtonCard>();
         Ref<Button> attackButton = Null<Button>();
     private:
         Ref<ButtonActions> buttonActions = Null<ButtonActions>();
+
+        void initWorkerButtonCard();
+
+        void initTempleButtonCard();
     };
 }

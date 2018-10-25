@@ -40,8 +40,8 @@ namespace DsprFrontend
         this->minimap = New<Sprite>(New<Sova::String>("images/ui/minimap.png"));
         this->armybar = New<Sprite>(New<Sova::String>("images/ui/armybar.png"));
         this->command = New<Sprite>(New<Sova::String>("images/ui/commandcard.png"));
-        this->unitPortrait = New<Sprite>(New<Sova::String>("images/worker/unitPortrait.png"));
-        this->unitPortraitTC = New<Sprite>(New<Sova::String>("images/worker/TC/unitPortrait_TC.png"));
+        this->unitPortrait = New<Sprite>(New<Sova::String>("images/worker/workerPortrait.png"));
+        this->unitPortraitTC = New<Sprite>(New<Sova::String>("images/worker/TC/workerPortrait_TC.png"));
         this->commandActions = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActions.png"), 10, 12, 0);
 
         this->healthBarLine = New<Sova::Line>();
@@ -148,13 +148,14 @@ namespace DsprFrontend
         this->minimap->drawSelf(camera, 0, 0);
 
         //draw armybar
-        this->armybar->position->set(48, 116);
+        this->armybar->position->set(48, 109);
         this->armybar->drawSelf(camera, 0, 0);
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         {
             auto selectedUnitList = g->unitManager->getSelectedUnits();
             int i = 0;
+            int j = 0;
             for (auto iterator = selectedUnitList->GetIterator(); iterator->Valid(); iterator->Next())
             {
                 auto unit = iterator->Get();
@@ -162,33 +163,38 @@ namespace DsprFrontend
                 if (unit != nullptr)
                 {
                     this->unitPortrait->useSpriteInfo(unit->unitTemplate->sprUnitPortrait);
-                    this->unitPortrait->position->set(48 + 6 + (i * 12), 116 + 5);
+                    this->unitPortrait->position->set(87 + 6 + (i * 11), 107 + 5 + (15*j));
                     this->unitPortrait->drawSelf(camera, 0, 0);
 
                     this->unitPortraitTC->useSpriteInfo(unit->unitTemplate->sprUnitPortraitTC);
                     this->unitPortraitTC->tint = unit->tcSprite->tint;
-                    this->unitPortraitTC->position->set(48 + 6 + (i * 12), 116 + 5);
+                    this->unitPortraitTC->position->set(87 + 6 + (i * 11), 107 + 5 + (15*j));
                     this->unitPortraitTC->drawSelf(camera, 0, 0);
 
                     this->healthBarLine->setLineStyle(1, Color::Green);
-                    this->healthBarLine->position->set(48 + 6 + (i * 12), 116 + 5 + 15);
+                    this->healthBarLine->position->set(87 + 6 + (i * 11), 107 + 2 + 15 + (15*j));
                     int healthBarLineLength = (unit->health >= 0) ? (int) (((float) unit->health / unit->unitTemplate->maxHealth) *
-                                                                           11) : 0;
-                    this->healthBarLine->endPosition->set(48 + 6 + (i * 12) + healthBarLineLength, 116 + 5 + 15);
+                                                                           10) : 0;
+                    this->healthBarLine->endPosition->set(87 + 6 + (i * 11) + healthBarLineLength, 107 + 2 + 15 + (15*j));
                     this->healthBarLine->drawSelf(camera, xoffset, yoffset);
 
                     this->healthBarLine->setLineStyle(1, Color::White);
-                    this->healthBarLine->position->y += 2;
-                    this->healthBarLine->endPosition->set(48 + 6 + 11 + (i * 12), 116 + 5 + 2 + 15);
+                    this->healthBarLine->position->y += 1;
+                    this->healthBarLine->endPosition->set(87 + 6 + 10 + (i * 11), 107+ 1 + 2 + 15 + (15*j));
                     this->healthBarLine->drawSelf(camera, xoffset, yoffset);
 
                     i++;
+                }
+
+                if (i>5){
+                    j++;
+                    i = 0;
                 }
             }
         }
 
         //draw command card
-        this->command->position->set(204, 106);
+        this->command->position->set(204, 100);
         this->command->drawSelf(camera, 0, 0);
 
         if (this->currentButtonCard != nullptr)
@@ -203,8 +209,8 @@ namespace DsprFrontend
 
                     auto button = iterator->Get();
 
-                    int leftX = 207 + (12 * i);
-                    int upY = 111 + 16*j;
+                    int leftX = 208 + (11 * i);
+                    int upY = 103 + 13*j;
 
                     if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
                                          leftX, upY,

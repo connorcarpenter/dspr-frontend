@@ -168,7 +168,7 @@ namespace DsprFrontend
         if (this->selectionList->Size() > 0)
         {
             auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-            g->uiManager->currentButtonCard = g->buttonCardCatalog->basicCommandCard;
+            g->uiManager->currentButtonCard = g->buttonCardCatalog->workerCommandCard;
         }
     }
 
