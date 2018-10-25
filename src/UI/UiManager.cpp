@@ -50,13 +50,13 @@ namespace DsprFrontend
 
     Ref<Button> UiManager::getButtonWithLeftClick(Ref<Point> clickPoint) {
 
-        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 116, 204, 144))
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 109, 204, 144))
         {
             //clicking within armybar
             return Null<Button>();
         }
 
-        if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 106, 256, 144))
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 100, 256, 144))
         {
             //clicking on command card
             if (this->currentButtonCard != nullptr)
@@ -72,8 +72,8 @@ namespace DsprFrontend
 
                         auto button = iterator->Get();
 
-                        int leftX = 207 + (12 * i);
-                        int upY = 111 + 16*j;
+                        int leftX = 208 + (11 * i);
+                        int upY = 103 + 13*j;
 
                         if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
                                              leftX, upY,
@@ -100,8 +100,8 @@ namespace DsprFrontend
 
     bool UiManager::isInGameArea(Ref<Point> clickPoint){
         if (Math::PointInBox(clickPoint->x,clickPoint->y,0,100,48,144)) return false;
-        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 116, 204, 144)) return false;
-        if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 106, 256, 144)) return false;
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 109, 204, 144)) return false;
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 100, 256, 144)) return false;
         return true;
     }
 
@@ -153,42 +153,71 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         {
-            auto selectedUnitList = g->unitManager->getSelectedUnits();
-            int i = 0;
-            int j = 0;
-            for (auto iterator = selectedUnitList->GetIterator(); iterator->Valid(); iterator->Next())
+            if (g->unitManager->getSelectedUnits()->Size() > 0)
             {
-                auto unit = iterator->Get();
+                auto selectedUnitList = g->unitManager->getSelectedUnits();
 
-                if (unit != nullptr)
+                auto firstUnit = selectedUnitList->At(0);
+                if (firstUnit != nullptr)
                 {
-                    this->unitPortrait->useSpriteInfo(unit->unitTemplate->sprUnitPortrait);
-                    this->unitPortrait->position->set(87 + 6 + (i * 11), 107 + 5 + (15*j));
+                    this->unitPortrait->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
+                    this->unitPortrait->position->set(55, 112);
                     this->unitPortrait->drawSelf(camera, 0, 0);
 
-                    this->unitPortraitTC->useSpriteInfo(unit->unitTemplate->sprUnitPortraitTC);
-                    this->unitPortraitTC->tint = unit->tcSprite->tint;
-                    this->unitPortraitTC->position->set(87 + 6 + (i * 11), 107 + 5 + (15*j));
+                    this->unitPortraitTC->useSpriteInfo(firstUnit->unitTemplate->sprBigPortraitTC);
+                    this->unitPortraitTC->tint = firstUnit->tcSprite->tint;
+                    this->unitPortraitTC->position->set(55, 112);
                     this->unitPortraitTC->drawSelf(camera, 0, 0);
-
-                    this->healthBarLine->setLineStyle(1, Color::Green);
-                    this->healthBarLine->position->set(87 + 6 + (i * 11), 107 + 2 + 15 + (15*j));
-                    int healthBarLineLength = (unit->health >= 0) ? (int) (((float) unit->health / unit->unitTemplate->maxHealth) *
-                                                                           10) : 0;
-                    this->healthBarLine->endPosition->set(87 + 6 + (i * 11) + healthBarLineLength, 107 + 2 + 15 + (15*j));
-                    this->healthBarLine->drawSelf(camera, xoffset, yoffset);
-
-                    this->healthBarLine->setLineStyle(1, Color::White);
-                    this->healthBarLine->position->y += 1;
-                    this->healthBarLine->endPosition->set(87 + 6 + 10 + (i * 11), 107+ 1 + 2 + 15 + (15*j));
-                    this->healthBarLine->drawSelf(camera, xoffset, yoffset);
-
-                    i++;
                 }
 
-                if (i>5){
-                    j++;
-                    i = 0;
+                if (g->unitManager->getSelectedUnits()->Size() == 1)
+                {
+                    //show individual unit stats
+                }
+                else
+                {
+                    //show all selected units
+
+                    int i = 0;
+                    int j = 0;
+                    for (auto iterator = selectedUnitList->GetIterator(); iterator->Valid(); iterator->Next())
+                    {
+                        auto unit = iterator->Get();
+
+                        if (unit != nullptr)
+                        {
+                            this->unitPortrait->useSpriteInfo(unit->unitTemplate->sprUnitPortrait);
+                            this->unitPortrait->position->set(87 + 6 + (i * 11), 107 + 5 + (15 * j));
+                            this->unitPortrait->drawSelf(camera, 0, 0);
+
+                            this->unitPortraitTC->useSpriteInfo(unit->unitTemplate->sprUnitPortraitTC);
+                            this->unitPortraitTC->tint = unit->tcSprite->tint;
+                            this->unitPortraitTC->position->set(87 + 6 + (i * 11), 107 + 5 + (15 * j));
+                            this->unitPortraitTC->drawSelf(camera, 0, 0);
+
+                            this->healthBarLine->setLineStyle(1, Color::Green);
+                            this->healthBarLine->position->set(87 + 6 + (i * 11), 107 + 2 + 15 + (15 * j));
+                            int healthBarLineLength = (unit->health >= 0) ? (int) (
+                                    ((float) unit->health / unit->unitTemplate->maxHealth) *
+                                    10) : 0;
+                            this->healthBarLine->endPosition->set(87 + 6 + (i * 11) + healthBarLineLength,
+                                                                  107 + 2 + 15 + (15 * j));
+                            this->healthBarLine->drawSelf(camera, xoffset, yoffset);
+
+                            this->healthBarLine->setLineStyle(1, Color::White);
+                            this->healthBarLine->position->y += 1;
+                            this->healthBarLine->endPosition->set(87 + 6 + 10 + (i * 11), 107 + 1 + 2 + 15 + (15 * j));
+                            this->healthBarLine->drawSelf(camera, xoffset, yoffset);
+
+                            i++;
+                        }
+
+                        if (i > 5)
+                        {
+                            j++;
+                            i = 0;
+                        }
+                    }
                 }
             }
         }

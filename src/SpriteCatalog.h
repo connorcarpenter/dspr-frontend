@@ -40,12 +40,16 @@ namespace DsprFrontend {
 
         Ref<Sova::AnimatedSpriteInfo> workerUnitPortrait = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerUnitPortraitTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerBigPortrait = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerBigPortraitTC = Null<Sova::AnimatedSpriteInfo>();
 
         //temple
         Ref<Sova::AnimatedSpriteInfo> temple = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> templeTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> templeUnitPortrait = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> templeUnitPortraitTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> templeBigPortrait = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> templeBigPortraitTC = Null<Sova::AnimatedSpriteInfo>();
 
         //other
         Ref<Sova::AnimatedSpriteInfo> bloodParticle = Null<Sova::AnimatedSpriteInfo>();
