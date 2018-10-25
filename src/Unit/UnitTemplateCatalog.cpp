@@ -62,6 +62,8 @@ namespace DsprFrontend
         this->worker->sprDieUp = g->spriteCatalog->workerDieUp;
         this->worker->sprDieDownTC = g->spriteCatalog->workerDieDownTC;
         this->worker->sprDieUpTC = g->spriteCatalog->workerDieUpTC;
+        this->worker->sprUnitPortrait = g->spriteCatalog->workerUnitPortrait;
+        this->worker->sprUnitPortraitTC = g->spriteCatalog->workerUnitPortraitTC;
     }
 
     void UnitTemplateCatalog::initTemple()
@@ -79,5 +81,8 @@ namespace DsprFrontend
         this->temple->bleeds = false;
         this->temple->hasDeathAnimation = false;
         this->temple->sprWalkDown = g->spriteCatalog->temple;
+        this->temple->sprWalkDownTC = g->spriteCatalog->templeTC;
+        this->temple->sprUnitPortrait = g->spriteCatalog->templeUnitPortrait;
+        this->temple->sprUnitPortraitTC = g->spriteCatalog->templeUnitPortraitTC;
     }
 }

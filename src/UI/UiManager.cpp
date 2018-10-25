@@ -41,6 +41,7 @@ namespace DsprFrontend
         this->armybar = New<Sprite>(New<Sova::String>("images/ui/armybar.png"));
         this->command = New<Sprite>(New<Sova::String>("images/ui/commandcard.png"));
         this->unitPortrait = New<Sprite>(New<Sova::String>("images/worker/unitPortrait.png"));
+        this->unitPortraitTC = New<Sprite>(New<Sova::String>("images/worker/TC/unitPortrait_TC.png"));
         this->commandActions = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActions.png"), 10, 12, 0);
 
         this->healthBarLine = New<Sova::Line>();
@@ -160,8 +161,14 @@ namespace DsprFrontend
 
                 if (unit != nullptr)
                 {
+                    this->unitPortrait->useSpriteInfo(unit->unitTemplate->sprUnitPortrait);
                     this->unitPortrait->position->set(48 + 6 + (i * 12), 116 + 5);
                     this->unitPortrait->drawSelf(camera, 0, 0);
+
+                    this->unitPortraitTC->useSpriteInfo(unit->unitTemplate->sprUnitPortraitTC);
+                    this->unitPortraitTC->tint = unit->tcSprite->tint;
+                    this->unitPortraitTC->position->set(48 + 6 + (i * 12), 116 + 5);
+                    this->unitPortraitTC->drawSelf(camera, 0, 0);
 
                     this->healthBarLine->setLineStyle(1, Color::Green);
                     this->healthBarLine->position->set(48 + 6 + (i * 12), 116 + 5 + 15);

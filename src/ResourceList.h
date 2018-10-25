@@ -4,15 +4,11 @@
 // Created by connor on 10/24/18.
 //
 
-#include <Sova/References/Refable.h>
-#include <Sova/Common/List.h>
-#include <Sova/Common/String.h>
-
-using namespace Sova;
+#include <Sova/References/Ref.h>
 
 namespace DsprFrontend
 {
-    class ResourceList : public Refable
+    class ResourceList : public Sova::Refable
     {
     public:
         Ref<List<String>> getResources()

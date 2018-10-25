@@ -12,6 +12,8 @@ namespace DsprFrontend {
     class SpriteCatalog : public Sova::Refable {
     public:
         SpriteCatalog();
+
+        //worker
         Ref<Sova::AnimatedSpriteInfo> workerWalkDown = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerWalkUp = Null<Sova::AnimatedSpriteInfo>();
 
@@ -36,8 +38,16 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> workerDieDownTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerDieUpTC = Null<Sova::AnimatedSpriteInfo>();
 
-        Ref<Sova::AnimatedSpriteInfo> temple = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerUnitPortrait = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerUnitPortraitTC = Null<Sova::AnimatedSpriteInfo>();
 
+        //temple
+        Ref<Sova::AnimatedSpriteInfo> temple = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> templeTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> templeUnitPortrait = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> templeUnitPortraitTC = Null<Sova::AnimatedSpriteInfo>();
+
+        //other
         Ref<Sova::AnimatedSpriteInfo> bloodParticle = Null<Sova::AnimatedSpriteInfo>();
     };
 }

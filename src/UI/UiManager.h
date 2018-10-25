@@ -34,6 +34,7 @@ namespace DsprFrontend
         Ref<Sprite> armybar = Null<Sprite>();
         Ref<Sprite> command = Null<Sprite>();
         Ref<Sprite> unitPortrait = Null<Sprite>();
+        Ref<Sprite> unitPortraitTC = Null<Sprite>();
         Ref<Sova::Line> healthBarLine = Null<Sova::Line>();
         Ref<AnimatedSprite> commandActions = Null<AnimatedSprite>();
         Ref<AnimatedSprite> commandActionsHover = Null<AnimatedSprite>();

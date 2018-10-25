@@ -54,6 +54,9 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> sprDieDownTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprDieUpTC = Null<Sova::AnimatedSpriteInfo>();
 
+        Ref<Sova::AnimatedSpriteInfo> sprUnitPortrait = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprUnitPortraitTC = Null<Sova::AnimatedSpriteInfo>();
+
         //sounds
         Ref<Sova::Sound> hitSound = Null<Sova::Sound>();
         Ref<Sova::Sound> selectedSound = Null<Sova::Sound>();
