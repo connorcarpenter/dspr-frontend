@@ -414,7 +414,7 @@ namespace DsprFrontend
     {
         if (this->selectionList->Size() <= 0) return;
 
-        auto orderIndex = UnitOrder::Special;
+        auto orderIndex = UnitOrder::Train;
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
@@ -439,6 +439,7 @@ namespace DsprFrontend
             sb->Append(intObj->ToString());
 
             unit->currentOrder = orderIndex;
+            unit->trainUnit(unitTemplate);
         }
         sb->Append(New<Sova::String>("|"));
         sb->Append(New<Int>(orderIndex)->ToString());

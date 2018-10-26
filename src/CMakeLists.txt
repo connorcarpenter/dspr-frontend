@@ -23,6 +23,7 @@ fips_begin_app(dspr-frontend windowed)
             Unit/BloodParticle.h Unit/BloodParticle.cpp
             Unit/UnitTemplate.h Unit/UnitTemplate.cpp
             Unit/UnitTemplateCatalog.h Unit/UnitTemplateCatalog.cpp
+            Unit/ConstructionQueue.h Unit/ConstructionQueue.cpp
 
             UI/UiManager.h UI/UiManager.cpp
             UI/Cursor.h UI/Cursor.cpp

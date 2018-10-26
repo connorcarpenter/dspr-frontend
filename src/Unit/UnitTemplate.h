@@ -22,6 +22,7 @@ namespace DsprFrontend {
         int maxHealth;
         unsigned int tileWidth = 1;
         unsigned int tileHeight = 1;
+        int buildTime;
 
         //other
         bool hasIdleTurnBehavior = false;
@@ -31,6 +32,8 @@ namespace DsprFrontend {
         bool hasDeathAnimation;
         bool hasInventory = false;
         Ref<ButtonCard> commandCard = Null<ButtonCard>();
+        bool hasConstructionQueue = false;
+
 
         //sprites
         Ref<Sova::AnimatedSpriteInfo> sprWalkDown = Null<Sova::AnimatedSpriteInfo>();
@@ -66,6 +69,7 @@ namespace DsprFrontend {
         Ref<Sova::Sound> hitSound = Null<Sova::Sound>();
         Ref<Sova::Sound> selectedSound = Null<Sova::Sound>();
         Ref<Sova::Sound> dieSound = Null<Sova::Sound>();
+        Ref<Sova::Sound> readySound = Null<Sova::Sound>();
 
         //ui
         Ref<Sova::Sprite> sprSelectCircle = Null<Sova::Sprite>();

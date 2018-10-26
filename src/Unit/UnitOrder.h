@@ -12,6 +12,6 @@ namespace DsprFrontend {
         AttackTarget,
         Stop,
         Hold,
-        Special
+        Train
     };
 }

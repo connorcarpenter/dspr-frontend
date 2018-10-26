@@ -6,6 +6,7 @@
 
 #include <Sova/Graphics/AnimatedSprite.h>
 #include "UnitOrder.h"
+#include "ConstructionQueue.h"
 
 namespace Sova
 {
@@ -23,6 +24,7 @@ namespace DsprFrontend
     public:
 
         Unit(int id, int x, int y, int tribeIndex, Ref<UnitTemplate> unitTemplate);
+        ~Unit();
 
         enum UnitAnimationState { Walking, Attacking };
 
@@ -51,7 +53,9 @@ namespace DsprFrontend
         Ref<UnitTemplate> unitTemplate = Null<UnitTemplate>();
 
         void playDeathSound();
+        void trainUnit(Ref<UnitTemplate> unitTemplate);
 
+        Ref<ConstructionQueue> constructionQueue = Null<ConstructionQueue>();
     private:
 
         void step(float deltaMs);

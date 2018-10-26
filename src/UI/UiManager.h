@@ -8,6 +8,7 @@
 #include <Sova/Graphics/Sprite.h>
 #include <Sova/Graphics/AnimatedSprite.h>
 #include <Sova/Graphics/Line.h>
+#include <Sova/Graphics/Rectangle.h>
 #include "ButtonCard.h"
 
 namespace DsprFrontend
@@ -32,6 +33,7 @@ namespace DsprFrontend
     private:
         Ref<Sprite> mySprite = Null<Sprite>();
         Ref<AnimatedSprite> myAnimatedSprite = Null<AnimatedSprite>();
-        Ref<Sova::Line> healthBarLine = Null<Sova::Line>();
+        Ref<Sova::Line> myLine = Null<Sova::Line>();
+        Ref<Sova::Rectangle> myRectangle = Null<Sova::Rectangle>();
     };
 }

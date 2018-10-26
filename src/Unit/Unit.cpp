@@ -55,6 +55,15 @@ namespace DsprFrontend
         this->updatePosition();
 
         this->SetDepth(this->tilePosition->y * -1);
+
+        if (this->unitTemplate->hasConstructionQueue)
+        {
+            this->constructionQueue = New<ConstructionQueue>();
+        }
+    }
+
+    Unit::~Unit()
+    {
     }
 
     void Unit::step(float deltaFrameMs)
@@ -67,6 +76,12 @@ namespace DsprFrontend
             case Attacking:
                 attackingStep(deltaFrameMs);
                 break;
+        }
+
+        //construction queue
+        if (this->constructionQueue != nullptr)
+        {
+            this->constructionQueue->update(deltaFrameMs / gameServerTickMs);
         }
     }
 
@@ -362,5 +377,12 @@ namespace DsprFrontend
         if (this->unitTemplate->dieSound != nullptr){
             this->unitTemplate->dieSound->Play();
         }
+    }
+
+    void Unit::trainUnit(Ref<UnitTemplate> unitTemplate) {
+        if (!this->unitTemplate->hasConstructionQueue) return;
+        if (this->constructionQueue->atMaxQueue()) return;
+
+        this->constructionQueue->enqueue(unitTemplate);
     }
 }

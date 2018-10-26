@@ -34,10 +34,12 @@ namespace DsprFrontend
         this->worker = New<UnitTemplate>(0);
         this->worker->sight = 6;
         this->worker->maxHealth = 420;
+        this->worker->buildTime = 100;
 
-        //this->worker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
+        this->worker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
         this->worker->selectedSound = New<Sound>(New<Sova::String>("sounds/hello.wav"));
         this->worker->dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
+        this->worker->readySound = New<Sound>(New<Sova::String>("sounds/ready.wav"));
         this->worker->sprSelectCircle = g->unitSelectCircle_1x1;
         this->worker->sprHoverCircle = g->unitHoverCircle_1x1;
         this->worker->hasIdleTurnBehavior = true;
@@ -78,6 +80,7 @@ namespace DsprFrontend
         this->temple = New<UnitTemplate>(1);
         this->temple->sight = 12;
         this->temple->maxHealth = 1500;
+        this->temple->buildTime = 1000;
         this->temple->sprSelectCircle = g->unitSelectCircle_5x5;
         this->temple->sprHoverCircle = g->unitHoverCircle_5x5;
         this->temple->canMove = false;
@@ -86,6 +89,7 @@ namespace DsprFrontend
         this->temple->bleeds = false;
         this->temple->hasDeathAnimation = false;
         this->temple->commandCard = g->buttonCardCatalog->templeCommandCard;
+        this->temple->hasConstructionQueue = true;
 
         this->temple->sprWalkDown = g->spriteCatalog->temple;
         this->temple->sprWalkDownTC = g->spriteCatalog->templeTC;
