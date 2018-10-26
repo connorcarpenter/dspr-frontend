@@ -154,33 +154,20 @@ namespace DsprFrontend
             auto unit = iterator->Get();
             unit->selected = false;
         }
-
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        g->uiManager->currentButtonCard = Null<ButtonCard>();
     }
 
     void UnitManager::addToSelectionList(Ref<Unit> unit)
     {
-        if (!this->selectionList->Contains(unit)) {
-            selectionList->Add(unit);
-        }
-
-        if (this->selectionList->Size() > 0)
+        if (!this->selectionList->Contains(unit))
         {
-            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-            g->uiManager->currentButtonCard = g->buttonCardCatalog->workerCommandCard;
+            selectionList->Add(unit);
         }
     }
 
-    void UnitManager::removeFromSelectionList(Ref<Unit> unit) {
+    void UnitManager::removeFromSelectionList(Ref<Unit> unit)
+    {
         if (this->selectionList->Contains(unit)) {
             selectionList->Remove(unit);
-        }
-
-        if (this->selectionList->Size() == 0)
-        {
-            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-            g->uiManager->currentButtonCard = Null<ButtonCard>();
         }
     }
 
@@ -419,6 +406,44 @@ namespace DsprFrontend
         }
         sb->Append(New<Sova::String>("|"));
         sb->Append(New<Int>(orderIndex)->ToString());
+
+        g->gameServer->send(sb->ToString());
+    }
+
+    void UnitManager::orderCurrentlySelectedUnitsToBuildUnit(Ref<UnitTemplate> unitTemplate)
+    {
+        if (this->selectionList->Size() <= 0) return;
+
+        auto orderIndex = UnitOrder::Special;
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        auto sb = New<Sova::StringBuilder>();
+        sb->Append(New<Sova::String>("unit/1.0/order|"));
+        sb->Append(g->gameServerPlayerToken);
+        sb->Append(New<Sova::String>("|"));
+        bool first = true;
+        for (Ref<ListIterator<Unit>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                sb->Append(New<Sova::String>(","));
+            }
+
+            auto unit = iterator->Get();
+            Ref<Int> intObj = New<Int>(unit->id);
+            sb->Append(intObj->ToString());
+
+            unit->currentOrder = orderIndex;
+        }
+        sb->Append(New<Sova::String>("|"));
+        sb->Append(New<Int>(orderIndex)->ToString());
+        sb->Append(New<Sova::String>(","));
+        sb->Append(New<Int>(unitTemplate->index)->ToString());
 
         g->gameServer->send(sb->ToString());
     }

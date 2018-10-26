@@ -7,6 +7,7 @@
 #include <Unit/UnitOrder.h>
 #include "ButtonActions.h"
 #include "Unit/UnitManager.h"
+#include "Unit/UnitTemplateCatalog.h"
 
 namespace DsprFrontend
 {
@@ -29,5 +30,9 @@ namespace DsprFrontend
 
     void ButtonActions::stopAction() {
         this->g->unitManager->orderCurrentlySelectedUnits(UnitOrder::Stop);
+    }
+
+    void ButtonActions::createVillagerAction() {
+        this->g->unitManager->orderCurrentlySelectedUnitsToBuildUnit(this->g->unitTemplateCatalog->worker);
     }
 }

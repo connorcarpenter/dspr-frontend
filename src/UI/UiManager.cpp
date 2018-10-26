@@ -155,7 +155,7 @@ namespace DsprFrontend
         this->mySprite->position->set(48, 109);
         this->mySprite->drawSelf(camera, 0, 0);
 
-
+        Ref<Unit> firstUnit = Null<Unit>();
 
         {
             if (g->unitManager->getSelectedUnits()->Size() <= 0)
@@ -178,7 +178,7 @@ namespace DsprFrontend
             {
                 auto selectedUnitList = g->unitManager->getSelectedUnits();
 
-                auto firstUnit = selectedUnitList->At(0);
+                firstUnit = selectedUnitList->At(0);
                 if (firstUnit != nullptr)
                 {
                     //draw itembar
@@ -197,6 +197,9 @@ namespace DsprFrontend
                     this->mySprite->tint = firstUnit->tcSprite->tint;
                     this->mySprite->position->set(55, 112);
                     this->mySprite->drawSelf(camera, 0, 0);
+
+                    //select commandcard
+                    this->currentButtonCard = firstUnit->unitTemplate->commandCard;
                 }
 
                 if (g->unitManager->getSelectedUnits()->Size() == 1)
@@ -272,7 +275,7 @@ namespace DsprFrontend
         this->mySprite->position->set(204, 100);
         this->mySprite->drawSelf(camera, 0, 0);
 
-        if (this->currentButtonCard != nullptr)
+        if (firstUnit != nullptr && this->currentButtonCard != nullptr)
         {
             auto iterator = this->currentButtonCard->buttonList->GetIterator();
 
@@ -287,21 +290,38 @@ namespace DsprFrontend
                     int leftX = 208 + (11 * i);
                     int upY = 103 + 13*j;
 
+                    Color buttonTint = Color::LightGray;
+
                     if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
                                          leftX, upY,
                                          leftX + 10, upY + 12))
                     {
-                        this->myAnimatedSprite->tint = Color::White;
+                        buttonTint = Color::White;
+                    }
+
+                    if (button->usesSubframes)
+                    {
+                        this->myAnimatedSprite->useAnimatedSpriteInfo(button->spriteInfo);
+                        this->myAnimatedSprite->position->set(leftX, upY);
+                        this->myAnimatedSprite->tint = buttonTint;
+                        this->myAnimatedSprite->imageIndex = button->imageIndex;
+                        this->myAnimatedSprite->drawSelf(camera, 0, 0);
                     }
                     else
                     {
-                        this->myAnimatedSprite->tint = Color::LightGray;
-                    }
+                        this->mySprite->useSpriteInfo(button->spriteInfo);
+                        this->mySprite->position->set(leftX, upY);
+                        this->mySprite->tint = buttonTint;
+                        this->mySprite->drawSelf(camera, 0, 0);
 
-                    this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprCommandActions);
-                    this->myAnimatedSprite->position->set(leftX, upY);
-                    this->myAnimatedSprite->imageIndex = button->imageIndex;
-                    this->myAnimatedSprite->drawSelf(camera, 0, 0);
+                        if (button->usesTeamColor)
+                        {
+                            this->mySprite->useSpriteInfo(button->tcSpriteInfo);
+                            this->mySprite->position->set(leftX, upY);
+                            this->mySprite->tint = Color::MixColors(buttonTint, firstUnit->tcSprite->tint);
+                            this->mySprite->drawSelf(camera, 0, 0);
+                        }
+                    }
 
                     iterator->Next();
                 }

@@ -9,6 +9,7 @@
 #include "Sova/Common/Int.h"
 #include "UnitOrder.h"
 #include "RefIsoGrid.h"
+#include "UnitTemplate.h"
 
 namespace DsprFrontend
 {
@@ -37,10 +38,12 @@ namespace DsprFrontend
         Ref<List<Unit>> getSelectedUnits();
         Ref<Unit> getUnitWithId(int id);
         void orderCurrentlySelectedUnits(DsprFrontend::UnitOrder orderIndex);
+        void orderCurrentlySelectedUnitsToBuildUnit(Ref<UnitTemplate> unitTemplate);
         void receiveGrid(int w, int h);
 
         Ref<List<Unit>> selectionList = Null<List<Unit>>();
         const int maxSelectedUnits = 12;
+
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
         bool rightButtonAlreadyClicked = false;
@@ -51,5 +54,6 @@ namespace DsprFrontend
         int gridHeight;
 
         void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
+
     };
 }

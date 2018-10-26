@@ -17,6 +17,7 @@ namespace DsprFrontend {
         void stopAction();
         void holdAction();
         void attackAction();
+        void createVillagerAction();
     private:
         Global* g = nullptr;
     };

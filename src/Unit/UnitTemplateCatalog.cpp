@@ -6,6 +6,7 @@
 #include <Global.h>
 #include "UnitTemplateCatalog.h"
 #include "SpriteCatalog.h"
+#include "../UI/ButtonCardCatalog.h"
 
 namespace DsprFrontend
 {
@@ -44,6 +45,7 @@ namespace DsprFrontend
         this->worker->bleeds = true;
         this->worker->hasDeathAnimation = true;
         this->worker->hasInventory = true;
+        this->worker->commandCard = g->buttonCardCatalog->workerCommandCard;
 
         this->worker->sprWalkDown = g->spriteCatalog->workerWalkDown;
         this->worker->sprWalkUp = g->spriteCatalog->workerWalkUp;
@@ -83,6 +85,8 @@ namespace DsprFrontend
         this->temple->tileHeight = 5;
         this->temple->bleeds = false;
         this->temple->hasDeathAnimation = false;
+        this->temple->commandCard = g->buttonCardCatalog->templeCommandCard;
+
         this->temple->sprWalkDown = g->spriteCatalog->temple;
         this->temple->sprWalkDownTC = g->spriteCatalog->templeTC;
         this->temple->sprUnitPortrait = g->spriteCatalog->templeUnitPortrait;

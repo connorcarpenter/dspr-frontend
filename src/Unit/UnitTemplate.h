@@ -9,6 +9,7 @@
 #include <Sova/Audio/Sound.h>
 #include <Sova/Graphics/Sprite.h>
 #include <Sova/Graphics/AnimatedSprite.h>
+#include <UI/ButtonCard.h>
 
 namespace DsprFrontend {
     class UnitTemplate : public Sova::Refable {
@@ -29,6 +30,7 @@ namespace DsprFrontend {
         bool bleeds;
         bool hasDeathAnimation;
         bool hasInventory = false;
+        Ref<ButtonCard> commandCard = Null<ButtonCard>();
 
         //sprites
         Ref<Sova::AnimatedSpriteInfo> sprWalkDown = Null<Sova::AnimatedSpriteInfo>();

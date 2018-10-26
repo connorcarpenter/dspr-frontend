@@ -11,6 +11,7 @@ namespace DsprFrontend {
         Follow,
         AttackTarget,
         Stop,
-        Hold
+        Hold,
+        Special
     };
 }

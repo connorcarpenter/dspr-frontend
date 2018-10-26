@@ -18,6 +18,7 @@ namespace DsprFrontend {
     public:
         ButtonCardCatalog();
         Ref<ButtonCard> workerCommandCard = Null<ButtonCard>();
+        Ref<ButtonCard> templeCommandCard = Null<ButtonCard>();
         Ref<Button> attackButton = Null<Button>();
     private:
         Ref<ButtonActions> buttonActions = Null<ButtonActions>();

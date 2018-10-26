@@ -91,6 +91,7 @@ namespace DsprFrontend
         g->uiManager->SetDepth(-9990);
         g->world->AddChild(g->uiManager);
 
+        g->buttonCardCatalog = New<ButtonCardCatalog>();
         g->unitTemplateCatalog = New<UnitTemplateCatalog>();
 
         g->fogManager = New<FogManager>();
@@ -110,8 +111,6 @@ namespace DsprFrontend
 
         g->minimap = New<Minimap>();
         g->world->AddChild(g->minimap);
-
-        g->buttonCardCatalog = New<ButtonCardCatalog>();
     }
 
     int gcCount = 0;
