@@ -45,5 +45,12 @@ namespace DsprFrontend
         this->templeBigPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple/temple_bigUnitPortrait_TC.png"), 29, 20, 0, 0, 0);
 
         this->bloodParticle = New<AnimatedSpriteInfo>(New<Sova::String>("images/bloodParticle.png"), 5, 5, 1, 2, 2);
+
+        this->sprMinimap = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/minimap.png"), true, 0, 0);
+        this->sprPortraitBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/portraitbar.png"), true, 0, 0);
+        this->sprItemBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/itembar.png"), 44, 35, 0, 0, 0);
+        this->sprArmyBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/armybar.png"), 70, 35, 0, 0, 0);
+        this->sprCommandBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/commandcard.png"), true, 0, 0);
+        this->sprCommandActions = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/commandActions.png"), 10, 12, 0, 0, 0);
     }
 }

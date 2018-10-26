@@ -11,6 +11,7 @@
 #include "Unit/UnitManager.h"
 #include "Cursor.h"
 #include "Unit/UnitTemplate.h"
+#include "SpriteCatalog.h"
 
 namespace DsprFrontend
 {
@@ -37,12 +38,8 @@ namespace DsprFrontend
         g->moveMarker->anchor->set(5, 4);
         /////////////////////////
 
-        this->minimap = New<Sprite>(New<Sova::String>("images/ui/minimap.png"));
-        this->armybar = New<Sprite>(New<Sova::String>("images/ui/armybar.png"));
-        this->command = New<Sprite>(New<Sova::String>("images/ui/commandcard.png"));
-        this->unitPortrait = New<Sprite>(New<Sova::String>("images/worker/workerPortrait.png"));
-        this->unitPortraitTC = New<Sprite>(New<Sova::String>("images/worker/TC/workerPortrait_TC.png"));
-        this->commandActions = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActions.png"), 10, 12, 0);
+        this->mySprite = New<Sprite>(New<Sova::String>("images/ui/minimap.png"));
+        this->myAnimatedSprite = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActions.png"), 10, 12, 0);
 
         this->healthBarLine = New<Sova::Line>();
         this->healthBarLine->setLineStyle(1, Color::Green);
@@ -142,40 +139,86 @@ namespace DsprFrontend
         return Null<Point>();
     }
 
-    void UiManager::Draw(Ref<Camera> camera, int xoffset, int yoffset) {
-
-        this->minimap->position->set(0, 100);
-        this->minimap->drawSelf(camera, 0, 0);
-
-        //draw armybar
-        this->armybar->position->set(48, 109);
-        this->armybar->drawSelf(camera, 0, 0);
-
+    void UiManager::Draw(Ref<Camera> camera, int xoffset, int yoffset)
+    {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        //draw minimap
+        this->mySprite->useSpriteInfo(g->spriteCatalog->sprMinimap);
+        this->mySprite->tint = Color::White;
+        this->mySprite->position->set(0, 100);
+        this->mySprite->drawSelf(camera, 0, 0);
+
+        //draw portraitbar
+        this->mySprite->useSpriteInfo(g->spriteCatalog->sprPortraitBar);
+        this->mySprite->tint = Color::White;
+        this->mySprite->position->set(48, 109);
+        this->mySprite->drawSelf(camera, 0, 0);
+
+
+
         {
-            if (g->unitManager->getSelectedUnits()->Size() > 0)
+            if (g->unitManager->getSelectedUnits()->Size() <= 0)
+            {
+                //draw individual armybar
+                this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprArmyBar);
+                this->myAnimatedSprite->tint = Color::White;
+                this->myAnimatedSprite->position->set(90, 109);
+                this->myAnimatedSprite->imageIndex = 0;
+                this->myAnimatedSprite->drawSelf(camera, 0, 0);
+
+                //draw empty itembar
+                this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprItemBar);
+                this->myAnimatedSprite->tint = Color::White;
+                this->myAnimatedSprite->position->set(160, 109);
+                this->myAnimatedSprite->imageIndex = 1;
+                this->myAnimatedSprite->drawSelf(camera, 0, 0);
+            }
+            else
             {
                 auto selectedUnitList = g->unitManager->getSelectedUnits();
 
                 auto firstUnit = selectedUnitList->At(0);
                 if (firstUnit != nullptr)
                 {
-                    this->unitPortrait->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
-                    this->unitPortrait->position->set(55, 112);
-                    this->unitPortrait->drawSelf(camera, 0, 0);
+                    //draw itembar
+                    this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprItemBar);
+                    this->myAnimatedSprite->tint = Color::White;
+                    this->myAnimatedSprite->position->set(160, 109);
+                    this->myAnimatedSprite->imageIndex = (firstUnit->unitTemplate->hasInventory) ? 0 : 1;
+                    this->myAnimatedSprite->drawSelf(camera, 0, 0);
 
-                    this->unitPortraitTC->useSpriteInfo(firstUnit->unitTemplate->sprBigPortraitTC);
-                    this->unitPortraitTC->tint = firstUnit->tcSprite->tint;
-                    this->unitPortraitTC->position->set(55, 112);
-                    this->unitPortraitTC->drawSelf(camera, 0, 0);
+                    this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
+                    this->mySprite->tint = Color::White;
+                    this->mySprite->position->set(55, 112);
+                    this->mySprite->drawSelf(camera, 0, 0);
+
+                    this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortraitTC);
+                    this->mySprite->tint = firstUnit->tcSprite->tint;
+                    this->mySprite->position->set(55, 112);
+                    this->mySprite->drawSelf(camera, 0, 0);
                 }
 
                 if (g->unitManager->getSelectedUnits()->Size() == 1)
                 {
+                    //draw individual armybar
+                    this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprArmyBar);
+                    this->myAnimatedSprite->tint = Color::White;
+                    this->myAnimatedSprite->position->set(90, 109);
+                    this->myAnimatedSprite->imageIndex = 0;
+                    this->myAnimatedSprite->drawSelf(camera, 0, 0);
+
                     //show individual unit stats
                 }
                 else
                 {
+                    //draw multi-select armybar
+                    this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprArmyBar);
+                    this->myAnimatedSprite->tint = Color::White;
+                    this->myAnimatedSprite->position->set(90, 109);
+                    this->myAnimatedSprite->imageIndex = 1;
+                    this->myAnimatedSprite->drawSelf(camera, 0, 0);
+
                     //show all selected units
 
                     int i = 0;
@@ -186,14 +229,15 @@ namespace DsprFrontend
 
                         if (unit != nullptr)
                         {
-                            this->unitPortrait->useSpriteInfo(unit->unitTemplate->sprUnitPortrait);
-                            this->unitPortrait->position->set(87 + 6 + (i * 11), 107 + 5 + (15 * j));
-                            this->unitPortrait->drawSelf(camera, 0, 0);
+                            this->mySprite->useSpriteInfo(unit->unitTemplate->sprUnitPortrait);
+                            this->mySprite->tint = Color::White;
+                            this->mySprite->position->set(87 + 6 + (i * 11), 107 + 5 + (15 * j));
+                            this->mySprite->drawSelf(camera, 0, 0);
 
-                            this->unitPortraitTC->useSpriteInfo(unit->unitTemplate->sprUnitPortraitTC);
-                            this->unitPortraitTC->tint = unit->tcSprite->tint;
-                            this->unitPortraitTC->position->set(87 + 6 + (i * 11), 107 + 5 + (15 * j));
-                            this->unitPortraitTC->drawSelf(camera, 0, 0);
+                            this->mySprite->useSpriteInfo(unit->unitTemplate->sprUnitPortraitTC);
+                            this->mySprite->tint = unit->tcSprite->tint;
+                            this->mySprite->position->set(87 + 6 + (i * 11), 107 + 5 + (15 * j));
+                            this->mySprite->drawSelf(camera, 0, 0);
 
                             this->healthBarLine->setLineStyle(1, Color::Green);
                             this->healthBarLine->position->set(87 + 6 + (i * 11), 107 + 2 + 15 + (15 * j));
@@ -223,8 +267,10 @@ namespace DsprFrontend
         }
 
         //draw command card
-        this->command->position->set(204, 100);
-        this->command->drawSelf(camera, 0, 0);
+        this->mySprite->useSpriteInfo(g->spriteCatalog->sprCommandBar);
+        this->mySprite->tint = Color::White;
+        this->mySprite->position->set(204, 100);
+        this->mySprite->drawSelf(camera, 0, 0);
 
         if (this->currentButtonCard != nullptr)
         {
@@ -243,15 +289,19 @@ namespace DsprFrontend
 
                     if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
                                          leftX, upY,
-                                         leftX + 10, upY + 12)) {
-                        this->commandActions->tint = Color::White;
-                    } else {
-                        this->commandActions->tint = Color::LightGray;
+                                         leftX + 10, upY + 12))
+                    {
+                        this->myAnimatedSprite->tint = Color::White;
+                    }
+                    else
+                    {
+                        this->myAnimatedSprite->tint = Color::LightGray;
                     }
 
-                    this->commandActions->position->set(leftX, upY);
-                    this->commandActions->imageIndex = button->imageIndex;
-                    this->commandActions->drawSelf(camera, 0, 0);
+                    this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprCommandActions);
+                    this->myAnimatedSprite->position->set(leftX, upY);
+                    this->myAnimatedSprite->imageIndex = button->imageIndex;
+                    this->myAnimatedSprite->drawSelf(camera, 0, 0);
 
                     iterator->Next();
                 }

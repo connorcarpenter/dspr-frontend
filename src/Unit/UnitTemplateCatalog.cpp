@@ -43,6 +43,7 @@ namespace DsprFrontend
         this->worker->spriteFaceLeftXoffset = -2;
         this->worker->bleeds = true;
         this->worker->hasDeathAnimation = true;
+        this->worker->hasInventory = true;
 
         this->worker->sprWalkDown = g->spriteCatalog->workerWalkDown;
         this->worker->sprWalkUp = g->spriteCatalog->workerWalkUp;

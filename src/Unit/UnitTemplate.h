@@ -28,6 +28,7 @@ namespace DsprFrontend {
         short spriteFaceLeftXoffset = 0;
         bool bleeds;
         bool hasDeathAnimation;
+        bool hasInventory = false;
 
         //sprites
         Ref<Sova::AnimatedSpriteInfo> sprWalkDown = Null<Sova::AnimatedSpriteInfo>();
