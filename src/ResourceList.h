@@ -21,6 +21,8 @@ namespace DsprFrontend
             resources->Add(New<String>("images/fogTile.png"));
             resources->Add(New<String>("images/bloodParticle.png"));
 
+            resources->Add(New<String>("images/manafount.png"));
+
             resources->Add(New<String>("images/temple/temple.png"));
             resources->Add(New<String>("images/temple/temple_TC.png"));
             resources->Add(New<String>("images/temple/temple_unitPortrait.png"));
@@ -62,6 +64,10 @@ namespace DsprFrontend
             resources->Add(New<String>("images/ui/unitSelection.png"));
             resources->Add(New<String>("images/ui/5x5_hovercircle.png"));
             resources->Add(New<String>("images/ui/5x5_selectioncircle.png"));
+            resources->Add(New<String>("images/ui/2x2_hovercircle.png"));
+            resources->Add(New<String>("images/ui/2x2_selectioncircle.png"));
+            resources->Add(New<String>("images/ui/3x3_hovercircle.png"));
+            resources->Add(New<String>("images/ui/3x3_selectioncircle.png"));
             resources->Add(New<String>("images/ui/moveMarker.png"));
 
             resources->Add(New<String>("sounds/hello.wav"));

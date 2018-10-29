@@ -56,6 +56,7 @@ namespace DsprFrontend
         void trainUnit(Ref<UnitTemplate> unitTemplate);
 
         Ref<ConstructionQueue> constructionQueue = Null<ConstructionQueue>();
+        Ref<SpecificUnit> specificUnit = Null<SpecificUnit>();
     private:
 
         void step(float deltaMs);
@@ -81,6 +82,8 @@ namespace DsprFrontend
         float interpolation = 0;
         int stamina = 100;
         int stillFrames = 0;
+
+        Ref<Point> centerAdjust = Null<Point>();
 
         void walkingStep(float deltaFrameMs);
         void attackingStep(float deltaFrameMs);

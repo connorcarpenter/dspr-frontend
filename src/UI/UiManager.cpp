@@ -26,6 +26,20 @@ namespace DsprFrontend
         g->unitSelectCircle_1x1 = New<Sprite>(New<Sova::String>("images/ui/unitSelection.png"));
         g->unitSelectCircle_1x1->anchor->set(8, 5);
 
+        g->unitHoverCircle_3x3 = New<AnimatedSprite>(New<Sova::String>("images/ui/3x3_hovercircle.png"), 66, 38, 1);
+        g->unitHoverCircle_3x3->imageSpeed = 0.1f;
+        g->unitHoverCircle_3x3->anchor->set(33, 19);
+
+        g->unitSelectCircle_3x3 = New<Sprite>(New<Sova::String>("images/ui/3x3_selectioncircle.png"));
+        g->unitSelectCircle_3x3->anchor->set(31, 17);
+
+        g->unitHoverCircle_2x2 = New<AnimatedSprite>(New<Sova::String>("images/ui/2x2_hovercircle.png"), 46, 28, 1);
+        g->unitHoverCircle_2x2->imageSpeed = 0.1f;
+        g->unitHoverCircle_2x2->anchor->set(23, 14);
+
+        g->unitSelectCircle_2x2 = New<Sprite>(New<Sova::String>("images/ui/2x2_selectioncircle.png"));
+        g->unitSelectCircle_2x2->anchor->set(21, 27);
+
         g->unitHoverCircle_5x5 = New<AnimatedSprite>(New<Sova::String>("images/ui/5x5_hovercircle.png"), 106, 58, 1);
         g->unitHoverCircle_5x5->imageSpeed = 0.1f;
         g->unitHoverCircle_5x5->anchor->set(53, 28);

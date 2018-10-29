@@ -10,8 +10,10 @@
 #include <Sova/Graphics/Sprite.h>
 #include <Sova/Graphics/AnimatedSprite.h>
 #include <UI/ButtonCard.h>
+#include <Unit/SpecificUnit/SpecificUnit.h>
 
 namespace DsprFrontend {
+    class Unit;
     class UnitTemplate : public Sova::Refable {
     public:
         UnitTemplate(int index);
@@ -23,6 +25,7 @@ namespace DsprFrontend {
         unsigned int tileWidth = 1;
         unsigned int tileHeight = 1;
         int buildTime;
+        Ref<Sova::Point> sprCenterAdjust = Null<Sova::Point>();
 
         //other
         bool hasIdleTurnBehavior = false;
@@ -74,5 +77,8 @@ namespace DsprFrontend {
         //ui
         Ref<Sova::Sprite> sprSelectCircle = Null<Sova::Sprite>();
         Ref<Sova::AnimatedSprite> sprHoverCircle = Null<Sova::AnimatedSprite>();
+
+        //special
+        std::function<Ref<SpecificUnit>(Unit* unit)> createSpecificUnitFunction = nullptr;
     };
 }

@@ -323,7 +323,7 @@ namespace DsprFrontend
         {
             targetedUnitId = targetedUnit->id;
             Ref<Unit> firstSelectedUnit = this->selectionList->At(0);
-            orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
+            orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex || targetedUnit->tribeIndex==-1) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
                          Follow : AttackTarget;
         }
 

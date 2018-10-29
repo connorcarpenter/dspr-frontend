@@ -34,6 +34,15 @@ namespace DsprFrontend
         this->health = this->unitTemplate->maxHealth;
 
         this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
+        if(this->unitTemplate->tileWidth % 2 == 0)
+        {
+            this->centerAdjust = New<Point>(g->tileManager->tileWidth/2,g->tileManager->tileHeight/2);
+        }
+        if(this->unitTemplate->sprCenterAdjust != nullptr)
+        {
+            this->centerAdjust->x += this->unitTemplate->sprCenterAdjust->x;
+            this->centerAdjust->y += this->unitTemplate->sprCenterAdjust->y;
+        }
 
         this->tcSprite = New<AnimatedSprite>();
         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
@@ -60,6 +69,11 @@ namespace DsprFrontend
         {
             this->constructionQueue = New<ConstructionQueue>();
         }
+
+        if (this->unitTemplate->createSpecificUnitFunction != nullptr)
+        {
+            this->specificUnit = this->unitTemplate->createSpecificUnitFunction(this);
+        }
     }
 
     Unit::~Unit()
@@ -82,6 +96,12 @@ namespace DsprFrontend
         if (this->constructionQueue != nullptr)
         {
             this->constructionQueue->update(deltaFrameMs / gameServerTickMs);
+        }
+
+        //call into specific unit
+        if (this->specificUnit != nullptr)
+        {
+            this->specificUnit->stepFunction();
         }
     }
 
@@ -334,8 +354,16 @@ namespace DsprFrontend
 
         if (this->selected)
         {
-            this->unitTemplate->sprSelectCircle->tint = (this->tribeIndex == g->playersTribeIndex) ? DsprColors::LightGreen : DsprColors::LightRed;
-            this->unitTemplate->sprSelectCircle->position->set(this->position->x, this->position->y);
+            this->unitTemplate->sprSelectCircle->tint = (this->tribeIndex==-1) ?
+                                                        DsprColors::LightYellow :
+                                                        (this->tribeIndex == g->playersTribeIndex) ?
+                                                        DsprColors::LightGreen :
+                                                        DsprColors::LightRed;
+            if (this->centerAdjust == nullptr) {
+                this->unitTemplate->sprSelectCircle->position->set(this->position->x, this->position->y);
+            } else {
+                this->unitTemplate->sprSelectCircle->position->set(this->position->x - this->centerAdjust->x, this->position->y - this->centerAdjust->y);
+            }
             this->unitTemplate->sprSelectCircle->drawSelf(camera, xoffset, yoffset);
 
             if (!this->tilePosition->Equals(this->moveTarget))
@@ -351,18 +379,38 @@ namespace DsprFrontend
 
         if (this->hovering)
         {
-            this->unitTemplate->sprHoverCircle->tint = (this->tribeIndex == g->playersTribeIndex) ? DsprColors::LightGreen : DsprColors::LightRed;
-            this->unitTemplate->sprHoverCircle->position->set(this->position->x, this->position->y);
-            this->unitTemplate->sprHoverCircle->drawSelf(camera, xoffset, yoffset);
+            if (this->unitTemplate->sprHoverCircle != nullptr) {
+                this->unitTemplate->sprHoverCircle->tint = (this->tribeIndex==-1) ?
+                                                           DsprColors::LightYellow :
+                                                           (this->tribeIndex == g->playersTribeIndex) ?
+                                                           DsprColors::LightGreen :
+                                                           DsprColors::LightRed;
+                if (this->centerAdjust == nullptr) {
+                    this->unitTemplate->sprHoverCircle->position->set(this->position->x, this->position->y);
+                }
+                else {
+                    this->unitTemplate->sprHoverCircle->position->set(this->position->x - this->centerAdjust->x, this->position->y - this->centerAdjust->y);
+                }
+                this->unitTemplate->sprHoverCircle->drawSelf(camera, xoffset, yoffset);
+            }
         }
 
         int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
-        AnimatedSprite::drawSelf(camera, newOffset, yoffset);
+
+        if (this->centerAdjust == nullptr) {
+            AnimatedSprite::drawSelf(camera, newOffset, yoffset);
+        } else {
+            AnimatedSprite::drawSelf(camera, newOffset - this->centerAdjust->x, yoffset - this->centerAdjust->y);
+        }
 
         //TC
 
         this->tcSprite->imageIndex = imageIndex;
-        this->tcSprite->position->set(this->position);
+        if (this->centerAdjust == nullptr) {
+            this->tcSprite->position->set(this->position);
+        } else {
+            this->tcSprite->position->set(this->position->x - this->centerAdjust->x, this->position->y - this->centerAdjust->y);
+        }
         this->tcSprite->scale->x = this->scale->x;
         this->tcSprite->drawSelf(camera, newOffset, yoffset);
     }

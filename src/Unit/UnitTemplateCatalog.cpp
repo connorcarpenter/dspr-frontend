@@ -4,6 +4,7 @@
 
 #include <Sova/Internal/InternalApp.h>
 #include <Global.h>
+#include <Unit/SpecificUnit/Manafount.h>
 #include "UnitTemplateCatalog.h"
 #include "SpriteCatalog.h"
 #include "../UI/ButtonCardCatalog.h"
@@ -14,10 +15,12 @@ namespace DsprFrontend
     {
         initWorker();
         initTemple();
+        initManafount();
 
         this->templateList = New<List<UnitTemplate>>();
         this->templateList->Add(this->worker);
         this->templateList->Add(this->temple);
+        this->templateList->Add(this->manafount);
     }
 
     Ref<UnitTemplate> UnitTemplateCatalog::findTemplateByIndex(int index)
@@ -97,5 +100,26 @@ namespace DsprFrontend
         this->temple->sprUnitPortraitTC = g->spriteCatalog->templeUnitPortraitTC;
         this->temple->sprBigPortrait = g->spriteCatalog->templeBigPortrait;
         this->temple->sprBigPortraitTC = g->spriteCatalog->templeBigPortraitTC;
+    }
+
+    void UnitTemplateCatalog::initManafount() {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        this->manafount = New<UnitTemplate>(2);
+//        this->manafount->sprSelectCircle = g->unitSelectCircle_3x3;
+//        this->manafount->sprHoverCircle = g->unitHoverCircle_3x3;
+        this->manafount->canMove = false;
+        this->manafount->tileWidth = 2;
+        this->manafount->tileHeight = 2;
+        this->manafount->bleeds = false;
+        this->manafount->hasDeathAnimation = false;
+        this->manafount->sprSelectCircle = g->unitSelectCircle_2x2;
+        this->manafount->sprHoverCircle = g->unitHoverCircle_2x2;
+        this->manafount->sprCenterAdjust = New<Point>(1,-3);
+
+        this->manafount->sprWalkDown = g->spriteCatalog->manafount;
+        this->manafount->createSpecificUnitFunction = [&](Unit* unit) {
+            return New<DsprFrontend::Manafount>(unit);
+        };
     }
 }

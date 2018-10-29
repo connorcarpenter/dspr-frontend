@@ -52,5 +52,7 @@ namespace DsprFrontend
         this->sprArmyBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/armybar.png"), 70, 35, 0, 0, 0);
         this->sprCommandBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/commandcard.png"), true, 0, 0);
         this->sprCommandActions = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/commandActions.png"), 10, 12, 0, 0, 0);
+
+        this->manafount = New<AnimatedSpriteInfo>(New<Sova::String>("images/manafount.png"), 41, 47, 1, 20, 34);
     }
 }

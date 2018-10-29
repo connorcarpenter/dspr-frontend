@@ -116,6 +116,7 @@ namespace DsprFrontend
 
             if (unitHovering != nullptr) {
                 this->tint = (unitHovering->tribeIndex == g->playersTribeIndex) ? DsprColors::Green : DsprColors::Red;
+                if (unitHovering->tribeIndex == -1) this->tint = DsprColors::Yellow;
 
                 if (this->cursorIsHovering)
                 {
@@ -320,6 +321,8 @@ namespace DsprFrontend
         }
 
         g->unitHoverCircle_1x1->Update(0);
+        g->unitHoverCircle_2x2->Update(0);
+        g->unitHoverCircle_3x3->Update(0);
         g->unitHoverCircle_5x5->Update(0);
         g->moveMarker->Update(0);
     }

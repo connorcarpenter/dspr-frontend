@@ -25,6 +25,9 @@ fips_begin_app(dspr-frontend windowed)
             Unit/UnitTemplateCatalog.h Unit/UnitTemplateCatalog.cpp
             Unit/ConstructionQueue.h Unit/ConstructionQueue.cpp
 
+            Unit/SpecificUnit/SpecificUnit.h Unit/SpecificUnit/SpecificUnit.cpp
+            Unit/SpecificUnit/Manafount.h Unit/SpecificUnit/Manafount.cpp
+
             UI/UiManager.h UI/UiManager.cpp
             UI/Cursor.h UI/Cursor.cpp
             UI/ButtonCardCatalog.h UI/ButtonCardCatalog.cpp

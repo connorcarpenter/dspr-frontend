@@ -43,11 +43,6 @@ namespace DsprFrontend
         Ref<TileManager> tileManager = Null<TileManager>();
         Ref<UnitManager> unitManager = Null<UnitManager>();
         Ref<Cursor> cursor = Null<Cursor>();
-        Ref<AnimatedSprite> unitHoverCircle_1x1 = Null<AnimatedSprite>();
-        Ref<Sprite> unitSelectCircle_1x1 = Null<Sprite>();
-        Ref<AnimatedSprite> unitHoverCircle_5x5 = Null<AnimatedSprite>();
-        Ref<Sprite> unitSelectCircle_5x5 = Null<Sprite>();
-        Ref<AnimatedSprite> moveMarker = Null<AnimatedSprite>();
         Ref<NetworkManager> networkManager = Null<NetworkManager>();
         Ref<FogManager> fogManager = Null<FogManager>();
         Ref<UiManager> uiManager = Null<UiManager>();
@@ -57,6 +52,17 @@ namespace DsprFrontend
         Ref<IsoBoxCache> isoBoxCache = Null<IsoBoxCache>();
         Ref<ButtonCardCatalog> buttonCardCatalog = Null<ButtonCardCatalog>();
         Ref<UnitTemplateCatalog> unitTemplateCatalog = Null<UnitTemplateCatalog>();
+
+        Ref<AnimatedSprite> moveMarker = Null<AnimatedSprite>();
+        Ref<AnimatedSprite> unitHoverCircle_1x1 = Null<AnimatedSprite>();
+        Ref<Sprite> unitSelectCircle_1x1 = Null<Sprite>();
+        Ref<AnimatedSprite> unitHoverCircle_5x5 = Null<AnimatedSprite>();
+        Ref<Sprite> unitSelectCircle_5x5 = Null<Sprite>();
+        Ref<AnimatedSprite> unitHoverCircle_3x3 = Null<AnimatedSprite>();
+        Ref<Sprite> unitSelectCircle_3x3 = Null<Sprite>();
+        Ref<AnimatedSprite> unitHoverCircle_2x2 = Null<AnimatedSprite>();
+        Ref<Sprite> unitSelectCircle_2x2 = Null<Sprite>();
+
         int playersTribeIndex = -1;
     };
 }
