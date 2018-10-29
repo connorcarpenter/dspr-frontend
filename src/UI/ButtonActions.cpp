@@ -35,4 +35,8 @@ namespace DsprFrontend
     void ButtonActions::createVillagerAction() {
         this->g->unitManager->orderCurrentlySelectedUnitsToBuildUnit(this->g->unitTemplateCatalog->worker);
     }
+
+    void ButtonActions::gatherAction() {
+        this->g->unitManager->issueUnitOrderGather();
+    }
 }

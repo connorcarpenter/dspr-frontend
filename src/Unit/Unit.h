@@ -26,7 +26,7 @@ namespace DsprFrontend
         Unit(int id, int x, int y, int tribeIndex, Ref<UnitTemplate> unitTemplate);
         ~Unit();
 
-        enum UnitAnimationState { Walking, Attacking };
+        enum UnitAnimationState { Walking, Attacking, Gathering };
 
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
         void newNextTilePosition(int x, int y);
@@ -91,5 +91,9 @@ namespace DsprFrontend
         void updatePosition();
 
         void updateTilePosition(Ref<Point> newPosition);
+
+        void handleFacing(int heading);
+
+        void gatheringStep(float deltaFrameMs);
     };
 }

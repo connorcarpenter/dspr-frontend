@@ -13,14 +13,11 @@ namespace DsprFrontend
 {
     UnitTemplateCatalog::UnitTemplateCatalog()
     {
+        this->templateList = New<List<UnitTemplate>>();
+
         initWorker();
         initTemple();
         initManafount();
-
-        this->templateList = New<List<UnitTemplate>>();
-        this->templateList->Add(this->worker);
-        this->templateList->Add(this->temple);
-        this->templateList->Add(this->manafount);
     }
 
     Ref<UnitTemplate> UnitTemplateCatalog::findTemplateByIndex(int index)
@@ -51,6 +48,7 @@ namespace DsprFrontend
         this->worker->hasDeathAnimation = true;
         this->worker->hasInventory = true;
         this->worker->commandCard = g->buttonCardCatalog->workerCommandCard;
+        this->worker->canGather = true;
 
         this->worker->sprWalkDown = g->spriteCatalog->workerWalkDown;
         this->worker->sprWalkUp = g->spriteCatalog->workerWalkUp;
@@ -74,6 +72,17 @@ namespace DsprFrontend
         this->worker->sprUnitPortraitTC = g->spriteCatalog->workerUnitPortraitTC;
         this->worker->sprBigPortrait = g->spriteCatalog->workerBigPortrait;
         this->worker->sprBigPortraitTC = g->spriteCatalog->workerBigPortraitTC;
+
+        this->worker->sprSummonFront = g->spriteCatalog->workerSummonFront;
+        this->worker->sprSummonFrontTC = g->spriteCatalog->workerSummonFrontTC;
+        this->worker->sprSummonBack = g->spriteCatalog->workerSummonBack;
+        this->worker->sprSummonBackTC = g->spriteCatalog->workerSummonBackTC;
+        this->worker->sprYieldFront = g->spriteCatalog->workerYieldFront;
+        this->worker->sprYieldFrontTC = g->spriteCatalog->workerYieldFrontTC;
+        this->worker->sprYieldBack = g->spriteCatalog->workerYieldBack;
+        this->worker->sprYieldBackTC = g->spriteCatalog->workerYieldBackTC;
+
+        this->templateList->Add(this->worker);
     }
 
     void UnitTemplateCatalog::initTemple()
@@ -100,14 +109,14 @@ namespace DsprFrontend
         this->temple->sprUnitPortraitTC = g->spriteCatalog->templeUnitPortraitTC;
         this->temple->sprBigPortrait = g->spriteCatalog->templeBigPortrait;
         this->temple->sprBigPortraitTC = g->spriteCatalog->templeBigPortraitTC;
+
+        this->templateList->Add(this->temple);
     }
 
     void UnitTemplateCatalog::initManafount() {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
         this->manafount = New<UnitTemplate>(2);
-//        this->manafount->sprSelectCircle = g->unitSelectCircle_3x3;
-//        this->manafount->sprHoverCircle = g->unitHoverCircle_3x3;
         this->manafount->canMove = false;
         this->manafount->tileWidth = 2;
         this->manafount->tileHeight = 2;
@@ -115,11 +124,14 @@ namespace DsprFrontend
         this->manafount->hasDeathAnimation = false;
         this->manafount->sprSelectCircle = g->unitSelectCircle_2x2;
         this->manafount->sprHoverCircle = g->unitHoverCircle_2x2;
-        this->manafount->sprCenterAdjust = New<Point>(1,-3);
+        this->manafount->sprCenterAdjust = New<Point>(0,-3);
+        this->manafount->isGatherable = true;
 
         this->manafount->sprWalkDown = g->spriteCatalog->manafount;
         this->manafount->createSpecificUnitFunction = [&](Unit* unit) {
             return New<DsprFrontend::Manafount>(unit);
         };
+
+        this->templateList->Add(this->manafount);
     }
 }

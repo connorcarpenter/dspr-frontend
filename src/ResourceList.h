@@ -52,6 +52,14 @@ namespace DsprFrontend
             resources->Add(New<String>("images/worker/TC/workerDieDown_TC.png"));
             resources->Add(New<String>("images/worker/TC/workerPortrait_TC.png"));
             resources->Add(New<String>("images/worker/TC/worker_bigPortrait_TC.png"));
+            resources->Add(New<String>("images/worker/TC/worker_summon_back_TC.png"));
+            resources->Add(New<String>("images/worker/TC/worker_summon_front_TC.png"));
+            resources->Add(New<String>("images/worker/TC/worker_yield_back_TC.png"));
+            resources->Add(New<String>("images/worker/TC/worker_yield_front_TC.png"));
+            resources->Add(New<String>("images/worker/worker_summon_back.png"));
+            resources->Add(New<String>("images/worker/worker_summon_front.png"));
+            resources->Add(New<String>("images/worker/worker_yield_back.png"));
+            resources->Add(New<String>("images/worker/worker_yield_front.png"));
 
             resources->Add(New<String>("images/ui/armybar.png"));
             resources->Add(New<String>("images/ui/commandcard.png"));

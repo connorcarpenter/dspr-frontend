@@ -43,6 +43,15 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> workerBigPortrait = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerBigPortraitTC = Null<Sova::AnimatedSpriteInfo>();
 
+        Ref<Sova::AnimatedSpriteInfo> workerSummonFront = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerSummonFrontTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerSummonBack = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerSummonBackTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerYieldFront = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerYieldFrontTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerYieldBack = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerYieldBackTC = Null<Sova::AnimatedSpriteInfo>();
+
         //temple
         Ref<Sova::AnimatedSpriteInfo> temple = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> templeTC = Null<Sova::AnimatedSpriteInfo>();

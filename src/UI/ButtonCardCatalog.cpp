@@ -28,6 +28,7 @@ namespace DsprFrontend
         auto holdButton = New<Button>(g->spriteCatalog->sprCommandActions, 2, false, Key::H); holdButton->usesSubframes = true;
         this->attackButton = New<Button>(g->spriteCatalog->sprCommandActions, 3, true, Key::A); attackButton->usesSubframes = true;
         auto dashButton = New<Button>(g->spriteCatalog->sprCommandActions, 4, true, Key::D); dashButton->usesSubframes = true;
+        auto gatherButton = New<Button>(g->spriteCatalog->sprCommandActions, 5, true, Key::G); moveButton->usesSubframes = true;
 
         this->workerCommandCard = New<ButtonCard>();
         this->workerCommandCard->AddButton(moveButton);
@@ -35,6 +36,7 @@ namespace DsprFrontend
         this->workerCommandCard->AddButton(holdButton);
         this->workerCommandCard->AddButton(this->attackButton);
         this->workerCommandCard->AddButton(dashButton);
+        this->workerCommandCard->AddButton(gatherButton);
 
         moveButton->setAction([&](){
             this->buttonActions->moveAction();
@@ -47,6 +49,9 @@ namespace DsprFrontend
         });
         this->attackButton->setAction([&](){
             this->buttonActions->attackAction();
+        });
+        gatherButton->setAction([&](){
+            this->buttonActions->gatherAction();
         });
     }
 

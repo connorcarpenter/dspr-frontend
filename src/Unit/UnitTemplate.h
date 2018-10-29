@@ -36,6 +36,8 @@ namespace DsprFrontend {
         bool hasInventory = false;
         Ref<ButtonCard> commandCard = Null<ButtonCard>();
         bool hasConstructionQueue = false;
+        bool isGatherable = false;
+        bool canGather = false;
 
 
         //sprites
@@ -67,6 +69,16 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> sprUnitPortraitTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprBigPortrait = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprBigPortraitTC = Null<Sova::AnimatedSpriteInfo>();
+
+        Ref<Sova::AnimatedSpriteInfo> sprSummonFront = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprSummonBack = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprSummonFrontTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprSummonBackTC = Null<Sova::AnimatedSpriteInfo>();
+
+        Ref<Sova::AnimatedSpriteInfo> sprYieldFront = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprYieldBack = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprYieldFrontTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprYieldBackTC = Null<Sova::AnimatedSpriteInfo>();
 
         //sounds
         Ref<Sova::Sound> hitSound = Null<Sova::Sound>();

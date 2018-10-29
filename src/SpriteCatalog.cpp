@@ -26,6 +26,15 @@ namespace DsprFrontend
         this->workerAttackDownRightTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackDownRight_TC.png"), 11, 11, 1, 4, 14);
         this->workerAttackDownTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackDown_TC.png"), 10, 15, 1, 4, 16);
 
+        this->workerSummonFront = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_summon_front.png"), 12, 19, 1, 3, 16);
+        this->workerSummonFrontTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/worker_summon_front_TC.png"), 11, 10, 1, 3, 12);
+        this->workerSummonBack = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_summon_back.png"), 12, 18, 1, 3, 16);
+        this->workerSummonBackTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/worker_summon_back_TC.png"), 11, 10, 1, 3, 12);
+        this->workerYieldFront = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_yield_front.png"), 18, 21, 1, 9, 20);
+        this->workerYieldFrontTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/worker_yield_front_TC.png"), 14, 14, 1, 9, 20);
+        this->workerYieldBack = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_yield_back.png"), 18, 20, 1, 9, 20);
+        this->workerYieldBackTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/worker_yield_back_TC.png"), 14, 14, 1, 9, 20);
+
         this->workerDieDown = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerDieDown.png"), 18, 16, 1, 8, 14);
         this->workerDieUp = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerDieUp.png"), 19, 16, 1, 9, 13);
 

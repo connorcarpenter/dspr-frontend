@@ -90,6 +90,9 @@ namespace DsprFrontend
             case Attacking:
                 attackingStep(deltaFrameMs);
                 break;
+            case Gathering:
+                gatheringStep(deltaFrameMs);
+                break;
         }
 
         //construction queue
@@ -181,6 +184,10 @@ namespace DsprFrontend
         }
     }
 
+    void Unit::gatheringStep(float deltaFrameMs) {
+        this->imageSpeed = deltaFrameMs / gameServerTickMs;
+    }
+
     void Unit::newNextTilePosition(int x, int y)
     {
         if (!this->unitTemplate->canMove) return;
@@ -262,63 +269,82 @@ namespace DsprFrontend
                 this->interpolation = interpolationMax-interpolationStep;
                 this->updateTilePosition(this->nextTilePosition);
 
+                this->handleFacing(heading);
+
                 switch(heading)
                 {
                     case 0: {
-                        this->facingDown = true;
-                        this->scale->x = 1;
                         this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRight);
                         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRightTC);
                         }
                         break;
                     case 1: {
-                        this->facingDown = false;
-                        this->scale->x = 1;
                         this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRight);
                         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRightTC);
                     }
                         break;
                     case 2: {
-                        this->facingDown = false;
                         this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUp);
                         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpTC);
                     }
                         break;
                     case 3: {
-                        this->facingDown = false;
-                        this->scale->x = -1;
                         this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRight);
                         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRightTC);
                     }
                         break;
                     case 4: {
-                        this->facingDown = true;
-                        this->scale->x = -1;
                         this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRight);
                         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRightTC);
                     }
                         break;
                     case 5: {
-                        this->facingDown = true;
-                        this->scale->x = -1;
                         this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRight);
                         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRightTC);
                     }
                         break;
                     case 6: {
-                        this->facingDown = true;
                         this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDown);
                         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownTC);
                     }
                         break;
                     case 7: {
-                        this->facingDown = true;
-                        this->scale->x = 1;
                         this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRight);
                         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRightTC);
                     }
                         break;
 
+                }
+            }
+                break;
+            case Gathering:
+            {
+                this->imageIndex = 0;
+                this->imageSpeed = 0;
+
+                if (this->tribeIndex == g->playersTribeIndex) {
+                    g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
+                    g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);
+                }
+
+                this->lastPosition->set(this->position);
+                this->interpolation = interpolationMax-interpolationStep;
+                this->updateTilePosition(this->nextTilePosition);
+
+                this->handleFacing(heading);
+
+                switch(heading)
+                {
+                    case 0: case 4: case 5: case 6: case 7: {
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprSummonFront);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSummonFrontTC);
+                    }
+                        break;
+                    case 1: case 2: case 3: {
+                        this->useAnimatedSpriteInfo(this->unitTemplate->sprSummonBack);
+                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSummonBackTC);
+                    }
+                        break;
                 }
             }
                 break;
@@ -432,5 +458,50 @@ namespace DsprFrontend
         if (this->constructionQueue->atMaxQueue()) return;
 
         this->constructionQueue->enqueue(unitTemplate);
+    }
+
+    void Unit::handleFacing(int heading) {
+        switch(heading)
+        {
+            case 0: {
+                this->facingDown = true;
+                this->scale->x = 1;
+            }
+                break;
+            case 1: {
+                this->facingDown = false;
+                this->scale->x = 1;
+            }
+                break;
+            case 2: {
+                this->facingDown = false;
+            }
+                break;
+            case 3: {
+                this->facingDown = false;
+                this->scale->x = -1;
+            }
+                break;
+            case 4: {
+                this->facingDown = true;
+                this->scale->x = -1;
+            }
+                break;
+            case 5: {
+                this->facingDown = true;
+                this->scale->x = -1;
+            }
+                break;
+            case 6: {
+                this->facingDown = true;
+            }
+                break;
+            case 7: {
+                this->facingDown = true;
+                this->scale->x = 1;
+            }
+                break;
+
+        }
     }
 }

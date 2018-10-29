@@ -325,6 +325,8 @@ namespace DsprFrontend
             Ref<Unit> firstSelectedUnit = this->selectionList->At(0);
             orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex || targetedUnit->tribeIndex==-1) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
                          Follow : AttackTarget;
+            if (targetedUnit->unitTemplate->isGatherable && firstSelectedUnit->unitTemplate->canGather)
+                orderIndex = Gather;
         }
 
         if (attackOrderSelected)
@@ -369,9 +371,57 @@ namespace DsprFrontend
             sb->Append(New<Sova::String>(","));
             sb->Append(New<Int>(tilePosition->y)->ToString());
         }
-        if (orderIndex == Follow || orderIndex == AttackTarget){
+        if (orderIndex == Follow || orderIndex == AttackTarget || orderIndex == Gather){
             sb->Append(New<Int>(targetedUnitId)->ToString());
         }
+
+        g->gameServer->send(sb->ToString());
+    }
+
+    void UnitManager::issueUnitOrderGather()
+    {
+        if (this->selectionList->Size() <= 0) return;
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        UnitOrder orderIndex = Gather;
+
+        auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
+
+        if (targetedUnit == nullptr) return;
+        if (!targetedUnit->unitTemplate->isGatherable) return;
+        int targetedUnitId = targetedUnit->id;
+
+        auto sb = New<Sova::StringBuilder>();
+        sb->Append(New<Sova::String>("unit/1.0/order|"));
+        sb->Append(g->gameServerPlayerToken);
+        sb->Append(New<Sova::String>("|"));
+        bool first = true;
+        for (Ref<ListIterator<Unit>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            auto unit = iterator->Get();
+            if (!unit->unitTemplate->canGather) continue;
+
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                sb->Append(New<Sova::String>(","));
+            }
+
+            Ref<Int> intObj = New<Int>(unit->id);
+            sb->Append(intObj->ToString());
+
+            unit->currentOrder = orderIndex;
+        }
+        if(first)return;
+        sb->Append(New<Sova::String>("|"));
+        sb->Append(New<Int>(orderIndex)->ToString());
+        sb->Append(New<Sova::String>(","));
+
+        sb->Append(New<Int>(targetedUnitId)->ToString());
 
         g->gameServer->send(sb->ToString());
     }

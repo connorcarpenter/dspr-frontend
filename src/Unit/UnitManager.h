@@ -40,6 +40,7 @@ namespace DsprFrontend
         void orderCurrentlySelectedUnits(DsprFrontend::UnitOrder orderIndex);
         void orderCurrentlySelectedUnitsToBuildUnit(Ref<UnitTemplate> unitTemplate);
         void receiveGrid(int w, int h);
+        void issueUnitOrderGather();
 
         Ref<List<Unit>> selectionList = Null<List<Unit>>();
         const int maxSelectedUnits = 12;
@@ -54,6 +55,5 @@ namespace DsprFrontend
         int gridHeight;
 
         void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
-
     };
 }
