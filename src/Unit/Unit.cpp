@@ -185,7 +185,31 @@ namespace DsprFrontend
     }
 
     void Unit::gatheringStep(float deltaFrameMs) {
-        this->imageSpeed = deltaFrameMs / gameServerTickMs;
+        this->gatherFrameIndex += (deltaFrameMs / gameServerTickMs);
+        if (!this->gatherYielding)
+        {
+            if (this->gatherFrameIndex >= this->gatherFramesToYield)
+            {
+                this->gatherFrameIndex = 0;
+                this->gatherYielding = true;
+
+                this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
+                this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFrontTC : this->unitTemplate->sprYieldBackTC);
+            }
+        }
+        else
+        {
+            if (this->gatherFrameIndex >= 4)
+            {
+                this->gatherFrameIndex = 0;
+                this->gatherYielding = false;
+
+                this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprSummonFront : this->unitTemplate->sprSummonBack);
+                this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprSummonFrontTC : this->unitTemplate->sprSummonBackTC);
+            }
+        }
+
+        this->imageIndex = ((int) this->gatherFrameIndex % 4);
     }
 
     void Unit::newNextTilePosition(int x, int y)

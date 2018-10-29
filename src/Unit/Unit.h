@@ -83,6 +83,10 @@ namespace DsprFrontend
         int stamina = 100;
         int stillFrames = 0;
 
+        float gatherFrameIndex = 0;
+        const int gatherFramesToYield = 95;
+        bool gatherYielding = false;
+
         Ref<Point> centerAdjust = Null<Point>();
 
         void walkingStep(float deltaFrameMs);
