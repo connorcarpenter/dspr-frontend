@@ -15,6 +15,7 @@ fips_begin_app(dspr-frontend windowed)
             SpriteCatalog.h SpriteCatalog.cpp
             RefIsoGrid.h
             ResourceList.h
+            Manaball.h Manaball.cpp
 
             Unit/Unit.h Unit/Unit.cpp
             Unit/DyingUnit.h Unit/DyingUnit.cpp

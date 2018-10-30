@@ -362,6 +362,8 @@ namespace DsprFrontend
             sb->Append(intObj->ToString());
 
             unit->currentOrder = orderIndex;
+            if (targetedUnit != nullptr)
+                unit->targetUnit = targetedUnit;
         }
         sb->Append(New<Sova::String>("|"));
         sb->Append(New<Int>(orderIndex)->ToString());

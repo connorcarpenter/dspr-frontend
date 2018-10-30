@@ -16,6 +16,7 @@ namespace Sova
 namespace DsprFrontend
 {
     class UnitTemplate;
+    class Manaball;
 
     class Unit : public Sova::AnimatedSprite
     {
@@ -57,6 +58,8 @@ namespace DsprFrontend
 
         Ref<ConstructionQueue> constructionQueue = Null<ConstructionQueue>();
         Ref<SpecificUnit> specificUnit = Null<SpecificUnit>();
+        Ref<Unit> targetUnit = Null<Unit>();
+        Ref<Manaball> myManaball = Null<Manaball>();
     private:
 
         void step(float deltaMs);

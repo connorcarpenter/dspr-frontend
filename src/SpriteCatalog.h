@@ -63,6 +63,7 @@ namespace DsprFrontend {
         //other
         Ref<Sova::AnimatedSpriteInfo> bloodParticle = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> manafount = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> manaball = Null<Sova::AnimatedSpriteInfo>();
 
         //ui
         Ref<Sova::AnimatedSpriteInfo> sprMinimap = Null<Sova::AnimatedSpriteInfo>();

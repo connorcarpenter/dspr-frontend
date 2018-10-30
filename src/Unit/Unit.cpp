@@ -9,6 +9,7 @@
 #include "FogManager.h"
 #include "SpriteCatalog.h"
 #include <Sova/Audio/Sound.h>
+#include <Manaball.h>
 #include "Unit.h"
 #include "TileManager.h"
 #include "DsprColors.h"
@@ -186,6 +187,38 @@ namespace DsprFrontend
 
     void Unit::gatheringStep(float deltaFrameMs) {
         this->gatherFrameIndex += (deltaFrameMs / gameServerTickMs);
+        if (this->myManaball == nullptr)
+        {
+            auto manapartPoint = New<Point>(this->position->x + (this->scale->x * 4) + (this->scale->x==-1 ? this->unitTemplate->spriteFaceLeftXoffset : 0),
+                                            this->position->y - 6);
+            this->myManaball = New<Manaball>(manapartPoint, 0);
+            this->myManaball->depth = this->depth + (this->facingDown ? 0 : 1);
+            this->myManaball->scale->x = this->scale->x;
+
+            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            g->world->AddChild(this->myManaball);
+        }
+        else
+        {
+            if ((int) this->gatherFrameIndex % 10 == 0)
+            {
+                if (this->targetUnit != nullptr && Math::Random(0,5)<1)
+                {
+                    auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
+                    auto manapartPoint = New<Point>(this->targetUnit->position->x - this->targetUnit->centerAdjust->x,
+                                                    this->targetUnit->position->y - this->targetUnit->centerAdjust->y);
+                    manapartPoint->x += Math::Random(-14, 14);
+                    manapartPoint->y += Math::Random(-7, 7);
+                    auto manaparticle = New<Manaball>(manapartPoint, 1);
+                    manaparticle->destroyAfterArrival = true;
+                    manaparticle->moveToPosition = this->myManaball->position;
+                    manaparticle->moveToManaball = this->myManaball;
+                    manaparticle->speed = 1;
+                    manaparticle->SetDepth(this->myManaball->depth);
+                    g->world->AddChild(manaparticle);
+                }
+            }
+        }
         if (!this->gatherYielding)
         {
             if (this->gatherFrameIndex >= this->gatherFramesToYield)
@@ -195,6 +228,12 @@ namespace DsprFrontend
 
                 this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
                 this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFrontTC : this->unitTemplate->sprYieldBackTC);
+
+                this->myManaball->moveToPosition = New<Point>(this->myManaball->position->x, this->myManaball->position->y - 48);
+                this->myManaball->destroyAfterArrival = true;
+                this->myManaball->speed = 1;
+                this->myManaball->size = 9;
+                this->myManaball = Null<Manaball>();
             }
         }
         else
