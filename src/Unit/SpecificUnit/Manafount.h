@@ -14,6 +14,7 @@ namespace DsprFrontend {
     public:
         Manafount(Unit* masterUnit);
         virtual void stepFunction();
+        int gatherRate = 10;
     private:
         Unit* masterUnit = nullptr;
         unsigned short wait = 100;

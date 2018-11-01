@@ -33,6 +33,8 @@ namespace DsprFrontend
         void newNextTilePosition(int x, int y);
         void setAnimationState(UnitAnimationState newState, int heading);
         void playSelectedSound();
+        void playDeathSound();
+        void trainUnit(Ref<UnitTemplate> unitTemplate);
         //
         Ref<Point> moveTarget = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();
@@ -53,8 +55,7 @@ namespace DsprFrontend
 
         Ref<UnitTemplate> unitTemplate = Null<UnitTemplate>();
 
-        void playDeathSound();
-        void trainUnit(Ref<UnitTemplate> unitTemplate);
+
 
         Ref<ConstructionQueue> constructionQueue = Null<ConstructionQueue>();
         Ref<SpecificUnit> specificUnit = Null<SpecificUnit>();

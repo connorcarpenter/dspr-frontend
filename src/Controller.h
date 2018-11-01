@@ -28,6 +28,7 @@
 #include "Unit/UnitTemplateCatalog.h"
 #include "ResourceList.h"
 #include "EconomyManager.h"
+#include "GraphicsManager.h"
 
 using namespace Sova;
 
@@ -82,6 +83,7 @@ namespace DsprFrontend
         g->circleCache = New<CircleCache>();
         g->isoBoxCache = New<IsoBoxCache>();
 
+        g->graphicsManager = New<GraphicsManager>();
         g->economyManager = New<EconomyManager>();
 
         g->tileManager = New<TileManager>();

@@ -15,4 +15,6 @@ namespace DsprFrontend
     Sova::Color DsprColors::LightYellow = Sova::Color(242, 255, 97);
     Sova::Color DsprColors::Yellow = Sova::Color(202, 217, 33);
     Sova::Color DsprColors::DarkYellow = Sova::Color(90, 97, 15);
+    Sova::Color DsprColors::ManaBlue = Sova::Color(40, 131, 217);
+    Sova::Color DsprColors::ManaLightBlue = Sova::Color(212, 234, 255);
 }

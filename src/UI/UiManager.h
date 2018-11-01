@@ -31,18 +31,9 @@ namespace DsprFrontend
         Ref<Button> getButtonFromKeyboardShortcut();
 
     private:
-        Ref<AnimatedSprite> myFont = Null<AnimatedSprite>();
         Ref<Sprite> mySprite = Null<Sprite>();
         Ref<AnimatedSprite> myAnimatedSprite = Null<AnimatedSprite>();
         Ref<Sova::Line> myLine = Null<Sova::Line>();
         Ref<Sova::Rectangle> myRectangle = Null<Sova::Rectangle>();
-
-        void drawFont(Ref<Camera> camera, bool alignLeft, int x, int y, int number);
-
-        int getDigits(int number);
-
-        char *getCharStrFromNumber(int number);
-
-        void drawFont(Ref<Camera> camera, bool alignLeft, int x, int y, char *str);
     };
 }

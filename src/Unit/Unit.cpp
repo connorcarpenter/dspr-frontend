@@ -10,6 +10,8 @@
 #include "SpriteCatalog.h"
 #include <Sova/Audio/Sound.h>
 #include <Effects/Manaball.h>
+#include <Effects/FloatingNumber.h>
+#include <Unit/SpecificUnit/Manafount.h>
 #include "Unit.h"
 #include "TileManager.h"
 #include "DsprColors.h"
@@ -230,10 +232,19 @@ namespace DsprFrontend
                 this->gatherYielding = true;
 
                 auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-                g->economyManager->mana += 10;
+                g->economyManager->setMana(g->economyManager->getMana()+10);
 
                 this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
                 this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFrontTC : this->unitTemplate->sprYieldBackTC);
+
+                Ref<Manafount> manafount = Null<Manafount>();
+                manafount = this->targetUnit->specificUnit;
+                auto floatingNumber = New<FloatingNumber>(New<Point>(this->myManaball->position->x, this->myManaball->position->y - 10),
+                                                          DsprColors::ManaLightBlue, manafount->gatherRate);
+                floatingNumber->ttl = 60;
+                floatingNumber->vspeed = -0.3f;
+                floatingNumber->depth = this->myManaball->depth - 20;
+                g->world->AddChild(floatingNumber);
 
                 this->myManaball->moveToPosition = New<Point>(this->myManaball->position->x, this->myManaball->position->y - 48);
                 this->myManaball->destroyAfterArrival = true;

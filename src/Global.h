@@ -30,6 +30,7 @@ namespace DsprFrontend
     class UnitTemplateCatalog;
     class IsoBoxCache;
     class EconomyManager;
+    class GraphicsManager;
 
     class Global : public Sova::Refable
     {
@@ -54,6 +55,7 @@ namespace DsprFrontend
         Ref<ButtonCardCatalog> buttonCardCatalog = Null<ButtonCardCatalog>();
         Ref<UnitTemplateCatalog> unitTemplateCatalog = Null<UnitTemplateCatalog>();
         Ref<EconomyManager> economyManager = Null<EconomyManager>();
+        Ref<GraphicsManager> graphicsManager = Null<GraphicsManager>();
 
         Ref<AnimatedSprite> moveMarker = Null<AnimatedSprite>();
         Ref<AnimatedSprite> unitHoverCircle_1x1 = Null<AnimatedSprite>();

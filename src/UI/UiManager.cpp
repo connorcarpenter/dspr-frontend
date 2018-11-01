@@ -13,6 +13,7 @@
 #include "Unit/UnitTemplate.h"
 #include "SpriteCatalog.h"
 #include "EconomyManager.h"
+#include "GraphicsManager.h"
 
 namespace DsprFrontend
 {
@@ -55,7 +56,6 @@ namespace DsprFrontend
 
         this->mySprite = New<Sprite>(New<Sova::String>("images/ui/minimap.png"));
         this->myAnimatedSprite = New<AnimatedSprite>(New<Sova::String>("images/ui/commandActions.png"), 10, 12, 0);
-        this->myFont = New<AnimatedSprite>(New<Sova::String>("images/ui/myFont.png"), 7, 7, 1);
 
         this->myLine = New<Sova::Line>();
         this->myLine->setLineStyle(1, Color::Green);
@@ -178,12 +178,12 @@ namespace DsprFrontend
         {
             this->mySprite->useSpriteInfo(g->spriteCatalog->sprResourceBar);
             this->mySprite->tint = Color::White;
-            this->mySprite->position->set(208, 0);
+            this->mySprite->position->set(205, 0);
             this->mySprite->drawSelf(camera, 0, 0);
 
-            drawFont(camera, false, 230, 1, g->economyManager->mana);//g->economyManager->mana);
-            drawFont(camera, false, 243, 1, g->economyManager->pop);
-            drawFont(camera, false, 252, 1, g->economyManager->popMax);
+            g->graphicsManager->drawText(camera, 228, 1, g->economyManager->manaStr, Color::White, false);
+            g->graphicsManager->drawText(camera, 242, 1, g->economyManager->popStr, Color::White, false);
+            g->graphicsManager->drawText(camera, 252, 1, g->economyManager->popMaxStr, Color::White, false);
         }
 
         Ref<Unit> firstUnit = Null<Unit>();
@@ -417,58 +417,5 @@ namespace DsprFrontend
         }
 
         return Null<Button>();
-    }
-
-    void UiManager::drawFont(Ref<Camera> camera, bool alignLeft, int x, int y, int number) {
-        char* out_string = getCharStrFromNumber(number);
-        drawFont(camera, alignLeft, x, y, out_string);
-        delete out_string;
-    }
-
-    void UiManager::drawFont(Ref<Camera> camera, bool alignLeft, int x, int y, char *str) {
-        this->myFont->position->set(x, y);
-        int charIndex = 0;
-        while(str[charIndex] != '\0') charIndex++;
-        charIndex--;
-        while(charIndex>=0)
-        {
-            this->myFont->imageIndex = str[charIndex]-33;
-            this->myFont->drawSelf(camera, 0, 0);
-            this->myFont->position->x-=4;
-            charIndex--;
-        }
-    }
-
-    int UiManager::getDigits(int number) {
-        int currentMax = 10;
-        int currentDigits = 1;
-        if (number < 0) {number*=-1;currentDigits+=1;}
-        while(number >= currentMax)
-        {
-            currentMax *= 10;
-            currentDigits += 1;
-        }
-        return currentDigits;
-    }
-
-    char *UiManager::getCharStrFromNumber(int number) {
-        bool negative = number < 0;
-        int digits = getDigits(number);
-        if (negative)number *= -1;
-        int currIndex = digits;
-        char* charArr = new char[digits+1];
-        charArr[currIndex] = '\0'; currIndex-=1;
-        digits = 1;
-        while(currIndex >= 0)
-        {
-            int num = (number/digits) % 10;
-            charArr[currIndex] = (char) (num + 48);
-            currIndex-=1;
-            digits *= 10;
-        }
-
-        if (negative) charArr[0] = '-';
-
-        return charArr;
     }
 }

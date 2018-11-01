@@ -18,5 +18,7 @@ namespace DsprFrontend {
         static Sova::Color LightGreen;
         static Sova::Color Green;
         static Sova::Color DarkGreen;
+        static Sova::Color ManaBlue;
+        static Sova::Color ManaLightBlue;
     };
 }

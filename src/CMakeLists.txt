@@ -15,20 +15,23 @@ fips_begin_app(dspr-frontend windowed)
             SpriteCatalog.h SpriteCatalog.cpp
             RefIsoGrid.h
             ResourceList.h
-            Effects/Manaball.h Effects/Manaball.cpp
             EconomyManager.h EconomyManager.cpp
+            GraphicsManager.h GraphicsManager.cpp
 
             Unit/Unit.h Unit/Unit.cpp
             Unit/DyingUnit.h Unit/DyingUnit.cpp
             Unit/UnitManager.h Unit/UnitManager.cpp
             Unit/UnitOrder.h
-            Effects/BloodParticle.h Effects/BloodParticle.cpp
             Unit/UnitTemplate.h Unit/UnitTemplate.cpp
             Unit/UnitTemplateCatalog.h Unit/UnitTemplateCatalog.cpp
             Unit/ConstructionQueue.h Unit/ConstructionQueue.cpp
 
             Unit/SpecificUnit/SpecificUnit.h Unit/SpecificUnit/SpecificUnit.cpp
             Unit/SpecificUnit/Manafount.h Unit/SpecificUnit/Manafount.cpp
+
+            Effects/Manaball.h Effects/Manaball.cpp
+            Effects/BloodParticle.h Effects/BloodParticle.cpp
+            Effects/FloatingNumber.h Effects/FloatingNumber.cpp
 
             UI/UiManager.h UI/UiManager.cpp
             UI/Cursor.h UI/Cursor.cpp
