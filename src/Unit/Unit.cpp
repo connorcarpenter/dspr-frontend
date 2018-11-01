@@ -9,13 +9,14 @@
 #include "FogManager.h"
 #include "SpriteCatalog.h"
 #include <Sova/Audio/Sound.h>
-#include <Manaball.h>
+#include <Effects/Manaball.h>
 #include "Unit.h"
 #include "TileManager.h"
 #include "DsprColors.h"
 #include "UnitTemplate.h"
 #include "UnitTemplateCatalog.h"
 #include "UnitManager.h"
+#include "EconomyManager.h"
 
 namespace DsprFrontend
 {
@@ -206,7 +207,7 @@ namespace DsprFrontend
                 {
                     auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
                     auto manapartPoint = New<Point>(this->targetUnit->position->x - this->targetUnit->centerAdjust->x,
-                                                    this->targetUnit->position->y - this->targetUnit->centerAdjust->y);
+                                                    this->targetUnit->position->y - this->targetUnit->centerAdjust->y - 6);
                     manapartPoint->x += Math::Random(-14, 14);
                     manapartPoint->y += Math::Random(-7, 7);
                     auto manaparticle = New<Manaball>(manapartPoint, 1);
@@ -218,6 +219,8 @@ namespace DsprFrontend
                     g->world->AddChild(manaparticle);
                 }
             }
+
+            this->myManaball->size = (int) ((this->gatherFrameIndex/this->gatherFramesToYield) * 9);
         }
         if (!this->gatherYielding)
         {
@@ -225,6 +228,9 @@ namespace DsprFrontend
             {
                 this->gatherFrameIndex = 0;
                 this->gatherYielding = true;
+
+                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                g->economyManager->mana += 10;
 
                 this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
                 this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFrontTC : this->unitTemplate->sprYieldBackTC);
@@ -307,6 +313,18 @@ namespace DsprFrontend
 
     void Unit::setAnimationState(UnitAnimationState newState, int heading) {
         auto g = (Global*) InternalApp::getGlobal();
+
+        switch (this->animationState)
+        {
+            case Gathering:
+            {
+                this->myManaball->Destroy();
+                this->myManaball = nullptr;
+                this->gatherFrameIndex = 0;
+                this->gatherYielding = false;
+            }
+                break;
+        }
 
         this->animationState = newState;
 

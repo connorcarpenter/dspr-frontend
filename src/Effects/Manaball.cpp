@@ -25,7 +25,6 @@ namespace DsprFrontend {
         if (!this->visible)return;
         this->imgIndex += this->imgSpeed;
         if (this->imgIndex >= 3.9f) this->imgIndex = 0;
-        if (this->size > 9)this->size = 9;
         this->imageIndex = this->imgIndex + ((this->size-1) * 4);
 
         if (this->moveToPosition != nullptr && (this->floatPosition->x != this->moveToPosition->x || this->floatPosition->y != this->moveToPosition->y))
@@ -43,9 +42,6 @@ namespace DsprFrontend {
                 this->position = this->moveToPosition;
                 if (destroyAfterArrival)
                     this->Destroy();
-                if (this->moveToManaball != nullptr){
-                    this->moveToManaball->size += 1;
-                }
             }
 
             this->floatPosition->x += changeX;

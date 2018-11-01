@@ -78,6 +78,8 @@ namespace DsprFrontend
             resources->Add(New<String>("images/ui/3x3_hovercircle.png"));
             resources->Add(New<String>("images/ui/3x3_selectioncircle.png"));
             resources->Add(New<String>("images/ui/moveMarker.png"));
+            resources->Add(New<String>("images/ui/resourcebar.png"));
+            resources->Add(New<String>("images/ui/myFont.png"));
 
             resources->Add(New<String>("sounds/hello.wav"));
             resources->Add(New<String>("sounds/hit.wav"));

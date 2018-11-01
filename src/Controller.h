@@ -27,6 +27,7 @@
 #include "IsoBox/IsoBoxCache.h"
 #include "Unit/UnitTemplateCatalog.h"
 #include "ResourceList.h"
+#include "EconomyManager.h"
 
 using namespace Sova;
 
@@ -80,6 +81,8 @@ namespace DsprFrontend
         g->spriteCatalog = New<SpriteCatalog>();
         g->circleCache = New<CircleCache>();
         g->isoBoxCache = New<IsoBoxCache>();
+
+        g->economyManager = New<EconomyManager>();
 
         g->tileManager = New<TileManager>();
         g->tileManager->SetDepth(9999);

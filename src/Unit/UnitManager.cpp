@@ -11,7 +11,7 @@
 #include "UI/UiManager.h"
 #include "DyingUnit.h"
 #include "Unit.h"
-#include "BloodParticle.h"
+#include "Effects/BloodParticle.h"
 #include "FogManager.h"
 #include "UI/Cursor.h"
 #include "Minimap/Minimap.h"
