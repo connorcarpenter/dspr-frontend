@@ -205,11 +205,12 @@ namespace DsprFrontend
         {
             if ((int) this->gatherFrameIndex % 10 == 0)
             {
-                if (this->targetUnit != nullptr && Math::Random(0,5)<1)
+                auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
+                auto targetUnit = g->unitManager->getUnitWithId(this->targetUnitId);
+                if (targetUnit != nullptr && Math::Random(0,5)<1)
                 {
-                    auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
-                    auto manapartPoint = New<Point>(this->targetUnit->position->x - this->targetUnit->centerAdjust->x,
-                                                    this->targetUnit->position->y - this->targetUnit->centerAdjust->y - 6);
+                    auto manapartPoint = New<Point>(targetUnit->position->x - targetUnit->centerAdjust->x,
+                                                    targetUnit->position->y - targetUnit->centerAdjust->y - 6);
                     manapartPoint->x += Math::Random(-14, 14);
                     manapartPoint->y += Math::Random(-7, 7);
                     auto manaparticle = New<Manaball>(manapartPoint, 1);
@@ -232,13 +233,13 @@ namespace DsprFrontend
                 this->gatherYielding = true;
 
                 auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-                g->economyManager->setMana(g->economyManager->getMana()+10);
+                auto targetUnit = g->unitManager->getUnitWithId(this->targetUnitId);
 
                 this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
                 this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFrontTC : this->unitTemplate->sprYieldBackTC);
 
                 Ref<Manafount> manafount = Null<Manafount>();
-                manafount = this->targetUnit->specificUnit;
+                manafount = targetUnit->specificUnit;
                 auto floatingNumber = New<FloatingNumber>(New<Point>(this->myManaball->position->x, this->myManaball->position->y - 10),
                                                           DsprColors::ManaLightBlue, manafount->gatherRate);
                 floatingNumber->ttl = 60;

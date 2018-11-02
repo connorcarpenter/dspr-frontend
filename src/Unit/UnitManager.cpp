@@ -250,6 +250,13 @@ namespace DsprFrontend
                 }
                 continue;
             }
+            else
+            if (propName->Equals("targetUnitId"))
+            {
+                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                unit->targetUnitId  = atoi(propsParts->At(1)->AsCStr());
+                continue;
+            }
         }
     }
 
@@ -362,8 +369,6 @@ namespace DsprFrontend
             sb->Append(intObj->ToString());
 
             unit->currentOrder = orderIndex;
-            if (targetedUnit != nullptr)
-                unit->targetUnit = targetedUnit;
         }
         sb->Append(New<Sova::String>("|"));
         sb->Append(New<Int>(orderIndex)->ToString());

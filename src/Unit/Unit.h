@@ -59,7 +59,7 @@ namespace DsprFrontend
 
         Ref<ConstructionQueue> constructionQueue = Null<ConstructionQueue>();
         Ref<SpecificUnit> specificUnit = Null<SpecificUnit>();
-        Ref<Unit> targetUnit = Null<Unit>();
+        int targetUnitId = -1;
         Ref<Manaball> myManaball = Null<Manaball>();
     private:
 

@@ -11,6 +11,7 @@
 #include <iostream>
 #include "TileManager.h"
 #include "Unit/UnitManager.h"
+#include "EconomyManager.h"
 
 using Sova::String;
 using Sova::StringBuilder;
@@ -131,6 +132,11 @@ namespace DsprFrontend
             auto idString = splitString->At(1);
             auto propsString = splitString->At(2);
             g->unitManager->receiveUnitDelete(idString, propsString);
+            return;
+        }
+        else if (command->Equals("economy/1.0/update")) {
+            auto propsString = splitString->At(1);
+            g->economyManager->receiveUpdate(propsString->Split('&'));
             return;
         }
     }

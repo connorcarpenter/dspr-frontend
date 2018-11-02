@@ -17,17 +17,22 @@ namespace DsprFrontend {
         int getPop();
         int getPopMax();
         int getMana();
-        void setPop(int value);
-        void setPopMax(int value);
-        void setMana(int value);
+
 
         Ref<String> popStr = Null<String>();
         Ref<String> popMaxStr = Null<String>();
         Ref<String> manaStr = Null<String>();
 
+        void receiveUpdate(Ref<List<String>> propsStrList);
+
     private:
         int pop = 3;
         int popMax = 25;
         int mana = 0;
+
+        void setPop(int value);
+        void setPopMax(int value);
+        void setMana(int value);
+
     };
 }
