@@ -61,6 +61,9 @@ namespace DsprFrontend
         Ref<SpecificUnit> specificUnit = Null<SpecificUnit>();
         int targetUnitId = -1;
         Ref<Manaball> myManaball = Null<Manaball>();
+
+        void gatherYield(int yieldAmount);
+
     private:
 
         void step(float deltaMs);
@@ -103,5 +106,6 @@ namespace DsprFrontend
         void handleFacing(int heading);
 
         void gatheringStep(float deltaFrameMs);
+
     };
 }

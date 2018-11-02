@@ -7,6 +7,7 @@
 #include <Sova/Common/StringBuilder.h>
 #include <Sova/Math/Math.h>
 #include "UnitManager.h"
+#include "EconomyManager.h"
 #include "Global.h"
 #include "UI/UiManager.h"
 #include "DyingUnit.h"
@@ -253,8 +254,17 @@ namespace DsprFrontend
             else
             if (propName->Equals("targetUnitId"))
             {
-                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
                 unit->targetUnitId  = atoi(propsParts->At(1)->AsCStr());
+                continue;
+            }
+            else
+            if (propName->Equals("gatherYield"))
+            {
+                auto varsParts = propsParts->At(1)->Split(',');
+
+                unit->gatherYield(atoi(varsParts->At(0)->AsCStr()));
+                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                g->economyManager->setMana(atoi(varsParts->At(1)->AsCStr()));
                 continue;
             }
         }

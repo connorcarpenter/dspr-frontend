@@ -25,6 +25,8 @@ namespace DsprFrontend {
 
         void receiveUpdate(Ref<List<String>> propsStrList);
 
+        void setMana(int value);
+
     private:
         int pop = 3;
         int popMax = 25;
@@ -32,7 +34,6 @@ namespace DsprFrontend {
 
         void setPop(int value);
         void setPopMax(int value);
-        void setMana(int value);
 
     };
 }

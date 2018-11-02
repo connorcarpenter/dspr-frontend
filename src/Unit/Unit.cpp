@@ -225,36 +225,7 @@ namespace DsprFrontend
 
             this->myManaball->size = (int) ((this->gatherFrameIndex/this->gatherFramesToYield) * 9);
         }
-        if (!this->gatherYielding)
-        {
-            if (this->gatherFrameIndex >= this->gatherFramesToYield)
-            {
-                this->gatherFrameIndex = 0;
-                this->gatherYielding = true;
-
-                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-                auto targetUnit = g->unitManager->getUnitWithId(this->targetUnitId);
-
-                this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
-                this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFrontTC : this->unitTemplate->sprYieldBackTC);
-
-                Ref<Manafount> manafount = Null<Manafount>();
-                manafount = targetUnit->specificUnit;
-                auto floatingNumber = New<FloatingNumber>(New<Point>(this->myManaball->position->x, this->myManaball->position->y - 10),
-                                                          DsprColors::ManaLightBlue, manafount->gatherRate);
-                floatingNumber->ttl = 60;
-                floatingNumber->vspeed = -0.3f;
-                floatingNumber->depth = this->myManaball->depth - 20;
-                g->world->AddChild(floatingNumber);
-
-                this->myManaball->moveToPosition = New<Point>(this->myManaball->position->x, this->myManaball->position->y - 48);
-                this->myManaball->destroyAfterArrival = true;
-                this->myManaball->speed = 1;
-                this->myManaball->size = 9;
-                this->myManaball = Null<Manaball>();
-            }
-        }
-        else
+        if (this->gatherYielding)
         {
             if (this->gatherFrameIndex >= 4)
             {
@@ -267,6 +238,40 @@ namespace DsprFrontend
         }
 
         this->imageIndex = ((int) this->gatherFrameIndex % 4);
+    }
+
+    void Unit::gatherYield(int yieldAmount)
+    {
+        if (this->animationState != Gathering) return;
+        if (this->gatherYielding) return;
+
+        this->gatherFrameIndex = 0;
+        this->gatherYielding = true;
+
+
+
+        this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
+        this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFrontTC : this->unitTemplate->sprYieldBackTC);
+
+        if (this->myManaball != nullptr)
+        {
+            auto floatingNumber = New<FloatingNumber>(
+                    New<Point>(this->myManaball->position->x, this->myManaball->position->y - 10),
+                    DsprColors::ManaLightBlue, yieldAmount);
+            floatingNumber->ttl = 60;
+            floatingNumber->vspeed = -0.3f;
+            floatingNumber->depth = this->myManaball->depth - 20;
+
+            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            g->world->AddChild(floatingNumber);
+
+            this->myManaball->moveToPosition = New<Point>(this->myManaball->position->x,
+                                                          this->myManaball->position->y - 48);
+            this->myManaball->destroyAfterArrival = true;
+            this->myManaball->speed = 1;
+            this->myManaball->size = 9;
+            this->myManaball = Null<Manaball>();
+        }
     }
 
     void Unit::newNextTilePosition(int x, int y)
