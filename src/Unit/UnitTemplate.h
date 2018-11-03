@@ -39,7 +39,6 @@ namespace DsprFrontend {
         bool isGatherable = false;
         bool canGather = false;
 
-
         //sprites
         Ref<Sova::AnimatedSpriteInfo> sprWalkDown = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprWalkUp = Null<Sova::AnimatedSpriteInfo>();

@@ -2,7 +2,6 @@
 // Created by connor on 7/26/18.
 //
 
-
 #include <Sova/Internal/InternalApp.h>
 #include <Sova/Math/Math.h>
 #include "Global.h"
@@ -22,7 +21,6 @@
 
 namespace DsprFrontend
 {
-
     Unit::Unit(int id, int x, int y, int tribeIndex, Ref<UnitTemplate> unitTemplate) : AnimatedSprite()
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
@@ -80,9 +78,7 @@ namespace DsprFrontend
         }
     }
 
-    Unit::~Unit()
-    {
-    }
+    Unit::~Unit() {}
 
     void Unit::step(float deltaFrameMs)
     {
@@ -247,8 +243,6 @@ namespace DsprFrontend
 
         this->gatherFrameIndex = 0;
         this->gatherYielding = true;
-
-
 
         this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
         this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFrontTC : this->unitTemplate->sprYieldBackTC);

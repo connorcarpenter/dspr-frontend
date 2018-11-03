@@ -26,15 +26,14 @@ namespace DsprFrontend
 
         Unit(int id, int x, int y, int tribeIndex, Ref<UnitTemplate> unitTemplate);
         ~Unit();
-
         enum UnitAnimationState { Walking, Attacking, Gathering };
-
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
         void newNextTilePosition(int x, int y);
         void setAnimationState(UnitAnimationState newState, int heading);
         void playSelectedSound();
         void playDeathSound();
         void trainUnit(Ref<UnitTemplate> unitTemplate);
+        void gatherYield(int yieldAmount);
         //
         Ref<Point> moveTarget = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();
@@ -47,22 +46,15 @@ namespace DsprFrontend
         Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
         int tribeIndex = -1;
         UnitAnimationState animationState = Walking;
-
         int health;
         bool facingDown = true;
 
         UnitOrder currentOrder = Move;
-
         Ref<UnitTemplate> unitTemplate = Null<UnitTemplate>();
-
-
-
         Ref<ConstructionQueue> constructionQueue = Null<ConstructionQueue>();
         Ref<SpecificUnit> specificUnit = Null<SpecificUnit>();
         int targetUnitId = -1;
         Ref<Manaball> myManaball = Null<Manaball>();
-
-        void gatherYield(int yieldAmount);
 
     private:
 

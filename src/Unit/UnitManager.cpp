@@ -243,7 +243,7 @@ namespace DsprFrontend
             {
                 auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
                 unit->health = atoi(propsParts->At(1)->AsCStr());
-                if (unit->unitTemplate->bleeds)
+                if (unit->unitTemplate->bleeds && unit->health<unit->unitTemplate->maxHealth)
                 {
                     auto bloodPartNum = Math::Random(1, 2);
                     for (int i = 0; i < bloodPartNum; i++)
@@ -261,10 +261,12 @@ namespace DsprFrontend
             if (propName->Equals("gatherYield"))
             {
                 auto varsParts = propsParts->At(1)->Split(',');
-
-                unit->gatherYield(atoi(varsParts->At(0)->AsCStr()));
-                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-                g->economyManager->setMana(atoi(varsParts->At(1)->AsCStr()));
+                int gatherRate = atoi(varsParts->At(0)->AsCStr());
+                if (gatherRate != 0) {
+                    unit->gatherYield(gatherRate);
+                    auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
+                    g->economyManager->setMana(atoi(varsParts->At(1)->AsCStr()));
+                }
                 continue;
             }
         }
