@@ -549,7 +549,7 @@ namespace DsprFrontend
         if (!this->unitTemplate->hasConstructionQueue) return;
         if (this->constructionQueue->atMaxQueue()) return;
 
-        this->constructionQueue->enqueue(unitTemplate);
+        //this->constructionQueue->enqueue(unitTemplate);
     }
 
     void Unit::handleFacing(int heading) {

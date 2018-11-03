@@ -211,7 +211,9 @@ namespace DsprFrontend
 
             if (propName->Equals("nextPosition"))
             {
-                auto varsParts = propsParts->At(1)->Split(',');
+                auto varsStr = propsParts->At(1);
+                if (varsStr == nullptr) continue;
+                auto varsParts = varsStr->Split(',');
 
                 ///
                 int x = atoi(varsParts->At(0)->AsCStr());
@@ -265,7 +267,40 @@ namespace DsprFrontend
                 if (gatherRate != 0) {
                     unit->gatherYield(gatherRate);
                     auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
-                    g->economyManager->setMana(atoi(varsParts->At(1)->AsCStr()));
+                    if (unit->tribeIndex == g->playersTribeIndex)
+                        g->economyManager->setMana(atoi(varsParts->At(1)->AsCStr()));
+                }
+                continue;
+            }
+            else
+            if (propName->Equals("cq"))
+            {
+                auto varsParts = propsParts->At(1)->Split('+');
+
+                auto index = 0;
+
+                while(index < varsParts->Size())
+                {
+                    auto intVarsParts = varsParts->At(index)->Split('-');
+                    if (intVarsParts->At(0)->Equals("bt"))
+                    {
+                        unit->constructionQueue->currentBuildTime = atoi(intVarsParts->At(1)->AsCStr());
+                    }
+                    else
+                    if (intVarsParts->At(0)->Equals("q"))
+                    {
+                        if (intVarsParts->At(1)->Length() == 0) {index++;continue;}
+
+                        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                        auto queueParts = intVarsParts->At(1)->Split(',');
+                        unit->constructionQueue->emptyQueue();
+                        for(int i = 0;i<queueParts->Size();i++){
+                            int index = atoi(queueParts->At(i)->AsCStr());
+                            Ref<UnitTemplate> ut = g->unitTemplateCatalog->findTemplateByIndex(index);
+                            unit->constructionQueue->enqueue(ut);
+                        }
+                    }
+                    index++;
                 }
                 continue;
             }

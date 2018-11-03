@@ -26,15 +26,15 @@ namespace DsprFrontend
         if (this->unitQueue->Size() > 0)
         {
             this->currentBuildTime += delta;
-            auto currentlyBuildingUnit = unitQueue->At(0);
-            if (this->currentBuildTime >= currentlyBuildingUnit->buildTime)
-            {
-                this->currentBuildTime = 0;
-                unitQueue->Remove(currentlyBuildingUnit);
-                if (currentlyBuildingUnit->readySound != nullptr){
-                    currentlyBuildingUnit->readySound->Play();
-                }
-            }
+//            auto currentlyBuildingUnit = unitQueue->At(0);
+//            if (this->currentBuildTime >= currentlyBuildingUnit->buildTime)
+//            {
+//                this->currentBuildTime = 0;
+//                unitQueue->Remove(currentlyBuildingUnit);
+//                if (currentlyBuildingUnit->readySound != nullptr){
+//                    currentlyBuildingUnit->readySound->Play();
+//                }
+//            }
         }
     }
 
@@ -51,5 +51,10 @@ namespace DsprFrontend
     {
         if (this->unitQueue->Size() <= 0) return 0;
         return this->unitQueue->At(0)->buildTime;
+    }
+
+    void ConstructionQueue::emptyQueue() {
+        this->unitQueue->Clear();
+
     }
 }
