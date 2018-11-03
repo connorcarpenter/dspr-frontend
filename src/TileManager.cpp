@@ -116,6 +116,8 @@ namespace DsprFrontend
         if (this->destroyed) return;
         if (!this->visible) return;
 
+        yoffset-=1;
+
         const auto resState = Gfx::QueryResourceInfo(this->texture->textureId).State;
         if (resState == ResourceState::Valid)
         {

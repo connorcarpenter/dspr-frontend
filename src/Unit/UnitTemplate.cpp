@@ -8,5 +8,6 @@ namespace DsprFrontend {
 
     UnitTemplate::UnitTemplate(int index) {
         this->index = index;
+        this->sprCenterAdjust = New<Point>(0,0);
     }
 }

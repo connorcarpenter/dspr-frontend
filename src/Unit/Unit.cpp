@@ -36,15 +36,6 @@ namespace DsprFrontend
         this->health = this->unitTemplate->maxHealth;
 
         this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
-        if(this->unitTemplate->tileWidth % 2 == 0)
-        {
-            this->centerAdjust = New<Point>(g->tileManager->tileWidth/2,g->tileManager->tileHeight/2);
-        }
-        if(this->unitTemplate->sprCenterAdjust != nullptr)
-        {
-            this->centerAdjust->x += this->unitTemplate->sprCenterAdjust->x;
-            this->centerAdjust->y += this->unitTemplate->sprCenterAdjust->y;
-        }
 
         this->tcSprite = New<AnimatedSprite>();
         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
@@ -205,8 +196,8 @@ namespace DsprFrontend
                 auto targetUnit = g->unitManager->getUnitWithId(this->targetUnitId);
                 if (targetUnit != nullptr && Math::Random(0,5)<1)
                 {
-                    auto manapartPoint = New<Point>(targetUnit->position->x - targetUnit->centerAdjust->x,
-                                                    targetUnit->position->y - targetUnit->centerAdjust->y - 6);
+                    auto manapartPoint = New<Point>(targetUnit->position->x - targetUnit->unitTemplate->sprCenterAdjust->x,
+                                                    targetUnit->position->y - targetUnit->unitTemplate->sprCenterAdjust->y - 6);
                     manapartPoint->x += Math::Random(-14, 14);
                     manapartPoint->y += Math::Random(-7, 7);
                     auto manaparticle = New<Manaball>(manapartPoint, 1);
@@ -477,11 +468,9 @@ namespace DsprFrontend
                                                         (this->tribeIndex == g->playersTribeIndex) ?
                                                         DsprColors::LightGreen :
                                                         DsprColors::LightRed;
-            if (this->centerAdjust == nullptr) {
-                this->unitTemplate->sprSelectCircle->position->set(this->position->x, this->position->y);
-            } else {
-                this->unitTemplate->sprSelectCircle->position->set(this->position->x - this->centerAdjust->x, this->position->y - this->centerAdjust->y);
-            }
+
+            this->unitTemplate->sprSelectCircle->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+
             this->unitTemplate->sprSelectCircle->drawSelf(camera, xoffset, yoffset);
 
             if (!this->tilePosition->Equals(this->moveTarget))
@@ -503,32 +492,21 @@ namespace DsprFrontend
                                                            (this->tribeIndex == g->playersTribeIndex) ?
                                                            DsprColors::LightGreen :
                                                            DsprColors::LightRed;
-                if (this->centerAdjust == nullptr) {
-                    this->unitTemplate->sprHoverCircle->position->set(this->position->x, this->position->y);
-                }
-                else {
-                    this->unitTemplate->sprHoverCircle->position->set(this->position->x - this->centerAdjust->x, this->position->y - this->centerAdjust->y);
-                }
+
+                this->unitTemplate->sprHoverCircle->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+
                 this->unitTemplate->sprHoverCircle->drawSelf(camera, xoffset, yoffset);
             }
         }
 
         int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
 
-        if (this->centerAdjust == nullptr) {
-            AnimatedSprite::drawSelf(camera, newOffset, yoffset);
-        } else {
-            AnimatedSprite::drawSelf(camera, newOffset - this->centerAdjust->x, yoffset - this->centerAdjust->y);
-        }
+        AnimatedSprite::drawSelf(camera, newOffset - this->unitTemplate->sprCenterAdjust->x, yoffset - this->unitTemplate->sprCenterAdjust->y);
 
         //TC
 
         this->tcSprite->imageIndex = imageIndex;
-        if (this->centerAdjust == nullptr) {
-            this->tcSprite->position->set(this->position);
-        } else {
-            this->tcSprite->position->set(this->position->x - this->centerAdjust->x, this->position->y - this->centerAdjust->y);
-        }
+        this->tcSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
         this->tcSprite->scale->x = this->scale->x;
         this->tcSprite->drawSelf(camera, newOffset, yoffset);
     }

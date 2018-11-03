@@ -86,8 +86,6 @@ namespace DsprFrontend
         const int gatherFramesToYield = 95;
         bool gatherYielding = false;
 
-        Ref<Point> centerAdjust = Null<Point>();
-
         void walkingStep(float deltaFrameMs);
         void attackingStep(float deltaFrameMs);
 

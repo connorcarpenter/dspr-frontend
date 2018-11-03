@@ -102,6 +102,7 @@ namespace DsprFrontend
         this->temple->hasDeathAnimation = false;
         this->temple->commandCard = g->buttonCardCatalog->templeCommandCard;
         this->temple->hasConstructionQueue = true;
+        this->temple->sprCenterAdjust = New<Point>(0,1);
 
         this->temple->sprWalkDown = g->spriteCatalog->temple;
         this->temple->sprWalkDownTC = g->spriteCatalog->templeTC;
@@ -124,7 +125,7 @@ namespace DsprFrontend
         this->manafount->hasDeathAnimation = false;
         this->manafount->sprSelectCircle = g->unitSelectCircle_2x2;
         this->manafount->sprHoverCircle = g->unitHoverCircle_2x2;
-        this->manafount->sprCenterAdjust = New<Point>(0,-3);
+        this->manafount->sprCenterAdjust = New<Point>(10,-3+5);
         this->manafount->isGatherable = true;
 
         this->manafount->sprWalkDown = g->spriteCatalog->manafount;
