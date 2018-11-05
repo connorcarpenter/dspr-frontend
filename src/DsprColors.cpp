@@ -17,4 +17,13 @@ namespace DsprFrontend
     Sova::Color DsprColors::DarkYellow = Sova::Color(90, 97, 15);
     Sova::Color DsprColors::ManaBlue = Sova::Color(40, 131, 217);
     Sova::Color DsprColors::ManaLightBlue = Sova::Color(212, 234, 255);
+
+    Sova::Color DsprColors::DarkSkin = Sova::Color(128, 53, 38);
+    Sova::Color DsprColors::MediumSkin = Sova::Color(191, 98, 67);
+    Sova::Color DsprColors::LightSkin = Sova::Color(255, 153, 102);
+
+    Sova::Color DsprColors::BlackHair = Sova::Color(26, 11, 8);
+    Sova::Color DsprColors::BrownHair = Sova::Color(102, 42, 30);
+    Sova::Color DsprColors::BlondHair = Sova::Color(255, 153, 51);
+    Sova::Color DsprColors::RedHair = Sova::Color(153, 41, 31);
 }

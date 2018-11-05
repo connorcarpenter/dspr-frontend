@@ -44,6 +44,8 @@ namespace DsprFrontend
         bool hovering = false;
         bool selected = false;
         Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
+        Ref<AnimatedSprite> skinSprite = Null<AnimatedSprite>();
+        Ref<AnimatedSprite> hairSprite = Null<AnimatedSprite>();
         int tribeIndex = -1;
         UnitAnimationState animationState = Walking;
         int health;

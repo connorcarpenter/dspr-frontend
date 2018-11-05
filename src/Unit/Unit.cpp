@@ -49,6 +49,49 @@ namespace DsprFrontend
                 break;
         }
 
+        //skin
+        this->skinSprite = New<AnimatedSprite>();
+        this->skinSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSkin);
+        int skinIndex = (int) Math::Random(0, 3);
+        int hairIndex;
+        switch (skinIndex)
+        {
+            case 0:
+                this->skinSprite->tint = DsprColors::DarkSkin;
+                hairIndex = 0;
+                break;
+            case 1:
+                this->skinSprite->tint = DsprColors::MediumSkin;
+                hairIndex = (int) Math::Random(0, 2);
+                break;
+            case 2:
+                this->skinSprite->tint = DsprColors::LightSkin;
+                hairIndex = (int) Math::Random(0, 4);
+                break;
+        }
+
+        //hair
+        this->hairSprite = New<AnimatedSprite>();
+        if (Math::Random(0,2)<1)
+            this->hairSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairLong);
+        else
+            this->hairSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairShort);
+        switch (hairIndex)
+        {
+            case 0:
+                this->hairSprite->tint = DsprColors::BlackHair;
+                break;
+            case 1:
+                this->hairSprite->tint = DsprColors::BrownHair;
+                break;
+            case 2:
+                this->hairSprite->tint = DsprColors::BlondHair;
+                break;
+            case 3:
+                this->hairSprite->tint = DsprColors::RedHair;
+                break;
+        }
+
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
         if (this->tribeIndex == g->playersTribeIndex)
@@ -139,7 +182,7 @@ namespace DsprFrontend
                         if (Math::Random(0, 2) < 1) {
                             this->scale->x = this->scale->x * -1;
                         } else {
-                                if (this->textureName->Equals(this->unitTemplate->sprWalkUp->spriteInfo->filename)) {
+                                if (Math::Random(0, 2) < 1) {
                                     this->facingDown = true;
                                     this->useAnimatedSequenceInfo(this->unitTemplate->sprWalkDown);
                                 } else {
@@ -288,12 +331,12 @@ namespace DsprFrontend
         {
             this->scale->x = Math::Sign(difx);
         }
-        if (dify >= 0 && !this->textureName->Equals(this->unitTemplate->sprWalkDown->spriteInfo->filename))
+        if (dify >= 0)
         {
             this->facingDown = true;
             this->useAnimatedSequenceInfo(this->unitTemplate->sprWalkDown);
         }
-        if (dify < 0 && !this->textureName->Equals(this->unitTemplate->sprWalkUp->spriteInfo->filename))
+        if (dify < 0)
         {
             this->facingDown = false;
             this->useAnimatedSequenceInfo(this->unitTemplate->sprWalkUp);
@@ -492,6 +535,16 @@ namespace DsprFrontend
         this->tcSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
         this->tcSprite->scale->x = this->scale->x;
         this->tcSprite->drawSelf(camera, newOffset, yoffset);
+
+        this->skinSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+        this->skinSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+        this->skinSprite->scale->x = this->scale->x;
+        this->skinSprite->drawSelf(camera, newOffset, yoffset);
+
+        this->hairSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+        this->hairSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+        this->hairSprite->scale->x = this->scale->x;
+        this->hairSprite->drawSelf(camera, newOffset, yoffset);
     }
 
     void Unit::playSelectedSound() {

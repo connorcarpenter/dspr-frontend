@@ -52,8 +52,9 @@ namespace DsprFrontend
 
         this->worker->sprBase = g->spriteCatalog->workerBase;
         this->worker->sprTC = g->spriteCatalog->workerTC;
-//        this->worker->sprBase = g->spriteCatalog->workerBase;
-//        this->worker->sprBase = g->spriteCatalog->workerBase;
+        this->worker->sprSkin = g->spriteCatalog->workerSkin;
+        this->worker->sprHairLong = g->spriteCatalog->workerHairLong;
+        this->worker->sprHairShort = g->spriteCatalog->workerHairShort;
 
         this->worker->sprWalkDown = g->spriteCatalog->workerWalkDown;
         this->worker->sprWalkUp = g->spriteCatalog->workerWalkUp;

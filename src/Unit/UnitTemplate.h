@@ -44,7 +44,8 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> sprBase = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprSkin = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprHair = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprHairShort = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprHairLong = Null<Sova::AnimatedSpriteInfo>();
 
         Ref<Sova::AnimatedSequenceInfo> sprWalkDown = Null<Sova::AnimatedSequenceInfo>();
         Ref<Sova::AnimatedSequenceInfo> sprWalkUp = Null<Sova::AnimatedSequenceInfo>();
