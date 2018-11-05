@@ -50,37 +50,29 @@ namespace DsprFrontend
         this->worker->commandCard = g->buttonCardCatalog->workerCommandCard;
         this->worker->canGather = true;
 
+        this->worker->sprBase = g->spriteCatalog->workerBase;
+        this->worker->sprTC = g->spriteCatalog->workerTC;
+//        this->worker->sprBase = g->spriteCatalog->workerBase;
+//        this->worker->sprBase = g->spriteCatalog->workerBase;
+
         this->worker->sprWalkDown = g->spriteCatalog->workerWalkDown;
         this->worker->sprWalkUp = g->spriteCatalog->workerWalkUp;
-        this->worker->sprWalkDownTC = g->spriteCatalog->workerWalkDownTC;
-        this->worker->sprWalkUpTC = g->spriteCatalog->workerWalkUpTC;
         this->worker->sprAttackUp = g->spriteCatalog->workerAttackUp;
         this->worker->sprAttackUpRight = g->spriteCatalog->workerAttackUpRight;
         this->worker->sprAttackRight = g->spriteCatalog->workerAttackRight;
         this->worker->sprAttackDownRight = g->spriteCatalog->workerAttackDownRight;
         this->worker->sprAttackDown = g->spriteCatalog->workerAttackDown;
-        this->worker->sprAttackUpTC = g->spriteCatalog->workerAttackUpTC;
-        this->worker->sprAttackUpRightTC = g->spriteCatalog->workerAttackUpRightTC;
-        this->worker->sprAttackRightTC = g->spriteCatalog->workerAttackRightTC;
-        this->worker->sprAttackDownRightTC = g->spriteCatalog->workerAttackDownRightTC;
-        this->worker->sprAttackDownTC = g->spriteCatalog->workerAttackDownTC;
         this->worker->sprDieDown = g->spriteCatalog->workerDieDown;
         this->worker->sprDieUp = g->spriteCatalog->workerDieUp;
-        this->worker->sprDieDownTC = g->spriteCatalog->workerDieDownTC;
-        this->worker->sprDieUpTC = g->spriteCatalog->workerDieUpTC;
+        this->worker->sprSummonFront = g->spriteCatalog->workerSummonFront;
+        this->worker->sprSummonBack = g->spriteCatalog->workerSummonBack;
+        this->worker->sprYieldFront = g->spriteCatalog->workerYieldFront;
+        this->worker->sprYieldBack = g->spriteCatalog->workerYieldBack;
+
         this->worker->sprUnitPortrait = g->spriteCatalog->workerUnitPortrait;
         this->worker->sprUnitPortraitTC = g->spriteCatalog->workerUnitPortraitTC;
         this->worker->sprBigPortrait = g->spriteCatalog->workerBigPortrait;
         this->worker->sprBigPortraitTC = g->spriteCatalog->workerBigPortraitTC;
-
-        this->worker->sprSummonFront = g->spriteCatalog->workerSummonFront;
-        this->worker->sprSummonFrontTC = g->spriteCatalog->workerSummonFrontTC;
-        this->worker->sprSummonBack = g->spriteCatalog->workerSummonBack;
-        this->worker->sprSummonBackTC = g->spriteCatalog->workerSummonBackTC;
-        this->worker->sprYieldFront = g->spriteCatalog->workerYieldFront;
-        this->worker->sprYieldFrontTC = g->spriteCatalog->workerYieldFrontTC;
-        this->worker->sprYieldBack = g->spriteCatalog->workerYieldBack;
-        this->worker->sprYieldBackTC = g->spriteCatalog->workerYieldBackTC;
 
         this->templateList->Add(this->worker);
     }
@@ -104,8 +96,8 @@ namespace DsprFrontend
         this->temple->hasConstructionQueue = true;
         this->temple->sprCenterAdjust = New<Point>(0,1);
 
-        this->temple->sprWalkDown = g->spriteCatalog->temple;
-        this->temple->sprWalkDownTC = g->spriteCatalog->templeTC;
+        this->temple->sprBase = g->spriteCatalog->temple;
+        this->temple->sprTC = g->spriteCatalog->templeTC;
         this->temple->sprUnitPortrait = g->spriteCatalog->templeUnitPortrait;
         this->temple->sprUnitPortraitTC = g->spriteCatalog->templeUnitPortraitTC;
         this->temple->sprBigPortrait = g->spriteCatalog->templeBigPortrait;
@@ -128,7 +120,7 @@ namespace DsprFrontend
         this->manafount->sprCenterAdjust = New<Point>(10,-3+5);
         this->manafount->isGatherable = true;
 
-        this->manafount->sprWalkDown = g->spriteCatalog->manafount;
+        this->manafount->sprBase = g->spriteCatalog->manafount;
         this->manafount->createSpecificUnitFunction = [&](Unit* unit) {
             return New<DsprFrontend::Manafount>(unit);
         };

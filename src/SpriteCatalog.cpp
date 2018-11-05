@@ -8,43 +8,30 @@ namespace DsprFrontend
 {
     SpriteCatalog::SpriteCatalog()
     {
-        this->workerWalkDown = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerDown.png"), 15, 20, 1, 7, 17);
-        this->workerWalkUp = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerUp.png"), 15, 20, 1, 7, 17);
-
-        this->workerWalkDownTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerDown_TC.png"), 14, 11, 1, 7, 12);
-        this->workerWalkUpTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerUp_TC.png"), 14, 11, 1, 7, 12);
-
-        this->workerAttackUp = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerAttackUp.png"), 18, 30, 1, 13, 25);
-        this->workerAttackUpRight = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerAttackUpRight.png"), 30, 26, 1, 15, 25);
-        this->workerAttackRight = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerAttackRight.png"), 27, 24, 1, 12, 22);
-        this->workerAttackDownRight = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerAttackDownRight.png"), 20, 25, 1, 6, 22);
-        this->workerAttackDown = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerAttackDown.png"), 17, 33, 1, 4, 24);
-
-        this->workerAttackUpTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackUp_TC.png"), 11, 14, 1, 7, 16);
-        this->workerAttackUpRightTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackUpRight_TC.png"), 14, 13, 1, 7, 16);
-        this->workerAttackRightTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackRight_TC.png"), 12, 12, 1, 4, 15);
-        this->workerAttackDownRightTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackDownRight_TC.png"), 11, 11, 1, 4, 14);
-        this->workerAttackDownTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerAttackDown_TC.png"), 10, 15, 1, 4, 16);
-
-        this->workerSummonFront = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_summon_front.png"), 12, 19, 1, 3, 16);
-        this->workerSummonFrontTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/worker_summon_front_TC.png"), 11, 10, 1, 3, 12);
-        this->workerSummonBack = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_summon_back.png"), 12, 18, 1, 3, 16);
-        this->workerSummonBackTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/worker_summon_back_TC.png"), 11, 10, 1, 3, 12);
-        this->workerYieldFront = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_yield_front.png"), 18, 21, 1, 8, 18);
-        this->workerYieldFrontTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/worker_yield_front_TC.png"), 14, 14, 1, 6, 16);
-        this->workerYieldBack = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_yield_back.png"), 18, 20, 1, 8, 18);
-        this->workerYieldBackTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/worker_yield_back_TC.png"), 14, 14, 1, 6, 16);
-
-        this->workerDieDown = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerDieDown.png"), 18, 16, 1, 8, 14);
-        this->workerDieUp = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerDieUp.png"), 19, 16, 1, 9, 13);
-
-        this->workerDieDownTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerDieDown_TC.png"), 11, 14, 1, 5, 13);
-        this->workerDieUpTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerDieUp_TC.png"), 11, 16, 1, 6, 13);
+        this->workerBase            = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerBase.png"), 19, 22, 1, 9, 18);
+        this->workerTC              = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerTC.png"), 19, 22, 1, 9, 18);
+        this->workerSkin            = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerSkin.png"), 19, 22, 1, 9, 18);
+        this->workerHairShort       = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerHairShort.png"), 19, 22, 1, 9, 18);
+        this->workerHairLong        = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerHairLong.png"), 19, 22, 1, 9, 18);
+        
+        this->workerWalkDown        = New<AnimatedSequenceInfo>(this->workerBase, 0, 1);
+        this->workerWalkUp          = New<AnimatedSequenceInfo>(this->workerBase, 2, 3);
+        this->workerAttackUp        = New<AnimatedSequenceInfo>(this->workerBase, 4, 8);
+        this->workerAttackUpRight   = New<AnimatedSequenceInfo>(this->workerBase, 9, 13);
+        this->workerAttackRight     = New<AnimatedSequenceInfo>(this->workerBase, 14, 18);
+        this->workerAttackDownRight = New<AnimatedSequenceInfo>(this->workerBase, 19, 23);
+        this->workerAttackDown      = New<AnimatedSequenceInfo>(this->workerBase, 24, 28);
+        this->workerDieDown         = New<AnimatedSequenceInfo>(this->workerBase, 29, 30);
+        this->workerDieUp           = New<AnimatedSequenceInfo>(this->workerBase, 31, 32);
+        this->workerSummonFront     = New<AnimatedSequenceInfo>(this->workerBase, 33, 36);
+        this->workerSummonBack      = New<AnimatedSequenceInfo>(this->workerBase, 37, 40);
+        this->workerYieldFront      = New<AnimatedSequenceInfo>(this->workerBase, 41, 44);
+        this->workerYieldBack       = New<AnimatedSequenceInfo>(this->workerBase, 45, 48);
 
         this->workerUnitPortrait = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerPortrait.png"), 10, 12, 0, 0, 0);
-        this->workerUnitPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/workerPortrait_TC.png"), 10, 4, 0, 0, -8);
+        this->workerUnitPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerPortrait_TC.png"), 10, 4, 0, 0, -8);
         this->workerBigPortrait = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_bigPortrait.png"), 29, 29, 0, 0, 0);
-        this->workerBigPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/TC/worker_bigPortrait_TC.png"), 29, 9, 0, 0, -20);
+        this->workerBigPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/worker_bigPortrait_TC.png"), 29, 9, 0, 0, -20);
 
         this->temple = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple/temple.png"), 100, 84, 1, 50, 57);
         this->templeTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/temple/temple_TC.png"), 100, 65, 1, 50, 59);

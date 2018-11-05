@@ -7,6 +7,7 @@
 #include <Sova/References/Ref.h>
 #include <Sova/References/Refable.h>
 #include <Sova/Graphics/AnimatedSpriteInfo.h>
+#include <Sova/Graphics/AnimatedSequenceInfo.h>
 
 namespace DsprFrontend {
     class SpriteCatalog : public Sova::Refable {
@@ -14,43 +15,30 @@ namespace DsprFrontend {
         SpriteCatalog();
 
         //worker
-        Ref<Sova::AnimatedSpriteInfo> workerWalkDown = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerWalkUp = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> workerWalkDownTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerWalkUpTC = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> workerAttackUp = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerAttackUpRight = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerAttackRight = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerAttackDownRight = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerAttackDown = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> workerAttackUpTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerAttackUpRightTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerAttackRightTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerAttackDownRightTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerAttackDownTC = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> workerDieDown = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerDieUp = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> workerDieDownTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerDieUpTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerBase = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerSkin = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerHairShort = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> workerHairLong = Null<Sova::AnimatedSpriteInfo>();
+        
+        Ref<Sova::AnimatedSequenceInfo> workerWalkDown = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerWalkUp = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerAttackUp = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerAttackUpRight = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerAttackRight = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerAttackDownRight = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerAttackDown = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerDieDown = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerDieUp = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerSummonFront = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerSummonBack = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerYieldFront = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> workerYieldBack = Null<Sova::AnimatedSequenceInfo>();
 
         Ref<Sova::AnimatedSpriteInfo> workerUnitPortrait = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerUnitPortraitTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerBigPortrait = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerBigPortraitTC = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> workerSummonFront = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerSummonFrontTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerSummonBack = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerSummonBackTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerYieldFront = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerYieldFrontTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerYieldBack = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> workerYieldBackTC = Null<Sova::AnimatedSpriteInfo>();
 
         //temple
         Ref<Sova::AnimatedSpriteInfo> temple = Null<Sova::AnimatedSpriteInfo>();

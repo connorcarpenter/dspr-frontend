@@ -35,10 +35,10 @@ namespace DsprFrontend
 
         this->health = this->unitTemplate->maxHealth;
 
-        this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
+        this->useAnimatedSpriteInfo(this->unitTemplate->sprBase);
 
         this->tcSprite = New<AnimatedSprite>();
-        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
+        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprTC);
         switch (tribeIndex)
         {
             case 0:
@@ -139,14 +139,12 @@ namespace DsprFrontend
                         if (Math::Random(0, 2) < 1) {
                             this->scale->x = this->scale->x * -1;
                         } else {
-                                if (this->textureName->Equals(this->unitTemplate->sprWalkUp->filename)) {
+                                if (this->textureName->Equals(this->unitTemplate->sprWalkUp->spriteInfo->filename)) {
                                     this->facingDown = true;
-                                    this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
-                                    this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
+                                    this->useAnimatedSequenceInfo(this->unitTemplate->sprWalkDown);
                                 } else {
                                     this->facingDown = false;
-                                    this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUp);
-                                    this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUpTC);
+                                    this->useAnimatedSequenceInfo(this->unitTemplate->sprWalkUp);
                                 }
                         }
                     }
@@ -219,8 +217,7 @@ namespace DsprFrontend
                 this->gatherFrameIndex = 0;
                 this->gatherYielding = false;
 
-                this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprSummonFront : this->unitTemplate->sprSummonBack);
-                this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprSummonFrontTC : this->unitTemplate->sprSummonBackTC);
+                this->useAnimatedSequenceInfo(this->facingDown ? this->unitTemplate->sprSummonFront : this->unitTemplate->sprSummonBack);
             }
         }
 
@@ -235,8 +232,7 @@ namespace DsprFrontend
         this->gatherFrameIndex = 0;
         this->gatherYielding = true;
 
-        this->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
-        this->tcSprite->useAnimatedSpriteInfo(this->facingDown ? this->unitTemplate->sprYieldFrontTC : this->unitTemplate->sprYieldBackTC);
+        this->useAnimatedSequenceInfo(this->facingDown ? this->unitTemplate->sprYieldFront : this->unitTemplate->sprYieldBack);
 
         if (this->myManaball != nullptr)
         {
@@ -292,17 +288,15 @@ namespace DsprFrontend
         {
             this->scale->x = Math::Sign(difx);
         }
-        if (dify >= 0 && !this->textureName->Equals(this->unitTemplate->sprWalkDown->filename))
+        if (dify >= 0 && !this->textureName->Equals(this->unitTemplate->sprWalkDown->spriteInfo->filename))
         {
             this->facingDown = true;
-            this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
-            this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
+            this->useAnimatedSequenceInfo(this->unitTemplate->sprWalkDown);
         }
-        if (dify < 0 && !this->textureName->Equals(this->unitTemplate->sprWalkUp->filename))
+        if (dify < 0 && !this->textureName->Equals(this->unitTemplate->sprWalkUp->spriteInfo->filename))
         {
             this->facingDown = false;
-            this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUp);
-            this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkUpTC);
+            this->useAnimatedSequenceInfo(this->unitTemplate->sprWalkUp);
         }
     }
 
@@ -334,8 +328,7 @@ namespace DsprFrontend
         {
             case Walking:
             {
-                this->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDown);
-                this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprWalkDownTC);
+                this->useAnimatedSequenceInfo(this->unitTemplate->sprWalkDown);
             }
             break;
             case Attacking:
@@ -357,43 +350,35 @@ namespace DsprFrontend
                 switch(heading)
                 {
                     case 0: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRight);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRightTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprAttackRight);
                         }
                         break;
                     case 1: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRight);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRightTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprAttackUpRight);
                     }
                         break;
                     case 2: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUp);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprAttackUp);
                     }
                         break;
                     case 3: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRight);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackUpRightTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprAttackUpRight);
                     }
                         break;
                     case 4: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRight);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackRightTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprAttackRight);
                     }
                         break;
                     case 5: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRight);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRightTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprAttackDownRight);
                     }
                         break;
                     case 6: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDown);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprAttackDown);
                     }
                         break;
                     case 7: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRight);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprAttackDownRightTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprAttackDownRight);
                     }
                         break;
 
@@ -419,13 +404,11 @@ namespace DsprFrontend
                 switch(heading)
                 {
                     case 0: case 4: case 5: case 6: case 7: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprSummonFront);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSummonFrontTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprSummonFront);
                     }
                         break;
                     case 1: case 2: case 3: {
-                        this->useAnimatedSpriteInfo(this->unitTemplate->sprSummonBack);
-                        this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSummonBackTC);
+                        this->useAnimatedSequenceInfo(this->unitTemplate->sprSummonBack);
                     }
                         break;
                 }
@@ -505,7 +488,7 @@ namespace DsprFrontend
 
         //TC
 
-        this->tcSprite->imageIndex = imageIndex;
+        this->tcSprite->imageIndex = this->frameStartIndex + this->imageIndex;
         this->tcSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
         this->tcSprite->scale->x = this->scale->x;
         this->tcSprite->drawSelf(camera, newOffset, yoffset);

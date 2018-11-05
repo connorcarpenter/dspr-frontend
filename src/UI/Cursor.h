@@ -19,14 +19,16 @@ namespace DsprFrontend
 
     class Cursor : public Sova::AnimatedSprite
     {
+
     public:
+
         Cursor();
 
         bool leftButtonDragging = false;
         Ref<Point> leftButtonDragPoint = Null<Point>();
         Ref<Point> worldPosition = Null<Point>();
-
         Ref<Button> buttonOrder = Null<Button>();
+
     private:
 
         void step();

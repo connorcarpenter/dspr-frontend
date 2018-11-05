@@ -16,18 +16,15 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
+        this->useAnimatedSpriteInfo(g->spriteCatalog->workerBase);
         this->tcSprite = New<AnimatedSprite>();
+        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerTC);
 
         if (unit->facingDown)
-        {
-            this->useAnimatedSpriteInfo(g->spriteCatalog->workerDieDown);
-            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerDieDownTC);
-        }
+            this->useAnimatedSequenceInfo(g->spriteCatalog->workerDieDown);
         else
-        {
-            this->useAnimatedSpriteInfo(g->spriteCatalog->workerDieUp);
-            this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerDieUpTC);
-        }
+            this->useAnimatedSequenceInfo(g->spriteCatalog->workerDieUp);
+
 
         switch (unit->tribeIndex)
         {
@@ -64,7 +61,7 @@ namespace DsprFrontend
 
         //TC
 
-        this->tcSprite->imageIndex = imageIndex;
+        this->tcSprite->imageIndex = imageIndex + this->frameStartIndex;
         this->tcSprite->position->set(this->position);
         this->tcSprite->scale->x = this->scale->x;
         this->tcSprite->drawSelf(camera, xoffset + (this->scale->x == -1 ? -2 : 0), yoffset);

@@ -11,6 +11,7 @@
 #include <Sova/Graphics/AnimatedSprite.h>
 #include <UI/ButtonCard.h>
 #include <Unit/SpecificUnit/SpecificUnit.h>
+#include <Sova/Graphics/AnimatedSequenceInfo.h>
 
 namespace DsprFrontend {
     class Unit;
@@ -40,44 +41,29 @@ namespace DsprFrontend {
         bool canGather = false;
 
         //sprites
-        Ref<Sova::AnimatedSpriteInfo> sprWalkDown = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprWalkUp = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprBase = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprSkin = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprHair = Null<Sova::AnimatedSpriteInfo>();
 
-        Ref<Sova::AnimatedSpriteInfo> sprWalkDownTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprWalkUpTC = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> sprAttackUp = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprAttackUpRight = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprAttackRight = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprAttackDownRight = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprAttackDown = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> sprAttackUpTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprAttackUpRightTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprAttackRightTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprAttackDownRightTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprAttackDownTC = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> sprDieDown = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprDieUp = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> sprDieDownTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprDieUpTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprWalkDown = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprWalkUp = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprAttackUp = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprAttackUpRight = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprAttackRight = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprAttackDownRight = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprAttackDown = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprDieDown = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprDieUp = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprSummonFront = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprSummonBack = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprYieldFront = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> sprYieldBack = Null<Sova::AnimatedSequenceInfo>();
 
         Ref<Sova::AnimatedSpriteInfo> sprUnitPortrait = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprUnitPortraitTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprBigPortrait = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprUnitPortraitTC = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprBigPortraitTC = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> sprSummonFront = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprSummonBack = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprSummonFrontTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprSummonBackTC = Null<Sova::AnimatedSpriteInfo>();
-
-        Ref<Sova::AnimatedSpriteInfo> sprYieldFront = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprYieldBack = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprYieldFrontTC = Null<Sova::AnimatedSpriteInfo>();
-        Ref<Sova::AnimatedSpriteInfo> sprYieldBackTC = Null<Sova::AnimatedSpriteInfo>();
 
         //sounds
         Ref<Sova::Sound> hitSound = Null<Sova::Sound>();

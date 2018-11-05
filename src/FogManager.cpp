@@ -173,6 +173,8 @@ namespace DsprFrontend
         if (this->destroyed) return;
         if (!this->receivedGrid) return;
 
+        yoffset-=1;
+
         const auto resState = Oryol::Gfx::QueryResourceInfo(this->texture->textureId).State;
         if (resState == Oryol::ResourceState::Valid)
         {
