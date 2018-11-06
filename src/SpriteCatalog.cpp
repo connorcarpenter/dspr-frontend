@@ -13,6 +13,8 @@ namespace DsprFrontend
         this->workerSkin            = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerSkin.png"), 19, 22, 1, 9, 18);
         this->workerHairShort       = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerHairShort.png"), 19, 22, 1, 9, 18);
         this->workerHairLong        = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerHairLong.png"), 19, 22, 1, 9, 18);
+
+        this->workerArmor        = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerArmor.png"), 19, 22, 1, 9, 18);
         
         this->workerWalkDown        = New<AnimatedSequenceInfo>(this->workerBase, 0, 1);
         this->workerWalkUp          = New<AnimatedSequenceInfo>(this->workerBase, 2, 3);

@@ -92,6 +92,10 @@ namespace DsprFrontend
                 break;
         }
 
+        //armor
+        this->armorSprite = New<AnimatedSprite>();
+        this->armorSprite->useAnimatedSpriteInfo(this->unitTemplate->sprArmor);
+
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
         if (this->tribeIndex == g->playersTribeIndex)
@@ -545,6 +549,11 @@ namespace DsprFrontend
         this->hairSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
         this->hairSprite->scale->x = this->scale->x;
         this->hairSprite->drawSelf(camera, newOffset, yoffset);
+
+        this->armorSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+        this->armorSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+        this->armorSprite->scale->x = this->scale->x;
+        this->armorSprite->drawSelf(camera, newOffset, yoffset);
     }
 
     void Unit::playSelectedSound() {

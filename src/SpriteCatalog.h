@@ -20,7 +20,8 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> workerSkin = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerHairShort = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerHairLong = Null<Sova::AnimatedSpriteInfo>();
-        
+        Ref<Sova::AnimatedSpriteInfo> workerArmor = Null<Sova::AnimatedSpriteInfo>();
+
         Ref<Sova::AnimatedSequenceInfo> workerWalkDown = Null<Sova::AnimatedSequenceInfo>();
         Ref<Sova::AnimatedSequenceInfo> workerWalkUp = Null<Sova::AnimatedSequenceInfo>();
         Ref<Sova::AnimatedSequenceInfo> workerAttackUp = Null<Sova::AnimatedSequenceInfo>();
