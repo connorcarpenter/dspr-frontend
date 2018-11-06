@@ -56,6 +56,7 @@ namespace DsprFrontend
         this->worker->sprHairLong = g->spriteCatalog->workerHairLong;
         this->worker->sprHairShort = g->spriteCatalog->workerHairShort;
         this->worker->sprArmor = g->spriteCatalog->workerArmor;
+        this->worker->sprHelmet = g->spriteCatalog->workerHelmet;
 
         this->worker->sprWalkDown = g->spriteCatalog->workerWalkDown;
         this->worker->sprWalkUp = g->spriteCatalog->workerWalkUp;

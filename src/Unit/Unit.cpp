@@ -70,31 +70,36 @@ namespace DsprFrontend
                 break;
         }
 
-        //hair
-        this->hairSprite = New<AnimatedSprite>();
-        if (Math::Random(0,2)<1)
-            this->hairSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairLong);
-        else
-            this->hairSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairShort);
-        switch (hairIndex)
-        {
-            case 0:
-                this->hairSprite->tint = DsprColors::BlackHair;
-                break;
-            case 1:
-                this->hairSprite->tint = DsprColors::BrownHair;
-                break;
-            case 2:
-                this->hairSprite->tint = DsprColors::BlondHair;
-                break;
-            case 3:
-                this->hairSprite->tint = DsprColors::RedHair;
-                break;
+        //hair, helmet
+        this->headSprite = New<AnimatedSprite>();
+        if (Math::Random(0,2)<1) {
+            if (Math::Random(0, 2) < 1)
+                this->headSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairLong);
+            else
+                this->headSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairShort);
+            switch (hairIndex) {
+                case 0:
+                    this->headSprite->tint = DsprColors::BlackHair;
+                    break;
+                case 1:
+                    this->headSprite->tint = DsprColors::BrownHair;
+                    break;
+                case 2:
+                    this->headSprite->tint = DsprColors::BlondHair;
+                    break;
+                case 3:
+                    this->headSprite->tint = DsprColors::RedHair;
+                    break;
+            }
+        } else {
+            this->headSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHelmet);
         }
 
         //armor
-        this->armorSprite = New<AnimatedSprite>();
-        this->armorSprite->useAnimatedSpriteInfo(this->unitTemplate->sprArmor);
+        if (Math::Random(0,2)<1) {
+            this->armorSprite = New<AnimatedSprite>();
+            this->armorSprite->useAnimatedSpriteInfo(this->unitTemplate->sprArmor);
+        }
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
@@ -545,15 +550,18 @@ namespace DsprFrontend
         this->skinSprite->scale->x = this->scale->x;
         this->skinSprite->drawSelf(camera, newOffset, yoffset);
 
-        this->hairSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-        this->hairSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
-        this->hairSprite->scale->x = this->scale->x;
-        this->hairSprite->drawSelf(camera, newOffset, yoffset);
+        this->headSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+        this->headSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+        this->headSprite->scale->x = this->scale->x;
+        this->headSprite->drawSelf(camera, newOffset, yoffset);
 
-        this->armorSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-        this->armorSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
-        this->armorSprite->scale->x = this->scale->x;
-        this->armorSprite->drawSelf(camera, newOffset, yoffset);
+        if (this->armorSprite != nullptr) {
+            this->armorSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+            this->armorSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                             this->position->y - this->unitTemplate->sprCenterAdjust->y);
+            this->armorSprite->scale->x = this->scale->x;
+            this->armorSprite->drawSelf(camera, newOffset, yoffset);
+        }
     }
 
     void Unit::playSelectedSound() {

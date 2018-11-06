@@ -45,7 +45,7 @@ namespace DsprFrontend
         bool selected = false;
         Ref<AnimatedSprite> tcSprite = Null<AnimatedSprite>();
         Ref<AnimatedSprite> skinSprite = Null<AnimatedSprite>();
-        Ref<AnimatedSprite> hairSprite = Null<AnimatedSprite>();
+        Ref<AnimatedSprite> headSprite = Null<AnimatedSprite>();
         Ref<AnimatedSprite> armorSprite = Null<AnimatedSprite>();
         int tribeIndex = -1;
         UnitAnimationState animationState = Walking;
