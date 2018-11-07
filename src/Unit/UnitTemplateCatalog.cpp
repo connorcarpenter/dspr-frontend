@@ -57,14 +57,15 @@ namespace DsprFrontend
         this->worker->sprHairShort = g->spriteCatalog->workerHairShort;
         this->worker->sprArmor = g->spriteCatalog->workerArmor;
         this->worker->sprHelmet = g->spriteCatalog->workerHelmet;
+        this->worker->sprClub = g->spriteCatalog->workerClub;
 
         this->worker->sprWalkDown = g->spriteCatalog->workerWalkDown;
         this->worker->sprWalkUp = g->spriteCatalog->workerWalkUp;
-        this->worker->sprAttackUp = g->spriteCatalog->workerAttackUp;
-        this->worker->sprAttackUpRight = g->spriteCatalog->workerAttackUpRight;
-        this->worker->sprAttackRight = g->spriteCatalog->workerAttackRight;
-        this->worker->sprAttackDownRight = g->spriteCatalog->workerAttackDownRight;
-        this->worker->sprAttackDown = g->spriteCatalog->workerAttackDown;
+        this->worker->sprAttackUp = g->spriteCatalog->workerAttackUp1HS;
+        this->worker->sprAttackUpRight = g->spriteCatalog->workerAttackUpRight1HS;
+        this->worker->sprAttackRight = g->spriteCatalog->workerAttackRight1HS;
+        this->worker->sprAttackDownRight = g->spriteCatalog->workerAttackDownRight1HS;
+        this->worker->sprAttackDown = g->spriteCatalog->workerAttackDown1HS;
         this->worker->sprDieDown = g->spriteCatalog->workerDieDown;
         this->worker->sprDieUp = g->spriteCatalog->workerDieUp;
         this->worker->sprSummonFront = g->spriteCatalog->workerSummonFront;

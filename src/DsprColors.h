@@ -28,5 +28,8 @@ namespace DsprFrontend {
         static Sova::Color BrownHair;
         static Sova::Color BlondHair;
         static Sova::Color RedHair;
+
+        static Sova::Color SeaGreen;
+        static Sova::Color LightSeaGreen;
     };
 }

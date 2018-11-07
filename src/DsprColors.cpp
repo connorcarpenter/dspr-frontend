@@ -26,4 +26,7 @@ namespace DsprFrontend
     Sova::Color DsprColors::BrownHair = Sova::Color(102, 42, 30);
     Sova::Color DsprColors::BlondHair = Sova::Color(255, 153, 51);
     Sova::Color DsprColors::RedHair = Sova::Color(153, 41, 31);
+
+    Sova::Color DsprColors::LightSeaGreen = Sova::Color(144, 255, 144);
+    Sova::Color DsprColors::SeaGreen = Sova::Color(128, 255, 128);
 }

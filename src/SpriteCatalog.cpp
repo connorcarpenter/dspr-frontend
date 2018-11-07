@@ -14,22 +14,28 @@ namespace DsprFrontend
         this->workerHairShort       = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerHairShort.png"), 19, 22, 1, 9, 18);
         this->workerHairLong        = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerHairLong.png"), 19, 22, 1, 9, 18);
 
-        this->workerArmor        = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerArmor.png"), 19, 22, 1, 9, 18);
-        this->workerHelmet        = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerHelmet.png"), 19, 22, 1, 9, 18);
+        this->workerArmor           = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerArmor.png"), 19, 22, 1, 9, 18);
+        this->workerHelmet          = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerHelmet.png"), 19, 22, 1, 9, 18);
+        this->workerClub          = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerClub.png"), 25, 30, 1, 13, 23);
         
         this->workerWalkDown        = New<AnimatedSequenceInfo>(this->workerBase, 0, 1);
         this->workerWalkUp          = New<AnimatedSequenceInfo>(this->workerBase, 2, 3);
-        this->workerAttackUp        = New<AnimatedSequenceInfo>(this->workerBase, 4, 8);
-        this->workerAttackUpRight   = New<AnimatedSequenceInfo>(this->workerBase, 9, 13);
-        this->workerAttackRight     = New<AnimatedSequenceInfo>(this->workerBase, 14, 18);
-        this->workerAttackDownRight = New<AnimatedSequenceInfo>(this->workerBase, 19, 23);
-        this->workerAttackDown      = New<AnimatedSequenceInfo>(this->workerBase, 24, 28);
+        this->workerAttackUp2HS        = New<AnimatedSequenceInfo>(this->workerBase, 4, 8);
+        this->workerAttackUpRight2HS   = New<AnimatedSequenceInfo>(this->workerBase, 9, 13);
+        this->workerAttackRight2HS     = New<AnimatedSequenceInfo>(this->workerBase, 14, 18);
+        this->workerAttackDownRight2HS = New<AnimatedSequenceInfo>(this->workerBase, 19, 23);
+        this->workerAttackDown2HS      = New<AnimatedSequenceInfo>(this->workerBase, 24, 28);
         this->workerDieDown         = New<AnimatedSequenceInfo>(this->workerBase, 29, 30);
         this->workerDieUp           = New<AnimatedSequenceInfo>(this->workerBase, 31, 32);
         this->workerSummonFront     = New<AnimatedSequenceInfo>(this->workerBase, 33, 36);
         this->workerSummonBack      = New<AnimatedSequenceInfo>(this->workerBase, 37, 40);
         this->workerYieldFront      = New<AnimatedSequenceInfo>(this->workerBase, 41, 44);
         this->workerYieldBack       = New<AnimatedSequenceInfo>(this->workerBase, 45, 48);
+        this->workerAttackUp1HS        = New<AnimatedSequenceInfo>(this->workerBase, 49, 53);
+        this->workerAttackUpRight1HS   = New<AnimatedSequenceInfo>(this->workerBase, 54, 58);
+        this->workerAttackRight1HS     = New<AnimatedSequenceInfo>(this->workerBase, 59, 63);
+        this->workerAttackDownRight1HS = New<AnimatedSequenceInfo>(this->workerBase, 64, 68);
+        this->workerAttackDown1HS      = New<AnimatedSequenceInfo>(this->workerBase, 69, 73);
 
         this->workerUnitPortrait = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerPortrait.png"), 10, 12, 0, 0, 0);
         this->workerUnitPortraitTC = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/workerPortrait_TC.png"), 10, 4, 0, 0, -8);

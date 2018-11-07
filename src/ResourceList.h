@@ -38,6 +38,8 @@ namespace DsprFrontend
             resources->Add(New<String>("images/worker/sprWorkerHairLong.png"));
             resources->Add(New<String>("images/worker/sprWorkerArmor.png"));
             resources->Add(New<String>("images/worker/sprWorkerHelmet.png"));
+            resources->Add(New<String>("images/worker/sprWorkerClub.png"));
+
             resources->Add(New<String>("images/worker/workerPortrait.png"));
             resources->Add(New<String>("images/worker/worker_bigPortrait.png"));
             resources->Add(New<String>("images/worker/workerPortrait_TC.png"));

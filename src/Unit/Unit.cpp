@@ -93,12 +93,21 @@ namespace DsprFrontend
             }
         } else {
             this->headSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHelmet);
+            this->headSprite->tint = DsprColors::LightSeaGreen;
         }
 
         //armor
         if (Math::Random(0,2)<1) {
             this->armorSprite = New<AnimatedSprite>();
             this->armorSprite->useAnimatedSpriteInfo(this->unitTemplate->sprArmor);
+            this->armorSprite->tint = DsprColors::LightSeaGreen;
+        }
+
+        //weapon
+        if (Math::Random(0,2)<1) {
+            this->weaponSprite = New<AnimatedSprite>();
+            this->weaponSprite->useAnimatedSpriteInfo(this->unitTemplate->sprClub);
+            this->weaponSprite->tint = DsprColors::LightSeaGreen;
         }
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
@@ -536,31 +545,55 @@ namespace DsprFrontend
 
         int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
 
+        //Weapon
+        if (!this->facingDown) {
+            if (this->weaponSprite != nullptr) {
+                this->weaponSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->weaponSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                  this->position->y - this->unitTemplate->sprCenterAdjust->y);
+                this->weaponSprite->scale->x = this->scale->x;
+                this->weaponSprite->drawSelf(camera, newOffset, yoffset);
+            }
+        }
+        
         AnimatedSprite::drawSelf(camera, newOffset - this->unitTemplate->sprCenterAdjust->x, yoffset - this->unitTemplate->sprCenterAdjust->y);
 
         //TC
-
         this->tcSprite->imageIndex = this->frameStartIndex + this->imageIndex;
         this->tcSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
         this->tcSprite->scale->x = this->scale->x;
         this->tcSprite->drawSelf(camera, newOffset, yoffset);
 
+        //Skin
         this->skinSprite->imageIndex = this->frameStartIndex + this->imageIndex;
         this->skinSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
         this->skinSprite->scale->x = this->scale->x;
         this->skinSprite->drawSelf(camera, newOffset, yoffset);
 
+        //Head
         this->headSprite->imageIndex = this->frameStartIndex + this->imageIndex;
         this->headSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
         this->headSprite->scale->x = this->scale->x;
         this->headSprite->drawSelf(camera, newOffset, yoffset);
 
+        //Armor
         if (this->armorSprite != nullptr) {
             this->armorSprite->imageIndex = this->frameStartIndex + this->imageIndex;
             this->armorSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
                                              this->position->y - this->unitTemplate->sprCenterAdjust->y);
             this->armorSprite->scale->x = this->scale->x;
             this->armorSprite->drawSelf(camera, newOffset, yoffset);
+        }
+
+        //Weapon
+        if (this->facingDown) {
+            if (this->weaponSprite != nullptr) {
+                this->weaponSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->weaponSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                  this->position->y - this->unitTemplate->sprCenterAdjust->y);
+                this->weaponSprite->scale->x = this->scale->x;
+                this->weaponSprite->drawSelf(camera, newOffset, yoffset);
+            }
         }
     }
 
