@@ -48,6 +48,7 @@ namespace DsprFrontend
         Ref<AnimatedSprite> headSprite = Null<AnimatedSprite>();
         Ref<AnimatedSprite> armorSprite = Null<AnimatedSprite>();
         Ref<AnimatedSprite> weaponSprite = Null<AnimatedSprite>();
+        Ref<AnimatedSprite> shieldSprite = Null<AnimatedSprite>();
         int tribeIndex = -1;
         UnitAnimationState animationState = Walking;
         int health;

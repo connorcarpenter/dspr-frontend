@@ -110,6 +110,13 @@ namespace DsprFrontend
             this->weaponSprite->tint = DsprColors::LightSeaGreen;
         }
 
+        //shield
+        if (Math::Random(0,2)<1) {
+            this->shieldSprite = New<AnimatedSprite>();
+            this->shieldSprite->useAnimatedSpriteInfo(this->unitTemplate->sprShield);
+            this->shieldSprite->tint = DsprColors::LightSeaGreen;
+        }
+
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
         if (this->tribeIndex == g->playersTribeIndex)
@@ -554,8 +561,16 @@ namespace DsprFrontend
                 this->weaponSprite->scale->x = this->scale->x;
                 this->weaponSprite->drawSelf(camera, newOffset, yoffset);
             }
+
+            if (this->shieldSprite != nullptr) {
+                this->shieldSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->shieldSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                  this->position->y - this->unitTemplate->sprCenterAdjust->y);
+                this->shieldSprite->scale->x = this->scale->x;
+                this->shieldSprite->drawSelf(camera, newOffset, yoffset);
+            }
         }
-        
+
         AnimatedSprite::drawSelf(camera, newOffset - this->unitTemplate->sprCenterAdjust->x, yoffset - this->unitTemplate->sprCenterAdjust->y);
 
         //TC
@@ -593,6 +608,14 @@ namespace DsprFrontend
                                                   this->position->y - this->unitTemplate->sprCenterAdjust->y);
                 this->weaponSprite->scale->x = this->scale->x;
                 this->weaponSprite->drawSelf(camera, newOffset, yoffset);
+            }
+
+            if (this->shieldSprite != nullptr) {
+                this->shieldSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->shieldSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                  this->position->y - this->unitTemplate->sprCenterAdjust->y);
+                this->shieldSprite->scale->x = this->scale->x;
+                this->shieldSprite->drawSelf(camera, newOffset, yoffset);
             }
         }
     }

@@ -49,6 +49,7 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> sprArmor = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprHelmet = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprClub = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprShield = Null<Sova::AnimatedSpriteInfo>();
 
         Ref<Sova::AnimatedSequenceInfo> sprWalkDown = Null<Sova::AnimatedSequenceInfo>();
         Ref<Sova::AnimatedSequenceInfo> sprWalkUp = Null<Sova::AnimatedSequenceInfo>();

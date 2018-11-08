@@ -58,6 +58,7 @@ namespace DsprFrontend
         this->worker->sprArmor = g->spriteCatalog->workerArmor;
         this->worker->sprHelmet = g->spriteCatalog->workerHelmet;
         this->worker->sprClub = g->spriteCatalog->workerClub;
+        this->worker->sprShield = g->spriteCatalog->workerShield;
 
         this->worker->sprWalkDown = g->spriteCatalog->workerWalkDown;
         this->worker->sprWalkUp = g->spriteCatalog->workerWalkUp;

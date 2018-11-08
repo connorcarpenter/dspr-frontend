@@ -17,6 +17,7 @@ namespace DsprFrontend
         this->workerArmor           = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerArmor.png"), 19, 22, 1, 9, 18);
         this->workerHelmet          = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerHelmet.png"), 19, 22, 1, 9, 18);
         this->workerClub          = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerClub.png"), 25, 30, 1, 13, 23);
+        this->workerShield          = New<AnimatedSpriteInfo>(New<Sova::String>("images/worker/sprWorkerShield.png"), 13, 15, 1, 3, 12);
         
         this->workerWalkDown        = New<AnimatedSequenceInfo>(this->workerBase, 0, 1);
         this->workerWalkUp          = New<AnimatedSequenceInfo>(this->workerBase, 2, 3);
