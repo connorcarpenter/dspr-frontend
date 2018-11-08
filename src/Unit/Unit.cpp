@@ -106,8 +106,13 @@ namespace DsprFrontend
         //weapon
         if (Math::Random(0,2)<1) {
             this->weaponSprite = New<AnimatedSprite>();
-            this->weaponSprite->useAnimatedSpriteInfo(this->unitTemplate->sprClub);
-            this->weaponSprite->tint = DsprColors::LightSeaGreen;
+            if (Math::Random(0,2)<1) {
+                this->weaponSprite->useAnimatedSpriteInfo(this->unitTemplate->sprClub);
+                this->weaponSprite->tint = DsprColors::LightSeaGreen;
+
+            } else {
+                this->weaponSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSling);
+            }
         }
 
         //shield
