@@ -281,7 +281,7 @@ namespace DsprFrontend
                 }
             }
 
-            this->myManaball->size = (int) ((this->gatherFrameIndex/this->gatherFramesToYield) * 9);
+            this->myManaball->size = Math::Min((this->gatherFrameIndex/this->gatherFramesToYield) * 9, 9);
         }
         if (this->gatherYielding)
         {
