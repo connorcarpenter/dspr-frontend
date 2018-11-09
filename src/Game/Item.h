@@ -1,14 +1,17 @@
+#pragma once
+
 //
 // Created by connor on 11/8/18.
 //
 
-#ifndef DSPR_FRONTEND_ITEM_H
-#define DSPR_FRONTEND_ITEM_H
+#include <Sova/Graphics/AnimatedSprite.h>
 
-
-class Item {
-
-};
-
-
-#endif //DSPR_FRONTEND_ITEM_H
+namespace DsprFrontend {
+    class Item : public Sova::AnimatedSprite {
+    public:
+        Item(int id, int x, int y, int index);
+        Ref<Point> tilePosition = Null<Point>();
+        int id = -1;
+        int index = -1;
+    };
+}

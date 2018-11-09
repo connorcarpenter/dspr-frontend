@@ -29,6 +29,7 @@
 #include "ResourceList.h"
 #include "Game/EconomyManager.h"
 #include "GraphicsManager.h"
+#include "Game/ItemManager.h"
 
 using namespace Sova;
 
@@ -91,6 +92,7 @@ namespace DsprFrontend
         g->world->AddChild(g->tileManager);
 
         g->unitManager = New<UnitManager>();
+        g->itemManager = New<ItemManager>();
 
         g->uiManager = New<UiManager>();
         g->uiManager->SetDepth(-9990);

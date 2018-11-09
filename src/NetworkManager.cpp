@@ -142,13 +142,13 @@ namespace DsprFrontend
         }
         else if (command->Equals("item/1.0/create")) {
             Ref<List<Sova::String>> itemString = splitString->At(1)->Split(',');
-            //g->itemManager->receiveItem(itemString->At(0), itemString->At(1), itemString->At(2), itemString->At(3));
+            g->itemManager->receiveItem(itemString->At(0), itemString->At(1), itemString->At(2), itemString->At(3));
             return;
         }
         else if (command->Equals("item/1.0/delete")) {
             auto idString = splitString->At(1);
             auto propsString = splitString->At(2);
-            //g->itemManager->receiveItemDelete(idString, propsString);
+            g->itemManager->receiveItemDelete(idString, propsString);
             return;
         }
     }

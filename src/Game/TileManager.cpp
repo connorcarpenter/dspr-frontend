@@ -15,6 +15,7 @@
 #include "FogManager.h"
 #include "Game/Minimap/Minimap.h"
 #include "Game/Unit/UnitManager.h"
+#include "Game/ItemManager.h"
 
 using namespace Sova;
 using namespace Oryol;
@@ -47,6 +48,7 @@ namespace DsprFrontend
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         g->fogManager->receiveGrid(this->gridWidth, this->gridHeight);
         g->unitManager->receiveGrid(this->gridWidth, this->gridHeight);
+        g->itemManager->receiveGrid(this->gridWidth, this->gridHeight);
 
         std::cout << "received Grid"<< std::endl;
     }
