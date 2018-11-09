@@ -15,6 +15,8 @@
 #include "Game/TileManager.h"
 #include "ButtonCardCatalog.h"
 #include "DsprColors.h"
+#include "Game/ItemManager.h"
+#include "Game/Item.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 
@@ -105,16 +107,59 @@ namespace DsprFrontend
             auto unitHovering = g->unitManager->getUnitOverlappingWithPoint(this->worldPosition->x,
                                                                             this->worldPosition->y);
 
-            if (unitHovering == nullptr && this->cursorIsHovering) {
-                this->cursorIsHovering = false;
-                this->imageIndex = 1;
-                if (this->hoverList->Size() > 0) {
-                    this->setHoverListUnitsToHover(false);
-                    this->hoverList->Clear();
+            if (unitHovering == nullptr) {
+
+                auto itemHovering = g->itemManager->getItemOverlappingWithPoint(this->worldPosition->x,
+                                                                                this->worldPosition->y);
+
+                if (this->cursorIsHovering) {
+
+                    if (itemHovering == nullptr)
+                    {
+                        this->cursorIsHovering = false;
+                        this->imageIndex = 1;
+                        if (this->lastHoveringItem != nullptr)
+                        {
+                            this->lastHoveringItem->hovering = false;
+                            this->lastHoveringItem = nullptr;
+                        }
+                    }
+
+                    if (this->hoverList->Size() > 0)
+                    {
+                        this->setHoverListUnitsToHover(false);
+                        this->hoverList->Clear();
+                    }
+                }
+
+                if (itemHovering != nullptr)
+                {
+                    this->tint = DsprColors::Yellow;
+
+                    if (this->lastHoveringItem != nullptr && this->lastHoveringItem != itemHovering)
+                        this->lastHoveringItem->hovering = false;
+
+                    itemHovering->hovering = true;
+                    this->lastHoveringItem = itemHovering;
+
+                    this->cursorIsHovering = true;
+
+                    if(g->unitManager->selectionList->Size() > 0) {
+                        this->imageIndex = 3;
+                    } else {
+                        this->imageIndex = 0;
+                    }
                 }
             }
+            else
+            {
+                if (this->lastHoveringItem != nullptr)
+                {
+                    this->lastHoveringItem->hovering = false;
+                    this->lastHoveringItem = nullptr;
+                    this->imageIndex = 0;
+                }
 
-            if (unitHovering != nullptr) {
                 this->tint = (unitHovering->tribeIndex == g->playersTribeIndex) ? DsprColors::Green : DsprColors::Red;
                 if (unitHovering->tribeIndex == -1) this->tint = DsprColors::Yellow;
 
@@ -170,6 +215,12 @@ namespace DsprFrontend
                     this->setHoverListUnitsToSelected(true, false);
                     this->setHoverListUnitsToHover(false);
                     this->hoverList->Clear();
+
+                    if (this->lastSelectedItem != nullptr)
+                    {
+                        this->lastSelectedItem->selected = false;
+                        this->lastSelectedItem = nullptr;
+                    }
                 }
             } else {
                 if (leftButtonPressed) {
@@ -197,6 +248,18 @@ namespace DsprFrontend
                                 this->setHoverListUnitsToSelected(true, shiftPressed);
 
                                 this->leftButtonDoubleClickCountdown = this->leftButtonDoubleClickWindow;
+
+                                if (this->lastSelectedItem != nullptr)
+                                {
+                                    this->lastSelectedItem->selected = false;
+                                    this->lastSelectedItem = nullptr;
+                                }
+                                if (this->lastHoveringItem != nullptr)
+                                {
+                                    this->lastHoveringItem->selected = true;
+                                    this->lastSelectedItem = this->lastHoveringItem;
+                                }
+
                             } else {
                                 ///its a doubleclick!
 
@@ -306,7 +369,7 @@ namespace DsprFrontend
         if (this->buttonOrder != nullptr) {
             this->imageIndex = 2;
         } else {
-            this->imageIndex = this->cursorIsHovering ? 0 : 1;
+            //this->imageIndex = this->cursorIsHovering ? 0 : 1;
         }
 
         AnimatedSprite::drawSelf(camera, xoffset, yoffset);

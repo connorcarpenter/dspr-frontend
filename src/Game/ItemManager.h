@@ -17,6 +17,9 @@ namespace DsprFrontend {
                          Ref<Sova::String> itemIndexStr);
         void receiveItemDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr);
         void receiveGrid(int w, int h);
+
+        Ref<Item> getItemOverlappingWithPoint(int x, int y);
+
     private:
         Ref<List<Item>> itemList = Null<List<Item>>();
         Ref<RefIsoGrid<Item>> itemGrid = Null<RefIsoGrid<Item>>();
@@ -25,5 +28,6 @@ namespace DsprFrontend {
         int gridHeight;
 
         void updateItemPosition(Ref<Item> item, Ref<Point> oldPosition, Ref<Point> newPosition);
+
     };
 }

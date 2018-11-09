@@ -45,7 +45,6 @@ namespace DsprFrontend
             rightButtonAlreadyClicked = false;
     }
 
-    /* CHANGE HERE*/
     Ref<Unit> UnitManager::getUnitOverlappingWithPoint(int x, int y)
     {
         if (!this->receivedGrid) return Null<Unit>();
@@ -55,17 +54,6 @@ namespace DsprFrontend
         auto tilePos = g->tileManager->getTilePosition(x, y);
 
         return this->unitGrid->get(tilePos->x, tilePos->y);
-
-//        for (auto iterator = this->unitList->GetIterator(); iterator->Valid(); iterator->Next())
-//        {
-//            auto unit = iterator->Get();
-//            if (Math::PointInBox(x, y,
-//                                 unit->position->x - 6, unit->position->y - 10,
-//                                 unit->position->x + 4, unit->position->y + 1))
-//                return unit;
-//        }
-//
-//        return Null<Unit>();
     }
 
     Ref<List<Unit>> UnitManager::getNonHoveringUnitsWithinBox(int x1, int y1, int x2, int y2)
@@ -94,18 +82,6 @@ namespace DsprFrontend
                 output->Add(unit);
             }
         }
-
-        /*
-        for (auto iterator = this->unitList->GetIterator(); iterator->Valid(); iterator->Next())
-        {
-            auto unit = iterator->Get();
-            if (unit->hovering) continue;
-            if (Math::BoxesOverlap(x1, y1, x2, y2,
-                                 unit->position->x - 6, unit->position->y - 10,
-                                 unit->position->x + 4, unit->position->y + 1))
-                output->Add(unit);
-        }
-         */
 
         if (output->Size() == 0)
             return Null<List<Unit>>();
@@ -145,7 +121,6 @@ namespace DsprFrontend
 
         return output;
     }
-    /* CHANGE HERE*/
 
     void UnitManager::deselectAllUnits()
     {

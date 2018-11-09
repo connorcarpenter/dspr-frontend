@@ -6,6 +6,7 @@
 #include "ItemManager.h"
 #include "Global.h"
 #include "Item.h"
+#include "TileManager.h"
 
 namespace DsprFrontend {
 
@@ -62,5 +63,16 @@ namespace DsprFrontend {
 
         this->itemGrid = New<RefIsoGrid<Item>>();
         this->itemGrid->initialize(this->gridWidth * 2, this->gridHeight * 2);
+    }
+
+    Ref<Item> ItemManager::getItemOverlappingWithPoint(int x, int y)
+    {
+        if (!this->receivedGrid) return Null<Item>();
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        auto tilePos = g->tileManager->getTilePosition(x, y);
+
+        return this->itemGrid->get(tilePos->x, tilePos->y);
     }
 }

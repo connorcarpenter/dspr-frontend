@@ -65,6 +65,7 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> manafount = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> manaball = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> itemsGround = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> sprSparkle = Null<Sova::AnimatedSpriteInfo>();
 
         //ui
         Ref<Sova::AnimatedSpriteInfo> sprMainFont = Null<Sova::AnimatedSpriteInfo>();

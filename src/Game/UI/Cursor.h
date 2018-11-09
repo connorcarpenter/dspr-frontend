@@ -16,6 +16,7 @@ namespace DsprFrontend
 {
     class Unit;
     class Button;
+    class Item;
 
     class Cursor : public Sova::AnimatedSprite
     {
@@ -48,5 +49,8 @@ namespace DsprFrontend
 
         bool cursorIsHovering = false;
         int ignoreNextLeftButtonClicked = 0;
+
+        Ref<Item> lastHoveringItem = Null<Item>();
+        Ref<Item> lastSelectedItem = Null<Item>();
     };
 }
