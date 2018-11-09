@@ -5,9 +5,9 @@
 #include <Sova/Internal/InternalApp.h>
 #include <Sova/Math/Math.h>
 #include "DyingUnit.h"
-#include "Global.h"
+#include "Game/Global.h"
 #include "SpriteCatalog.h"
-#include "Unit/Unit.h"
+#include "Game/Unit/Unit.h"
 #include "Sova/Audio/Sound.h"
 
 namespace DsprFrontend

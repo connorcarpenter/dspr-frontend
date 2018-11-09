@@ -9,8 +9,8 @@
 #include <Sova/Audio/Sound.h>
 #include <Sova/Graphics/Sprite.h>
 #include <Sova/Graphics/AnimatedSprite.h>
-#include <UI/ButtonCard.h>
-#include <Unit/SpecificUnit/SpecificUnit.h>
+#include <Game/UI/ButtonCard.h>
+#include <Game/Unit/SpecificUnit/SpecificUnit.h>
 #include <Sova/Graphics/AnimatedSequenceInfo.h>
 
 namespace DsprFrontend {

@@ -5,14 +5,14 @@
 #include <Sova/Internal/InternalApp.h>
 #include <Sova/Math/Math.h>
 #include "UiManager.h"
-#include "Global.h"
-#include "Unit/Unit.h"
-#include "TileManager.h"
-#include "Unit/UnitManager.h"
+#include "Game/Global.h"
+#include "Game/Unit/Unit.h"
+#include "Game/TileManager.h"
+#include "Game/Unit/UnitManager.h"
 #include "Cursor.h"
-#include "Unit/UnitTemplate.h"
+#include "Game/Unit/UnitTemplate.h"
 #include "SpriteCatalog.h"
-#include "EconomyManager.h"
+#include "Game/EconomyManager.h"
 #include "GraphicsManager.h"
 
 namespace DsprFrontend

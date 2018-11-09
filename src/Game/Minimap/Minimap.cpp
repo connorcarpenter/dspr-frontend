@@ -7,10 +7,10 @@
 
 #include "MinimapFog.h"
 #include "MinimapUnits.h"
-#include "Global.h"
+#include "Game/Global.h"
 #include "Minimap.h"
-#include "UI/Cursor.h"
-#include "TileManager.h"
+#include "Game/UI/Cursor.h"
+#include "Game/TileManager.h"
 
 namespace DsprFrontend {
 

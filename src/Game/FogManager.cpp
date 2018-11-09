@@ -8,7 +8,7 @@
 #include "FogManager.h"
 #include "Sova/Graphics/Internal/InternalCamera.h"
 #include "Global.h"
-#include "Minimap/Minimap.h"
+#include "Game/Minimap/Minimap.h"
 #include "Circle/CircleCache.h"
 
 namespace DsprFrontend

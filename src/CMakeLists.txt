@@ -4,45 +4,48 @@ fips_begin_app(dspr-frontend windowed)
             Main.cpp
             Controller.h
             DsprShaderHandler.h DsprShaderHandler.cpp
-            Tile.h Tile.cpp
-            TileManager.h TileManager.cpp
+            Game/Tile.h Game/Tile.cpp
+            Game/TileManager.h Game/TileManager.cpp
             NetworkManager.h NetworkManager.cpp
-            FogManager.h FogManager.cpp
+            Game/FogManager.h Game/FogManager.cpp
             DsprColors.h DsprColors.cpp
-            Block.h Block.cpp
-            Global.h Global.cpp
+            Game/Block.h Game/Block.cpp
+            Game/Global.h Game/Global.cpp
             TestClass.h TestClass.cpp
             SpriteCatalog.h SpriteCatalog.cpp
             RefIsoGrid.h
             ResourceList.h
-            EconomyManager.h EconomyManager.cpp
+            Game/EconomyManager.h Game/EconomyManager.cpp
             GraphicsManager.h GraphicsManager.cpp
 
-            Unit/Unit.h Unit/Unit.cpp
-            Unit/DyingUnit.h Unit/DyingUnit.cpp
-            Unit/UnitManager.h Unit/UnitManager.cpp
-            Unit/UnitOrder.h
-            Unit/UnitTemplate.h Unit/UnitTemplate.cpp
-            Unit/UnitTemplateCatalog.h Unit/UnitTemplateCatalog.cpp
-            Unit/ConstructionQueue.h Unit/ConstructionQueue.cpp
+            Game/Unit/Unit.h Game/Unit/Unit.cpp
+            Game/Unit/DyingUnit.h Game/Unit/DyingUnit.cpp
+            Game/Unit/UnitManager.h Game/Unit/UnitManager.cpp
+            Game/Unit/UnitOrder.h
+            Game/Unit/UnitTemplate.h Game/Unit/UnitTemplate.cpp
+            Game/Unit/UnitTemplateCatalog.h Game/Unit/UnitTemplateCatalog.cpp
+            Game/Unit/ConstructionQueue.h Game/Unit/ConstructionQueue.cpp
 
-            Unit/SpecificUnit/SpecificUnit.h Unit/SpecificUnit/SpecificUnit.cpp
-            Unit/SpecificUnit/Manafount.h Unit/SpecificUnit/Manafount.cpp
+            Game/Unit/SpecificUnit/SpecificUnit.h Game/Unit/SpecificUnit/SpecificUnit.cpp
+            Game/Unit/SpecificUnit/Manafount.h Game/Unit/SpecificUnit/Manafount.cpp
 
-            Effects/Manaball.h Effects/Manaball.cpp
-            Effects/BloodParticle.h Effects/BloodParticle.cpp
-            Effects/FloatingNumber.h Effects/FloatingNumber.cpp
+            Game/Item.h Game/Item.cpp
+            Game/ItemManager.h Game/ItemManager.cpp
 
-            UI/UiManager.h UI/UiManager.cpp
-            UI/Cursor.h UI/Cursor.cpp
-            UI/ButtonCardCatalog.h UI/ButtonCardCatalog.cpp
-            UI/ButtonCard.h UI/ButtonCard.cpp
-            UI/ButtonActions.h UI/ButtonActions.cpp
-            UI/Button.h UI/Button.cpp
+            Game/Effects/Manaball.h Game/Effects/Manaball.cpp
+            Game/Effects/BloodParticle.h Game/Effects/BloodParticle.cpp
+            Game/Effects/FloatingNumber.h Game/Effects/FloatingNumber.cpp
 
-            Minimap/Minimap.h Minimap/Minimap.cpp
-            Minimap/MinimapUnits.h Minimap/MinimapUnits.cpp
-            Minimap/MinimapFog.h Minimap/MinimapFog.cpp
+            Game/UI/UiManager.h Game/UI/UiManager.cpp
+            Game/UI/Cursor.h Game/UI/Cursor.cpp
+            Game/UI/ButtonCardCatalog.h Game/UI/ButtonCardCatalog.cpp
+            Game/UI/ButtonCard.h Game/UI/ButtonCard.cpp
+            Game/UI/ButtonActions.h Game/UI/ButtonActions.cpp
+            Game/UI/Button.h Game/UI/Button.cpp
+
+            Game/Minimap/Minimap.h Game/Minimap/Minimap.cpp
+            Game/Minimap/MinimapUnits.h Game/Minimap/MinimapUnits.cpp
+            Game/Minimap/MinimapFog.h Game/Minimap/MinimapFog.cpp
 
             Circle/Circle.h Circle/Circle.cpp
             Circle/CircleCache.h Circle/CircleCache.cpp

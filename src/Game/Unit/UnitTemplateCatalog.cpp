@@ -3,8 +3,8 @@
 //
 
 #include <Sova/Internal/InternalApp.h>
-#include <Global.h>
-#include <Unit/SpecificUnit/Manafount.h>
+#include <Game/Global.h>
+#include <Game/Unit/SpecificUnit/Manafount.h>
 #include "UnitTemplateCatalog.h"
 #include "SpriteCatalog.h"
 #include "../UI/ButtonCardCatalog.h"

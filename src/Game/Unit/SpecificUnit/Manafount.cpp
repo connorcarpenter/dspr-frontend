@@ -4,7 +4,7 @@
 
 #include <Sova/Math/Math.h>
 #include "Manafount.h"
-#include "Unit/Unit.h"
+#include "Game/Unit/Unit.h"
 
 namespace DsprFrontend
 {

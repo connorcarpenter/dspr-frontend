@@ -5,7 +5,7 @@
 #include <Sova/Math/Math.h>
 #include <Sova/Internal/InternalApp.h>
 #include "BloodParticle.h"
-#include "Global.h"
+#include "Game/Global.h"
 #include "SpriteCatalog.h"
 
 namespace DsprFrontend

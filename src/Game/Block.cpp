@@ -8,7 +8,7 @@
 #include "Global.h"
 #include "FogManager.h"
 #include "TileManager.h"
-#include "Minimap/Minimap.h"
+#include "Game/Minimap/Minimap.h"
 
 namespace DsprFrontend
 {

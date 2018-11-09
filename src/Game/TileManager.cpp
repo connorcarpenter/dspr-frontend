@@ -13,8 +13,8 @@
 #include "Global.h"
 #include "Block.h"
 #include "FogManager.h"
-#include "Minimap/Minimap.h"
-#include "Unit/UnitManager.h"
+#include "Game/Minimap/Minimap.h"
+#include "Game/Unit/UnitManager.h"
 
 using namespace Sova;
 using namespace Oryol;

@@ -3,10 +3,10 @@
 //
 
 #include <Sova/Internal/InternalApp.h>
-#include <Global.h>
+#include <Game/Global.h>
 #include "MinimapFog.h"
-#include "FogManager.h"
-#include "TileManager.h"
+#include "Game/FogManager.h"
+#include "Game/TileManager.h"
 
 namespace DsprFrontend {
 

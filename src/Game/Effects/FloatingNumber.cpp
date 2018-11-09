@@ -3,7 +3,7 @@
 //
 
 #include <Sova/Internal/InternalApp.h>
-#include <Global.h>
+#include <Game/Global.h>
 #include "FloatingNumber.h"
 #include "GraphicsManager.h"
 

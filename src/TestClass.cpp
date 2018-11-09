@@ -6,8 +6,8 @@
 #include <Sova/Math/Math.h>
 
 //#include <Sova/Internal/InternalApp.h>
-#include "UI/UiManager.h"
-#include "Global.h"
+#include "Game/UI/UiManager.h"
+#include "Game/Global.h"
 //#include "Unit.h"
 
 namespace DsprFrontend {

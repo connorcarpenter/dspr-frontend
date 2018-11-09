@@ -3,11 +3,11 @@
 //
 
 #include <Sova/Internal/InternalApp.h>
-#include <Global.h>
-#include <Unit/UnitOrder.h>
+#include <Game/Global.h>
+#include <Game/Unit/UnitOrder.h>
 #include "ButtonActions.h"
-#include "Unit/UnitManager.h"
-#include "Unit/UnitTemplateCatalog.h"
+#include "Game/Unit/UnitManager.h"
+#include "Game/Unit/UnitTemplateCatalog.h"
 
 namespace DsprFrontend
 {

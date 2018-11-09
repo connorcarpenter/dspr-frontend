@@ -7,7 +7,7 @@
 #include "ButtonCard.h"
 #include "ButtonActions.h"
 #include "SpriteCatalog.h"
-#include "Global.h"
+#include "Game/Global.h"
 
 namespace DsprFrontend
 {

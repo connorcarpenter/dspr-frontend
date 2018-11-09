@@ -7,11 +7,12 @@
 #include <Sova/Network/HttpRequest.h>
 #include <Sova/Internal/InternalApp.h>
 #include "NetworkManager.h"
-#include "Global.h"
+#include "Game/Global.h"
 #include <iostream>
-#include "TileManager.h"
-#include "Unit/UnitManager.h"
-#include "EconomyManager.h"
+#include "Game/TileManager.h"
+#include "Game/Unit/UnitManager.h"
+#include "Game/EconomyManager.h"
+#include "Game/ItemManager.h"
 
 using Sova::String;
 using Sova::StringBuilder;
@@ -137,6 +138,17 @@ namespace DsprFrontend
         else if (command->Equals("economy/1.0/update")) {
             auto propsString = splitString->At(1);
             g->economyManager->receiveUpdate(propsString->Split('&'));
+            return;
+        }
+        else if (command->Equals("item/1.0/create")) {
+            Ref<List<Sova::String>> itemString = splitString->At(1)->Split(',');
+            //g->itemManager->receiveItem(itemString->At(0), itemString->At(1), itemString->At(2), itemString->At(3));
+            return;
+        }
+        else if (command->Equals("item/1.0/delete")) {
+            auto idString = splitString->At(1);
+            auto propsString = splitString->At(2);
+            //g->itemManager->receiveItemDelete(idString, propsString);
             return;
         }
     }

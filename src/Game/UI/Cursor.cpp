@@ -7,12 +7,12 @@
 #include "Sova/Graphics/Color.h"
 #include <Sova/Audio/Sound.h>
 
-#include "Global.h"
+#include "Game/Global.h"
 #include "Cursor.h"
 #include "UiManager.h"
-#include "Unit/Unit.h"
-#include "Unit/UnitManager.h"
-#include "TileManager.h"
+#include "Game/Unit/Unit.h"
+#include "Game/Unit/UnitManager.h"
+#include "Game/TileManager.h"
 #include "ButtonCardCatalog.h"
 #include "DsprColors.h"
 

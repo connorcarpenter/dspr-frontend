@@ -4,11 +4,11 @@
 
 #include <Sova/Internal/InternalApp.h>
 
-#include <Global.h>
+#include <Game/Global.h>
 #include "MinimapUnits.h"
-#include "Unit/Unit.h"
-#include "Unit/UnitManager.h"
-#include "TileManager.h"
+#include "Game/Unit/Unit.h"
+#include "Game/Unit/UnitManager.h"
+#include "Game/TileManager.h"
 
 namespace DsprFrontend
 {

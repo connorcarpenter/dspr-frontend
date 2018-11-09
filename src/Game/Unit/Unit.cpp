@@ -4,20 +4,20 @@
 
 #include <Sova/Internal/InternalApp.h>
 #include <Sova/Math/Math.h>
-#include "Global.h"
-#include "FogManager.h"
+#include "Game/Global.h"
+#include "Game/FogManager.h"
 #include "SpriteCatalog.h"
 #include <Sova/Audio/Sound.h>
-#include <Effects/Manaball.h>
-#include <Effects/FloatingNumber.h>
-#include <Unit/SpecificUnit/Manafount.h>
+#include <Game/Effects/Manaball.h>
+#include <Game/Effects/FloatingNumber.h>
+#include <Game/Unit/SpecificUnit/Manafount.h>
 #include "Unit.h"
-#include "TileManager.h"
+#include "Game/TileManager.h"
 #include "DsprColors.h"
 #include "UnitTemplate.h"
 #include "UnitTemplateCatalog.h"
 #include "UnitManager.h"
-#include "EconomyManager.h"
+#include "Game/EconomyManager.h"
 
 namespace DsprFrontend
 {

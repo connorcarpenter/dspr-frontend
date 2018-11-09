@@ -20,6 +20,8 @@ namespace DsprFrontend
             resources->Add(New<String>("images/block.png"));
             resources->Add(New<String>("images/fogTile.png"));
             resources->Add(New<String>("images/bloodParticle.png"));
+            resources->Add(New<String>("images/itemsGround.png"));
+            resources->Add(New<String>("images/itemsIcons.png"));
 
             resources->Add(New<String>("images/manafount.png"));
             resources->Add(New<String>("images/manaball.png"));
