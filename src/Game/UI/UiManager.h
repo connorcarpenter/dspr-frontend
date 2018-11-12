@@ -35,5 +35,7 @@ namespace DsprFrontend
         Ref<AnimatedSprite> myAnimatedSprite = Null<AnimatedSprite>();
         Ref<Sova::Line> myLine = Null<Sova::Line>();
         Ref<Sova::Rectangle> myRectangle = Null<Sova::Rectangle>();
+
+        float currentFps = 60.0f;
     };
 }

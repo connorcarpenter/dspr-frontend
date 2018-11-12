@@ -638,15 +638,18 @@ namespace DsprFrontend
     {
         int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
         const int theSkewX = -6;
+        const float theAlpha = 0.25f;
         this->skew->x = theSkewX;
         this->scale->y = 0.5f;
         this->tint = Color::Black;
+        this->alpha = theAlpha;
 
         AnimatedSprite::drawSelf(camera, newOffset - this->unitTemplate->sprCenterAdjust->x, yoffset - this->unitTemplate->sprCenterAdjust->y);
 
         this->skew->x = 0;
         this->scale->y = 1.0f;
         this->tint = Color::White;
+        this->alpha = 1.0f;
 
         //Weapon
         if (this->weaponSprite != nullptr)
@@ -655,6 +658,7 @@ namespace DsprFrontend
             this->weaponSprite->scale->y = 0.5f;
             auto lastTint = this->weaponSprite->tint;
             this->weaponSprite->tint = Color::Black;
+            this->weaponSprite->alpha = theAlpha;
 
             this->weaponSprite->imageIndex = this->frameStartIndex + this->imageIndex;
             this->weaponSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
@@ -665,6 +669,7 @@ namespace DsprFrontend
             this->weaponSprite->skew->x = 0;
             this->weaponSprite->scale->y = 1.0f;
             this->weaponSprite->tint = lastTint;
+            this->weaponSprite->alpha = 1.0f;
         }
 
         if (this->shieldSprite != nullptr)
@@ -673,6 +678,7 @@ namespace DsprFrontend
             this->shieldSprite->scale->y = 0.5f;
             auto lastTint = this->shieldSprite->tint;
             this->shieldSprite->tint = Color::Black;
+            this->shieldSprite->alpha = theAlpha;
 
             this->shieldSprite->imageIndex = this->frameStartIndex + this->imageIndex;
             this->shieldSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
@@ -683,6 +689,7 @@ namespace DsprFrontend
             this->shieldSprite->skew->x = 0;
             this->shieldSprite->scale->y = 1.0f;
             this->shieldSprite->tint = lastTint;
+            this->shieldSprite->alpha = 1.0f;
         }
     }
 

@@ -39,6 +39,7 @@ namespace DsprFrontend {
         bool hasConstructionQueue = false;
         bool isGatherable = false;
         bool canGather = false;
+        bool hasShadow = false;
 
         //sprites
         Ref<Sova::AnimatedSpriteInfo> sprBase = Null<Sova::AnimatedSpriteInfo>();

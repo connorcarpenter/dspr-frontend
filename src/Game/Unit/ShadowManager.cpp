@@ -19,6 +19,7 @@ namespace DsprFrontend {
 
         for (auto iterator = g->unitManager->getUnits()->GetIterator(); iterator->Valid(); iterator->Next()) {
             auto unit = iterator->Get();
+            if (!unit->unitTemplate->hasShadow) continue;
             unit->drawShadow(camera, xoffset, yoffset);
         }
     }

@@ -49,6 +49,7 @@ namespace DsprFrontend
         this->worker->hasInventory = true;
         this->worker->commandCard = g->buttonCardCatalog->workerCommandCard;
         this->worker->canGather = true;
+        this->worker->hasShadow = true;
 
         this->worker->sprBase = g->spriteCatalog->workerBase;
         this->worker->sprTC = g->spriteCatalog->workerTC;

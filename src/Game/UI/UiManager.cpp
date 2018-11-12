@@ -62,6 +62,11 @@ namespace DsprFrontend
 
         this->myRectangle = New<Sova::Rectangle>(0,4);
         this->myRectangle->setLineStyle(false);
+
+        this->UpdateFunction = [&](float deltaFrame){
+            auto newFps = (1000 / deltaFrame);
+            this->currentFps = ((this->currentFps*29) + newFps)/30;
+        };
     }
 
     Ref<Button> UiManager::getButtonWithLeftClick(Ref<Point> clickPoint) {
@@ -185,6 +190,9 @@ namespace DsprFrontend
             g->graphicsManager->drawText(camera, 242, 1, g->economyManager->popStr, Color::White, false);
             g->graphicsManager->drawText(camera, 252, 1, g->economyManager->popMaxStr, Color::White, false);
         }
+
+        //draw fps
+        g->graphicsManager->drawText(camera, 5, 1, String::getStringFromNumber((int) this->currentFps), Color::White, false);
 
         Ref<Unit> firstUnit = Null<Unit>();
 

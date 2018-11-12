@@ -14,14 +14,14 @@ static const char* canvasVS_glsl330_src =
                 "out vec2 uv;\n"
                 "layout(location = 2) in vec2 texcoord0;\n"
                 "out vec4 color1;\n"
-                "layout(location = 10) in vec3 color0;\n"
+                "layout(location = 10) in vec4 color0;\n"
                 "\n"
                 "void main()\n"
                 "{\n"
                 "    gl_Position = vec4((position * 2.0) - vec2(1.0), 0.0, 1.0);\n"
                 "    gl_Position.y = -gl_Position.y;\n"
                 "    uv = texcoord0;\n"
-                "    color1 = vec4(color0.xyz, 1.0);\n"
+                "    color1 = color0;\n"
                 "}\n"
                 "\n"
 ;
@@ -149,7 +149,7 @@ Oryol::ShaderSetup CanvasShader::Setup() {
     Oryol::VertexLayout canvasVS_input;
     canvasVS_input.Add(Oryol::VertexAttr::Position, Oryol::VertexFormat::Float2);
     canvasVS_input.Add(Oryol::VertexAttr::TexCoord0, Oryol::VertexFormat::Float2);
-    canvasVS_input.Add(Oryol::VertexAttr::Color0, Oryol::VertexFormat::Float3);
+    canvasVS_input.Add(Oryol::VertexAttr::Color0, Oryol::VertexFormat::Float4);
     setup.SetInputLayout(canvasVS_input);
     setup.SetProgramFromSources(Oryol::ShaderLang::GLSL330, canvasVS_glsl330_src, canvasFS_glsl330_src);
     setup.AddTexture("tex", Oryol::TextureType::Texture2D, Oryol::ShaderStage::FS, 0);
