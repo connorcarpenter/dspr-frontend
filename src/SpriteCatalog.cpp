@@ -66,6 +66,7 @@ namespace DsprFrontend
         this->manaball = New<AnimatedSpriteInfo>(New<Sova::String>("images/manaball.png"), 9,9, 1, 4, 4);
 
         this->itemsGround = New<AnimatedSpriteInfo>(New<Sova::String>("images/itemsGround.png"), 11, 11, 1, 5, 5);
+        this->itemsIcons = New<AnimatedSpriteInfo>(New<Sova::String>("images/itemsIcons.png"), 10, 12, 0, 0, 0);
         this->sprSparkle = New<AnimatedSpriteInfo>(New<Sova::String>("images/sprSparkle.png"), 5, 5, 1, 3, 3);
     }
 }

@@ -20,6 +20,8 @@
 #include "Game/Unit/UnitTemplateCatalog.h"
 #include "Game/TileManager.h"
 #include "IsoBox/IsoBoxCache.h"
+#include "Game/ItemManager.h"
+#include "Game/Item.h"
 
 namespace DsprFrontend
 {
@@ -279,6 +281,21 @@ namespace DsprFrontend
                 }
                 continue;
             }
+            else
+            if (propName->Equals("inventory"))
+            {
+                auto varsParts = propsParts->At(1)->Split(',');
+
+                auto index = 0;
+
+                while(index < varsParts->Size())
+                {
+                    int itemIndex = atoi(varsParts->At(index)->AsCStr());
+                    unit->inventory->SetItemIndex(index, itemIndex);
+                    index++;
+                }
+                continue;
+            }
         }
     }
 
@@ -347,15 +364,26 @@ namespace DsprFrontend
         UnitOrder orderIndex = Move;
 
         auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
-        int targetedUnitId = -1;
+        int targetId = -1;
+        Ref<Unit> firstSelectedUnit = this->selectionList->At(0);
         if (targetedUnit != nullptr)
         {
-            targetedUnitId = targetedUnit->id;
-            Ref<Unit> firstSelectedUnit = this->selectionList->At(0);
+            targetId = targetedUnit->id;
+
             orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex || targetedUnit->tribeIndex==-1) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
                          Follow : AttackTarget;
             if (targetedUnit->unitTemplate->isGatherable && firstSelectedUnit->unitTemplate->canGather)
                 orderIndex = Gather;
+        }
+        else
+        {
+            auto targetedItem = g->itemManager->getItemOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
+            if (targetedItem != nullptr){
+                if (firstSelectedUnit->unitTemplate->hasInventory) {
+                    targetId = targetedItem->id;
+                    orderIndex = Pickup;
+                }
+            }
         }
 
         if (attackOrderSelected)
@@ -400,8 +428,8 @@ namespace DsprFrontend
             sb->Append(New<Sova::String>(","));
             sb->Append(New<Int>(tilePosition->y)->ToString());
         }
-        if (orderIndex == Follow || orderIndex == AttackTarget || orderIndex == Gather){
-            sb->Append(New<Int>(targetedUnitId)->ToString());
+        if (orderIndex == Follow || orderIndex == AttackTarget || orderIndex == Gather || orderIndex == Pickup){
+            sb->Append(New<Int>(targetId)->ToString());
         }
 
         g->gameServer->send(sb->ToString());
@@ -413,13 +441,23 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
-        UnitOrder orderIndex = Gather;
+        UnitOrder orderIndex;
 
         auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
-
-        if (targetedUnit == nullptr) return;
-        if (!targetedUnit->unitTemplate->isGatherable) return;
-        int targetedUnitId = targetedUnit->id;
+        int targetId = -1;
+        if (targetedUnit == nullptr)
+        {
+            auto targetedItem = g->itemManager->getItemOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
+            if (targetedItem == nullptr) return;
+            targetId = targetedItem->id;
+            orderIndex = Pickup;
+        }
+        else
+        {
+            if (!targetedUnit->unitTemplate->isGatherable) return;
+            targetId = targetedUnit->id;
+            orderIndex = Gather;
+        }
 
         auto sb = New<Sova::StringBuilder>();
         sb->Append(New<Sova::String>("unit/1.0/order|"));
@@ -450,7 +488,7 @@ namespace DsprFrontend
         sb->Append(New<Int>(orderIndex)->ToString());
         sb->Append(New<Sova::String>(","));
 
-        sb->Append(New<Int>(targetedUnitId)->ToString());
+        sb->Append(New<Int>(targetId)->ToString());
 
         g->gameServer->send(sb->ToString());
     }

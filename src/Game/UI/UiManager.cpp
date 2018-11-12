@@ -212,12 +212,33 @@ namespace DsprFrontend
                 firstUnit = selectedUnitList->At(0);
                 if (firstUnit != nullptr)
                 {
-                    //draw itembar
-                    this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprItemBar);
-                    this->myAnimatedSprite->tint = Color::White;
-                    this->myAnimatedSprite->position->set(160, 109);
-                    this->myAnimatedSprite->imageIndex = (firstUnit->unitTemplate->hasInventory) ? 0 : 1;
-                    this->myAnimatedSprite->drawSelf(camera, 0, 0);
+                    {
+                        //draw itembar
+                        this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprItemBar);
+                        this->myAnimatedSprite->tint = Color::White;
+                        this->myAnimatedSprite->position->set(160, 109);
+                        this->myAnimatedSprite->imageIndex = (firstUnit->unitTemplate->hasInventory) ? 0 : 1;
+                        this->myAnimatedSprite->drawSelf(camera, 0, 0);
+
+                        if (firstUnit->unitTemplate->hasInventory)
+                        {
+                            int ix = 0, iy = 0;
+                            for(int i=0;i<6;i++)
+                            {
+                                int itemIndex = firstUnit->inventory->GetItemAt(i);
+                                if (itemIndex != -1)
+                                {
+                                    this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->itemsIcons);
+                                    this->myAnimatedSprite->tint = Color::White;
+                                    this->myAnimatedSprite->position->set(166 + (ix * 11), 116 + (iy*13));
+                                    this->myAnimatedSprite->imageIndex = itemIndex;
+                                    this->myAnimatedSprite->drawSelf(camera, 0, 0);
+                                }
+
+                                ix ++; if (ix > 2) {ix=0;iy++;}
+                            }
+                        }
+                    }
 
                     this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
                     this->mySprite->tint = Color::White;

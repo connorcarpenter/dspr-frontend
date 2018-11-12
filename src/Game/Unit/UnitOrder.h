@@ -13,6 +13,7 @@ namespace DsprFrontend {
         Stop,
         Hold,
         Train,
-        Gather
+        Gather,
+        Pickup
     };
 }

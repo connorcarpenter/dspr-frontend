@@ -136,6 +136,11 @@ namespace DsprFrontend
             this->constructionQueue = New<ConstructionQueue>();
         }
 
+        if (this->unitTemplate->hasInventory)
+        {
+            this->inventory = New<Inventory>();
+        }
+
         if (this->unitTemplate->createSpecificUnitFunction != nullptr)
         {
             this->specificUnit = this->unitTemplate->createSpecificUnitFunction(this);

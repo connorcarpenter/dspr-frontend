@@ -7,6 +7,7 @@
 #include <Sova/Graphics/AnimatedSprite.h>
 #include "UnitOrder.h"
 #include "ConstructionQueue.h"
+#include "Inventory.h"
 
 namespace Sova
 {
@@ -57,6 +58,7 @@ namespace DsprFrontend
         UnitOrder currentOrder = Move;
         Ref<UnitTemplate> unitTemplate = Null<UnitTemplate>();
         Ref<ConstructionQueue> constructionQueue = Null<ConstructionQueue>();
+        Ref<Inventory> inventory = Null<Inventory>();
         Ref<SpecificUnit> specificUnit = Null<SpecificUnit>();
         int targetUnitId = -1;
         Ref<Manaball> myManaball = Null<Manaball>();
