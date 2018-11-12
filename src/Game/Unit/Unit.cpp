@@ -35,6 +35,10 @@ namespace DsprFrontend
 
         this->health = this->unitTemplate->maxHealth;
 
+//        this->skew->x = -8;
+//        this->scale->y = 0.5f;
+//        this->tint = Color::Black;
+
         this->useAnimatedSpriteInfo(this->unitTemplate->sprBase);
 
         this->tcSprite = New<AnimatedSprite>();
@@ -627,6 +631,58 @@ namespace DsprFrontend
                 this->shieldSprite->scale->x = this->scale->x;
                 this->shieldSprite->drawSelf(camera, newOffset, yoffset);
             }
+        }
+    }
+
+    void Unit::drawShadow(Ref<Camera> camera, int xoffset, int yoffset)
+    {
+        int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
+        const int theSkewX = -6;
+        this->skew->x = theSkewX;
+        this->scale->y = 0.5f;
+        this->tint = Color::Black;
+
+        AnimatedSprite::drawSelf(camera, newOffset - this->unitTemplate->sprCenterAdjust->x, yoffset - this->unitTemplate->sprCenterAdjust->y);
+
+        this->skew->x = 0;
+        this->scale->y = 1.0f;
+        this->tint = Color::White;
+
+        //Weapon
+        if (this->weaponSprite != nullptr)
+        {
+            this->weaponSprite->skew->x = theSkewX;
+            this->weaponSprite->scale->y = 0.5f;
+            auto lastTint = this->weaponSprite->tint;
+            this->weaponSprite->tint = Color::Black;
+
+            this->weaponSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+            this->weaponSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                              this->position->y - this->unitTemplate->sprCenterAdjust->y);
+            this->weaponSprite->scale->x = this->scale->x;
+            this->weaponSprite->drawSelf(camera, newOffset, yoffset);
+
+            this->weaponSprite->skew->x = 0;
+            this->weaponSprite->scale->y = 1.0f;
+            this->weaponSprite->tint = lastTint;
+        }
+
+        if (this->shieldSprite != nullptr)
+        {
+            this->shieldSprite->skew->x = theSkewX;
+            this->shieldSprite->scale->y = 0.5f;
+            auto lastTint = this->shieldSprite->tint;
+            this->shieldSprite->tint = Color::Black;
+
+            this->shieldSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+            this->shieldSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                              this->position->y - this->unitTemplate->sprCenterAdjust->y);
+            this->shieldSprite->scale->x = this->scale->x;
+            this->shieldSprite->drawSelf(camera, newOffset, yoffset);
+
+            this->shieldSprite->skew->x = 0;
+            this->shieldSprite->scale->y = 1.0f;
+            this->shieldSprite->tint = lastTint;
         }
     }
 

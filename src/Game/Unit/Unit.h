@@ -63,6 +63,8 @@ namespace DsprFrontend
         int targetUnitId = -1;
         Ref<Manaball> myManaball = Null<Manaball>();
 
+        void drawShadow(Ref<Camera> camera, int xoffset, int yoffset);
+
     private:
 
         void step(float deltaMs);

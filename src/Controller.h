@@ -30,6 +30,7 @@
 #include "Game/EconomyManager.h"
 #include "GraphicsManager.h"
 #include "Game/ItemManager.h"
+#include "Game/Unit/ShadowManager.h"
 
 using namespace Sova;
 
@@ -90,6 +91,10 @@ namespace DsprFrontend
         g->tileManager = New<TileManager>();
         g->tileManager->SetDepth(9999);
         g->world->AddChild(g->tileManager);
+
+        g->shadowManager = New<ShadowManager>();
+        g->shadowManager->SetDepth(8888);
+        g->world->AddChild(g->shadowManager);
 
         g->unitManager = New<UnitManager>();
         g->itemManager = New<ItemManager>();
