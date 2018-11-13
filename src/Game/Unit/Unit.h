@@ -7,7 +7,7 @@
 #include <Sova/Graphics/AnimatedSprite.h>
 #include "UnitOrder.h"
 #include "ConstructionQueue.h"
-#include "Inventory.h"
+#include "Game/Item/Inventory.h"
 
 namespace Sova
 {

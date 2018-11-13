@@ -17,6 +17,7 @@ namespace DsprFrontend
     class Unit;
     class Button;
     class Item;
+    class ItemTemplate;
 
     class Cursor : public Sova::AnimatedSprite
     {
@@ -24,7 +25,7 @@ namespace DsprFrontend
     public:
 
         Cursor();
-        void handleItemClicked(Ref<Unit> unit, int itemIndex, int slotIndex);
+        void handleItemClicked(Ref<Unit> unit, Ref<ItemTemplate> itemTemplate, int slotIndex);
         bool isItemInHand();
         void handleItemPutSlot(Ref<Unit> unit, int slotIndex);
 
@@ -35,6 +36,7 @@ namespace DsprFrontend
 
         Ref<Unit> itemInHandOwner = Null<Unit>();
         int itemInHandSlotIndex = -1;
+        Ref<ItemTemplate> itemInHandTemplate = Null<ItemTemplate>();
     private:
 
         void step();
@@ -59,6 +61,5 @@ namespace DsprFrontend
 
         Ref<Item> lastHoveringItem = Null<Item>();
         Ref<Item> lastSelectedItem = Null<Item>();
-        int itemInHandIndex = -1;
     };
 }

@@ -82,7 +82,7 @@ namespace DsprFrontend
                 int ix = 0, iy = 0;
                 for(int i=0;i<6;i++)
                 {
-                    int itemIndex = firstUnit->inventory->GetItemAt(i);
+                    auto itemTemplate = firstUnit->inventory->GetItemAt(i);
 
                     auto leftX = itemBarX + 6 + (ix * 11);
                     auto upY = itemBarY + 7 + (iy*13);
@@ -97,8 +97,8 @@ namespace DsprFrontend
                         }
                         else
                         {
-                            if (itemIndex != -1) {
-                                g->cursor->handleItemClicked(firstUnit, itemIndex, i);
+                            if (itemTemplate != nullptr) {
+                                g->cursor->handleItemClicked(firstUnit, itemTemplate, i);
                                 firstUnit->inventory->RemoveItem(i);
                             }
                         }
@@ -274,7 +274,7 @@ namespace DsprFrontend
                             int ix = 0, iy = 0;
                             for(int i=0;i<6;i++)
                             {
-                                int itemIndex = firstUnit->inventory->GetItemAt(i);
+                                auto itemTemplate = firstUnit->inventory->GetItemAt(i);
 
                                 auto leftX = 166 + (ix * 11);
                                 auto upY = 116 + (iy*13);
@@ -286,21 +286,23 @@ namespace DsprFrontend
                                     buttonTint = Color::White;
                                 }
 
-                                if (itemIndex != -1)
+                                if (itemTemplate != nullptr)
                                 {
                                     this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->itemsIcons);
                                     this->myAnimatedSprite->tint = buttonTint;
                                     this->myAnimatedSprite->position->set(leftX, upY);
-                                    this->myAnimatedSprite->imageIndex = itemIndex;
+                                    this->myAnimatedSprite->imageIndex = itemTemplate->index;
                                     this->myAnimatedSprite->drawSelf(camera, 0, 0);
                                 }
 
                                 if (g->cursor->isItemInHand() && buttonTint == Color::White)
                                 {
                                     //colored box to indicate whether it's okay to put item in hand into new slot
+                                    Color boxColor = firstUnit->inventory->CanPlaceInInventory(i, g->cursor->itemInHandTemplate) ? Color::Green : Color::Red;
+
                                     this->myRectangle->position->set(leftX-1, upY-1);
                                     this->myRectangle->setLineStyle(false);
-                                    this->myRectangle->setFillStyle(Color::Green, 0.2f);
+                                    this->myRectangle->setFillStyle(boxColor, 0.2f);
                                     this->myRectangle->size->set(12, 14);
                                     this->myRectangle->drawSelf(camera, 0, 0);
                                 }

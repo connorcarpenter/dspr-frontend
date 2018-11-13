@@ -18,6 +18,8 @@
 #include "Game/Item/ItemManager.h"
 #include "Game/Item/Item.h"
 #include "SpriteCatalog.h"
+#include "Game/Item/ItemTemplateCatalog.h"
+#include "Game/Item/ItemTemplate.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 
@@ -66,7 +68,7 @@ namespace DsprFrontend
         this->worldPosition->x = this->position->x  + g->camera->position->x;
         this->worldPosition->y = this->position->y  + g->camera->position->y;
 
-        if (this->itemInHandIndex == -1) {
+        if (!this->isItemInHand()) {
             this->tint = DsprColors::Yellow;
 
             //Hovering over units
@@ -431,7 +433,7 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
-        if (this->itemInHandIndex == -1) {
+        if (!this->isItemInHand()) {
             if (this->buttonOrder != nullptr) {
                 this->imageIndex = 2;
             } else {
@@ -441,7 +443,7 @@ namespace DsprFrontend
 
         AnimatedSprite::drawSelf(camera, xoffset, yoffset);
 
-        if (this->itemInHandIndex == -1) {
+        if (!this->isItemInHand()) {
             if (this->leftButtonDragging) {
                 this->selectionBox->position->set(this->leftButtonDragPoint->x, this->leftButtonDragPoint->y);
 
@@ -458,29 +460,31 @@ namespace DsprFrontend
         g->moveMarker->Update(0);
     }
 
-    void Cursor::handleItemClicked(Ref<Unit> unit, int itemIndex, int slotIndex) {
-        this->itemInHandIndex = itemIndex;
+    void Cursor::handleItemClicked(Ref<Unit> unit, Ref<ItemTemplate> itemTemplate, int slotIndex) {
+        this->itemInHandTemplate = itemTemplate;
         this->itemInHandSlotIndex = slotIndex;
         this->itemInHandOwner = unit;
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         this->useAnimatedSpriteInfo(g->spriteCatalog->itemsIcons);
-        this->imageIndex = itemIndex;
+        this->imageIndex = itemTemplate->index;
         this->tint = Color::White;
     }
 
     void Cursor::handleItemPutSlot(Ref<Unit> unit, int slotIndex) {
+
+        if (!unit->inventory->CanPlaceInInventory(slotIndex, this->itemInHandTemplate)) return;
+
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        auto oldItemIndex = this->itemInHandIndex;
+        auto oldItemTemplate = this->itemInHandTemplate;
         auto oldItemSlotIndex = this->itemInHandSlotIndex;
 
-        this->itemInHandIndex = unit->inventory->GetItemAt(slotIndex);
+        this->itemInHandTemplate = unit->inventory->GetItemAt(slotIndex);
+        unit->inventory->SetItemIndex(slotIndex, oldItemTemplate);
 
-        unit->inventory->SetItemIndex(slotIndex, oldItemIndex);
-
-        if (this->itemInHandIndex == -1) {
+        if (!this->isItemInHand()) {
             undoItemInHandGraphic();
         } else {
-            this->imageIndex = this->itemInHandIndex;
+            this->imageIndex = this->itemInHandTemplate->index;
         }
 
         g->unitManager->orderUnitSwapInventory(unit, oldItemSlotIndex, slotIndex);
@@ -491,7 +495,7 @@ namespace DsprFrontend
         auto firstUnit = g->unitManager->getSelectedUnits()->At(0);
         if (firstUnit != nullptr)
         {
-            firstUnit->inventory->SetItemIndex(this->itemInHandSlotIndex, this->itemInHandIndex);
+            firstUnit->inventory->SetItemIndex(this->itemInHandSlotIndex, this->itemInHandTemplate);
         }
 
         undoItemInHandGraphic();
@@ -500,13 +504,13 @@ namespace DsprFrontend
     void Cursor::undoItemInHandGraphic(){
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         this->itemInHandSlotIndex = -1;
-        this->itemInHandIndex = -1;
+        this->itemInHandTemplate = Null<ItemTemplate>();
         this->useAnimatedSpriteInfo(g->spriteCatalog->sprCursor);
         this->imageIndex = 1;
         this->tint = Color::White;
     }
 
     bool Cursor::isItemInHand() {
-        return itemInHandIndex != -1;
+        return this->itemInHandTemplate != nullptr;
     }
 }

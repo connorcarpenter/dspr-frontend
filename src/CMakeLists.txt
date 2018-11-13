@@ -25,7 +25,7 @@ fips_begin_app(dspr-frontend windowed)
             Game/Unit/UnitTemplate.h Game/Unit/UnitTemplate.cpp
             Game/Unit/UnitTemplateCatalog.h Game/Unit/UnitTemplateCatalog.cpp
             Game/Unit/ConstructionQueue.h Game/Unit/ConstructionQueue.cpp
-            Game/Unit/Inventory.h Game/Unit/Inventory.cpp
+            Game/Item/Inventory.h Game/Item/Inventory.cpp
             Game/Unit/ShadowManager.h Game/Unit/ShadowManager.cpp
 
             Game/Unit/SpecificUnit/SpecificUnit.h Game/Unit/SpecificUnit/SpecificUnit.cpp

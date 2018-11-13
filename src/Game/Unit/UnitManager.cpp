@@ -22,6 +22,7 @@
 #include "IsoBox/IsoBoxCache.h"
 #include "Game/Item/ItemManager.h"
 #include "Game/Item/Item.h"
+#include "Game/Item/ItemTemplateCatalog.h"
 
 namespace DsprFrontend
 {
@@ -270,7 +271,7 @@ namespace DsprFrontend
             else
             if (propName->Equals("inventory"))
             {
-                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                auto g = (Global*) InternalApp::getGlobal();
 
                 auto varsParts = propsParts->At(1)->Split(',');
 
@@ -285,7 +286,7 @@ namespace DsprFrontend
                     }
                     else
                     {
-                        unit->inventory->SetItemIndex(index, itemIndex);
+                        unit->inventory->SetItemIndex(index, g->itemTemplateCatalog->findTemplateByIndex(itemIndex));
                     }
 
                     index++;

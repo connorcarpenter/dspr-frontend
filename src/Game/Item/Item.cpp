@@ -33,8 +33,10 @@ namespace DsprFrontend {
 
         this->sparkleTimer = Math::Random(30, 600);
 
-        //if (this->position->x % 2 == 1)this->scale->x *= -1;
-        //if (this->position->y % 2 == 0)this->scale->y *= -1;
+        int semiRandomness = ((int) Math::Random(0,12)) % 4;
+        if (semiRandomness == 1)this->scale->x *= -1;
+        if (semiRandomness == 2)this->scale->y *= -1;
+        if (semiRandomness == 3){this->scale->x *= -1; this->scale->y *= -1;}
     }
 
     void Item::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
