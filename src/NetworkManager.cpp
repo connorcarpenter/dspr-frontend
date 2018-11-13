@@ -12,7 +12,7 @@
 #include "Game/TileManager.h"
 #include "Game/Unit/UnitManager.h"
 #include "Game/EconomyManager.h"
-#include "Game/ItemManager.h"
+#include "Game/Item/ItemManager.h"
 
 using Sova::String;
 using Sova::StringBuilder;

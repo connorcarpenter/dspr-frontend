@@ -15,8 +15,8 @@
 #include "Game/TileManager.h"
 #include "ButtonCardCatalog.h"
 #include "DsprColors.h"
-#include "Game/ItemManager.h"
-#include "Game/Item.h"
+#include "Game/Item/ItemManager.h"
+#include "Game/Item/Item.h"
 #include "SpriteCatalog.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>

@@ -29,7 +29,7 @@
 #include "ResourceList.h"
 #include "Game/EconomyManager.h"
 #include "GraphicsManager.h"
-#include "Game/ItemManager.h"
+#include "Game/Item/ItemManager.h"
 #include "Game/Unit/ShadowManager.h"
 
 using namespace Sova;

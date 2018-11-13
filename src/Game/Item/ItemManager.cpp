@@ -4,9 +4,9 @@
 
 #include <Sova/Internal/InternalApp.h>
 #include "ItemManager.h"
-#include "Global.h"
+#include "Game/Global.h"
 #include "Item.h"
-#include "TileManager.h"
+#include "Game/TileManager.h"
 
 namespace DsprFrontend {
 

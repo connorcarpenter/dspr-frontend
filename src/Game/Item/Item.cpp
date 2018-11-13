@@ -7,8 +7,8 @@
 #include <Game/Effects/Sparkle.h>
 #include <Sova/Math/Math.h>
 #include "Item.h"
-#include "Global.h"
-#include "TileManager.h"
+#include "Game/Global.h"
+#include "Game/TileManager.h"
 #include "SpriteCatalog.h"
 
 namespace DsprFrontend {

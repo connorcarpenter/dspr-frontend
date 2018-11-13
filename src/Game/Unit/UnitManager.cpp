@@ -20,8 +20,8 @@
 #include "Game/Unit/UnitTemplateCatalog.h"
 #include "Game/TileManager.h"
 #include "IsoBox/IsoBoxCache.h"
-#include "Game/ItemManager.h"
-#include "Game/Item.h"
+#include "Game/Item/ItemManager.h"
+#include "Game/Item/Item.h"
 
 namespace DsprFrontend
 {

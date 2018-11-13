@@ -15,7 +15,7 @@
 #include "FogManager.h"
 #include "Game/Minimap/Minimap.h"
 #include "Game/Unit/UnitManager.h"
-#include "Game/ItemManager.h"
+#include "Game/Item/ItemManager.h"
 
 using namespace Sova;
 using namespace Oryol;

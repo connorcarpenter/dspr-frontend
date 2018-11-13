@@ -31,8 +31,8 @@ fips_begin_app(dspr-frontend windowed)
             Game/Unit/SpecificUnit/SpecificUnit.h Game/Unit/SpecificUnit/SpecificUnit.cpp
             Game/Unit/SpecificUnit/Manafount.h Game/Unit/SpecificUnit/Manafount.cpp
 
-            Game/Item.h Game/Item.cpp
-            Game/ItemManager.h Game/ItemManager.cpp
+            Game/Item/Item.h Game/Item/Item.cpp
+            Game/Item/ItemManager.h Game/Item/ItemManager.cpp
 
             Game/Effects/Manaball.h Game/Effects/Manaball.cpp
             Game/Effects/BloodParticle.h Game/Effects/BloodParticle.cpp
