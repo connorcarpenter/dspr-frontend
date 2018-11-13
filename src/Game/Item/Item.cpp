@@ -13,21 +13,21 @@
 
 namespace DsprFrontend {
 
-    Item::Item(int id, int x, int y, int index) : AnimatedSprite()
+    Item::Item(int id, int x, int y, Ref<ItemTemplate> itemTemplate) : AnimatedSprite()
     {
         this->id = id;
-        this->index = index;
+        this->itemTemplate = itemTemplate;
         this->tilePosition = New<Point>(x,y);
 
         auto g = (Global*) InternalApp::getGlobal();
-        this->position->x = (int) (((this->tilePosition->x/2) + 0.5f) * g->tileManager->tileWidth);
-        this->position->y = (int) (((this->tilePosition->y/2) + 0.5f) * g->tileManager->tileHeight);
+        this->position->x = (int) ((((float) this->tilePosition->x/2) + 0.5f) * g->tileManager->tileWidth);
+        this->position->y = (int) ((((float) this->tilePosition->y/2) + 0.5f) * g->tileManager->tileHeight);
 
         this->useAnimatedSpriteInfo(g->spriteCatalog->itemsGround);
 
         this->SetDepth(this->tilePosition->y * -1);
 
-        this->imageIndex = index;
+        this->imageIndex = itemTemplate->index;
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 

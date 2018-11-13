@@ -33,6 +33,7 @@ namespace DsprFrontend
     class GraphicsManager;
     class ItemManager;
     class ShadowManager;
+    class ItemTemplateCatalog;
 
     class Global : public Sova::Refable
     {
@@ -60,6 +61,7 @@ namespace DsprFrontend
         Ref<GraphicsManager> graphicsManager = Null<GraphicsManager>();
         Ref<ItemManager> itemManager = Null<ItemManager>();
         Ref<ShadowManager> shadowManager = Null<ShadowManager>();
+        Ref<ItemTemplateCatalog> itemTemplateCatalog = Null<ItemTemplateCatalog>();
 
         Ref<AnimatedSprite> moveMarker = Null<AnimatedSprite>();
         Ref<AnimatedSprite> unitHoverCircle_1x1 = Null<AnimatedSprite>();

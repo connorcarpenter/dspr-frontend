@@ -33,6 +33,8 @@ fips_begin_app(dspr-frontend windowed)
 
             Game/Item/Item.h Game/Item/Item.cpp
             Game/Item/ItemManager.h Game/Item/ItemManager.cpp
+            Game/Item/ItemTemplate.h Game/Item/ItemTemplate.cpp
+            Game/Item/ItemTemplateCatalog.h Game/Item/ItemTemplateCatalog.cpp
 
             Game/Effects/Manaball.h Game/Effects/Manaball.cpp
             Game/Effects/BloodParticle.h Game/Effects/BloodParticle.cpp

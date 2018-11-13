@@ -5,6 +5,7 @@
 //
 
 #include <Sova/Graphics/AnimatedSprite.h>
+#include "ItemTemplate.h"
 
 namespace DsprFrontend
 {
@@ -12,15 +13,15 @@ namespace DsprFrontend
     {
     public:
         
-        Item(int id, int x, int y, int index);
+        Item(int id, int x, int y, Ref<ItemTemplate> itemTemplate);
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
         
         Ref<Point> tilePosition = Null<Point>();
         int id = -1;
-        int index = -1;
+        Ref<ItemTemplate> itemTemplate = Null<ItemTemplate>();
         bool selected = false;
         bool hovering = false;
-        
+
     private:
         
         void step(float deltaMs);

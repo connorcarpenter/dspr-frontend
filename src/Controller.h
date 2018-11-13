@@ -31,6 +31,7 @@
 #include "GraphicsManager.h"
 #include "Game/Item/ItemManager.h"
 #include "Game/Unit/ShadowManager.h"
+#include "Game/Item/ItemTemplateCatalog.h"
 
 using namespace Sova;
 
@@ -97,6 +98,7 @@ namespace DsprFrontend
         g->world->AddChild(g->shadowManager);
 
         g->unitManager = New<UnitManager>();
+        g->itemTemplateCatalog = New<ItemTemplateCatalog>();
         g->itemManager = New<ItemManager>();
 
         g->uiManager = New<UiManager>();

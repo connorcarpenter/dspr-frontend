@@ -337,7 +337,6 @@ namespace DsprFrontend
                         this->setHoverListUnitsToHover(true);
                     }
                 } else {
-                    this->imageIndex = 0;
                     this->cursorIsHovering = true;
                     this->hoverList->Clear();
                     this->hoverList->Add(unitHovering);

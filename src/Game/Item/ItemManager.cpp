@@ -7,6 +7,7 @@
 #include "Game/Global.h"
 #include "Item.h"
 #include "Game/TileManager.h"
+#include "ItemTemplateCatalog.h"
 
 namespace DsprFrontend {
 
@@ -23,7 +24,7 @@ namespace DsprFrontend {
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         
-        auto newItem = New<Item>(id, x, y, index);
+        auto newItem = New<Item>(id, x, y, g->itemTemplateCatalog->findTemplateByIndex(index));
 
         g->world->AddChild(newItem);
         this->itemList->Add(newItem);
