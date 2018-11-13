@@ -316,9 +316,17 @@ namespace DsprFrontend
                 return;
             }
 
-            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left)) {
-                this->buttonOrder = g->uiManager->getButtonWithLeftClick(this->position);
-                this->ignoreNextLeftButtonClicked = 10;
+            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left))
+            {
+                this->leftButtonPressedTime = 1;
+            }
+            else
+            {
+                if (this->leftButtonPressedTime > 0)
+                {
+                    this->leftButtonPressedTime = 0;
+                    this->buttonOrder = g->uiManager->getButtonWithLeftClick(this->position);
+                }
             }
         }
     }
@@ -399,9 +407,10 @@ namespace DsprFrontend
         g->moveMarker->Update(0);
     }
 
-    void Cursor::handleItemClicked(int itemIndex, int slotIndex) {
+    void Cursor::handleItemClicked(Ref<Unit> unit, int itemIndex, int slotIndex) {
         this->itemInHandIndex = itemIndex;
         this->itemInHandSlotIndex = slotIndex;
+        this->itemInHandOwner = unit;
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         this->useAnimatedSpriteInfo(g->spriteCatalog->itemsIcons);
         this->imageIndex = itemIndex;
@@ -410,9 +419,20 @@ namespace DsprFrontend
 
     void Cursor::handleItemPutSlot(Ref<Unit> unit, int slotIndex) {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-        g->unitManager->orderUnitSwapInventory(unit, this->itemInHandSlotIndex, slotIndex);
-        //unit->inventory->SetItemIndex(slotIndex, this->itemInHandIndex);
-        undoItemInHandGraphic();
+        auto oldItemIndex = this->itemInHandIndex;
+        auto oldItemSlotIndex = this->itemInHandSlotIndex;
+
+        this->itemInHandIndex = unit->inventory->GetItemAt(slotIndex);
+
+        unit->inventory->SetItemIndex(slotIndex, oldItemIndex);
+
+        if (this->itemInHandIndex == -1) {
+            undoItemInHandGraphic();
+        } else {
+            this->imageIndex = this->itemInHandIndex;
+        }
+
+        g->unitManager->orderUnitSwapInventory(unit, oldItemSlotIndex, slotIndex);
     }
 
     void Cursor::resetItemInHand(){

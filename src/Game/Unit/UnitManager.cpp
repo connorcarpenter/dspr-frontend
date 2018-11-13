@@ -270,6 +270,8 @@ namespace DsprFrontend
             else
             if (propName->Equals("inventory"))
             {
+                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
                 auto varsParts = propsParts->At(1)->Split(',');
 
                 auto index = 0;
@@ -277,7 +279,15 @@ namespace DsprFrontend
                 while(index < varsParts->Size())
                 {
                     int itemIndex = atoi(varsParts->At(index)->AsCStr());
-                    unit->inventory->SetItemIndex(index, itemIndex);
+                    if (unit == g->cursor->itemInHandOwner && g->cursor->itemInHandSlotIndex == index)
+                    {
+                        index++; continue;
+                    }
+                    else
+                    {
+                        unit->inventory->SetItemIndex(index, itemIndex);
+                    }
+
                     index++;
                 }
                 continue;

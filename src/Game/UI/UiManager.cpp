@@ -97,16 +97,15 @@ namespace DsprFrontend
                                          leftX, upY,
                                          leftX + 10, upY + 12))
                     {
-                        if (itemIndex != -1)
+                        if (g->cursor->isItemInHand())
                         {
-                            g->cursor->handleItemClicked(itemIndex, i);
-                            firstUnit->inventory->RemoveItem(i);
+                            g->cursor->handleItemPutSlot(firstUnit, i);
                         }
                         else
                         {
-                            if (g->cursor->isItemInHand())
-                            {
-                                g->cursor->handleItemPutSlot(firstUnit, i);
+                            if (itemIndex != -1) {
+                                g->cursor->handleItemClicked(firstUnit, itemIndex, i);
+                                firstUnit->inventory->RemoveItem(i);
                             }
                         }
                     }

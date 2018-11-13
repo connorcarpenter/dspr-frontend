@@ -24,7 +24,7 @@ namespace DsprFrontend
     public:
 
         Cursor();
-        void handleItemClicked(int itemIndex, int slotIndex);
+        void handleItemClicked(Ref<Unit> unit, int itemIndex, int slotIndex);
         bool isItemInHand();
         void handleItemPutSlot(Ref<Unit> unit, int slotIndex);
 
@@ -33,6 +33,8 @@ namespace DsprFrontend
         Ref<Point> worldPosition = Null<Point>();
         Ref<Button> buttonOrder = Null<Button>();
 
+        Ref<Unit> itemInHandOwner = Null<Unit>();
+        int itemInHandSlotIndex = -1;
     private:
 
         void step();
@@ -58,6 +60,5 @@ namespace DsprFrontend
         Ref<Item> lastHoveringItem = Null<Item>();
         Ref<Item> lastSelectedItem = Null<Item>();
         int itemInHandIndex = -1;
-        int itemInHandSlotIndex = -1;
     };
 }
