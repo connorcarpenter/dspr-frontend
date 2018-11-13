@@ -46,6 +46,8 @@ namespace DsprFrontend
 
         void orderUnitSwapInventory(Ref<Unit> unit, int beforeSlotIndex, int afterSlotIndex);
 
+        void orderUnitDropItem(Ref<Unit> unit, int slotIndex, Ref<Point> position);
+
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();

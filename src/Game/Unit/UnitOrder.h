@@ -15,6 +15,7 @@ namespace DsprFrontend {
         Train,
         Gather,
         Pickup,
-        ItemSwap
+        ItemSwap,
+        ItemDrop
     };
 }

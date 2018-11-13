@@ -584,6 +584,35 @@ namespace DsprFrontend
         g->gameServer->send(sb->ToString());
     }
 
+    void UnitManager::orderUnitDropItem(Ref<Unit> unit, int slotIndex, Ref<Point> position)
+    {
+        auto orderIndex = UnitOrder::ItemDrop;
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        Ref<Point> tilePosition = Null<Point>();
+        auto mmPosition = g->uiManager->getMinimapPosition(g->cursor->position);
+        tilePosition = (mmPosition == nullptr) ?
+                       g->tileManager->getTilePosition(position->x, position->y) : mmPosition;
+
+        auto sb = New<Sova::StringBuilder>();
+        sb->Append(New<Sova::String>("unit/1.0/order|"));
+        sb->Append(g->gameServerPlayerToken);
+        sb->Append(New<Sova::String>("|"));
+        Ref<Int> intObj = New<Int>(unit->id);
+        sb->Append(intObj->ToString());
+        sb->Append(New<Sova::String>("|"));
+        sb->Append(New<Int>(orderIndex)->ToString());
+        sb->Append(New<Sova::String>(","));
+        sb->Append(New<Int>(slotIndex)->ToString());
+        sb->Append(New<Sova::String>(","));
+        sb->Append(New<Int>(tilePosition->x)->ToString());
+        sb->Append(New<Sova::String>(","));
+        sb->Append(New<Int>(tilePosition->y)->ToString());
+
+        g->gameServer->send(sb->ToString());
+    }
+
     void UnitManager::updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition)
     {
         if (!this->receivedGrid) return;

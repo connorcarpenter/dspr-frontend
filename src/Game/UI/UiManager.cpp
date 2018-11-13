@@ -70,14 +70,8 @@ namespace DsprFrontend
         };
     }
 
-    Ref<Button> UiManager::getButtonWithLeftClick(Ref<Point> clickPoint) {
-
-        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 109, 155, 144))
-        {
-            //clicking within armybar
-            return Null<Button>();
-        }
-
+    void UiManager::handleItemBarClick(Ref<Point> clickPoint)
+    {
         if (Math::PointInBox(clickPoint->x, clickPoint->y, itemBarX, itemBarY, itemBarX + itemBarW, itemBarY + itemBarH))
         {
             //clicking within itembar
@@ -113,7 +107,14 @@ namespace DsprFrontend
                     ix ++; if (ix > 2) {ix=0;iy++;}
                 }
             }
+        }
+    }
 
+    Ref<Button> UiManager::getButtonWithLeftClick(Ref<Point> clickPoint) {
+
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 109, 155, 144))
+        {
+            //clicking within armybar
             return Null<Button>();
         }
 
@@ -512,15 +513,19 @@ namespace DsprFrontend
     void UiManager::step() {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
-        if (g->cursor->isItemInHand())return;
-
-        if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked)
+        if (g->cursor->isItemInHand())
         {
-            this->rightButtonAlreadyClicked = true;
-            g->unitManager->issueUnitOrder(false);
-        }
 
-        if(!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
-            rightButtonAlreadyClicked = false;
+        }
+        else
+        {
+            if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked) {
+                this->rightButtonAlreadyClicked = true;
+                g->unitManager->issueUnitOrder(false);
+            }
+
+            if (!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
+                rightButtonAlreadyClicked = false;
+        }
     }
 }

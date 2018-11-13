@@ -275,6 +275,9 @@ namespace DsprFrontend
                                 }
                             } else {
                                 this->buttonOrder = g->uiManager->getButtonWithLeftClick(this->position);
+                                if (this->buttonOrder == nullptr){
+                                    g->uiManager->handleItemBarClick(this->position);
+                                }
                             }
                         }
                         this->leftButtonPressedTime = 0;
@@ -325,7 +328,16 @@ namespace DsprFrontend
                 if (this->leftButtonPressedTime > 0)
                 {
                     this->leftButtonPressedTime = 0;
-                    this->buttonOrder = g->uiManager->getButtonWithLeftClick(this->position);
+
+                    if (g->uiManager->isInGameArea(this->position))
+                    {
+                        g->unitManager->orderUnitDropItem(this->itemInHandOwner, this->itemInHandSlotIndex, this->worldPosition);
+                        this->resetItemInHand();
+                    }
+                    else
+                    {
+                        g->uiManager->handleItemBarClick(this->position);
+                    }
                 }
             }
         }

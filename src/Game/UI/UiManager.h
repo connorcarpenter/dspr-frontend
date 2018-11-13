@@ -31,6 +31,9 @@ namespace DsprFrontend
         Ref<Button> getButtonFromKeyboardShortcut();
 
         bool rightButtonAlreadyClicked = false;
+
+        void handleItemBarClick(Ref<Point> clickPoint);
+
     private:
         Ref<Sprite> mySprite = Null<Sprite>();
         Ref<AnimatedSprite> myAnimatedSprite = Null<AnimatedSprite>();
@@ -48,5 +51,6 @@ namespace DsprFrontend
         void oldUnitManagerUiUpdate();
 
         void step();
+
     };
 }
