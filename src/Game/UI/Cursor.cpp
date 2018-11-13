@@ -309,10 +309,16 @@ namespace DsprFrontend
         else
         {
             //item is in hand
+
             if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Right)) {
                 this->resetItemInHand();
                 g->uiManager->rightButtonAlreadyClicked = true;
                 return;
+            }
+
+            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left)) {
+                this->buttonOrder = g->uiManager->getButtonWithLeftClick(this->position);
+                this->ignoreNextLeftButtonClicked = 10;
             }
         }
     }
@@ -402,6 +408,13 @@ namespace DsprFrontend
         this->tint = Color::White;
     }
 
+    void Cursor::handleItemPutSlot(Ref<Unit> unit, int slotIndex) {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        g->unitManager->orderUnitSwapInventory(unit, this->itemInHandSlotIndex, slotIndex);
+        //unit->inventory->SetItemIndex(slotIndex, this->itemInHandIndex);
+        undoItemInHandGraphic();
+    }
+
     void Cursor::resetItemInHand(){
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         auto firstUnit = g->unitManager->getSelectedUnits()->At(0);
@@ -410,6 +423,11 @@ namespace DsprFrontend
             firstUnit->inventory->SetItemIndex(this->itemInHandSlotIndex, this->itemInHandIndex);
         }
 
+        undoItemInHandGraphic();
+    }
+
+    void Cursor::undoItemInHandGraphic(){
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         this->itemInHandSlotIndex = -1;
         this->itemInHandIndex = -1;
         this->useAnimatedSpriteInfo(g->spriteCatalog->sprCursor);

@@ -26,6 +26,7 @@ namespace DsprFrontend
         Cursor();
         void handleItemClicked(int itemIndex, int slotIndex);
         bool isItemInHand();
+        void handleItemPutSlot(Ref<Unit> unit, int slotIndex);
 
         bool leftButtonDragging = false;
         Ref<Point> leftButtonDragPoint = Null<Point>();
@@ -39,6 +40,8 @@ namespace DsprFrontend
         void clearHoverList();
         void setHoverListUnitsToHover(bool i);
         void setHoverListUnitsToSelected(bool selected, bool toggle = false);
+        void resetItemInHand();
+        void undoItemInHandGraphic();
 
         Ref<Rectangle> selectionBox = Null<Rectangle>();
         Ref<List<Unit>> hoverList = Null<List<Unit>>();
@@ -56,7 +59,5 @@ namespace DsprFrontend
         Ref<Item> lastSelectedItem = Null<Item>();
         int itemInHandIndex = -1;
         int itemInHandSlotIndex = -1;
-
-        void resetItemInHand();
     };
 }

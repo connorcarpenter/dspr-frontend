@@ -44,6 +44,8 @@ namespace DsprFrontend
         Ref<List<Unit>> selectionList = Null<List<Unit>>();
         const int maxSelectedUnits = 12;
 
+        void orderUnitSwapInventory(Ref<Unit> unit, int beforeSlotIndex, int afterSlotIndex);
+
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
@@ -53,5 +55,6 @@ namespace DsprFrontend
         int gridHeight;
 
         void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
+
     };
 }

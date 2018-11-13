@@ -89,23 +89,33 @@ namespace DsprFrontend
                 for(int i=0;i<6;i++)
                 {
                     int itemIndex = firstUnit->inventory->GetItemAt(i);
-                    if (itemIndex != -1)
-                    {
-                        auto leftX = itemBarX + 6 + (ix * 11);
-                        auto upY = itemBarY + 7 + (iy*13);
 
-                        if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
-                                             leftX, upY,
-                                             leftX + 10, upY + 12))
+                    auto leftX = itemBarX + 6 + (ix * 11);
+                    auto upY = itemBarY + 7 + (iy*13);
+
+                    if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                         leftX, upY,
+                                         leftX + 10, upY + 12))
+                    {
+                        if (itemIndex != -1)
                         {
                             g->cursor->handleItemClicked(itemIndex, i);
                             firstUnit->inventory->RemoveItem(i);
+                        }
+                        else
+                        {
+                            if (g->cursor->isItemInHand())
+                            {
+                                g->cursor->handleItemPutSlot(firstUnit, i);
+                            }
                         }
                     }
 
                     ix ++; if (ix > 2) {ix=0;iy++;}
                 }
             }
+
+            return Null<Button>();
         }
 
         if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 100, 256, 144))
@@ -240,7 +250,7 @@ namespace DsprFrontend
                 //draw empty itembar
                 this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprItemBar);
                 this->myAnimatedSprite->tint = Color::White;
-                this->myAnimatedSprite->position->set(160, 109);
+                this->myAnimatedSprite->position->set(itemBarX, itemBarY);
                 this->myAnimatedSprite->imageIndex = 1;
                 this->myAnimatedSprite->drawSelf(camera, 0, 0);
             }
@@ -255,7 +265,7 @@ namespace DsprFrontend
                         //draw itembar
                         this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprItemBar);
                         this->myAnimatedSprite->tint = Color::White;
-                        this->myAnimatedSprite->position->set(160, 109);
+                        this->myAnimatedSprite->position->set(itemBarX, itemBarY);
                         this->myAnimatedSprite->imageIndex = (firstUnit->unitTemplate->hasInventory) ? 0 : 1;
                         this->myAnimatedSprite->drawSelf(camera, 0, 0);
 
@@ -265,23 +275,34 @@ namespace DsprFrontend
                             for(int i=0;i<6;i++)
                             {
                                 int itemIndex = firstUnit->inventory->GetItemAt(i);
+
+                                auto leftX = 166 + (ix * 11);
+                                auto upY = 116 + (iy*13);
+                                Color buttonTint = Color::LightGray;
+                                if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                                     leftX, upY,
+                                                     leftX + 10, upY + 12))
+                                {
+                                    buttonTint = Color::White;
+                                }
+
                                 if (itemIndex != -1)
                                 {
-                                    auto leftX = 166 + (ix * 11);
-                                    auto upY = 116 + (iy*13);
-                                    Color buttonTint = Color::LightGray;
-                                    if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
-                                                         leftX, upY,
-                                                         leftX + 10, upY + 12))
-                                    {
-                                        buttonTint = Color::White;
-                                    }
-
                                     this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->itemsIcons);
                                     this->myAnimatedSprite->tint = buttonTint;
                                     this->myAnimatedSprite->position->set(leftX, upY);
                                     this->myAnimatedSprite->imageIndex = itemIndex;
                                     this->myAnimatedSprite->drawSelf(camera, 0, 0);
+                                }
+
+                                if (g->cursor->isItemInHand() && buttonTint == Color::White)
+                                {
+                                    //colored box to indicate whether it's okay to put item in hand into new slot
+                                    this->myRectangle->position->set(leftX-1, upY-1);
+                                    this->myRectangle->setLineStyle(false);
+                                    this->myRectangle->setFillStyle(Color::Green, 0.2f);
+                                    this->myRectangle->size->set(12, 14);
+                                    this->myRectangle->drawSelf(camera, 0, 0);
                                 }
 
                                 ix ++; if (ix > 2) {ix=0;iy++;}
