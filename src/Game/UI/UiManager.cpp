@@ -66,15 +66,46 @@ namespace DsprFrontend
         this->UpdateFunction = [&](float deltaFrame){
             auto newFps = (1000 / deltaFrame);
             this->currentFps = ((this->currentFps*29) + newFps)/30;
+            this->step();
         };
     }
 
     Ref<Button> UiManager::getButtonWithLeftClick(Ref<Point> clickPoint) {
 
-        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 109, 204, 144))
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 109, 155, 144))
         {
             //clicking within armybar
             return Null<Button>();
+        }
+
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, itemBarX, itemBarY, itemBarX + itemBarW, itemBarY + itemBarH))
+        {
+            //clicking within itembar
+            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            auto firstUnit = g->unitManager->getSelectedUnits()->At(0);
+            if (firstUnit != nullptr && firstUnit->unitTemplate->hasInventory)
+            {
+                int ix = 0, iy = 0;
+                for(int i=0;i<6;i++)
+                {
+                    int itemIndex = firstUnit->inventory->GetItemAt(i);
+                    if (itemIndex != -1)
+                    {
+                        auto leftX = itemBarX + 6 + (ix * 11);
+                        auto upY = itemBarY + 7 + (iy*13);
+
+                        if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                             leftX, upY,
+                                             leftX + 10, upY + 12))
+                        {
+                            g->cursor->handleItemClicked(itemIndex, i);
+                            firstUnit->inventory->RemoveItem(i);
+                        }
+                    }
+
+                    ix ++; if (ix > 2) {ix=0;iy++;}
+                }
+            }
         }
 
         if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 100, 256, 144))
@@ -236,9 +267,19 @@ namespace DsprFrontend
                                 int itemIndex = firstUnit->inventory->GetItemAt(i);
                                 if (itemIndex != -1)
                                 {
+                                    auto leftX = 166 + (ix * 11);
+                                    auto upY = 116 + (iy*13);
+                                    Color buttonTint = Color::LightGray;
+                                    if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                                         leftX, upY,
+                                                         leftX + 10, upY + 12))
+                                    {
+                                        buttonTint = Color::White;
+                                    }
+
                                     this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->itemsIcons);
-                                    this->myAnimatedSprite->tint = Color::White;
-                                    this->myAnimatedSprite->position->set(166 + (ix * 11), 116 + (iy*13));
+                                    this->myAnimatedSprite->tint = buttonTint;
+                                    this->myAnimatedSprite->position->set(leftX, upY);
                                     this->myAnimatedSprite->imageIndex = itemIndex;
                                     this->myAnimatedSprite->drawSelf(camera, 0, 0);
                                 }
@@ -385,7 +426,7 @@ namespace DsprFrontend
 
                     Color buttonTint = Color::LightGray;
 
-                    if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                    if (!g->cursor->isItemInHand() &&Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
                                          leftX, upY,
                                          leftX + 10, upY + 12))
                     {
@@ -446,5 +487,20 @@ namespace DsprFrontend
         }
 
         return Null<Button>();
+    }
+
+    void UiManager::step() {
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        if (g->cursor->isItemInHand())return;
+
+        if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked)
+        {
+            this->rightButtonAlreadyClicked = true;
+            g->unitManager->issueUnitOrder(false);
+        }
+
+        if(!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
+            rightButtonAlreadyClicked = false;
     }
 }

@@ -33,20 +33,6 @@ namespace DsprFrontend
         this->minimapPixel->setLineStyle(1, Color::White);
     }
 
-    void UnitManager::uiUpdate()
-    {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
-
-        if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked)
-        {
-            this->rightButtonAlreadyClicked = true;
-            this->issueUnitOrder(false);
-        }
-
-        if(!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
-            rightButtonAlreadyClicked = false;
-    }
-
     Ref<Unit> UnitManager::getUnitOverlappingWithPoint(int x, int y)
     {
         if (!this->receivedGrid) return Null<Unit>();

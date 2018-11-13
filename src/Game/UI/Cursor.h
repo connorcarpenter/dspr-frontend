@@ -24,6 +24,8 @@ namespace DsprFrontend
     public:
 
         Cursor();
+        void handleItemClicked(int itemIndex, int slotIndex);
+        bool isItemInHand();
 
         bool leftButtonDragging = false;
         Ref<Point> leftButtonDragPoint = Null<Point>();
@@ -52,5 +54,9 @@ namespace DsprFrontend
 
         Ref<Item> lastHoveringItem = Null<Item>();
         Ref<Item> lastSelectedItem = Null<Item>();
+        int itemInHandIndex = -1;
+        int itemInHandSlotIndex = -1;
+
+        void resetItemInHand();
     };
 }

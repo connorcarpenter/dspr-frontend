@@ -21,6 +21,7 @@ namespace DsprFrontend {
         ~Inventory();
         void SetItemIndex(int slotIndex, int itemIndex);
         int GetItemAt(int slotIndex);
+        void RemoveItem(int slotIndex);
 
     private:
 

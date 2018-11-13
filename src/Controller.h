@@ -136,7 +136,6 @@ namespace DsprFrontend
         if (g->app->keyPressed(Key::Down)) g->camera->position->y += 2;
 
         // this is the game loop
-        g->unitManager->uiUpdate();
         g->world->UpdateChildren(deltaFrameMs);
 
         //when enough time has passed, do this

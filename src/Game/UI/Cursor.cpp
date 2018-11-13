@@ -17,6 +17,7 @@
 #include "DsprColors.h"
 #include "Game/ItemManager.h"
 #include "Game/Item.h"
+#include "SpriteCatalog.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
 
@@ -33,10 +34,9 @@ namespace DsprFrontend
 
     Cursor::Cursor() : AnimatedSprite()
     {
-        this->setTexture(New<Sova::String>("images/ui/cursor.png"));
-        this->frameWidth = 15;
-        this->frameHeight = 16;
-        this->padding = 1;
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        this->useAnimatedSpriteInfo(g->spriteCatalog->sprCursor);
         this->OnUpdate([&](float deltaFrameMs){ step(); });
         this->imageSpeed = 0;
         this->imageIndex = 1;
@@ -48,8 +48,6 @@ namespace DsprFrontend
         this->worldPosition = New<Point>(0,0);
 
         //this->tint = DsprColors::Yellow;
-        this->anchor->x = 8;
-        this->anchor->y = 7;
 
 #if ORYOL_LINUX
         glfwSetInputMode(Oryol::_priv::glfwDisplayMgr::getGlfwWindow(), GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
@@ -68,250 +66,252 @@ namespace DsprFrontend
         this->worldPosition->x = this->position->x  + g->camera->position->x;
         this->worldPosition->y = this->position->y  + g->camera->position->y;
 
-        this->tint = DsprColors::Yellow;
+        if (this->itemInHandIndex == -1) {
+            this->tint = DsprColors::Yellow;
 
-        //Hovering over units
-        if (this->leftButtonDragging) {
-            //get new non-hovering units
-            auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(
-                    this->leftButtonDragPoint->x + g->camera->position->x,
-                    this->leftButtonDragPoint->y + g->camera->position->y,
-                    this->worldPosition->x, this->worldPosition->y);
+            //Hovering over units
+            if (this->leftButtonDragging) {
+                //get new non-hovering units
+                auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(
+                        this->leftButtonDragPoint->x + g->camera->position->x,
+                        this->leftButtonDragPoint->y + g->camera->position->y,
+                        this->worldPosition->x, this->worldPosition->y);
 
-            //currently hovered units, if outside the box, should be set back to non-hovering
-            auto unitsOutsideBox = g->unitManager->getUnitsOutsideBox(this->hoverList,
-                                                                      this->leftButtonDragPoint->x +
-                                                                      g->camera->position->x,
-                                                                      this->leftButtonDragPoint->y +
-                                                                      g->camera->position->y,
-                                                                      this->worldPosition->x,
-                                                                      this->worldPosition->y);
+                //currently hovered units, if outside the box, should be set back to non-hovering
+                auto unitsOutsideBox = g->unitManager->getUnitsOutsideBox(this->hoverList,
+                                                                          this->leftButtonDragPoint->x +
+                                                                          g->camera->position->x,
+                                                                          this->leftButtonDragPoint->y +
+                                                                          g->camera->position->y,
+                                                                          this->worldPosition->x,
+                                                                          this->worldPosition->y);
 
-            if (unitsOutsideBox != nullptr && unitsOutsideBox->Size() > 0) {
-                for (auto iterator = unitsOutsideBox->GetIterator(); iterator->Valid(); iterator->Next()) {
-                    auto unit = iterator->Get();
-                    unit->hovering = false;
-                    this->hoverList->Remove(unit);
+                if (unitsOutsideBox != nullptr && unitsOutsideBox->Size() > 0) {
+                    for (auto iterator = unitsOutsideBox->GetIterator(); iterator->Valid(); iterator->Next()) {
+                        auto unit = iterator->Get();
+                        unit->hovering = false;
+                        this->hoverList->Remove(unit);
+                    }
                 }
-            }
 
-            if (nonHoveringUnits != nullptr && nonHoveringUnits->Size() > 0) {
-                for (auto iterator = nonHoveringUnits->GetIterator(); iterator->Valid(); iterator->Next()) {
-                    auto unit = iterator->Get();
-                    unit->hovering = true;
-                    this->hoverList->Add(unit);
+                if (nonHoveringUnits != nullptr && nonHoveringUnits->Size() > 0) {
+                    for (auto iterator = nonHoveringUnits->GetIterator(); iterator->Valid(); iterator->Next()) {
+                        auto unit = iterator->Get();
+                        unit->hovering = true;
+                        this->hoverList->Add(unit);
+                    }
                 }
-            }
-        } else {
+            } else {
 
-            auto unitHovering = g->unitManager->getUnitOverlappingWithPoint(this->worldPosition->x,
-                                                                            this->worldPosition->y);
-
-            if (unitHovering == nullptr) {
-
-                auto itemHovering = g->itemManager->getItemOverlappingWithPoint(this->worldPosition->x,
+                auto unitHovering = g->unitManager->getUnitOverlappingWithPoint(this->worldPosition->x,
                                                                                 this->worldPosition->y);
 
-                if (this->cursorIsHovering) {
+                if (unitHovering == nullptr) {
 
-                    if (itemHovering == nullptr)
-                    {
-                        this->cursorIsHovering = false;
-                        this->imageIndex = 1;
-                        if (this->lastHoveringItem != nullptr)
-                        {
-                            this->lastHoveringItem->hovering = false;
-                            this->lastHoveringItem = nullptr;
+                    auto itemHovering = g->itemManager->getItemOverlappingWithPoint(this->worldPosition->x,
+                                                                                    this->worldPosition->y);
+
+                    if (this->cursorIsHovering) {
+
+                        if (itemHovering == nullptr) {
+                            this->cursorIsHovering = false;
+                            this->imageIndex = 1;
+                            if (this->lastHoveringItem != nullptr) {
+                                this->lastHoveringItem->hovering = false;
+                                this->lastHoveringItem = nullptr;
+                            }
                         }
-                    }
-
-                    if (this->hoverList->Size() > 0)
-                    {
-                        this->setHoverListUnitsToHover(false);
-                        this->hoverList->Clear();
-                    }
-                }
-
-                if (itemHovering != nullptr)
-                {
-                    this->tint = DsprColors::Yellow;
-
-                    if (this->lastHoveringItem != nullptr && this->lastHoveringItem != itemHovering)
-                        this->lastHoveringItem->hovering = false;
-
-                    itemHovering->hovering = true;
-                    this->lastHoveringItem = itemHovering;
-
-                    this->cursorIsHovering = true;
-
-                    if(g->unitManager->selectionList->Size() > 0) {
-                        this->imageIndex = 3;
-                    } else {
-                        this->imageIndex = 0;
-                    }
-                }
-            }
-            else
-            {
-                if (this->lastHoveringItem != nullptr)
-                {
-                    this->lastHoveringItem->hovering = false;
-                    this->lastHoveringItem = nullptr;
-                    this->imageIndex = 0;
-                }
-
-                this->tint = (unitHovering->tribeIndex == g->playersTribeIndex) ? DsprColors::Green : DsprColors::Red;
-                if (unitHovering->tribeIndex == -1) this->tint = DsprColors::Yellow;
-
-                if (this->cursorIsHovering)
-                {
-                    if (!this->hoverList->Contains(unitHovering)){
 
                         if (this->hoverList->Size() > 0) {
                             this->setHoverListUnitsToHover(false);
+                            this->hoverList->Clear();
                         }
+                    }
 
+                    if (itemHovering != nullptr) {
+                        this->tint = DsprColors::Yellow;
+
+                        if (this->lastHoveringItem != nullptr && this->lastHoveringItem != itemHovering)
+                            this->lastHoveringItem->hovering = false;
+
+                        itemHovering->hovering = true;
+                        this->lastHoveringItem = itemHovering;
+
+                        this->cursorIsHovering = true;
+
+                        if (g->unitManager->selectionList->Size() > 0) {
+                            this->imageIndex = 3;
+                        } else {
+                            this->imageIndex = 0;
+                        }
+                    }
+                } else {
+                    if (this->lastHoveringItem != nullptr) {
+                        this->lastHoveringItem->hovering = false;
+                        this->lastHoveringItem = nullptr;
+                        this->imageIndex = 0;
+                    }
+
+                    this->tint = (unitHovering->tribeIndex == g->playersTribeIndex) ? DsprColors::Green
+                                                                                    : DsprColors::Red;
+                    if (unitHovering->tribeIndex == -1) this->tint = DsprColors::Yellow;
+
+                    if (this->cursorIsHovering) {
+                        if (!this->hoverList->Contains(unitHovering)) {
+
+                            if (this->hoverList->Size() > 0) {
+                                this->setHoverListUnitsToHover(false);
+                            }
+
+                            this->hoverList->Clear();
+                            this->hoverList->Add(unitHovering);
+                            this->setHoverListUnitsToHover(true);
+                        }
+                    } else {
+                        this->imageIndex = 0;
+                        this->cursorIsHovering = true;
                         this->hoverList->Clear();
                         this->hoverList->Add(unitHovering);
                         this->setHoverListUnitsToHover(true);
                     }
+
                 }
-                else
-                {
-                    this->imageIndex = 0;
-                    this->cursorIsHovering = true;
-                    this->hoverList->Clear();
-                    this->hoverList->Add(unitHovering);
-                    this->setHoverListUnitsToHover(true);
-                }
-
-            }
-        }
-
-        if (this->buttonOrder == nullptr) {
-
-            this->buttonOrder = g->uiManager->getButtonFromKeyboardShortcut();
-
-            bool leftButtonPressed = InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left);
-            //Left button clicking + dragging
-
-            if (leftButtonPressed) {
-                leftButtonPressed = g->uiManager->captureLeftClickMinimapEvent(this->position);
             }
 
-            if (this->ignoreNextLeftButtonClicked > 0){
-                this->ignoreNextLeftButtonClicked -= 1;
-                leftButtonPressed = false;
-            }
+            if (this->buttonOrder == nullptr) {
 
-            if (this->leftButtonDragging) {
-                if (!leftButtonPressed) {
-                    ///group selection event
-                    this->leftButtonDragging = false;
-                    bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) ||
-                                        InternalApp::getInternalApp()->keyPressed(Key::RightShift);
-                    if (!shiftPressed)
-                        g->unitManager->deselectAllUnits();
-                    this->setHoverListUnitsToSelected(true, false);
-                    this->setHoverListUnitsToHover(false);
-                    this->hoverList->Clear();
+                this->buttonOrder = g->uiManager->getButtonFromKeyboardShortcut();
 
-                    if (this->lastSelectedItem != nullptr)
-                    {
-                        this->lastSelectedItem->selected = false;
-                        this->lastSelectedItem = nullptr;
-                    }
-                }
-            } else {
+                bool leftButtonPressed = InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left);
+                //Left button clicking + dragging
+
                 if (leftButtonPressed) {
-                    if (this->leftButtonPressedTime == 0)
-                        this->leftButtonDragPoint->set(this->position->x, this->position->y);
+                    leftButtonPressed = g->uiManager->captureLeftClickMinimapEvent(this->position);
+                }
 
-                    if (this->leftButtonPressedTime < this->leftButtonPressedTimeToDrag)
-                        this->leftButtonPressedTime += 1;
-                } else {
-                    if (this->leftButtonPressedTime > 0) {
+                if (this->ignoreNextLeftButtonClicked > 0) {
+                    this->ignoreNextLeftButtonClicked -= 1;
+                    leftButtonPressed = false;
+                }
 
+                if (this->leftButtonDragging) {
+                    if (!leftButtonPressed) {
+                        ///group selection event
+                        this->leftButtonDragging = false;
                         bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) ||
                                             InternalApp::getInternalApp()->keyPressed(Key::RightShift);
-                        bool ctrlPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftControl) ||
-                                           InternalApp::getInternalApp()->keyPressed(Key::RightControl);
+                        if (!shiftPressed)
+                            g->unitManager->deselectAllUnits();
+                        this->setHoverListUnitsToSelected(true, false);
+                        this->setHoverListUnitsToHover(false);
+                        this->hoverList->Clear();
 
-                        bool clickedInGameArea = g->uiManager->isInGameArea(this->position);
-                        if (clickedInGameArea) {
-                            if (this->leftButtonDoubleClickCountdown == 0 && !ctrlPressed) {
-                                ///single unit selection event
-
-                                if (!shiftPressed)
-                                    g->unitManager->deselectAllUnits();
-
-                                this->setHoverListUnitsToSelected(true, shiftPressed);
-
-                                this->leftButtonDoubleClickCountdown = this->leftButtonDoubleClickWindow;
-
-                                if (this->lastSelectedItem != nullptr)
-                                {
-                                    this->lastSelectedItem->selected = false;
-                                    this->lastSelectedItem = nullptr;
-                                }
-                                if (this->lastHoveringItem != nullptr)
-                                {
-                                    this->lastHoveringItem->selected = true;
-                                    this->lastSelectedItem = this->lastHoveringItem;
-                                }
-
-                            } else {
-                                ///its a doubleclick!
-
-                                this->setHoverListUnitsToHover(false);
-                                this->hoverList->Clear();
-
-                                //get new non-hovering units
-                                auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(
-                                        g->camera->position->x,
-                                        g->camera->position->y,
-                                        g->camera->position->x +
-                                        g->camera->width,
-                                        g->camera->position->y +
-                                        g->camera->height);
-
-                                if (nonHoveringUnits != nullptr && nonHoveringUnits->Size() > 0) {
-                                    for (auto iterator = nonHoveringUnits->GetIterator(); iterator->Valid(); iterator->Next()) {
-                                        auto unit = iterator->Get();
-                                        this->hoverList->Add(unit);
-                                    }
-                                }
-                                if (!shiftPressed)
-                                    g->unitManager->deselectAllUnits();
-                                this->setHoverListUnitsToSelected(true, false);
-                                this->hoverList->Clear();
-                            }
-                        }
-                        else{
-                            this->buttonOrder = g->uiManager->getButtonWithLeftClick(this->position);
+                        if (this->lastSelectedItem != nullptr) {
+                            this->lastSelectedItem->selected = false;
+                            this->lastSelectedItem = nullptr;
                         }
                     }
-                    this->leftButtonPressedTime = 0;
+                } else {
+                    if (leftButtonPressed) {
+                        if (this->leftButtonPressedTime == 0)
+                            this->leftButtonDragPoint->set(this->position->x, this->position->y);
+
+                        if (this->leftButtonPressedTime < this->leftButtonPressedTimeToDrag)
+                            this->leftButtonPressedTime += 1;
+                    } else {
+                        if (this->leftButtonPressedTime > 0) {
+
+                            bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) ||
+                                                InternalApp::getInternalApp()->keyPressed(Key::RightShift);
+                            bool ctrlPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftControl) ||
+                                               InternalApp::getInternalApp()->keyPressed(Key::RightControl);
+
+                            bool clickedInGameArea = g->uiManager->isInGameArea(this->position);
+                            if (clickedInGameArea) {
+                                if (this->leftButtonDoubleClickCountdown == 0 && !ctrlPressed) {
+                                    ///single unit selection event
+
+                                    if (!shiftPressed)
+                                        g->unitManager->deselectAllUnits();
+
+                                    this->setHoverListUnitsToSelected(true, shiftPressed);
+
+                                    this->leftButtonDoubleClickCountdown = this->leftButtonDoubleClickWindow;
+
+                                    if (this->lastSelectedItem != nullptr) {
+                                        this->lastSelectedItem->selected = false;
+                                        this->lastSelectedItem = nullptr;
+                                    }
+                                    if (this->lastHoveringItem != nullptr) {
+                                        this->lastHoveringItem->selected = true;
+                                        this->lastSelectedItem = this->lastHoveringItem;
+                                    }
+
+                                } else {
+                                    ///its a doubleclick!
+
+                                    this->setHoverListUnitsToHover(false);
+                                    this->hoverList->Clear();
+
+                                    //get new non-hovering units
+                                    auto nonHoveringUnits = g->unitManager->getNonHoveringUnitsWithinBox(
+                                            g->camera->position->x,
+                                            g->camera->position->y,
+                                            g->camera->position->x +
+                                            g->camera->width,
+                                            g->camera->position->y +
+                                            g->camera->height);
+
+                                    if (nonHoveringUnits != nullptr && nonHoveringUnits->Size() > 0) {
+                                        for (auto iterator = nonHoveringUnits->GetIterator(); iterator->Valid(); iterator->Next()) {
+                                            auto unit = iterator->Get();
+                                            this->hoverList->Add(unit);
+                                        }
+                                    }
+                                    if (!shiftPressed)
+                                        g->unitManager->deselectAllUnits();
+                                    this->setHoverListUnitsToSelected(true, false);
+                                    this->hoverList->Clear();
+                                }
+                            } else {
+                                this->buttonOrder = g->uiManager->getButtonWithLeftClick(this->position);
+                            }
+                        }
+                        this->leftButtonPressedTime = 0;
+                    }
+
+                    if (this->leftButtonDoubleClickCountdown > 0)this->leftButtonDoubleClickCountdown -= 1;
+
+                    if (leftButtonPressed && this->leftButtonPressedTime >= this->leftButtonPressedTimeToDrag &&
+                        g->uiManager->isInGameArea(this->position)) {
+                        this->leftButtonDragging = true;
+                        this->leftButtonPressedTime = 0;
+                    }
+
                 }
-
-                if (this->leftButtonDoubleClickCountdown > 0)this->leftButtonDoubleClickCountdown -= 1;
-
-                if (leftButtonPressed && this->leftButtonPressedTime >= this->leftButtonPressedTimeToDrag && g->uiManager->isInGameArea(this->position)) {
-                    this->leftButtonDragging = true;
+            } else {
+                if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left)) {
+                    this->buttonOrder->executeAction();
+                    this->buttonOrder = Null<Button>();
                     this->leftButtonPressedTime = 0;
+                    this->ignoreNextLeftButtonClicked = 10;
+                    this->imageIndex = 1;
+                    return;
                 }
-
+                if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Right)) {
+                    this->buttonOrder = Null<Button>();
+                    g->uiManager->rightButtonAlreadyClicked = true;
+                    this->imageIndex = 1;
+                    return;
+                }
             }
-        } else {
-            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left)){
-                this->buttonOrder->executeAction();
-                this->buttonOrder = Null<Button>();
-                this->leftButtonPressedTime = 0;
-                this->ignoreNextLeftButtonClicked = 10;
-                return;
-            }
-            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Right)){
-                this->buttonOrder = Null<Button>();
+        }
+        else
+        {
+            //item is in hand
+            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Right)) {
+                this->resetItemInHand();
+                g->uiManager->rightButtonAlreadyClicked = true;
                 return;
             }
         }
@@ -366,21 +366,24 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
 
-        if (this->buttonOrder != nullptr) {
-            this->imageIndex = 2;
-        } else {
-            //this->imageIndex = this->cursorIsHovering ? 0 : 1;
+        if (this->itemInHandIndex == -1) {
+            if (this->buttonOrder != nullptr) {
+                this->imageIndex = 2;
+            } else {
+                //this->imageIndex = this->cursorIsHovering ? 0 : 1;
+            }
         }
 
         AnimatedSprite::drawSelf(camera, xoffset, yoffset);
 
-        if (this->leftButtonDragging)
-        {
-            this->selectionBox->position->set(this->leftButtonDragPoint->x, this->leftButtonDragPoint->y);
+        if (this->itemInHandIndex == -1) {
+            if (this->leftButtonDragging) {
+                this->selectionBox->position->set(this->leftButtonDragPoint->x, this->leftButtonDragPoint->y);
 
-            this->selectionBox->size->set(this->position->x - this->leftButtonDragPoint->x,
-                                          this->position->y - this->leftButtonDragPoint->y);
-            this->selectionBox->drawSelf(camera, xoffset, yoffset);
+                this->selectionBox->size->set(this->position->x - this->leftButtonDragPoint->x,
+                                              this->position->y - this->leftButtonDragPoint->y);
+                this->selectionBox->drawSelf(camera, xoffset, yoffset);
+            }
         }
 
         g->unitHoverCircle_1x1->Update(0);
@@ -388,5 +391,33 @@ namespace DsprFrontend
         g->unitHoverCircle_3x3->Update(0);
         g->unitHoverCircle_5x5->Update(0);
         g->moveMarker->Update(0);
+    }
+
+    void Cursor::handleItemClicked(int itemIndex, int slotIndex) {
+        this->itemInHandIndex = itemIndex;
+        this->itemInHandSlotIndex = slotIndex;
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        this->useAnimatedSpriteInfo(g->spriteCatalog->itemsIcons);
+        this->imageIndex = itemIndex;
+        this->tint = Color::White;
+    }
+
+    void Cursor::resetItemInHand(){
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto firstUnit = g->unitManager->getSelectedUnits()->At(0);
+        if (firstUnit != nullptr)
+        {
+            firstUnit->inventory->SetItemIndex(this->itemInHandSlotIndex, this->itemInHandIndex);
+        }
+
+        this->itemInHandSlotIndex = -1;
+        this->itemInHandIndex = -1;
+        this->useAnimatedSpriteInfo(g->spriteCatalog->sprCursor);
+        this->imageIndex = 1;
+        this->tint = Color::White;
+    }
+
+    bool Cursor::isItemInHand() {
+        return itemInHandIndex != -1;
     }
 }

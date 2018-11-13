@@ -30,6 +30,7 @@ namespace DsprFrontend
 
         Ref<Button> getButtonFromKeyboardShortcut();
 
+        bool rightButtonAlreadyClicked = false;
     private:
         Ref<Sprite> mySprite = Null<Sprite>();
         Ref<AnimatedSprite> myAnimatedSprite = Null<AnimatedSprite>();
@@ -37,5 +38,15 @@ namespace DsprFrontend
         Ref<Sova::Rectangle> myRectangle = Null<Sova::Rectangle>();
 
         float currentFps = 60.0f;
+
+        //consts
+        const int itemBarX = 160;
+        const int itemBarY = 109;
+        const int itemBarW = 44;
+        const int itemBarH = 35;
+
+        void oldUnitManagerUiUpdate();
+
+        void step();
     };
 }

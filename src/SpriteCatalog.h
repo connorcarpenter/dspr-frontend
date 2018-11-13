@@ -69,6 +69,7 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> sprSparkle = Null<Sova::AnimatedSpriteInfo>();
 
         //ui
+        Ref<Sova::AnimatedSpriteInfo> sprCursor = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprMainFont = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprMinimap = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprArmyBar = Null<Sova::AnimatedSpriteInfo>();
@@ -77,5 +78,6 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> sprCommandActions = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprItemBar = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprPortraitBar = Null<Sova::AnimatedSpriteInfo>();
+
     };
 }

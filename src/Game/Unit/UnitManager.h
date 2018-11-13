@@ -28,7 +28,6 @@ namespace DsprFrontend
         void addToSelectionList(Ref<Unit> unit);
         void removeFromSelectionList(Ref<Unit> unit);
         void clearSelectionList();
-        void uiUpdate();
         Ref<Unit> getUnitOverlappingWithPoint(int x, int y);
         Ref<List<Unit>> getNonHoveringUnitsWithinBox(int x1, int y1, int x2, int y2);
         Ref<List<Unit>> getUnitsOutsideBox(Ref<List<Unit>> hoverList, int x1, int y1, int x2, int y2);
@@ -47,7 +46,6 @@ namespace DsprFrontend
 
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
-        bool rightButtonAlreadyClicked = false;
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
         Ref<RefIsoGrid<Unit>> unitGrid = Null<RefIsoGrid<Unit>>();
         bool receivedGrid = false;

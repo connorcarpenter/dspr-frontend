@@ -25,4 +25,8 @@ namespace DsprFrontend
     int Inventory::GetItemAt(int slotIndex) {
         return this->items[slotIndex];
     }
+
+    void Inventory::RemoveItem(int slotIndex) {
+        this->items[slotIndex] = -1;
+    }
 }
