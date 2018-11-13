@@ -298,7 +298,8 @@ namespace DsprFrontend
                                 if (g->cursor->isItemInHand() && buttonTint == Color::White)
                                 {
                                     //colored box to indicate whether it's okay to put item in hand into new slot
-                                    Color boxColor = firstUnit->inventory->CanPlaceInInventory(i, g->cursor->itemInHandTemplate) ? Color::Green : Color::Red;
+                                    Color boxColor = firstUnit->inventory->CanPlaceInSlot(i, g->cursor->itemInHandTemplate)
+                                                     ? Color::Green : Color::Red;
 
                                     this->myRectangle->position->set(leftX-1, upY-1);
                                     this->myRectangle->setLineStyle(false);

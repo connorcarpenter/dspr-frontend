@@ -28,6 +28,7 @@ namespace DsprFrontend
         void handleItemClicked(Ref<Unit> unit, Ref<ItemTemplate> itemTemplate, int slotIndex);
         bool isItemInHand();
         void handleItemPutSlot(Ref<Unit> unit, int slotIndex);
+        void setItemInHandTemplate(Ref<ItemTemplate> itemTemplate);
 
         bool leftButtonDragging = false;
         Ref<Point> leftButtonDragPoint = Null<Point>();

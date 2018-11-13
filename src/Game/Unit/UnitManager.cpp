@@ -282,7 +282,7 @@ namespace DsprFrontend
                     int itemIndex = atoi(varsParts->At(index)->AsCStr());
                     if (unit == g->cursor->itemInHandOwner && g->cursor->itemInHandSlotIndex == index)
                     {
-                        index++; continue;
+                        g->cursor->setItemInHandTemplate(g->itemTemplateCatalog->findTemplateByIndex(itemIndex));
                     }
                     else
                     {

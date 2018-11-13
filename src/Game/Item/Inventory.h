@@ -23,7 +23,7 @@ namespace DsprFrontend {
         void SetItemIndex(int slotIndex, Ref<ItemTemplate> itemTemplate);
         Ref<ItemTemplate> GetItemAt(int slotIndex);
         void RemoveItem(int slotIndex);
-        bool CanPlaceInInventory(int slotIndex, Ref<ItemTemplate> itemTemplate);
+        bool CanPlaceInSlot(int slotIndex, Ref<ItemTemplate> itemTemplate);
 
     private:
 

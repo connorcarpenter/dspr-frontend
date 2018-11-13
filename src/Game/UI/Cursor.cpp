@@ -461,31 +461,24 @@ namespace DsprFrontend
     }
 
     void Cursor::handleItemClicked(Ref<Unit> unit, Ref<ItemTemplate> itemTemplate, int slotIndex) {
-        this->itemInHandTemplate = itemTemplate;
+        this->setItemInHandTemplate(itemTemplate);
         this->itemInHandSlotIndex = slotIndex;
         this->itemInHandOwner = unit;
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         this->useAnimatedSpriteInfo(g->spriteCatalog->itemsIcons);
-        this->imageIndex = itemTemplate->index;
         this->tint = Color::White;
     }
 
     void Cursor::handleItemPutSlot(Ref<Unit> unit, int slotIndex) {
 
-        if (!unit->inventory->CanPlaceInInventory(slotIndex, this->itemInHandTemplate)) return;
+        if (!unit->inventory->CanPlaceInSlot(slotIndex, this->itemInHandTemplate)) return;
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
         auto oldItemTemplate = this->itemInHandTemplate;
         auto oldItemSlotIndex = this->itemInHandSlotIndex;
 
-        this->itemInHandTemplate = unit->inventory->GetItemAt(slotIndex);
+        this->setItemInHandTemplate(unit->inventory->GetItemAt(slotIndex));
         unit->inventory->SetItemIndex(slotIndex, oldItemTemplate);
-
-        if (!this->isItemInHand()) {
-            undoItemInHandGraphic();
-        } else {
-            this->imageIndex = this->itemInHandTemplate->index;
-        }
 
         g->unitManager->orderUnitSwapInventory(unit, oldItemSlotIndex, slotIndex);
     }
@@ -512,5 +505,15 @@ namespace DsprFrontend
 
     bool Cursor::isItemInHand() {
         return this->itemInHandTemplate != nullptr;
+    }
+
+    void Cursor::setItemInHandTemplate(Ref<ItemTemplate> itemTemplate) {
+        this->itemInHandTemplate = itemTemplate;
+
+        if (!this->isItemInHand()) {
+            undoItemInHandGraphic();
+        } else {
+            this->imageIndex = itemTemplate->index;
+        }
     }
 }

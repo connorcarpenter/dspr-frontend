@@ -23,7 +23,7 @@ namespace DsprFrontend
     void Inventory::SetItemIndex(int slotIndex, Ref<ItemTemplate> itemTemplate) {
         if (itemTemplate == nullptr) {this->items[slotIndex] = -1; return;}
 
-        if(!this->CanPlaceInInventory(slotIndex, itemTemplate)) {
+        if(!this->CanPlaceInSlot(slotIndex, itemTemplate)) {
             int i = 1/0; // how did we get here?
         }
 
@@ -39,7 +39,7 @@ namespace DsprFrontend
         this->items[slotIndex] = -1;
     }
 
-    bool Inventory::CanPlaceInInventory(int slotIndex, Ref<ItemTemplate> itemTemplate) {
+    bool Inventory::CanPlaceInSlot(int slotIndex, Ref<ItemTemplate> itemTemplate) {
         auto partAllowed = this->slotAllowsPart(slotIndex);
         if (partAllowed == Any)return true;
         if (partAllowed == None)return false;
