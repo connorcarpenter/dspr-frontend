@@ -613,6 +613,28 @@ namespace DsprFrontend
         g->gameServer->send(sb->ToString());
     }
 
+    void UnitManager::orderUnitGiveItem(Ref<Unit> unit, int slotIndex, int targetUnitId)
+    {
+        auto orderIndex = UnitOrder::ItemGive;
+
+        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+
+        auto sb = New<Sova::StringBuilder>();
+        sb->Append(New<Sova::String>("unit/1.0/order|"));
+        sb->Append(g->gameServerPlayerToken);
+        sb->Append(New<Sova::String>("|"));
+        Ref<Int> intObj = New<Int>(unit->id);
+        sb->Append(intObj->ToString());
+        sb->Append(New<Sova::String>("|"));
+        sb->Append(New<Int>(orderIndex)->ToString());
+        sb->Append(New<Sova::String>(","));
+        sb->Append(New<Int>(slotIndex)->ToString());
+        sb->Append(New<Sova::String>(","));
+        sb->Append(New<Int>(targetUnitId)->ToString());
+
+        g->gameServer->send(sb->ToString());
+    }
+
     void UnitManager::updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition)
     {
         if (!this->receivedGrid) return;

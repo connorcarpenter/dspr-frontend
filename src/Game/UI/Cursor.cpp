@@ -312,6 +312,38 @@ namespace DsprFrontend
         else
         {
             //item is in hand
+            auto unitHovering = g->unitManager->getUnitOverlappingWithPoint(this->worldPosition->x,
+                                                                            this->worldPosition->y);
+
+            if (unitHovering == nullptr) {
+                if (this->cursorIsHovering) {
+                    if (this->hoverList->Size() > 0) {
+                        this->setHoverListUnitsToHover(false);
+                        this->hoverList->Clear();
+                    }
+                }
+            }
+            else
+            {
+                if (this->cursorIsHovering) {
+                    if (!this->hoverList->Contains(unitHovering)) {
+
+                        if (this->hoverList->Size() > 0) {
+                            this->setHoverListUnitsToHover(false);
+                        }
+
+                        this->hoverList->Clear();
+                        this->hoverList->Add(unitHovering);
+                        this->setHoverListUnitsToHover(true);
+                    }
+                } else {
+                    this->imageIndex = 0;
+                    this->cursorIsHovering = true;
+                    this->hoverList->Clear();
+                    this->hoverList->Add(unitHovering);
+                    this->setHoverListUnitsToHover(true);
+                }
+            }
 
             if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Right)) {
                 this->resetItemInHand();
@@ -331,7 +363,15 @@ namespace DsprFrontend
 
                     if (g->uiManager->isInGameArea(this->position))
                     {
-                        g->unitManager->orderUnitDropItem(this->itemInHandOwner, this->itemInHandSlotIndex, this->worldPosition);
+                        if (unitHovering != nullptr && unitHovering->unitTemplate->hasInventory && unitHovering->tribeIndex == g->playersTribeIndex)
+                        {
+                            g->unitManager->orderUnitGiveItem(this->itemInHandOwner, this->itemInHandSlotIndex, unitHovering->id);
+                        }
+                        else
+                        {
+                            g->unitManager->orderUnitDropItem(this->itemInHandOwner, this->itemInHandSlotIndex, this->worldPosition);
+                        }
+
                         this->resetItemInHand();
                     }
                     else
