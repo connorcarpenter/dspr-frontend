@@ -5,14 +5,14 @@
 @vs canvasVS
 in vec2 position;
 in vec2 texcoord0;
-in vec3 color0;
+in vec4 color0;
 out vec2 uv;
 out vec4 color1;
 void main() {
     gl_Position = vec4(((position.xy * 2.0) - 1.0), 0.0, 1.0);
     gl_Position.y = -gl_Position.y;
     uv = texcoord0;
-    color1 = vec4(color0.xyz, 1.0);
+    color1 = color0;
 }
 @end
 
