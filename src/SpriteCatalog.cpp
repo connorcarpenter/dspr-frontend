@@ -69,5 +69,16 @@ namespace DsprFrontend
         this->itemsGround = New<AnimatedSpriteInfo>(New<Sova::String>("images/itemsGround.png"), 11, 11, 1, 5, 5);
         this->itemsIcons = New<AnimatedSpriteInfo>(New<Sova::String>("images/itemsIcons.png"), 10, 12, 0, 0, 0);
         this->sprSparkle = New<AnimatedSpriteInfo>(New<Sova::String>("images/sprSparkle.png"), 5, 5, 1, 3, 3);
+
+        this->ashwalkerBase            = New<AnimatedSpriteInfo>(New<Sova::String>("images/enemy/sprAshwalker.png"), 20, 22, 1, 10, 19);
+        this->ashwalkerWalkDown        = New<AnimatedSequenceInfo>(this->ashwalkerBase, 0, 1);
+        this->ashwalkerWalkUp          = New<AnimatedSequenceInfo>(this->ashwalkerBase, 2, 3);
+        this->ashwalkerDieDown         = New<AnimatedSequenceInfo>(this->ashwalkerBase, 4, 5);
+        this->ashwalkerDieUp           = New<AnimatedSequenceInfo>(this->ashwalkerBase, 6, 7);
+        this->ashwalkerAttackUp1HS        = New<AnimatedSequenceInfo>(this->ashwalkerBase, 8, 12);
+        this->ashwalkerAttackUpRight1HS   = New<AnimatedSequenceInfo>(this->ashwalkerBase, 13, 17);
+        this->ashwalkerAttackRight1HS     = New<AnimatedSequenceInfo>(this->ashwalkerBase, 18, 22);
+        this->ashwalkerAttackDownRight1HS = New<AnimatedSequenceInfo>(this->ashwalkerBase, 23, 27);
+        this->ashwalkerAttackDown1HS      = New<AnimatedSequenceInfo>(this->ashwalkerBase, 28, 32);
     }
 }

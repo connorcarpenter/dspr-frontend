@@ -18,6 +18,7 @@ namespace DsprFrontend {
         Ref<UnitTemplate> worker = Null<UnitTemplate>();
         Ref<UnitTemplate> temple = Null<UnitTemplate>();
         Ref<UnitTemplate> manafount = Null<UnitTemplate>();
+        Ref<UnitTemplate> ashwalker = Null<UnitTemplate>();
 
         Ref<UnitTemplate> findTemplateByIndex(int index);
     private:
@@ -28,5 +29,7 @@ namespace DsprFrontend {
         void initTemple();
 
         void initManafount();
+
+        void initAshwalker();
     };
 }

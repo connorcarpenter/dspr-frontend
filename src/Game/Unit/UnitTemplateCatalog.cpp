@@ -18,6 +18,7 @@ namespace DsprFrontend
         initWorker();
         initTemple();
         initManafount();
+        initAshwalker();
     }
 
     Ref<UnitTemplate> UnitTemplateCatalog::findTemplateByIndex(int index)
@@ -77,6 +78,39 @@ namespace DsprFrontend
         this->worker->sprBigPortraitTC = g->spriteCatalog->workerBigPortraitTC;
 
         this->templateList->Add(this->worker);
+    }
+
+    void UnitTemplateCatalog::initAshwalker()
+    {
+        auto g = (Global*) InternalApp::getGlobal();
+
+        this->ashwalker = New<UnitTemplate>(3);
+        this->ashwalker->sight = 6;
+        this->ashwalker->maxHealth = 340;
+
+        this->ashwalker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
+        this->ashwalker->dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
+        this->ashwalker->sprSelectCircle = g->unitSelectCircle_1x1;
+        this->ashwalker->sprHoverCircle = g->unitHoverCircle_1x1;
+        this->ashwalker->hasIdleTurnBehavior = true;
+        this->ashwalker->spriteFaceLeftXoffset = -2;
+        this->ashwalker->bleeds = true;
+        this->ashwalker->hasDeathAnimation = true;
+        this->ashwalker->hasShadow = true;
+
+        this->ashwalker->sprBase = g->spriteCatalog->ashwalkerBase;
+
+        this->ashwalker->sprWalkDown = g->spriteCatalog->ashwalkerWalkDown;
+        this->ashwalker->sprWalkUp = g->spriteCatalog->ashwalkerWalkUp;
+        this->ashwalker->sprAttackUp = g->spriteCatalog->ashwalkerAttackUp1HS;
+        this->ashwalker->sprAttackUpRight = g->spriteCatalog->ashwalkerAttackUpRight1HS;
+        this->ashwalker->sprAttackRight = g->spriteCatalog->ashwalkerAttackRight1HS;
+        this->ashwalker->sprAttackDownRight = g->spriteCatalog->ashwalkerAttackDownRight1HS;
+        this->ashwalker->sprAttackDown = g->spriteCatalog->ashwalkerAttackDown1HS;
+        this->ashwalker->sprDieDown = g->spriteCatalog->ashwalkerDieDown;
+        this->ashwalker->sprDieUp = g->spriteCatalog->ashwalkerDieUp;
+
+        this->templateList->Add(this->ashwalker);
     }
 
     void UnitTemplateCatalog::initTemple()

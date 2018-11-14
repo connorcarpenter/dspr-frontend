@@ -52,6 +52,19 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> workerBigPortrait = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> workerBigPortraitTC = Null<Sova::AnimatedSpriteInfo>();
 
+        //ashwalker
+        Ref<Sova::AnimatedSpriteInfo> ashwalkerBase = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSequenceInfo> ashwalkerWalkDown = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> ashwalkerWalkUp = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> ashwalkerDieDown = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> ashwalkerDieUp = Null<Sova::AnimatedSequenceInfo>();
+
+        Ref<Sova::AnimatedSequenceInfo> ashwalkerAttackUp1HS = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> ashwalkerAttackUpRight1HS = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> ashwalkerAttackRight1HS = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> ashwalkerAttackDownRight1HS = Null<Sova::AnimatedSequenceInfo>();
+        Ref<Sova::AnimatedSequenceInfo> ashwalkerAttackDown1HS = Null<Sova::AnimatedSequenceInfo>();
+
         //temple
         Ref<Sova::AnimatedSpriteInfo> temple = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> templeTC = Null<Sova::AnimatedSpriteInfo>();
