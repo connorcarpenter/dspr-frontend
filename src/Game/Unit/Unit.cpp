@@ -23,7 +23,7 @@ namespace DsprFrontend
 {
     Unit::Unit(int id, int x, int y, int tribeIndex, Ref<UnitTemplate> unitTemplate) : AnimatedSprite()
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         this->id = id;
         this->moveTarget = New<Point>(x, y);
@@ -182,7 +182,7 @@ namespace DsprFrontend
     }
 
     void Unit::walkingStep(float deltaFrameMs) {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         if (!this->tilePosition->Equals(this->nextTilePosition))
         {
@@ -265,7 +265,7 @@ namespace DsprFrontend
             this->myManaball->depth = this->depth + (this->facingDown ? 0 : 1);
             this->myManaball->scale->x = this->scale->x;
 
-            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            auto g = (Global*) InternalApp::getGlobal();
             g->world->AddChild(this->myManaball);
         }
         else
@@ -325,7 +325,7 @@ namespace DsprFrontend
             floatingNumber->vspeed = -0.3f;
             floatingNumber->depth = this->myManaball->depth - 20;
 
-            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            auto g = (Global*) InternalApp::getGlobal();
             g->world->AddChild(floatingNumber);
 
             this->myManaball->moveToPosition = New<Point>(this->myManaball->position->x,
@@ -341,7 +341,7 @@ namespace DsprFrontend
     {
         if (!this->unitTemplate->canMove) return;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         if (this->tribeIndex == g->playersTribeIndex) {
             g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
             g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);

@@ -20,7 +20,7 @@ namespace DsprFrontend
     UiManager::UiManager() : Container()
     {
         ///global stuff
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         g->unitHoverCircle_1x1 = New<AnimatedSprite>(New<Sova::String>("images/ui/unitHover.png"), 16, 12, 1);
         g->unitHoverCircle_1x1->imageSpeed = 0.1f;
         g->unitHoverCircle_1x1->anchor->set(8, 6);
@@ -75,7 +75,7 @@ namespace DsprFrontend
         if (Math::PointInBox(clickPoint->x, clickPoint->y, itemBarX, itemBarY, itemBarX + itemBarW, itemBarY + itemBarH))
         {
             //clicking within itembar
-            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            auto g = (Global*) InternalApp::getGlobal();
             auto firstUnit = g->unitManager->getSelectedUnits()->At(0);
             if (firstUnit != nullptr && firstUnit->unitTemplate->hasInventory)
             {
@@ -123,7 +123,7 @@ namespace DsprFrontend
             //clicking on command card
             if (this->currentButtonCard != nullptr)
             {
-                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                auto g = (Global*) InternalApp::getGlobal();
                 auto iterator = this->currentButtonCard->buttonList->GetIterator();
 
                 for (int j = 0; j < 2; j += 1)
@@ -174,7 +174,7 @@ namespace DsprFrontend
             if (Math::PointInBox(clickPoint->x,clickPoint->y,5,103,43,141))
             {
                 //clicking within actual minimap
-                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                auto g = (Global*) InternalApp::getGlobal();
                 auto gridSize = g->tileManager->getGridSize();
                 g->camera->position->set(
                         (int) (((((float) clickPoint->x - 5)/38)*gridSize->x*g->tileManager->tileWidth) - g->camera->width/2),
@@ -193,7 +193,7 @@ namespace DsprFrontend
         if (Math::PointInBox(clickPoint->x,clickPoint->y,5,103,43,141))
         {
             //clicking within actual minimap
-            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            auto g = (Global*) InternalApp::getGlobal();
             auto gridSize = g->tileManager->getGridSize();
             return New<Point>(
                     ((int) ((((float) clickPoint->x - 5)/38)*gridSize->x))*2,
@@ -206,7 +206,7 @@ namespace DsprFrontend
 
     void UiManager::Draw(Ref<Camera> camera, int xoffset, int yoffset)
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         //draw minimap
         this->mySprite->useSpriteInfo(g->spriteCatalog->sprMinimap);
@@ -514,7 +514,7 @@ namespace DsprFrontend
     }
 
     void UiManager::step() {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         if (g->cursor->isItemInHand())
         {

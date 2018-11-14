@@ -14,7 +14,7 @@ namespace DsprFrontend
 {
     DyingUnit::DyingUnit(Ref<DsprFrontend::Unit> unit)
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         this->useAnimatedSpriteInfo(g->spriteCatalog->workerBase);
         this->tcSprite = New<AnimatedSprite>();

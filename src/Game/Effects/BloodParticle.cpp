@@ -26,7 +26,7 @@ namespace DsprFrontend
         float speed = Math::Random(0.25f,1.0f);
         this->velocity = New<FloatPoint>(Math::Cos(dir)*speed, Math::Sin(dir)*speed);
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         this->useAnimatedSpriteInfo(g->spriteCatalog->bloodParticle);
 
         this->SetDepth(depth + Math::Sign((int) this->velocity->y));

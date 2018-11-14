@@ -29,7 +29,7 @@ namespace DsprFrontend
 
     void UnitTemplateCatalog::initWorker()
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         this->worker = New<UnitTemplate>(0);
         this->worker->sight = 6;
@@ -86,7 +86,7 @@ namespace DsprFrontend
 
     void UnitTemplateCatalog::initTemple()
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         this->temple = New<UnitTemplate>(1);
         this->temple->sight = 12;
@@ -114,7 +114,7 @@ namespace DsprFrontend
     }
 
     void UnitTemplateCatalog::initManafount() {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         this->manafount = New<UnitTemplate>(2);
         this->manafount->canMove = false;

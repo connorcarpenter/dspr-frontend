@@ -45,7 +45,7 @@ namespace DsprFrontend
         this->tileGrid = New<RefIsoGrid<Tile>>();
         this->tileGrid->initialize(this->gridWidth * 2, this->gridHeight * 2);
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         g->fogManager->receiveGrid(this->gridWidth, this->gridHeight);
         g->unitManager->receiveGrid(this->gridWidth, this->gridHeight);
         g->itemManager->receiveGrid(this->gridWidth, this->gridHeight);
@@ -58,7 +58,7 @@ namespace DsprFrontend
         if (!this->receivedGrid)
             return;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         int tileX = atoi(x->AsCStr());
         int tileY = atoi(y->AsCStr());
@@ -114,7 +114,7 @@ namespace DsprFrontend
 
     void TileManager::Draw(Ref<Camera> camera, int xoffset, int yoffset)
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         if (this->destroyed) return;
         if (!this->visible) return;
 

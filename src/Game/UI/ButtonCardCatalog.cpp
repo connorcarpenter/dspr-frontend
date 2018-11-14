@@ -21,7 +21,7 @@ namespace DsprFrontend
 
     void ButtonCardCatalog::initWorkerButtonCard()
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto moveButton = New<Button>(g->spriteCatalog->sprCommandActions, 0, true, Key::M); moveButton->usesSubframes = true;
         auto stopButton = New<Button>(g->spriteCatalog->sprCommandActions, 1, false, Key::S); stopButton->usesSubframes = true;
@@ -57,7 +57,7 @@ namespace DsprFrontend
 
     void ButtonCardCatalog::initTempleButtonCard()
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         this->templeCommandCard = New<ButtonCard>();
 

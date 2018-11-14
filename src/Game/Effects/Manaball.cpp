@@ -16,7 +16,7 @@ namespace DsprFrontend {
         this->size = size;
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         this->useAnimatedSpriteInfo(g->spriteCatalog->manaball);
     }
 

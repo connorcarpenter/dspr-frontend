@@ -16,7 +16,7 @@ namespace DsprFrontend {
 
     Minimap::Minimap()
     {
-        this->g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        this->g = (Global*) InternalApp::getGlobal();
 
         this->terrainCamera = New<Camera>(0,0,128,128,Null<Container>(), Color::Black, 1.0f, false, false);
         auto terrainViewport = g->app->createViewport(5*5,103*5,38*5,38*5, this->terrainCamera);

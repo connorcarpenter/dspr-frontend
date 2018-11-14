@@ -38,7 +38,7 @@ namespace DsprFrontend
     {
         if (!this->receivedGrid) return Null<Unit>();
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto tilePos = g->tileManager->getTilePosition(x, y);
 
@@ -49,7 +49,7 @@ namespace DsprFrontend
     {
         if (!this->receivedGrid) return Null<List<Unit>>();
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto output = New<List<Unit>>();
 
@@ -82,7 +82,7 @@ namespace DsprFrontend
     {
         if (!this->receivedGrid) return Null<List<Unit>>();
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto output = New<List<Unit>>(hoverList);
 
@@ -145,7 +145,7 @@ namespace DsprFrontend
         int tribeIndex = atoi(tribeIndexStr->AsCStr());
         int templateIndex = atoi(templateIndexStr->AsCStr());
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto unitTemplate = g->unitTemplateCatalog->findTemplateByIndex(templateIndex);
         auto newUnit = New<Unit>(id, x, y, tribeIndex, unitTemplate);
@@ -207,7 +207,7 @@ namespace DsprFrontend
             else
             if (propName->Equals("health"))
             {
-                auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                auto g = (Global*) InternalApp::getGlobal();
                 unit->health = atoi(propsParts->At(1)->AsCStr());
                 if (unit->unitTemplate->bleeds && unit->health<unit->unitTemplate->maxHealth)
                 {
@@ -255,7 +255,7 @@ namespace DsprFrontend
                     {
                         if (intVarsParts->At(1)->Length() == 0) {index++;continue;}
 
-                        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+                        auto g = (Global*) InternalApp::getGlobal();
                         auto queueParts = intVarsParts->At(1)->Split(',');
                         unit->constructionQueue->emptyQueue();
                         for(int i = 0;i<queueParts->Size();i++){
@@ -306,7 +306,7 @@ namespace DsprFrontend
 
         if (unit == nullptr) return;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto deleteModifier = atoi(propsStr->AsCStr());
 
@@ -356,7 +356,7 @@ namespace DsprFrontend
     {
         if (this->selectionList->Size() <= 0) return;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         UnitOrder orderIndex = Move;
 
@@ -436,7 +436,7 @@ namespace DsprFrontend
     {
         if (this->selectionList->Size() <= 0) return;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         UnitOrder orderIndex;
 
@@ -494,7 +494,7 @@ namespace DsprFrontend
     {
         if (this->selectionList->Size() <= 0) return;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto sb = New<Sova::StringBuilder>();
         sb->Append(New<Sova::String>("unit/1.0/order|"));
@@ -530,7 +530,7 @@ namespace DsprFrontend
 
         auto orderIndex = UnitOrder::Train;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto sb = New<Sova::StringBuilder>();
         sb->Append(New<Sova::String>("unit/1.0/order|"));
@@ -569,7 +569,7 @@ namespace DsprFrontend
 
         auto orderIndex = UnitOrder::ItemSwap;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto sb = New<Sova::StringBuilder>();
         sb->Append(New<Sova::String>("unit/1.0/order|"));
@@ -591,7 +591,7 @@ namespace DsprFrontend
     {
         auto orderIndex = UnitOrder::ItemDrop;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         Ref<Point> tilePosition = Null<Point>();
         auto mmPosition = g->uiManager->getMinimapPosition(g->cursor->position);
@@ -620,7 +620,7 @@ namespace DsprFrontend
     {
         auto orderIndex = UnitOrder::ItemGive;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto sb = New<Sova::StringBuilder>();
         sb->Append(New<Sova::String>("unit/1.0/order|"));
@@ -652,7 +652,7 @@ namespace DsprFrontend
         }
         else
         {
-            auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+            auto g = (Global*) InternalApp::getGlobal();
             auto unitIsoBoxBase = g->isoBoxCache->getIsoBox(unit->unitTemplate->tileWidth, unit->unitTemplate->tileHeight);
 
             if (oldPosition != nullptr)

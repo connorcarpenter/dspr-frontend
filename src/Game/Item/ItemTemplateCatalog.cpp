@@ -11,7 +11,7 @@ namespace DsprFrontend {
     ItemTemplateCatalog::ItemTemplateCatalog() {
         this->templateList = New<List<ItemTemplate>>();
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         this->sling = New<ItemTemplate>(0);
         this->sling->wornOn = BodyPart::Hand;

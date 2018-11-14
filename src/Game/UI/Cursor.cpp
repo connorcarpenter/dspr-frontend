@@ -36,7 +36,7 @@ namespace DsprFrontend
 
     Cursor::Cursor() : AnimatedSprite()
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         this->useAnimatedSpriteInfo(g->spriteCatalog->sprCursor);
         this->OnUpdate([&](float deltaFrameMs){ step(); });
@@ -61,7 +61,7 @@ namespace DsprFrontend
 
     void Cursor::step()
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         this->position->x = (InternalApp::getInternalApp()->getMouseX() / 5);
         this->position->y = (InternalApp::getInternalApp()->getMouseY() / 5);
 
@@ -397,7 +397,7 @@ namespace DsprFrontend
     {
         if (this->hoverList->Size() == 0) return;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         bool playedSoundYet = false;
 
         for (auto iterator = this->hoverList->GetIterator(); iterator->Valid(); iterator->Next())
@@ -431,7 +431,7 @@ namespace DsprFrontend
 
     void Cursor::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
     {
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         if (!this->isItemInHand()) {
             if (this->buttonOrder != nullptr) {
@@ -464,7 +464,7 @@ namespace DsprFrontend
         this->setItemInHandTemplate(itemTemplate);
         this->itemInHandSlotIndex = slotIndex;
         this->itemInHandOwner = unit;
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         this->useAnimatedSpriteInfo(g->spriteCatalog->itemsIcons);
         this->tint = Color::White;
     }
@@ -473,7 +473,7 @@ namespace DsprFrontend
 
         if (!unit->inventory->CanPlaceInSlot(slotIndex, this->itemInHandTemplate)) return;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         auto oldItemTemplate = this->itemInHandTemplate;
         auto oldItemSlotIndex = this->itemInHandSlotIndex;
 
@@ -484,7 +484,7 @@ namespace DsprFrontend
     }
 
     void Cursor::resetItemInHand(){
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         auto firstUnit = g->unitManager->getSelectedUnits()->At(0);
         if (firstUnit != nullptr)
         {
@@ -495,7 +495,7 @@ namespace DsprFrontend
     }
 
     void Cursor::undoItemInHandGraphic(){
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         this->itemInHandSlotIndex = -1;
         this->itemInHandTemplate = Null<ItemTemplate>();
         this->useAnimatedSpriteInfo(g->spriteCatalog->sprCursor);

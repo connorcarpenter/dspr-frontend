@@ -14,7 +14,7 @@ namespace DsprFrontend {
         this->position = position;
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         this->useAnimatedSpriteInfo(g->spriteCatalog->sprSparkle);
 
         this->imageSpeed = 0.2f;

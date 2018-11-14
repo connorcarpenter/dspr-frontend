@@ -12,7 +12,7 @@ namespace DsprFrontend {
 
     MinimapFog::MinimapFog()
     {
-        this->g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        this->g = (Global*) InternalApp::getGlobal();
     }
 
     void MinimapFog::drawSelf(Sova::Ref<Camera> camera, int xoffset, int yoffset)

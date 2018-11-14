@@ -14,7 +14,7 @@ namespace DsprFrontend
 {
     MinimapUnits::MinimapUnits()
     {
-        this->g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        this->g = (Global*) InternalApp::getGlobal();
         this->pixel = New<Pixel>();
         this->pixel->setLineStyle(1, Color::White);
 
@@ -45,7 +45,7 @@ namespace DsprFrontend
             this->pixel->drawSelf(camera, xoffset, yoffset);
         }
 
-        this->g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        this->g = (Global*) InternalApp::getGlobal();
         this->rectangle->position->set(g->camera->position->x*2/g->tileManager->tileWidth, g->camera->position->y*2/g->tileManager->tileHeight);
         this->rectangle->drawSelf(camera, 0, 0);
     }

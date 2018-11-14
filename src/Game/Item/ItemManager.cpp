@@ -22,7 +22,7 @@ namespace DsprFrontend {
         int y = atoi(yStr->AsCStr());
         int index = atoi(itemIndexStr->AsCStr());
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
         
         auto newItem = New<Item>(id, x, y, g->itemTemplateCatalog->findTemplateByIndex(index));
 
@@ -70,7 +70,7 @@ namespace DsprFrontend {
     {
         if (!this->receivedGrid) return Null<Item>();
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto tilePos = g->tileManager->getTilePosition(x, y);
 

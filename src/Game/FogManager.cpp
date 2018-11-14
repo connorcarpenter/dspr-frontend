@@ -93,7 +93,7 @@ namespace DsprFrontend
     {
         if (!this->receivedGrid) return;
 
-        auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        auto g = (Global*) InternalApp::getGlobal();
 
         auto sightCircle = g->circleCache->getCircle(radius);
 

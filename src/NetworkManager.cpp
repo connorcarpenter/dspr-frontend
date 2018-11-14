@@ -21,7 +21,7 @@ namespace DsprFrontend
 {
     NetworkManager::NetworkManager()
     {
-        this->g = (Global*) InternalApp::getSovaApp()->getGlobal();
+        this->g = (Global*) InternalApp::getGlobal();
 
         Ref<HttpRequest> bffReq = g->app->makeHttpRequest(New<Sova::String>("GET"), New<Sova::String>("http://www.deuspora.com:3170/orchestrator/bff"));
         bffReq->onResponse(
