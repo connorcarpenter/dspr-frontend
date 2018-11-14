@@ -565,6 +565,8 @@ namespace DsprFrontend
 
     void UnitManager::orderUnitSwapInventory(Ref<Unit> unit, int beforeSlotIndex, int afterSlotIndex)
     {
+        if (beforeSlotIndex == afterSlotIndex)return;
+
         auto orderIndex = UnitOrder::ItemSwap;
 
         auto g = (Global*) InternalApp::getSovaApp()->getGlobal();
