@@ -35,6 +35,10 @@ namespace DsprFrontend
         void playDeathSound();
         void trainUnit(Ref<UnitTemplate> unitTemplate);
         void gatherYield(int yieldAmount);
+        void updateHeadSprite(Ref<ItemTemplate> itemTemplate);
+        void updateBodySprite(Ref<ItemTemplate> itemTemplate);
+        void updateLeftHandSprite(Ref<ItemTemplate> itemTemplate);
+        void drawShadow(Ref<Camera> camera, int xoffset, int yoffset);
         //
         Ref<Point> moveTarget = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();
@@ -48,8 +52,8 @@ namespace DsprFrontend
         Ref<AnimatedSprite> skinSprite = Null<AnimatedSprite>();
         Ref<AnimatedSprite> headSprite = Null<AnimatedSprite>();
         Ref<AnimatedSprite> armorSprite = Null<AnimatedSprite>();
-        Ref<AnimatedSprite> weaponSprite = Null<AnimatedSprite>();
-        Ref<AnimatedSprite> shieldSprite = Null<AnimatedSprite>();
+        Ref<AnimatedSprite> leftHandSprite = Null<AnimatedSprite>();
+        Ref<AnimatedSprite> rightHandSprite = Null<AnimatedSprite>();
         int tribeIndex = -1;
         UnitAnimationState animationState = Walking;
         int health;
@@ -63,11 +67,17 @@ namespace DsprFrontend
         int targetUnitId = -1;
         Ref<Manaball> myManaball = Null<Manaball>();
 
-        void drawShadow(Ref<Camera> camera, int xoffset, int yoffset);
+        void updateRightHandSprite(Ref<ItemTemplate> itemTemplate);
 
     private:
 
         void step(float deltaMs);
+        void walkingStep(float deltaFrameMs);
+        void attackingStep(float deltaFrameMs);
+        void updatePosition();
+        void updateTilePosition(Ref<Point> newPosition);
+        void handleFacing(int heading);
+        void gatheringStep(float deltaFrameMs);
 
         const int interpolationMax = 6;
         const int interpolationStep = 1;
@@ -94,17 +104,8 @@ namespace DsprFrontend
         float gatherFrameIndex = 0;
         const int gatherFramesToYield = 95;
         bool gatherYielding = false;
-
-        void walkingStep(float deltaFrameMs);
-        void attackingStep(float deltaFrameMs);
-
-        void updatePosition();
-
-        void updateTilePosition(Ref<Point> newPosition);
-
-        void handleFacing(int heading);
-
-        void gatheringStep(float deltaFrameMs);
+        bool hasShortHair = false;
+        Color hairColor = Color::Black;
 
     };
 }

@@ -18,7 +18,7 @@ namespace DsprFrontend {
 
     public:
 
-        Inventory();
+        Inventory(Unit* mainUnit);
         ~Inventory();
         void SetItemIndex(int slotIndex, Ref<ItemTemplate> itemTemplate);
         Ref<ItemTemplate> GetItemAt(int slotIndex);
@@ -34,5 +34,8 @@ namespace DsprFrontend {
 
         int* items = nullptr;
 
+        Unit* mainUnit = nullptr;
+
+        void UpdateUnitSprite(int slotIndex, int prevItem);
     };
 }

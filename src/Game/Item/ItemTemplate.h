@@ -5,6 +5,7 @@
 //
 
 #include <Sova/References/Refable.h>
+#include <Sova/Graphics/AnimatedSpriteInfo.h>
 
 namespace DsprFrontend {
 
@@ -15,5 +16,7 @@ namespace DsprFrontend {
         ItemTemplate(int index);
         int index;
         BodyPart wornOn = BodyPart::None;
+        bool leftHanded = false;
+        Ref<Sova::AnimatedSpriteInfo> wornSpriteInfo = Null<Sova::AnimatedSpriteInfo>();
     };
 }

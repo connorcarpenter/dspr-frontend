@@ -35,10 +35,6 @@ namespace DsprFrontend
 
         this->health = this->unitTemplate->maxHealth;
 
-//        this->skew->x = -8;
-//        this->scale->y = 0.5f;
-//        this->tint = Color::Black;
-
         this->useAnimatedSpriteInfo(this->unitTemplate->sprBase);
 
         this->tcSprite = New<AnimatedSprite>();
@@ -57,74 +53,69 @@ namespace DsprFrontend
         this->skinSprite = New<AnimatedSprite>();
         this->skinSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSkin);
         int skinIndex = (int) Math::Random(0, 3);
-        int hairIndex;
+
         switch (skinIndex)
         {
             case 0:
                 this->skinSprite->tint = DsprColors::DarkSkin;
-                hairIndex = 0;
+                this->hairColor = DsprColors::BlackHair;
                 break;
             case 1:
                 this->skinSprite->tint = DsprColors::MediumSkin;
-                hairIndex = (int) Math::Random(0, 2);
+                if (Math::Random(0, 2) < 1)
+                    this->hairColor = DsprColors::BlackHair;
+                else
+                    this->hairColor = DsprColors::BrownHair;
                 break;
             case 2:
                 this->skinSprite->tint = DsprColors::LightSkin;
-                hairIndex = (int) Math::Random(0, 4);
+                {
+                    switch ((int) Math::Random(0, 4)) {
+                        case 0:
+                            this->hairColor = DsprColors::BlackHair;
+                            break;
+                        case 1:
+                            this->hairColor = DsprColors::BrownHair;
+                            break;
+                        case 2:
+                            this->hairColor = DsprColors::BlondHair;
+                            break;
+                        case 3:
+                            this->hairColor = DsprColors::RedHair;
+                            break;
+                    }
+                }
                 break;
         }
 
-        //hair, helmet
-        this->headSprite = New<AnimatedSprite>();
-        if (Math::Random(0,2)<1) {
-            if (Math::Random(0, 2) < 1)
-                this->headSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairLong);
-            else
-                this->headSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairShort);
-            switch (hairIndex) {
-                case 0:
-                    this->headSprite->tint = DsprColors::BlackHair;
-                    break;
-                case 1:
-                    this->headSprite->tint = DsprColors::BrownHair;
-                    break;
-                case 2:
-                    this->headSprite->tint = DsprColors::BlondHair;
-                    break;
-                case 3:
-                    this->headSprite->tint = DsprColors::RedHair;
-                    break;
-            }
-        } else {
-            this->headSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHelmet);
-            this->headSprite->tint = DsprColors::LightSeaGreen;
-        }
+        this->hasShortHair = Math::Random(0, 2) < 1;
+        this->updateHeadSprite(Ref<ItemTemplate>());
 
-        //armor
-        if (Math::Random(0,2)<1) {
-            this->armorSprite = New<AnimatedSprite>();
-            this->armorSprite->useAnimatedSpriteInfo(this->unitTemplate->sprArmor);
-            this->armorSprite->tint = DsprColors::LightSeaGreen;
-        }
-
-        //weapon
-        if (Math::Random(0,2)<1) {
-            this->weaponSprite = New<AnimatedSprite>();
-            if (Math::Random(0,2)<1) {
-                this->weaponSprite->useAnimatedSpriteInfo(this->unitTemplate->sprClub);
-                this->weaponSprite->tint = DsprColors::LightSeaGreen;
-
-            } else {
-                this->weaponSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSling);
-            }
-        }
-
-        //shield
-        if (Math::Random(0,2)<1) {
-            this->shieldSprite = New<AnimatedSprite>();
-            this->shieldSprite->useAnimatedSpriteInfo(this->unitTemplate->sprShield);
-            this->shieldSprite->tint = DsprColors::LightSeaGreen;
-        }
+//        //armor
+//        if (Math::Random(0,2)<1) {
+//            this->armorSprite = New<AnimatedSprite>();
+//            this->armorSprite->useAnimatedSpriteInfo(this->unitTemplate->sprArmor);
+//            this->armorSprite->tint = DsprColors::LightSeaGreen;
+//        }
+//
+//        //weapon
+//        if (Math::Random(0,2)<1) {
+//            this->leftHandSprite = New<AnimatedSprite>();
+//            if (Math::Random(0,2)<1) {
+//                this->leftHandSprite->useAnimatedSpriteInfo(this->unitTemplate->sprClub);
+//                this->leftHandSprite->tint = DsprColors::LightSeaGreen;
+//
+//            } else {
+//                this->leftHandSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSling);
+//            }
+//        }
+//
+//        //shield
+//        if (Math::Random(0,2)<1) {
+//            this->rightHandSprite = New<AnimatedSprite>();
+//            this->rightHandSprite->useAnimatedSpriteInfo(this->unitTemplate->sprShield);
+//            this->rightHandSprite->tint = DsprColors::LightSeaGreen;
+//        }
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
@@ -142,7 +133,7 @@ namespace DsprFrontend
 
         if (this->unitTemplate->hasInventory)
         {
-            this->inventory = New<Inventory>();
+            this->inventory = New<Inventory>(this);
         }
 
         if (this->unitTemplate->createSpecificUnitFunction != nullptr)
@@ -568,20 +559,20 @@ namespace DsprFrontend
 
         //Weapon
         if (!this->facingDown) {
-            if (this->weaponSprite != nullptr) {
-                this->weaponSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-                this->weaponSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+            if (this->leftHandSprite != nullptr) {
+                this->leftHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->leftHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
                                                   this->position->y - this->unitTemplate->sprCenterAdjust->y);
-                this->weaponSprite->scale->x = this->scale->x;
-                this->weaponSprite->drawSelf(camera, newOffset, yoffset);
+                this->leftHandSprite->scale->x = this->scale->x;
+                this->leftHandSprite->drawSelf(camera, newOffset, yoffset);
             }
 
-            if (this->shieldSprite != nullptr) {
-                this->shieldSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-                this->shieldSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+            if (this->rightHandSprite != nullptr) {
+                this->rightHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->rightHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
                                                   this->position->y - this->unitTemplate->sprCenterAdjust->y);
-                this->shieldSprite->scale->x = this->scale->x;
-                this->shieldSprite->drawSelf(camera, newOffset, yoffset);
+                this->rightHandSprite->scale->x = this->scale->x;
+                this->rightHandSprite->drawSelf(camera, newOffset, yoffset);
             }
         }
 
@@ -616,20 +607,20 @@ namespace DsprFrontend
 
         //Weapon
         if (this->facingDown) {
-            if (this->weaponSprite != nullptr) {
-                this->weaponSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-                this->weaponSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+            if (this->leftHandSprite != nullptr) {
+                this->leftHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->leftHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
                                                   this->position->y - this->unitTemplate->sprCenterAdjust->y);
-                this->weaponSprite->scale->x = this->scale->x;
-                this->weaponSprite->drawSelf(camera, newOffset, yoffset);
+                this->leftHandSprite->scale->x = this->scale->x;
+                this->leftHandSprite->drawSelf(camera, newOffset, yoffset);
             }
 
-            if (this->shieldSprite != nullptr) {
-                this->shieldSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-                this->shieldSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+            if (this->rightHandSprite != nullptr) {
+                this->rightHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->rightHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
                                                   this->position->y - this->unitTemplate->sprCenterAdjust->y);
-                this->shieldSprite->scale->x = this->scale->x;
-                this->shieldSprite->drawSelf(camera, newOffset, yoffset);
+                this->rightHandSprite->scale->x = this->scale->x;
+                this->rightHandSprite->drawSelf(camera, newOffset, yoffset);
             }
         }
     }
@@ -652,44 +643,44 @@ namespace DsprFrontend
         this->alpha = 1.0f;
 
         //Weapon
-        if (this->weaponSprite != nullptr)
+        if (this->leftHandSprite != nullptr)
         {
-            this->weaponSprite->skew->x = theSkewX;
-            this->weaponSprite->scale->y = 0.5f;
-            auto lastTint = this->weaponSprite->tint;
-            this->weaponSprite->tint = Color::Black;
-            this->weaponSprite->alpha = theAlpha;
+            this->leftHandSprite->skew->x = theSkewX;
+            this->leftHandSprite->scale->y = 0.5f;
+            auto lastTint = this->leftHandSprite->tint;
+            this->leftHandSprite->tint = Color::Black;
+            this->leftHandSprite->alpha = theAlpha;
 
-            this->weaponSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-            this->weaponSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+            this->leftHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+            this->leftHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
                                               this->position->y - this->unitTemplate->sprCenterAdjust->y);
-            this->weaponSprite->scale->x = this->scale->x;
-            this->weaponSprite->drawSelf(camera, newOffset, yoffset);
+            this->leftHandSprite->scale->x = this->scale->x;
+            this->leftHandSprite->drawSelf(camera, newOffset, yoffset);
 
-            this->weaponSprite->skew->x = 0;
-            this->weaponSprite->scale->y = 1.0f;
-            this->weaponSprite->tint = lastTint;
-            this->weaponSprite->alpha = 1.0f;
+            this->leftHandSprite->skew->x = 0;
+            this->leftHandSprite->scale->y = 1.0f;
+            this->leftHandSprite->tint = lastTint;
+            this->leftHandSprite->alpha = 1.0f;
         }
 
-        if (this->shieldSprite != nullptr)
+        if (this->rightHandSprite != nullptr)
         {
-            this->shieldSprite->skew->x = theSkewX;
-            this->shieldSprite->scale->y = 0.5f;
-            auto lastTint = this->shieldSprite->tint;
-            this->shieldSprite->tint = Color::Black;
-            this->shieldSprite->alpha = theAlpha;
+            this->rightHandSprite->skew->x = theSkewX;
+            this->rightHandSprite->scale->y = 0.5f;
+            auto lastTint = this->rightHandSprite->tint;
+            this->rightHandSprite->tint = Color::Black;
+            this->rightHandSprite->alpha = theAlpha;
 
-            this->shieldSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-            this->shieldSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+            this->rightHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+            this->rightHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
                                               this->position->y - this->unitTemplate->sprCenterAdjust->y);
-            this->shieldSprite->scale->x = this->scale->x;
-            this->shieldSprite->drawSelf(camera, newOffset, yoffset);
+            this->rightHandSprite->scale->x = this->scale->x;
+            this->rightHandSprite->drawSelf(camera, newOffset, yoffset);
 
-            this->shieldSprite->skew->x = 0;
-            this->shieldSprite->scale->y = 1.0f;
-            this->shieldSprite->tint = lastTint;
-            this->shieldSprite->alpha = 1.0f;
+            this->rightHandSprite->skew->x = 0;
+            this->rightHandSprite->scale->y = 1.0f;
+            this->rightHandSprite->tint = lastTint;
+            this->rightHandSprite->alpha = 1.0f;
         }
     }
 
@@ -754,6 +745,61 @@ namespace DsprFrontend
             }
                 break;
 
+        }
+    }
+
+    void Unit::updateHeadSprite(Ref<ItemTemplate> itemTemplate)
+    {
+        if (this->headSprite == nullptr) this->headSprite = New<AnimatedSprite>();
+        if (itemTemplate == nullptr) {
+            if (this->hasShortHair)
+                this->headSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairShort);
+            else
+                this->headSprite->useAnimatedSpriteInfo(this->unitTemplate->sprHairLong);
+            this->headSprite->tint = this->hairColor;
+        }
+        else
+        {
+            this->headSprite->tint = Color::White;
+            this->headSprite->useAnimatedSpriteInfo(itemTemplate->wornSpriteInfo);
+        }
+    }
+
+    void Unit::updateBodySprite(Ref<ItemTemplate> itemTemplate) {
+        if (itemTemplate == nullptr)
+        {
+            this->armorSprite = Null<AnimatedSprite>();
+        }
+        else
+        {
+            if (this->armorSprite == nullptr) this->armorSprite = New<AnimatedSprite>();
+            this->armorSprite->useAnimatedSpriteInfo(itemTemplate->wornSpriteInfo);
+        }
+    }
+
+    void Unit::updateLeftHandSprite(Ref<ItemTemplate> itemTemplate)
+    {
+        if (itemTemplate == nullptr)
+        {
+            this->leftHandSprite = Null<AnimatedSprite>();
+        }
+        else
+        {
+            if (this->leftHandSprite == nullptr) this->leftHandSprite = New<AnimatedSprite>();
+            this->leftHandSprite->useAnimatedSpriteInfo(itemTemplate->wornSpriteInfo);
+        }
+    }
+
+    void Unit::updateRightHandSprite(Ref<ItemTemplate> itemTemplate)
+    {
+        if (itemTemplate == nullptr)
+        {
+            this->rightHandSprite = Null<AnimatedSprite>();
+        }
+        else
+        {
+            if (this->rightHandSprite == nullptr) this->rightHandSprite = New<AnimatedSprite>();
+            this->rightHandSprite->useAnimatedSpriteInfo(itemTemplate->wornSpriteInfo);
         }
     }
 }
