@@ -17,23 +17,19 @@ namespace DsprFrontend
     class UiManager : public Container
     {
     public:
+
         UiManager();
         void Draw(Ref<Camera> camera, int xoffset, int yoffset);
         bool captureLeftClickEvent(Ref<Point> clickPoint);
         bool captureLeftClickMinimapEvent(Ref<Point> clickPoint);
         Ref<Button> getButtonWithLeftClick(Ref<Point> clickPoint);
-
         Ref<Point> getMinimapPosition(Ref<Point> clickPoint);
+        bool isInGameArea(Ref<Point> clickPoint);
+        Ref<Button> getButtonFromKeyboardShortcut();
+        void handleItemBarClick(Ref<Point> clickPoint);
 
         Ref<ButtonCard> currentButtonCard = Null<ButtonCard>();
-
-        bool isInGameArea(Ref<Point> clickPoint);
-
-        Ref<Button> getButtonFromKeyboardShortcut();
-
         bool rightButtonAlreadyClicked = false;
-
-        void handleItemBarClick(Ref<Point> clickPoint);
 
     private:
 

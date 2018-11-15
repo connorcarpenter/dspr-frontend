@@ -40,6 +40,7 @@ namespace DsprFrontend
         void orderCurrentlySelectedUnitsToBuildUnit(Ref<UnitTemplate> unitTemplate);
         void receiveGrid(int w, int h);
         void issueUnitOrderGather();
+        Color getColorFromTribeIndex(int index);
 
         Ref<List<Unit>> selectionList = Null<List<Unit>>();
         const int maxSelectedUnits = 12;

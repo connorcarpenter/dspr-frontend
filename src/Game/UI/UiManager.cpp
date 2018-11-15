@@ -14,6 +14,7 @@
 #include "SpriteCatalog.h"
 #include "Game/EconomyManager.h"
 #include "GraphicsManager.h"
+#include "ChatManager.h"
 
 namespace DsprFrontend
 {
@@ -252,6 +253,77 @@ namespace DsprFrontend
         return Null<Point>();
     }
 
+    Ref<Button> UiManager::getButtonFromKeyboardShortcut() {
+        auto g = (Global*) InternalApp::getGlobal();
+        if (g->chatManager->isPlayerTyping()) return Null<Button>();
+
+        if (this->currentButtonCard != nullptr) {
+            for (auto iterator = this->currentButtonCard->buttonList->GetIterator(); iterator->Valid(); iterator->Next()) {
+                auto button = iterator->Get();
+                if (InternalApp::getInternalApp()->keyPressed(button->keyboardShortcut)){
+                    if (!button->needKeyUp) {
+                        if (button->requiresClickOnGameArea) {
+                            return button;
+                        } else {
+                            button->needKeyUp = true;
+                            button->executeAction();
+                            return Null<Button>();
+                        }
+                    }
+                } else {
+                    if (button->needKeyUp) button->needKeyUp = false;
+                }
+            }
+        }
+
+        return Null<Button>();
+    }
+
+    void UiManager::step() {
+        auto g = (Global*) InternalApp::getGlobal();
+
+        //camera stuff
+        if (g->app->keyPressed(Key::Left)) g->camera->position->x -= cameraSpeed;
+        if (g->app->keyPressed(Key::Right)) g->camera->position->x += cameraSpeed;
+        if (g->app->keyPressed(Key::Up)) g->camera->position->y -= cameraSpeed;
+        if (g->app->keyPressed(Key::Down)) g->camera->position->y += cameraSpeed;
+
+        //right clicking?
+        if (g->cursor->isItemInHand())
+        {
+
+        }
+        else
+        {
+            if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked) {
+                this->rightButtonAlreadyClicked = true;
+                g->unitManager->issueUnitOrder(false);
+            }
+
+            if (!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
+                rightButtonAlreadyClicked = false;
+        }
+
+        //chat stuff
+        g->chatManager->step();
+        if (g->chatManager->isPlayerTyping()) return;
+
+        //camera focus on unit
+        if(InternalApp::keyPressed(Key::Space))
+        {
+            if (g->unitManager->selectionList->Size()>0)
+            {
+                this->centerCameraOnUnit(g->unitManager->selectionList->At(0));
+            }
+        }
+    }
+
+    void UiManager::centerCameraOnUnit(Ref<DsprFrontend::Unit> unit) {
+        auto g = (Global *) InternalApp::getGlobal();
+        g->camera->position->x = unit->position->x - (g->camera->width/2);
+        g->camera->position->y = unit->position->y - ((g->camera->height - portraitBarH)/2);
+    }
+
     void UiManager::Draw(Ref<Camera> camera, int xoffset, int yoffset)
     {
         auto g = (Global*) InternalApp::getGlobal();
@@ -276,6 +348,14 @@ namespace DsprFrontend
 
         //draw fps
         g->graphicsManager->drawNumber(camera, 5, 1, (int) this->currentFps, Color::White, false);
+
+        //draw chat bar
+        if (g->chatManager->isPlayerTyping()) {
+            this->mySprite->useSpriteInfo(g->spriteCatalog->sprChatBar);
+            this->mySprite->tint = Color::White;
+            this->mySprite->position->set(portraitBarX, portraitBarY - 6);
+            this->mySprite->drawSelf(camera, 0, 0);
+        }
 
         Ref<Unit> firstUnit = Null<Unit>();
 
@@ -368,7 +448,7 @@ namespace DsprFrontend
                             }
                         }
                     }
-                    
+
                     {
                         //portraitbar
                         this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
@@ -529,8 +609,8 @@ namespace DsprFrontend
                     Color buttonTint = Color::LightGray;
 
                     if (!g->cursor->isItemInHand() && Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
-                                         leftX, upY,
-                                         leftX + 10, upY + 12))
+                                                                       leftX, upY,
+                                                                       leftX + 10, upY + 12))
                     {
                         buttonTint = Color::White;
                     }
@@ -565,69 +645,5 @@ namespace DsprFrontend
         }
 
         Container::Draw(camera, xoffset, yoffset);
-    }
-
-    Ref<Button> UiManager::getButtonFromKeyboardShortcut() {
-
-        if (this->currentButtonCard != nullptr) {
-            for (auto iterator = this->currentButtonCard->buttonList->GetIterator(); iterator->Valid(); iterator->Next()) {
-                auto button = iterator->Get();
-                if (InternalApp::getInternalApp()->keyPressed(button->keyboardShortcut)){
-                    if (!button->needKeyUp) {
-                        if (button->requiresClickOnGameArea) {
-                            return button;
-                        } else {
-                            button->needKeyUp = true;
-                            button->executeAction();
-                            return Null<Button>();
-                        }
-                    }
-                } else {
-                    if (button->needKeyUp) button->needKeyUp = false;
-                }
-            }
-        }
-
-        return Null<Button>();
-    }
-
-    void UiManager::step() {
-        auto g = (Global*) InternalApp::getGlobal();
-
-        //camera stuff
-        if (g->app->keyPressed(Key::Left)) g->camera->position->x -= cameraSpeed;
-        if (g->app->keyPressed(Key::Right)) g->camera->position->x += cameraSpeed;
-        if (g->app->keyPressed(Key::Up)) g->camera->position->y -= cameraSpeed;
-        if (g->app->keyPressed(Key::Down)) g->camera->position->y += cameraSpeed;
-
-        if(InternalApp::keyPressed(Key::Space))
-        {
-            if (g->unitManager->selectionList->Size()>0)
-            {
-                this->centerCameraOnUnit(g->unitManager->selectionList->At(0));
-            }
-        }
-
-        //right clicking?
-        if (g->cursor->isItemInHand())
-        {
-
-        }
-        else
-        {
-            if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked) {
-                this->rightButtonAlreadyClicked = true;
-                g->unitManager->issueUnitOrder(false);
-            }
-
-            if (!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
-                rightButtonAlreadyClicked = false;
-        }
-    }
-
-    void UiManager::centerCameraOnUnit(Ref<DsprFrontend::Unit> unit) {
-        auto g = (Global *) InternalApp::getGlobal();
-        g->camera->position->x = unit->position->x - (g->camera->width/2);
-        g->camera->position->y = unit->position->y - ((g->camera->height - portraitBarH)/2);
     }
 }

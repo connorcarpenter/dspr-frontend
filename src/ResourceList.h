@@ -53,6 +53,7 @@ namespace DsprFrontend
             resources->Add(New<String>("images/worker/worker_bigPortrait_TC.png"));
 
             resources->Add(New<String>("images/ui/armybar.png"));
+            resources->Add(New<String>("images/ui/chatBar.png"));
             resources->Add(New<String>("images/ui/commandcard.png"));
             resources->Add(New<String>("images/ui/itembar.png"));
             resources->Add(New<String>("images/ui/portraitbar.png"));

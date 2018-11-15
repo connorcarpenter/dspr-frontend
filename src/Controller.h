@@ -32,6 +32,7 @@
 #include "Game/Item/ItemManager.h"
 #include "Game/Unit/ShadowManager.h"
 #include "Game/Item/ItemTemplateCatalog.h"
+#include "Game/UI/ChatManager.h"
 
 using namespace Sova;
 
@@ -104,6 +105,10 @@ namespace DsprFrontend
         g->uiManager = New<UiManager>();
         g->uiManager->SetDepth(-9990);
         g->world->AddChild(g->uiManager);
+
+        g->chatManager = New<ChatManager>();
+        g->chatManager->SetDepth(-9991);
+        g->world->AddChild(g->chatManager);
 
         g->buttonCardCatalog = New<ButtonCardCatalog>();
         g->unitTemplateCatalog = New<UnitTemplateCatalog>();

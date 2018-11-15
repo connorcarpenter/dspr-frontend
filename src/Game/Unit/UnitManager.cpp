@@ -690,4 +690,16 @@ namespace DsprFrontend
         this->unitGrid = New<RefIsoGrid<Unit>>();
         this->unitGrid->initialize(this->gridWidth * 2, this->gridHeight * 2);
     }
+
+    Color UnitManager::getColorFromTribeIndex(int index) {
+        switch (index)
+        {
+            case 0:
+                return Color::Red;
+                break;
+            case 1:
+                return Color::Blue;
+                break;
+        }
+    }
 }

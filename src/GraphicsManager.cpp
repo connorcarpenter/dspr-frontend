@@ -12,19 +12,41 @@ namespace DsprFrontend
         this->myFont = New<AnimatedSprite>(New<Sova::String>("images/ui/myFont.png"), 7, 7, 1);
     }
 
-    void GraphicsManager::drawText(Ref<Camera> camera, int x, int y, Ref<String> str, Color color, bool alignLeft) {
+    int GraphicsManager::drawText(Ref<Camera> camera, int x, int y, Ref<String> str, Color color, bool alignLeft) {
         this->myFont->position->set(x, y);
         this->myFont->tint = color;
-        int charIndex = 0;
-        auto charStr = str->AsCStr();
-        while(charStr[charIndex] != '\0') charIndex++;
-        charIndex--;
-        while(charIndex>=0)
+
+        if (alignLeft)
         {
-            this->myFont->imageIndex = charStr[charIndex]-33;
-            this->myFont->drawSelf(camera, 0, 0);
-            this->myFont->position->x-=4;
+            int charIndex = 0;
+            auto charStr = str->AsCStr();
+            while(charStr[charIndex] != '\0')
+            {
+                this->myFont->imageIndex = charStr[charIndex]-33;
+                if (this->myFont->imageIndex < 0 || this->myFont->imageIndex > 126) {
+                    this->myFont->position->x += 3;
+                    charIndex++;
+                    continue;
+                }
+                this->myFont->drawSelf(camera, 0, 0);
+                this->myFont->position->x+= letterWidth((int) this->myFont->imageIndex)+1;
+                charIndex++;
+            }
+            return this->myFont->position->x - x;
+        }
+        else
+        {
+            int charIndex = 0;
+            auto charStr = str->AsCStr();
+            while(charStr[charIndex] != '\0') charIndex++;
             charIndex--;
+            while(charIndex>=0)
+            {
+                this->myFont->imageIndex = charStr[charIndex]-33;
+                this->myFont->drawSelf(camera, 0, 0);
+                this->myFont->position->x-=6;
+                charIndex--;
+            }
         }
     }
 

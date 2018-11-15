@@ -47,6 +47,7 @@ fips_begin_app(dspr-frontend windowed)
             Game/UI/ButtonCard.h Game/UI/ButtonCard.cpp
             Game/UI/ButtonActions.h Game/UI/ButtonActions.cpp
             Game/UI/Button.h Game/UI/Button.cpp
+            Game/UI/ChatManager.h Game/UI/ChatManager.cpp
 
             Game/Minimap/Minimap.h Game/Minimap/Minimap.cpp
             Game/Minimap/MinimapUnits.h Game/Minimap/MinimapUnits.cpp

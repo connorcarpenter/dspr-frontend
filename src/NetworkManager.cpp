@@ -13,6 +13,7 @@
 #include "Game/Unit/UnitManager.h"
 #include "Game/EconomyManager.h"
 #include "Game/Item/ItemManager.h"
+#include "Game/UI/ChatManager.h"
 
 using Sova::String;
 using Sova::StringBuilder;
@@ -149,6 +150,12 @@ namespace DsprFrontend
             auto idString = splitString->At(1);
             auto propsString = splitString->At(2);
             g->itemManager->receiveItemDelete(idString, propsString);
+            return;
+        }
+        else if (command->Equals("chat/1.0/send")) {
+            auto tribeIndex = atoi(splitString->At(1)->AsCStr());
+            auto msgString = splitString->At(2);
+            g->chatManager->receiveMessage(tribeIndex, msgString);
             return;
         }
     }

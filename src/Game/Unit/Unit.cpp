@@ -40,15 +40,7 @@ namespace DsprFrontend
 
         this->tcSprite = New<AnimatedSprite>();
         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprTC);
-        switch (tribeIndex)
-        {
-            case 0:
-                this->tcSprite->tint = Color::Red;
-                break;
-            case 1:
-                this->tcSprite->tint = Color::Blue;
-                break;
-        }
+        this->tcSprite->tint = g->unitManager->getColorFromTribeIndex(tribeIndex);
 
         //skin
         this->skinSprite = New<AnimatedSprite>();
