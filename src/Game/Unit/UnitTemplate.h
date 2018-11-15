@@ -27,6 +27,9 @@ namespace DsprFrontend {
         unsigned int tileHeight = 1;
         int buildTime;
         Ref<Sova::Point> sprCenterAdjust = Null<Sova::Point>();
+        int walkMax = 1;
+        int walkSpeedStraight = 0;
+        int walkSpeedDiagonal = 0;
 
         //other
         bool hasIdleTurnBehavior = false;
@@ -79,5 +82,7 @@ namespace DsprFrontend {
 
         //special
         std::function<Ref<SpecificUnit>(Unit* unit)> createSpecificUnitFunction = nullptr;
+
+        void setWalkSpeed(int straightTicks, int diagTicks);
     };
 }

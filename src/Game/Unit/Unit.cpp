@@ -179,7 +179,7 @@ namespace DsprFrontend
         {
             this->imageSpeed = walkImageSpeed;
             this->walkAmount += this->walkSpeed * (deltaFrameMs / gameServerTickMs);
-            if (this->walkAmount >= maxWalkAmount)
+            if (this->walkAmount >= this->unitTemplate->walkMax)
             {
                 //update fog
                 if (this->tribeIndex == g->playersTribeIndex) {
@@ -350,11 +350,11 @@ namespace DsprFrontend
         if (difx == 0 || dify == 0)
         {
             difx *= 2; dify *= 2;
-            walkSpeed = walkSpeedDiagonal;
+            walkSpeed = this->unitTemplate->walkSpeedDiagonal;
         }
         else
         {
-            walkSpeed = walkSpeedStraight;
+            walkSpeed = this->unitTemplate->walkSpeedStraight;
         }
 
         if (difx != 0)
@@ -493,8 +493,8 @@ namespace DsprFrontend
     void Unit::updatePosition() {
         auto g = (Global*) InternalApp::getGlobal();
 
-        float extrapolatedPositionX = ((Math::Lerp(this->tilePosition->x, this->nextTilePosition->x, walkAmount/maxWalkAmount)/2) + 0.5f) * g->tileManager->tileWidth;
-        float extrapolatedPositionY = ((Math::Lerp(this->tilePosition->y, this->nextTilePosition->y, walkAmount/maxWalkAmount)/2) + 0.5f) * g->tileManager->tileHeight;
+        float extrapolatedPositionX = ((Math::Lerp(this->tilePosition->x, this->nextTilePosition->x, walkAmount/this->unitTemplate->walkMax)/2) + 0.5f) * g->tileManager->tileWidth;
+        float extrapolatedPositionY = ((Math::Lerp(this->tilePosition->y, this->nextTilePosition->y, walkAmount/this->unitTemplate->walkMax)/2) + 0.5f) * g->tileManager->tileHeight;
         if (interpolation > 0)
         {
             float interpolatedPositionX = Math::Lerp(this->lastPosition->x, extrapolatedPositionX, 1-(interpolation/interpolationMax));

@@ -36,6 +36,7 @@ namespace DsprFrontend
         this->worker->sight = 6;
         this->worker->maxHealth = 420;
         this->worker->buildTime = 100;
+        this->worker->setWalkSpeed(2,3);
 
         this->worker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
         this->worker->selectedSound = New<Sound>(New<Sova::String>("sounds/hello.wav"));
@@ -87,6 +88,7 @@ namespace DsprFrontend
         this->ashwalker = New<UnitTemplate>(3);
         this->ashwalker->sight = 6;
         this->ashwalker->maxHealth = 340;
+        this->ashwalker->setWalkSpeed(4,6);
 
         this->ashwalker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
         this->ashwalker->dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));

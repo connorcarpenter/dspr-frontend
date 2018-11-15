@@ -81,9 +81,6 @@ namespace DsprFrontend
 
         const int interpolationMax = 6;
         const int interpolationStep = 1;
-        const int maxWalkAmount = 6;
-        const int walkSpeedStraight = maxWalkAmount / 2;
-        const int walkSpeedDiagonal = maxWalkAmount / 3;
         const float walkImageSpeed = 0.1f;
         const int gameServerTickMs = 100;
 
@@ -93,9 +90,8 @@ namespace DsprFrontend
         const float attackWaitSpeed = 1.0f / 1.7f;
         const int attackFramesNumber = 5;
         const int attackWaitFrames = 5;
-        const int acquisition = 6; // 12 will be a circle that touches the edges of the screen if centered on the unit, 8 is standard
         float walkAmount = 0;
-        int walkSpeed = walkSpeedStraight;
+        int walkSpeed = 0;
         bool checkReleaseSelectionBox = false;
         float interpolation = 0;
         int stamina = 100;
