@@ -31,5 +31,7 @@ namespace DsprFrontend {
 
         static Sova::Color SeaGreen;
         static Sova::Color LightSeaGreen;
+
+        static Sova::Color AshwalkerBlood;
     };
 }

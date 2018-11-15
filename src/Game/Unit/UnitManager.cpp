@@ -209,11 +209,17 @@ namespace DsprFrontend
             {
                 auto g = (Global*) InternalApp::getGlobal();
                 unit->health = atoi(propsParts->At(1)->AsCStr());
-                if (unit->unitTemplate->bleeds && unit->health<unit->unitTemplate->maxHealth)
+                continue;
+            }
+            else
+            if (propName->Equals("bleed"))
+            {
+                auto g = (Global*) InternalApp::getGlobal();
+                if (unit->unitTemplate->bleeds && atoi(propsParts->At(1)->AsCStr()) == 1)
                 {
                     auto bloodPartNum = Math::Random(1, 2);
                     for (int i = 0; i < bloodPartNum; i++)
-                        g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0, 6), unit->depth));
+                        g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0, 6), unit->depth, unit->unitTemplate->bloodColor));
                 }
                 continue;
             }
@@ -323,7 +329,7 @@ namespace DsprFrontend
             if (unit->unitTemplate->bleeds)
             {
                 for (int i = 0;i<6;i++)
-                    g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth));
+                    g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0,6), unit->depth, unit->unitTemplate->bloodColor));
             }
         }
 

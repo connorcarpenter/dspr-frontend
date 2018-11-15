@@ -11,7 +11,10 @@
 namespace DsprFrontend
 {
 
-    BloodParticle::BloodParticle(Ref<Point> position, float z, int depth) {
+    BloodParticle::BloodParticle(Ref<Point> position, float z, int depth, Color color) {
+
+        this->tint = color;
+
         this->floatPos = New<FloatPoint>(position->x, position->y);
         this->z = z;
 

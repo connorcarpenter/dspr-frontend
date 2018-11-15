@@ -16,14 +16,14 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getGlobal();
 
-        this->useAnimatedSpriteInfo(g->spriteCatalog->workerBase);
+        this->useAnimatedSpriteInfo(unit->unitTemplate->sprBase);
         this->tcSprite = New<AnimatedSprite>();
-        this->tcSprite->useAnimatedSpriteInfo(g->spriteCatalog->workerTC);
+        this->tcSprite->useAnimatedSpriteInfo(unit->unitTemplate->sprTC);
 
         if (unit->facingDown)
-            this->useAnimatedSequenceInfo(g->spriteCatalog->workerDieDown);
+            this->useAnimatedSequenceInfo(unit->unitTemplate->sprDieDown);
         else
-            this->useAnimatedSequenceInfo(g->spriteCatalog->workerDieUp);
+            this->useAnimatedSequenceInfo(unit->unitTemplate->sprDieUp);
 
 
         switch (unit->tribeIndex)

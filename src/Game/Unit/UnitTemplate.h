@@ -36,6 +36,7 @@ namespace DsprFrontend {
         bool canMove = true;
         short spriteFaceLeftXoffset = 0;
         bool bleeds;
+        Color bloodColor = Color::White;
         bool hasDeathAnimation;
         bool hasInventory = false;
         Ref<ButtonCard> commandCard = Null<ButtonCard>();

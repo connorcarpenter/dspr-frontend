@@ -11,7 +11,7 @@ namespace DsprFrontend {
     class BloodParticle : public Sova::AnimatedSprite {
         SovaTypeDecl(BloodParticle, AnimatedSprite);
     public:
-        BloodParticle(Ref<Point> position, float z, int depth);
+        BloodParticle(Ref<Point> position, float z, int depth, Color color);
         void drawSelf(Ref<Camera> camera, int xoffset, int yoffset) override;
     private:
         float z;

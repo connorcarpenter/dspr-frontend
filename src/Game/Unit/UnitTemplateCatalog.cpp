@@ -5,6 +5,7 @@
 #include <Sova/Internal/InternalApp.h>
 #include <Game/Global.h>
 #include <Game/Unit/SpecificUnit/Manafount.h>
+#include <DsprColors.h>
 #include "UnitTemplateCatalog.h"
 #include "SpriteCatalog.h"
 #include "../UI/ButtonCardCatalog.h"
@@ -47,6 +48,7 @@ namespace DsprFrontend
         this->worker->hasIdleTurnBehavior = true;
         this->worker->spriteFaceLeftXoffset = -2;
         this->worker->bleeds = true;
+        this->worker->bloodColor = Color::Red;
         this->worker->hasDeathAnimation = true;
         this->worker->hasInventory = true;
         this->worker->commandCard = g->buttonCardCatalog->workerCommandCard;
@@ -97,6 +99,7 @@ namespace DsprFrontend
         this->ashwalker->hasIdleTurnBehavior = true;
         this->ashwalker->spriteFaceLeftXoffset = -2;
         this->ashwalker->bleeds = true;
+        this->ashwalker->bloodColor = DsprColors::AshwalkerBlood;
         this->ashwalker->hasDeathAnimation = true;
         this->ashwalker->hasShadow = true;
 

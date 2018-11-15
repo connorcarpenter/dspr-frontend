@@ -29,4 +29,6 @@ namespace DsprFrontend
 
     Sova::Color DsprColors::LightSeaGreen = Sova::Color(144, 255, 144);
     Sova::Color DsprColors::SeaGreen = Sova::Color(128, 255, 128);
+
+    Sova::Color DsprColors::AshwalkerBlood = Sova::Color(26, 9, 9);
 }
