@@ -13,6 +13,7 @@
 
 namespace DsprFrontend
 {
+    class Unit;
     class UiManager : public Container
     {
     public:
@@ -35,6 +36,10 @@ namespace DsprFrontend
         void handleItemBarClick(Ref<Point> clickPoint);
 
     private:
+
+        void step();
+        void centerCameraOnUnit(Ref<Unit> unit);
+
         Ref<Sprite> mySprite = Null<Sprite>();
         Ref<AnimatedSprite> myAnimatedSprite = Null<AnimatedSprite>();
         Ref<Sova::Line> myLine = Null<Sova::Line>();
@@ -47,10 +52,18 @@ namespace DsprFrontend
         const int itemBarY = 109;
         const int itemBarW = 44;
         const int itemBarH = 35;
-
-        void oldUnitManagerUiUpdate();
-
-        void step();
-
+        const int armyBarX = 90;
+        const int armyBarY = 109;
+        const int armyBarW = 70;
+        const int armyBarH = 35;
+        const int portraitBarX = 48;
+        const int portraitBarY = 109;
+        const int portraitBarW = 42;
+        const int portraitBarH = 35;
+        const int bigPortraitX = 59;
+        const int bigPortraitY = 111;
+        const int bigPortraitW = 20;
+        const int bigPortraitH = 19;
+        const int cameraSpeed = 2;
     };
 }

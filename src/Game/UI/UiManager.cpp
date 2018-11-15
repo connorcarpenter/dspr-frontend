@@ -112,10 +112,58 @@ namespace DsprFrontend
 
     Ref<Button> UiManager::getButtonWithLeftClick(Ref<Point> clickPoint) {
 
-        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 109, 155, 144))
-        {
-            //clicking within armybar
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, bigPortraitX, bigPortraitY, bigPortraitX + bigPortraitW, bigPortraitY + bigPortraitH)) {
+            //clicking within portrait
+            auto g = (Global *) InternalApp::getGlobal();
+            if (g->unitManager->getSelectedUnits()->Size() > 0)
+            {
+                auto firstUnit = g->unitManager->getSelectedUnits()->At(0);
+                this->centerCameraOnUnit(firstUnit);
+            }
             return Null<Button>();
+        }
+        
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, armyBarX, armyBarY, armyBarX + armyBarW, armyBarY + armyBarH)) {
+            //clicking within armybar
+            auto g = (Global *) InternalApp::getGlobal();
+            if (g->unitManager->getSelectedUnits()->Size() > 0) {
+                int i = 0;
+                int j = 0;
+                for (auto iterator = g->unitManager->getSelectedUnits()->GetIterator(); iterator->Valid(); iterator->Next()) {
+                    auto unit = iterator->Get();
+
+                    if (unit != nullptr) {
+
+                        auto leftX = armyBarX + 3 + (i * 11);
+                        auto upY = armyBarY + 3 + (15 * j);
+                        if(Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                                          leftX, upY,
+                                                          leftX + 10, upY + 12)){
+                            //clicked unit!
+                            bool shiftPressed = InternalApp::getInternalApp()->keyPressed(Key::LeftShift) ||
+                                                InternalApp::getInternalApp()->keyPressed(Key::RightShift);
+                            if (shiftPressed)
+                            {
+                                unit->selected = false;
+                                g->unitManager->removeFromSelectionList(unit);
+                            }
+                            else {
+                                g->unitManager->deselectAllUnits();
+                                unit->selected = true;
+                                g->unitManager->addToSelectionList(unit);
+                            }
+
+                            return Null<Button>();
+                        }
+                    }
+                    i++;
+
+                    if (i > 5) {
+                        j++;
+                        i = 0;
+                    }
+                }
+            }
         }
 
         if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 100, 256, 144))
@@ -162,7 +210,7 @@ namespace DsprFrontend
 
     bool UiManager::isInGameArea(Ref<Point> clickPoint){
         if (Math::PointInBox(clickPoint->x,clickPoint->y,0,100,48,144)) return false;
-        if (Math::PointInBox(clickPoint->x, clickPoint->y, 48, 109, 204, 144)) return false;
+        if (Math::PointInBox(clickPoint->x, clickPoint->y, portraitBarX, portraitBarY, 204, 144)) return false;
         if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 100, 256, 144)) return false;
         return true;
     }
@@ -237,14 +285,14 @@ namespace DsprFrontend
                 //draw empty portraitbar
                 this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprPortraitBar);
                 this->myAnimatedSprite->tint = Color::White;
-                this->myAnimatedSprite->position->set(48, 109);
+                this->myAnimatedSprite->position->set(portraitBarX, portraitBarY);
                 this->myAnimatedSprite->imageIndex = 1;
                 this->myAnimatedSprite->drawSelf(camera, 0, 0);
 
                 //draw individual armybar
                 this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprArmyBar);
                 this->myAnimatedSprite->tint = Color::White;
-                this->myAnimatedSprite->position->set(90, 109);
+                this->myAnimatedSprite->position->set(armyBarX, armyBarY);
                 this->myAnimatedSprite->imageIndex = 0;
                 this->myAnimatedSprite->drawSelf(camera, 0, 0);
 
@@ -266,7 +314,7 @@ namespace DsprFrontend
                         //draw empty portraitbar
                         this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprPortraitBar);
                         this->myAnimatedSprite->tint = Color::White;
-                        this->myAnimatedSprite->position->set(48, 109);
+                        this->myAnimatedSprite->position->set(portraitBarX, portraitBarY);
                         this->myAnimatedSprite->imageIndex = 0;
                         this->myAnimatedSprite->drawSelf(camera, 0, 0);
 
@@ -320,22 +368,12 @@ namespace DsprFrontend
                             }
                         }
                     }
-
-                    //switch on/off my experimental small portrait
-                    if (1 == 2) {
+                    
+                    {
+                        //portraitbar
                         this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
                         this->mySprite->tint = Color::White;
-                        this->mySprite->position->set(55, 112);
-                        this->mySprite->drawSelf(camera, 0, 0);
-
-                        this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortraitTC);
-                        this->mySprite->tint = firstUnit->tcSprite->tint;
-                        this->mySprite->position->set(55, 112);
-                        this->mySprite->drawSelf(camera, 0, 0);
-                    } else {
-                        this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
-                        this->mySprite->tint = Color::White;
-                        this->mySprite->position->set(59, 111);
+                        this->mySprite->position->set(bigPortraitX, bigPortraitY);
                         this->mySprite->drawSelf(camera, 0, 0);
 
 //                        this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprUnitPortraitTC);
@@ -369,7 +407,7 @@ namespace DsprFrontend
 
                     this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprArmyBar);
                     this->myAnimatedSprite->tint = Color::White;
-                    this->myAnimatedSprite->position->set(90, 109);
+                    this->myAnimatedSprite->position->set(armyBarX, armyBarY);
                     this->myAnimatedSprite->imageIndex = showTraining ? 2 : 0;
                     this->myAnimatedSprite->drawSelf(camera, 0, 0);
 
@@ -411,7 +449,7 @@ namespace DsprFrontend
                     //draw multi-select armybar
                     this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprArmyBar);
                     this->myAnimatedSprite->tint = Color::White;
-                    this->myAnimatedSprite->position->set(90, 109);
+                    this->myAnimatedSprite->position->set(armyBarX, armyBarY);
                     this->myAnimatedSprite->imageIndex = 1;
                     this->myAnimatedSprite->drawSelf(camera, 0, 0);
 
@@ -425,28 +463,33 @@ namespace DsprFrontend
 
                         if (unit != nullptr)
                         {
+                            auto leftX = armyBarX + 3 + (i * 11);
+                            auto upY = armyBarY + 3 + (15 * j);
+                            auto selecting = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                                              leftX, upY,
+                                                              leftX + 10, upY + 12);
+
+
                             this->mySprite->useSpriteInfo(unit->unitTemplate->sprUnitPortrait);
-                            this->mySprite->tint = Color::White;
-                            this->mySprite->position->set(87 + 6 + (i * 11), 107 + 5 + (15 * j));
+                            this->mySprite->tint = selecting ? Color::White : Color::LightGray;
+                            this->mySprite->position->set(leftX, upY);
                             this->mySprite->drawSelf(camera, 0, 0);
 
                             this->mySprite->useSpriteInfo(unit->unitTemplate->sprUnitPortraitTC);
-                            this->mySprite->tint = unit->tcSprite->tint;
-                            this->mySprite->position->set(87 + 6 + (i * 11), 107 + 5 + (15 * j));
+                            this->mySprite->tint = selecting ? unit->tcSprite->tint : Color::MixColors(unit->tcSprite->tint, Color::LightGray);
+                            this->mySprite->position->set(leftX, upY);
                             this->mySprite->drawSelf(camera, 0, 0);
 
                             this->myLine->setLineStyle(1, Color::Green);
-                            this->myLine->position->set(87 + 6 + (i * 11), 107 + 2 + 15 + (15 * j));
-                            int healthBarLineLength = (unit->health >= 0) ? (int) (
-                                    ((float) unit->health / unit->unitTemplate->maxHealth) *
-                                    10) : 0;
-                            this->myLine->endPosition->set(87 + 6 + (i * 11) + healthBarLineLength,
-                                                                  107 + 2 + 15 + (15 * j));
+                            this->myLine->position->set(leftX, upY + 12 + (15 * j));
+                            int barLineLength = (unit->health > 1) ? (int) (((float) unit->health / unit->unitTemplate->maxHealth) * 10) : 1;
+                            this->myLine->endPosition->set(leftX + barLineLength, upY + 12 + (15 * j));
                             this->myLine->drawSelf(camera, xoffset, yoffset);
 
                             this->myLine->setLineStyle(1, Color::White);
                             this->myLine->position->y += 1;
-                            this->myLine->endPosition->set(87 + 6 + 10 + (i * 11), 107 + 1 + 2 + 15 + (15 * j));
+                            barLineLength = (unit->stamina >= 0) ? (int) (((float) unit->stamina / unit->unitTemplate->maxStamina) * 10) : 0;
+                            this->myLine->endPosition->set(leftX + barLineLength, upY + 13 + (15 * j));
                             this->myLine->drawSelf(camera, xoffset, yoffset);
 
                             i++;
@@ -485,7 +528,7 @@ namespace DsprFrontend
 
                     Color buttonTint = Color::LightGray;
 
-                    if (!g->cursor->isItemInHand() &&Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                    if (!g->cursor->isItemInHand() && Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
                                          leftX, upY,
                                          leftX + 10, upY + 12))
                     {
@@ -551,6 +594,21 @@ namespace DsprFrontend
     void UiManager::step() {
         auto g = (Global*) InternalApp::getGlobal();
 
+        //camera stuff
+        if (g->app->keyPressed(Key::Left)) g->camera->position->x -= cameraSpeed;
+        if (g->app->keyPressed(Key::Right)) g->camera->position->x += cameraSpeed;
+        if (g->app->keyPressed(Key::Up)) g->camera->position->y -= cameraSpeed;
+        if (g->app->keyPressed(Key::Down)) g->camera->position->y += cameraSpeed;
+
+        if(InternalApp::keyPressed(Key::Space))
+        {
+            if (g->unitManager->selectionList->Size()>0)
+            {
+                this->centerCameraOnUnit(g->unitManager->selectionList->At(0));
+            }
+        }
+
+        //right clicking?
         if (g->cursor->isItemInHand())
         {
 
@@ -565,5 +623,11 @@ namespace DsprFrontend
             if (!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
                 rightButtonAlreadyClicked = false;
         }
+    }
+
+    void UiManager::centerCameraOnUnit(Ref<DsprFrontend::Unit> unit) {
+        auto g = (Global *) InternalApp::getGlobal();
+        g->camera->position->x = unit->position->x - (g->camera->width/2);
+        g->camera->position->y = unit->position->y - ((g->camera->height - portraitBarH)/2);
     }
 }

@@ -131,12 +131,6 @@ namespace DsprFrontend
 
     void Controller::onGameUpdate(float deltaFrameMs)
     {
-        //move camera
-        if (g->app->keyPressed(Key::Left)) g->camera->position->x -= 2;
-        if (g->app->keyPressed(Key::Right)) g->camera->position->x += 2;
-        if (g->app->keyPressed(Key::Up)) g->camera->position->y -= 2;
-        if (g->app->keyPressed(Key::Down)) g->camera->position->y += 2;
-
         // this is the game loop
         g->world->UpdateChildren(deltaFrameMs);
 
