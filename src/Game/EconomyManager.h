@@ -14,26 +14,16 @@ namespace DsprFrontend {
     public:
 
         EconomyManager();
-        int getPop();
-        int getPopMax();
         int getMana();
-
-
-        Ref<String> popStr = Null<String>();
-        Ref<String> popMaxStr = Null<String>();
-        Ref<String> manaStr = Null<String>();
 
         void receiveUpdate(Ref<List<String>> propsStrList);
 
         void setMana(int value);
 
-    private:
+        int mana = 0;
         int pop = 3;
         int popMax = 25;
-        int mana = 0;
-
-        void setPop(int value);
-        void setPopMax(int value);
+    private:
 
     };
 }

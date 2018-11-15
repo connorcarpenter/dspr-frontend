@@ -27,4 +27,49 @@ namespace DsprFrontend
             charIndex--;
         }
     }
+
+    void GraphicsManager::drawChar(Ref<Camera> camera, int x, int y, char c, Color color) {
+        this->myFont->position->set(x, y);
+        this->myFont->tint = color;
+        this->myFont->imageIndex = c-33;
+        this->myFont->drawSelf(camera, 0, 0);
+        this->myFont->position->x-=4;
+    }
+
+    int NumDigits(int x)
+    {
+        x = abs(x);
+        return (x < 10 ? 1 :
+                (x < 100 ? 2 :
+                 (x < 1000 ? 3 :
+                  (x < 10000 ? 4 :
+                   (x < 100000 ? 5 :
+                    (x < 1000000 ? 6 :
+                     (x < 10000000 ? 7 :
+                      (x < 100000000 ? 8 :
+                       (x < 1000000000 ? 9 :
+                        10)))))))));
+    }
+
+    void GraphicsManager::drawNumber(Ref<Camera> camera, int x, int y, int number, Color color, bool alignLeft) {
+        this->myFont->position->set(x, y);
+        this->myFont->tint = color;
+
+        if (alignLeft)
+        {
+            int digits = NumDigits(number);
+            this->myFont->position->x+=4*digits;
+        }
+
+        while(true)
+        {
+            auto digit = number % 10;
+            this->myFont->imageIndex = digit+15;
+            this->myFont->drawSelf(camera, 0, 0);
+            this->myFont->position->x-=4;
+
+            if (number < 10)break;
+            number /= 10;
+        }
+    }
 }

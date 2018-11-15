@@ -26,6 +26,5 @@ namespace DsprFrontend
         void step(float deltaMs);
         int number;
         Color color;
-        Ref<String> numberStr = Null<String>();
     };
 }

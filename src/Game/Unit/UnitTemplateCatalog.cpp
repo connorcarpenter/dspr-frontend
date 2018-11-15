@@ -36,6 +36,7 @@ namespace DsprFrontend
         this->worker = New<UnitTemplate>(0);
         this->worker->sight = 6;
         this->worker->maxHealth = 420;
+        this->worker->maxStamina = 100;
         this->worker->buildTime = 100;
         this->worker->setWalkSpeed(2,3);
 

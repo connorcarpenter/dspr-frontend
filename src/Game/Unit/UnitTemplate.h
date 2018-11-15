@@ -22,7 +22,8 @@ namespace DsprFrontend {
 
         //stats
         int sight;
-        int maxHealth;
+        int maxHealth = -1;
+        int maxStamina = -1;
         unsigned int tileWidth = 1;
         unsigned int tileHeight = 1;
         int buildTime;

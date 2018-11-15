@@ -214,12 +214,6 @@ namespace DsprFrontend
         this->mySprite->position->set(0, 100);
         this->mySprite->drawSelf(camera, 0, 0);
 
-        //draw portraitbar
-        this->mySprite->useSpriteInfo(g->spriteCatalog->sprPortraitBar);
-        this->mySprite->tint = Color::White;
-        this->mySprite->position->set(48, 109);
-        this->mySprite->drawSelf(camera, 0, 0);
-
         //draw resourcebar
         {
             this->mySprite->useSpriteInfo(g->spriteCatalog->sprResourceBar);
@@ -227,19 +221,26 @@ namespace DsprFrontend
             this->mySprite->position->set(205, 0);
             this->mySprite->drawSelf(camera, 0, 0);
 
-            g->graphicsManager->drawText(camera, 228, 1, g->economyManager->manaStr, Color::White, false);
-            g->graphicsManager->drawText(camera, 242, 1, g->economyManager->popStr, Color::White, false);
-            g->graphicsManager->drawText(camera, 252, 1, g->economyManager->popMaxStr, Color::White, false);
+            g->graphicsManager->drawNumber(camera, 228, 1, g->economyManager->mana, Color::White, false);
+            g->graphicsManager->drawNumber(camera, 242, 1, g->economyManager->pop, Color::White, false);
+            g->graphicsManager->drawNumber(camera, 252, 1, g->economyManager->popMax, Color::White, false);
         }
 
         //draw fps
-        g->graphicsManager->drawText(camera, 5, 1, String::getStringFromNumber((int) this->currentFps), Color::White, false);
+        g->graphicsManager->drawNumber(camera, 5, 1, (int) this->currentFps, Color::White, false);
 
         Ref<Unit> firstUnit = Null<Unit>();
 
         {
             if (g->unitManager->getSelectedUnits()->Size() <= 0)
             {
+                //draw empty portraitbar
+                this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprPortraitBar);
+                this->myAnimatedSprite->tint = Color::White;
+                this->myAnimatedSprite->position->set(48, 109);
+                this->myAnimatedSprite->imageIndex = 1;
+                this->myAnimatedSprite->drawSelf(camera, 0, 0);
+
                 //draw individual armybar
                 this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprArmyBar);
                 this->myAnimatedSprite->tint = Color::White;
@@ -262,6 +263,13 @@ namespace DsprFrontend
                 if (firstUnit != nullptr)
                 {
                     {
+                        //draw empty portraitbar
+                        this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprPortraitBar);
+                        this->myAnimatedSprite->tint = Color::White;
+                        this->myAnimatedSprite->position->set(48, 109);
+                        this->myAnimatedSprite->imageIndex = 0;
+                        this->myAnimatedSprite->drawSelf(camera, 0, 0);
+
                         //draw itembar
                         this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprItemBar);
                         this->myAnimatedSprite->tint = Color::White;
@@ -313,15 +321,42 @@ namespace DsprFrontend
                         }
                     }
 
-                    this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
-                    this->mySprite->tint = Color::White;
-                    this->mySprite->position->set(55, 112);
-                    this->mySprite->drawSelf(camera, 0, 0);
+                    //switch on/off my experimental small portrait
+                    if (1 == 2) {
+                        this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
+                        this->mySprite->tint = Color::White;
+                        this->mySprite->position->set(55, 112);
+                        this->mySprite->drawSelf(camera, 0, 0);
 
-                    this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortraitTC);
-                    this->mySprite->tint = firstUnit->tcSprite->tint;
-                    this->mySprite->position->set(55, 112);
-                    this->mySprite->drawSelf(camera, 0, 0);
+                        this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortraitTC);
+                        this->mySprite->tint = firstUnit->tcSprite->tint;
+                        this->mySprite->position->set(55, 112);
+                        this->mySprite->drawSelf(camera, 0, 0);
+                    } else {
+                        this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprBigPortrait);
+                        this->mySprite->tint = Color::White;
+                        this->mySprite->position->set(59, 111);
+                        this->mySprite->drawSelf(camera, 0, 0);
+
+//                        this->mySprite->useSpriteInfo(firstUnit->unitTemplate->sprUnitPortraitTC);
+//                        this->mySprite->tint = firstUnit->tcSprite->tint;
+//                        this->mySprite->position->set(55, 112);
+//                        this->mySprite->drawSelf(camera, 0, 0);
+
+                        if (firstUnit->unitTemplate->maxHealth != -1)
+                        {
+                            g->graphicsManager->drawNumber(camera, 63, 132, firstUnit->health, Color::Green, false);
+                            g->graphicsManager->drawChar(camera, 67, 132, '/', Color::Green);
+                            g->graphicsManager->drawNumber(camera, 69, 132, firstUnit->unitTemplate->maxHealth, Color::Green, true);
+                        }
+
+                        if (firstUnit->unitTemplate->maxStamina != -1)
+                        {
+                            g->graphicsManager->drawNumber(camera, 63, 138, firstUnit->stamina, Color::White, false);
+                            g->graphicsManager->drawChar(camera, 67, 138, '/', Color::White);
+                            g->graphicsManager->drawNumber(camera, 69, 138, firstUnit->unitTemplate->maxStamina, Color::White, true);
+                        }
+                    }
 
                     //select commandcard
                     this->currentButtonCard = firstUnit->unitTemplate->commandCard;

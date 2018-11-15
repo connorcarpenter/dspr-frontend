@@ -34,6 +34,7 @@ namespace DsprFrontend
         this->unitTemplate = unitTemplate;
 
         this->health = this->unitTemplate->maxHealth;
+        this->stamina = this->unitTemplate->maxStamina;
 
         this->useAnimatedSpriteInfo(this->unitTemplate->sprBase);
 

@@ -57,6 +57,7 @@ namespace DsprFrontend
         int tribeIndex = -1;
         UnitAnimationState animationState = Walking;
         int health;
+        int stamina;
         bool facingDown = true;
 
         UnitOrder currentOrder = Move;
@@ -94,7 +95,6 @@ namespace DsprFrontend
         int walkSpeed = 0;
         bool checkReleaseSelectionBox = false;
         float interpolation = 0;
-        int stamina = 100;
         int stillFrames = 0;
 
         float gatherFrameIndex = 0;

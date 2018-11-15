@@ -13,7 +13,6 @@ namespace DsprFrontend {
         this->floatPosition = New<FloatPoint>(position->x, position->y);
         this->position = position;
         this->number = number;
-        this->numberStr = String::getStringFromNumber(this->number);
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
     }
@@ -27,7 +26,7 @@ namespace DsprFrontend {
 
     void FloatingNumber::drawSelf(Ref<Camera> camera, int xoffset, int yoffset) {
         auto g = (Global*) InternalApp::getGlobal();
-        g->graphicsManager->drawText(camera, this->position->x + xoffset, this->position->y + yoffset, this->numberStr,
+        g->graphicsManager->drawNumber(camera, this->position->x + xoffset, this->position->y + yoffset, this->number,
                                      this->color, false);
     }
 }

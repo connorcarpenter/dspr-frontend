@@ -55,7 +55,7 @@ namespace DsprFrontend
 
         this->sprCursor = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/cursor.png"), 15, 16, 1, 8, 7);
         this->sprMinimap = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/minimap.png"), true, 0, 0);
-        this->sprPortraitBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/portraitbar.png"), true, 0, 0);
+        this->sprPortraitBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/portraitbar.png"), 42, 35, 0, 0, 0);
         this->sprItemBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/itembar.png"), 44, 35, 0, 0, 0);
         this->sprArmyBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/armybar.png"), 70, 35, 0, 0, 0);
         this->sprCommandBar = New<AnimatedSpriteInfo>(New<Sova::String>("images/ui/commandcard.png"), true, 0, 0);

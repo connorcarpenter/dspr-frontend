@@ -7,31 +7,10 @@
 namespace DsprFrontend {
 
     EconomyManager::EconomyManager() {
-        this->popStr = String::getStringFromNumber(this->pop);
-        this->popMaxStr = String::getStringFromNumber(this->popMax);
-        this->manaStr = String::getStringFromNumber(this->mana);
-    }
-
-    int EconomyManager::getPop() {
-        return this->pop;
-    }
-
-    int EconomyManager::getPopMax() {
-        return this->popMax;
     }
 
     int EconomyManager::getMana() {
         return this->mana;
-    }
-
-    void EconomyManager::setPop(int value) {
-        this->pop = value;
-        this->popStr = String::getStringFromNumber(this->pop);
-    }
-
-    void EconomyManager::setPopMax(int value) {
-        this->popMax = value;
-        this->popMaxStr = String::getStringFromNumber(this->popMax);
     }
 
     void EconomyManager::setMana(int value) {
@@ -39,7 +18,6 @@ namespace DsprFrontend {
         if (value > 99999) value = 99999;
         if (this->mana != value) {
             this->mana = value;
-            this->manaStr = String::getStringFromNumber(this->mana);
         }
     }
 
@@ -62,14 +40,14 @@ namespace DsprFrontend {
             if (propName->Equals("pop"))
             {
                 int amount = atoi(propsParts->At(1)->AsCStr());
-                this->setPop(amount);
+                this->pop = amount;
                 continue;
             }
             else
             if (propName->Equals("popMax"))
             {
                 int amount = atoi(propsParts->At(1)->AsCStr());
-                this->setPopMax(amount);
+                this->popMax = amount;
                 continue;
             }
         }
