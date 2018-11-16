@@ -70,6 +70,8 @@ namespace DsprFrontend
 
         void updateRightHandSprite(Ref<ItemTemplate> itemTemplate);
 
+        Ref<Point> rallyPoint = Null<Point>();
+        int rallyUnitId = -1;
     private:
 
         void step(float deltaMs);

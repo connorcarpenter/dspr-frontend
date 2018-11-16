@@ -328,6 +328,33 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getGlobal();
 
+        auto selectedUnitList = g->unitManager->getSelectedUnits();
+
+        //draw rally flags
+        if (selectedUnitList->Size() > 0)
+        {
+            for (auto iterator = selectedUnitList->GetIterator(); iterator->Valid(); iterator->Next()) {
+                auto unit = iterator->Get();
+                if (unit != nullptr && unit->unitTemplate->hasRallyPoint) {
+                    //draw rally point!
+                    auto drawX = (int) (((((float) unit->rallyPoint->x) / 2) + 0.5f) * g->tileManager->tileWidth);
+                    auto drawY =
+                            (int) (((((float) unit->rallyPoint->y) / 2) + 0.5f) * g->tileManager->tileHeight);
+
+
+                    this->mySprite->useSpriteInfo(g->spriteCatalog->sprRallyFlag);
+                    this->mySprite->tint = Color::White;
+                    this->mySprite->position->set(drawX, drawY);
+                    this->mySprite->drawSelf(camera, xoffset, yoffset);
+
+                    this->mySprite->useSpriteInfo(g->spriteCatalog->sprRallyFlagTC);
+                    this->mySprite->tint = unit->tcSprite->tint;
+                    this->mySprite->position->set(drawX, drawY);
+                    this->mySprite->drawSelf(camera, xoffset, yoffset);
+                }
+            }
+        }
+
         //draw minimap
         this->mySprite->useSpriteInfo(g->spriteCatalog->sprMinimap);
         this->mySprite->tint = Color::White;
@@ -360,7 +387,7 @@ namespace DsprFrontend
         Ref<Unit> firstUnit = Null<Unit>();
 
         {
-            if (g->unitManager->getSelectedUnits()->Size() <= 0)
+            if (selectedUnitList->Size() <= 0)
             {
                 //draw empty portraitbar
                 this->myAnimatedSprite->useAnimatedSpriteInfo(g->spriteCatalog->sprPortraitBar);
@@ -385,8 +412,6 @@ namespace DsprFrontend
             }
             else
             {
-                auto selectedUnitList = g->unitManager->getSelectedUnits();
-
                 firstUnit = selectedUnitList->At(0);
                 if (firstUnit != nullptr)
                 {
@@ -480,7 +505,7 @@ namespace DsprFrontend
                     this->currentButtonCard = firstUnit->unitTemplate->commandCard;
                 }
 
-                if (g->unitManager->getSelectedUnits()->Size() == 1)
+                if (selectedUnitList->Size() == 1)
                 {
                     //draw individual armybar
                     bool showTraining = (firstUnit->unitTemplate->hasConstructionQueue && firstUnit->constructionQueue->isTraining());

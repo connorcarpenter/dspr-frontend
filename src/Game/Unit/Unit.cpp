@@ -84,32 +84,6 @@ namespace DsprFrontend
         this->hasShortHair = Math::Random(0, 2) < 1;
         this->updateHeadSprite(Ref<ItemTemplate>());
 
-//        //armor
-//        if (Math::Random(0,2)<1) {
-//            this->armorSprite = New<AnimatedSprite>();
-//            this->armorSprite->useAnimatedSpriteInfo(this->unitTemplate->sprArmor);
-//            this->armorSprite->tint = DsprColors::LightSeaGreen;
-//        }
-//
-//        //weapon
-//        if (Math::Random(0,2)<1) {
-//            this->leftHandSprite = New<AnimatedSprite>();
-//            if (Math::Random(0,2)<1) {
-//                this->leftHandSprite->useAnimatedSpriteInfo(this->unitTemplate->sprClub);
-//                this->leftHandSprite->tint = DsprColors::LightSeaGreen;
-//
-//            } else {
-//                this->leftHandSprite->useAnimatedSpriteInfo(this->unitTemplate->sprSling);
-//            }
-//        }
-//
-//        //shield
-//        if (Math::Random(0,2)<1) {
-//            this->rightHandSprite = New<AnimatedSprite>();
-//            this->rightHandSprite->useAnimatedSpriteInfo(this->unitTemplate->sprShield);
-//            this->rightHandSprite->tint = DsprColors::LightSeaGreen;
-//        }
-
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
         if (this->tribeIndex == g->playersTribeIndex)
@@ -122,6 +96,11 @@ namespace DsprFrontend
         if (this->unitTemplate->hasConstructionQueue)
         {
             this->constructionQueue = New<ConstructionQueue>();
+        }
+
+        if (this->unitTemplate->hasRallyPoint)
+        {
+            this->rallyPoint = New<Point>();
         }
 
         if (this->unitTemplate->hasInventory)
@@ -505,178 +484,6 @@ namespace DsprFrontend
         }
     }
 
-
-    void Unit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
-    {
-        auto g = (Global*) InternalApp::getGlobal();
-
-        if (this->selected)
-        {
-            this->unitTemplate->sprSelectCircle->tint = (this->tribeIndex==-1) ?
-                                                        DsprColors::LightYellow :
-                                                        (this->tribeIndex == g->playersTribeIndex) ?
-                                                        DsprColors::LightGreen :
-                                                        DsprColors::LightRed;
-
-            this->unitTemplate->sprSelectCircle->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
-
-            this->unitTemplate->sprSelectCircle->drawSelf(camera, xoffset, yoffset);
-
-            if (!this->tilePosition->Equals(this->moveTarget))
-            {
-                int x = (int) ((((float) this->moveTarget->x / 2) + 0.5f) * g->tileManager->tileWidth);
-                int y = (int) ((((float) this->moveTarget->y / 2) + 0.5f) * g->tileManager->tileHeight);
-
-                g->moveMarker->tint = (this->currentOrder == AttackTarget || this->currentOrder == AttackMove) ? DsprColors::LightRed : DsprColors::LightGreen;
-                g->moveMarker->position->set(x, y);
-                g->moveMarker->drawSelf(camera, xoffset, yoffset);
-            }
-        }
-
-        if (this->hovering)
-        {
-            if (this->unitTemplate->sprHoverCircle != nullptr) {
-                this->unitTemplate->sprHoverCircle->tint = (this->tribeIndex==-1) ?
-                                                           DsprColors::LightYellow :
-                                                           (this->tribeIndex == g->playersTribeIndex) ?
-                                                           DsprColors::LightGreen :
-                                                           DsprColors::LightRed;
-
-                this->unitTemplate->sprHoverCircle->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
-
-                this->unitTemplate->sprHoverCircle->drawSelf(camera, xoffset, yoffset);
-            }
-        }
-
-        int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
-
-        //Weapon
-        if (!this->facingDown) {
-            if (this->leftHandSprite != nullptr) {
-                this->leftHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-                this->leftHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
-                                                  this->position->y - this->unitTemplate->sprCenterAdjust->y);
-                this->leftHandSprite->scale->x = this->scale->x;
-                this->leftHandSprite->drawSelf(camera, newOffset, yoffset);
-            }
-
-            if (this->rightHandSprite != nullptr) {
-                this->rightHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-                this->rightHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
-                                                  this->position->y - this->unitTemplate->sprCenterAdjust->y);
-                this->rightHandSprite->scale->x = this->scale->x;
-                this->rightHandSprite->drawSelf(camera, newOffset, yoffset);
-            }
-        }
-
-        AnimatedSprite::drawSelf(camera, newOffset - this->unitTemplate->sprCenterAdjust->x, yoffset - this->unitTemplate->sprCenterAdjust->y);
-
-        //TC
-        this->tcSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-        this->tcSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
-        this->tcSprite->scale->x = this->scale->x;
-        this->tcSprite->drawSelf(camera, newOffset, yoffset);
-
-        //Skin
-        this->skinSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-        this->skinSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
-        this->skinSprite->scale->x = this->scale->x;
-        this->skinSprite->drawSelf(camera, newOffset, yoffset);
-
-        //Head
-        this->headSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-        this->headSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
-        this->headSprite->scale->x = this->scale->x;
-        this->headSprite->drawSelf(camera, newOffset, yoffset);
-
-        //Armor
-        if (this->armorSprite != nullptr) {
-            this->armorSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-            this->armorSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
-                                             this->position->y - this->unitTemplate->sprCenterAdjust->y);
-            this->armorSprite->scale->x = this->scale->x;
-            this->armorSprite->drawSelf(camera, newOffset, yoffset);
-        }
-
-        //Weapon
-        if (this->facingDown) {
-            if (this->leftHandSprite != nullptr) {
-                this->leftHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-                this->leftHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
-                                                  this->position->y - this->unitTemplate->sprCenterAdjust->y);
-                this->leftHandSprite->scale->x = this->scale->x;
-                this->leftHandSprite->drawSelf(camera, newOffset, yoffset);
-            }
-
-            if (this->rightHandSprite != nullptr) {
-                this->rightHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-                this->rightHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
-                                                  this->position->y - this->unitTemplate->sprCenterAdjust->y);
-                this->rightHandSprite->scale->x = this->scale->x;
-                this->rightHandSprite->drawSelf(camera, newOffset, yoffset);
-            }
-        }
-    }
-
-    void Unit::drawShadow(Ref<Camera> camera, int xoffset, int yoffset)
-    {
-        int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
-        const int theSkewX = -6;
-        const float theAlpha = 0.25f;
-        this->skew->x = theSkewX;
-        this->scale->y = 0.5f;
-        this->tint = Color::Black;
-        this->alpha = theAlpha;
-
-        AnimatedSprite::drawSelf(camera, newOffset - this->unitTemplate->sprCenterAdjust->x, yoffset - this->unitTemplate->sprCenterAdjust->y);
-
-        this->skew->x = 0;
-        this->scale->y = 1.0f;
-        this->tint = Color::White;
-        this->alpha = 1.0f;
-
-        //Weapon
-        if (this->leftHandSprite != nullptr)
-        {
-            this->leftHandSprite->skew->x = theSkewX;
-            this->leftHandSprite->scale->y = 0.5f;
-            auto lastTint = this->leftHandSprite->tint;
-            this->leftHandSprite->tint = Color::Black;
-            this->leftHandSprite->alpha = theAlpha;
-
-            this->leftHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-            this->leftHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
-                                              this->position->y - this->unitTemplate->sprCenterAdjust->y);
-            this->leftHandSprite->scale->x = this->scale->x;
-            this->leftHandSprite->drawSelf(camera, newOffset, yoffset);
-
-            this->leftHandSprite->skew->x = 0;
-            this->leftHandSprite->scale->y = 1.0f;
-            this->leftHandSprite->tint = lastTint;
-            this->leftHandSprite->alpha = 1.0f;
-        }
-
-        if (this->rightHandSprite != nullptr)
-        {
-            this->rightHandSprite->skew->x = theSkewX;
-            this->rightHandSprite->scale->y = 0.5f;
-            auto lastTint = this->rightHandSprite->tint;
-            this->rightHandSprite->tint = Color::Black;
-            this->rightHandSprite->alpha = theAlpha;
-
-            this->rightHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
-            this->rightHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
-                                              this->position->y - this->unitTemplate->sprCenterAdjust->y);
-            this->rightHandSprite->scale->x = this->scale->x;
-            this->rightHandSprite->drawSelf(camera, newOffset, yoffset);
-
-            this->rightHandSprite->skew->x = 0;
-            this->rightHandSprite->scale->y = 1.0f;
-            this->rightHandSprite->tint = lastTint;
-            this->rightHandSprite->alpha = 1.0f;
-        }
-    }
-
     void Unit::playSelectedSound() {
         if (this->unitTemplate->selectedSound != nullptr){
             this->unitTemplate->selectedSound->Play();
@@ -793,6 +600,177 @@ namespace DsprFrontend
         {
             if (this->rightHandSprite == nullptr) this->rightHandSprite = New<AnimatedSprite>();
             this->rightHandSprite->useAnimatedSpriteInfo(itemTemplate->wornSpriteInfo);
+        }
+    }
+
+    void Unit::drawSelf(Ref<Camera> camera, int xoffset, int yoffset)
+    {
+        auto g = (Global*) InternalApp::getGlobal();
+
+        if (this->selected)
+        {
+            this->unitTemplate->sprSelectCircle->tint = (this->tribeIndex==-1) ?
+                                                        DsprColors::LightYellow :
+                                                        (this->tribeIndex == g->playersTribeIndex) ?
+                                                        DsprColors::LightGreen :
+                                                        DsprColors::LightRed;
+
+            this->unitTemplate->sprSelectCircle->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+
+            this->unitTemplate->sprSelectCircle->drawSelf(camera, xoffset, yoffset);
+
+            if (!this->tilePosition->Equals(this->moveTarget))
+            {
+                int x = (int) ((((float) this->moveTarget->x / 2) + 0.5f) * g->tileManager->tileWidth);
+                int y = (int) ((((float) this->moveTarget->y / 2) + 0.5f) * g->tileManager->tileHeight);
+
+                g->moveMarker->tint = (this->currentOrder == AttackTarget || this->currentOrder == AttackMove) ? DsprColors::LightRed : DsprColors::LightGreen;
+                g->moveMarker->position->set(x, y);
+                g->moveMarker->drawSelf(camera, xoffset, yoffset);
+            }
+        }
+
+        if (this->hovering)
+        {
+            if (this->unitTemplate->sprHoverCircle != nullptr) {
+                this->unitTemplate->sprHoverCircle->tint = (this->tribeIndex==-1) ?
+                                                           DsprColors::LightYellow :
+                                                           (this->tribeIndex == g->playersTribeIndex) ?
+                                                           DsprColors::LightGreen :
+                                                           DsprColors::LightRed;
+
+                this->unitTemplate->sprHoverCircle->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+
+                this->unitTemplate->sprHoverCircle->drawSelf(camera, xoffset, yoffset);
+            }
+        }
+
+        int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
+
+        //Weapon
+        if (!this->facingDown) {
+            if (this->leftHandSprite != nullptr) {
+                this->leftHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->leftHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                    this->position->y - this->unitTemplate->sprCenterAdjust->y);
+                this->leftHandSprite->scale->x = this->scale->x;
+                this->leftHandSprite->drawSelf(camera, newOffset, yoffset);
+            }
+
+            if (this->rightHandSprite != nullptr) {
+                this->rightHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->rightHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                     this->position->y - this->unitTemplate->sprCenterAdjust->y);
+                this->rightHandSprite->scale->x = this->scale->x;
+                this->rightHandSprite->drawSelf(camera, newOffset, yoffset);
+            }
+        }
+
+        AnimatedSprite::drawSelf(camera, newOffset - this->unitTemplate->sprCenterAdjust->x, yoffset - this->unitTemplate->sprCenterAdjust->y);
+
+        //TC
+        this->tcSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+        this->tcSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+        this->tcSprite->scale->x = this->scale->x;
+        this->tcSprite->drawSelf(camera, newOffset, yoffset);
+
+        //Skin
+        this->skinSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+        this->skinSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+        this->skinSprite->scale->x = this->scale->x;
+        this->skinSprite->drawSelf(camera, newOffset, yoffset);
+
+        //Head
+        this->headSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+        this->headSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
+        this->headSprite->scale->x = this->scale->x;
+        this->headSprite->drawSelf(camera, newOffset, yoffset);
+
+        //Armor
+        if (this->armorSprite != nullptr) {
+            this->armorSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+            this->armorSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                             this->position->y - this->unitTemplate->sprCenterAdjust->y);
+            this->armorSprite->scale->x = this->scale->x;
+            this->armorSprite->drawSelf(camera, newOffset, yoffset);
+        }
+
+        //Weapon
+        if (this->facingDown) {
+            if (this->leftHandSprite != nullptr) {
+                this->leftHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->leftHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                    this->position->y - this->unitTemplate->sprCenterAdjust->y);
+                this->leftHandSprite->scale->x = this->scale->x;
+                this->leftHandSprite->drawSelf(camera, newOffset, yoffset);
+            }
+
+            if (this->rightHandSprite != nullptr) {
+                this->rightHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+                this->rightHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                     this->position->y - this->unitTemplate->sprCenterAdjust->y);
+                this->rightHandSprite->scale->x = this->scale->x;
+                this->rightHandSprite->drawSelf(camera, newOffset, yoffset);
+            }
+        }
+    }
+
+    void Unit::drawShadow(Ref<Camera> camera, int xoffset, int yoffset)
+    {
+        int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
+        const int theSkewX = -6;
+        const float theAlpha = 0.25f;
+        this->skew->x = theSkewX;
+        this->scale->y = 0.5f;
+        this->tint = Color::Black;
+        this->alpha = theAlpha;
+
+        AnimatedSprite::drawSelf(camera, newOffset - this->unitTemplate->sprCenterAdjust->x, yoffset - this->unitTemplate->sprCenterAdjust->y);
+
+        this->skew->x = 0;
+        this->scale->y = 1.0f;
+        this->tint = Color::White;
+        this->alpha = 1.0f;
+
+        //Weapon
+        if (this->leftHandSprite != nullptr)
+        {
+            this->leftHandSprite->skew->x = theSkewX;
+            this->leftHandSprite->scale->y = 0.5f;
+            auto lastTint = this->leftHandSprite->tint;
+            this->leftHandSprite->tint = Color::Black;
+            this->leftHandSprite->alpha = theAlpha;
+
+            this->leftHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+            this->leftHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                this->position->y - this->unitTemplate->sprCenterAdjust->y);
+            this->leftHandSprite->scale->x = this->scale->x;
+            this->leftHandSprite->drawSelf(camera, newOffset, yoffset);
+
+            this->leftHandSprite->skew->x = 0;
+            this->leftHandSprite->scale->y = 1.0f;
+            this->leftHandSprite->tint = lastTint;
+            this->leftHandSprite->alpha = 1.0f;
+        }
+
+        if (this->rightHandSprite != nullptr)
+        {
+            this->rightHandSprite->skew->x = theSkewX;
+            this->rightHandSprite->scale->y = 0.5f;
+            auto lastTint = this->rightHandSprite->tint;
+            this->rightHandSprite->tint = Color::Black;
+            this->rightHandSprite->alpha = theAlpha;
+
+            this->rightHandSprite->imageIndex = this->frameStartIndex + this->imageIndex;
+            this->rightHandSprite->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x,
+                                                 this->position->y - this->unitTemplate->sprCenterAdjust->y);
+            this->rightHandSprite->scale->x = this->scale->x;
+            this->rightHandSprite->drawSelf(camera, newOffset, yoffset);
+
+            this->rightHandSprite->skew->x = 0;
+            this->rightHandSprite->scale->y = 1.0f;
+            this->rightHandSprite->tint = lastTint;
+            this->rightHandSprite->alpha = 1.0f;
         }
     }
 }

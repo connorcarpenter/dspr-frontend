@@ -45,6 +45,7 @@ namespace DsprFrontend {
         bool isGatherable = false;
         bool canGather = false;
         bool hasShadow = false;
+        bool hasRallyPoint = false;
 
         //sprites
         Ref<Sova::AnimatedSpriteInfo> sprBase = Null<Sova::AnimatedSpriteInfo>();

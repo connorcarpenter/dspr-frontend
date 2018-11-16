@@ -299,6 +299,25 @@ namespace DsprFrontend
                 }
                 continue;
             }
+            else
+            if (propName->Equals("rallyPoint"))
+            {
+                auto varsParts = propsParts->At(1)->Split(',');
+                if (unit->unitTemplate->hasRallyPoint) {
+                    unit->rallyPoint->x = atoi(varsParts->At(0)->AsCStr());
+                    unit->rallyPoint->y = atoi(varsParts->At(1)->AsCStr());
+                }
+                continue;
+            }
+            else
+            if (propName->Equals("rallyUnitId"))
+            {
+                auto varsParts = propsParts->At(1)->Split(',');
+                if (unit->unitTemplate->hasRallyPoint) {
+                    unit->rallyUnitId = atoi(varsParts->At(0)->AsCStr());
+                }
+                continue;
+            }
         }
     }
 
@@ -357,7 +376,7 @@ namespace DsprFrontend
             return evalUnit->id ==  id;
         });
     }
-    
+
     void UnitManager::issueUnitOrder(bool attackOrderSelected)
     {
         if (this->selectionList->Size() <= 0) return;

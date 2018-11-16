@@ -137,6 +137,7 @@ namespace DsprFrontend
         this->temple->commandCard = g->buttonCardCatalog->templeCommandCard;
         this->temple->hasConstructionQueue = true;
         this->temple->sprCenterAdjust = New<Point>(0,1);
+        this->temple->hasRallyPoint = true;
 
         this->temple->sprBase = g->spriteCatalog->temple;
         this->temple->sprTC = g->spriteCatalog->templeTC;
