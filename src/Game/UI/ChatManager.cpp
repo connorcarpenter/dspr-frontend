@@ -5,13 +5,20 @@
 #include <Sova/Common/StringBuilder.h>
 #include <Sova/Internal/InternalApp.h>
 #include <Game/Global.h>
+#include <Sova/Common/Int.h>
 #include "ChatManager.h"
 #include "GraphicsManager.h"
+#include "Game/Unit/UnitManager.h"
 
 namespace DsprFrontend {
 
     ChatManager::ChatManager() {
         this->preStr = New<String>("Chat: ");
+        this->messageList = New<List<String>>();
+        this->indexList = New<List<Int>>();
+        this->nameList = New<List<String>>();
+        this->nameList->Add(New<String>("Player1: "));
+        this->nameList->Add(New<String>("Player2: "));
     }
 
 //    void ChatManager::setPlayerName(int playerIndex) {
@@ -21,20 +28,23 @@ namespace DsprFrontend {
 //        this->playerName = sb->ToString();
 //    }
 
-    void ChatManager::Draw(Ref<Camera> camera, int xoffset, int yoffset) {
-        if (!this->playerIsTyping)return;
-        auto g = (Global*) InternalApp::getGlobal();
-        g->graphicsManager->drawText(camera, 48, 104, this->preStr, Color::LightGray, true);
-        if (this->playerStr != nullptr)
-            this->strDisplayLength = g->graphicsManager->drawText(camera, 69, 104, this->playerStr, Color::White, true);
-    }
-
     bool ChatManager::isPlayerTyping() {
         return this->playerIsTyping;
     }
 
     void ChatManager::step() {
         //auto g = (Global*) InternalApp::getGlobal();
+        if (this->messageList->Size()>0)
+        {
+            this->disappearCounter--;
+            if (this->disappearCounter <= 0)
+            {
+                this->disappearCounter = disappearTimeMax;
+
+                this->messageList->Remove(0);
+                this->indexList->Remove(0);
+            }
+        }
 
         auto enterPressed = InternalApp::keyPressed(Key::Enter);
 
@@ -44,7 +54,7 @@ namespace DsprFrontend {
             this->pressingEnter = true;
             if (!this->playerIsTyping && this->playerStr->Length()>0)
             {
-                this->SendPlayerStr();
+                this->sendMessage();
                 this->playerStr = Null<String>();
             }
         }
@@ -85,7 +95,7 @@ namespace DsprFrontend {
 
     }
 
-    void ChatManager::SendPlayerStr() {
+    void ChatManager::sendMessage() {
 
         auto g = (Global*) InternalApp::getGlobal();
 
@@ -94,10 +104,46 @@ namespace DsprFrontend {
         sb->Append(g->gameServerPlayerToken);
         sb->Append(New<Sova::String>("|"));
         sb->Append(this->playerStr);
-        g->gameServer->send(sb->ToString());
+        auto msgToSend = sb->ToString();
+        g->gameServer->send(msgToSend);
+
+        this->addToMessageLog(g->playersTribeIndex, this->playerStr);
     }
 
     void ChatManager::receiveMessage(int tribeIndex, Ref<String> chatMsg) {
+        this->addToMessageLog(tribeIndex, chatMsg);
+    }
 
+    void ChatManager::addToMessageLog(int tribeIndex, Ref<String> chatMsg) {
+        this->messageList->Add(chatMsg);
+        this->indexList->Add(New<Int>(tribeIndex));
+    }
+
+    void ChatManager::Draw(Ref<Camera> camera, int xoffset, int yoffset)
+    {
+        auto g = (Global*) InternalApp::getGlobal();
+
+        if (this->messageList->Size()>0)
+        {
+            auto upY = 100 - this->messageList->Size()*6;
+            auto indexIterator = this->indexList->GetIterator();
+            for (auto msgIterator = this->messageList->GetIterator(); msgIterator->Valid(); msgIterator->Next())
+            {
+                auto message = msgIterator->Get();
+                auto index = indexIterator->Get()->getInt();
+
+                g->graphicsManager->drawText(camera, 1, upY, this->nameList->At(index), g->unitManager->getColorFromTribeIndex(index), true);
+                g->graphicsManager->drawText(camera, 35, upY, message, Color::White, true);
+
+                upY += 6;
+                indexIterator->Next();
+            }
+        }
+
+        if (!this->playerIsTyping)return;
+
+        g->graphicsManager->drawText(camera, 48, 104, this->preStr, Color::LightGray, true);
+        if (this->playerStr != nullptr)
+            this->strDisplayLength = g->graphicsManager->drawText(camera, 69, 104, this->playerStr, Color::White, true);
     }
 }

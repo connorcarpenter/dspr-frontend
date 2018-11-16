@@ -27,7 +27,15 @@ namespace DsprFrontend {
         bool pressingBackspace = false;
         int backspaceCounter = 0;
         int strDisplayLength = 0;
+        Ref<List<String>> messageList = Null<List<String>>();
+        Ref<List<Int>> indexList = Null<List<Int>>();
+        Ref<List<String>> nameList = Null<List<String>>();
 
-        void SendPlayerStr();
+        const int disappearTimeMax = 240;
+        int disappearCounter = disappearTimeMax;
+
+        void sendMessage();
+
+        void addToMessageLog(int tribeIndex, Ref<String> chatMsg);
     };
 }
