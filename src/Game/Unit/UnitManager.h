@@ -51,6 +51,8 @@ namespace DsprFrontend
 
         void orderUnitGiveItem(Ref<Unit> unit, int slotIndex, int targetUnitId);
 
+        void issueUnitOrderRally();
+
     private:
         Ref<List<Unit>> unitList = Null<List<Unit>>();
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();

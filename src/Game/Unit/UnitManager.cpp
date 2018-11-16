@@ -357,7 +357,7 @@ namespace DsprFrontend
             return evalUnit->id ==  id;
         });
     }
-
+    
     void UnitManager::issueUnitOrder(bool attackOrderSelected)
     {
         if (this->selectionList->Size() <= 0) return;
@@ -467,7 +467,7 @@ namespace DsprFrontend
         sb->Append(g->gameServerPlayerToken);
         sb->Append(New<Sova::String>("|"));
         bool first = true;
-        for (Ref<ListIterator<Unit>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+        for (auto iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto unit = iterator->Get();
             if (!unit->unitTemplate->canGather) continue;
@@ -640,6 +640,65 @@ namespace DsprFrontend
         sb->Append(New<Int>(slotIndex)->ToString());
         sb->Append(New<Sova::String>(","));
         sb->Append(New<Int>(targetUnitId)->ToString());
+
+        g->gameServer->send(sb->ToString());
+    }
+
+    void UnitManager::issueUnitOrderRally(){
+        if (this->selectionList->Size() <= 0) return;
+
+        auto g = (Global*) InternalApp::getGlobal();
+
+        UnitOrder orderIndex = RallyPoint;
+
+        auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
+        int targetId = -1;
+
+        if (targetedUnit != nullptr)
+        {
+            targetId = targetedUnit->id;
+            orderIndex = RallyUnit;
+        }
+
+        Ref<Point> tilePosition = Null<Point>();
+
+        auto mmPosition = g->uiManager->getMinimapPosition(g->cursor->position);
+        tilePosition = (mmPosition == nullptr) ?
+                       g->tileManager->getTilePosition(g->cursor->worldPosition->x, g->cursor->worldPosition->y) : mmPosition;
+
+        auto sb = New<Sova::StringBuilder>();
+        sb->Append(New<Sova::String>("unit/1.0/order|"));
+        sb->Append(g->gameServerPlayerToken);
+        sb->Append(New<Sova::String>("|"));
+        bool first = true;
+        for (auto iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
+            if (first)
+            {
+                first = false;
+            }
+            else
+            {
+                sb->Append(New<Sova::String>(","));
+            }
+
+            auto unit = iterator->Get();
+            Ref<Int> intObj = New<Int>(unit->id);
+            sb->Append(intObj->ToString());
+
+            unit->currentOrder = orderIndex;
+        }
+        sb->Append(New<Sova::String>("|"));
+        sb->Append(New<Int>(orderIndex)->ToString());
+        sb->Append(New<Sova::String>(","));
+        if (orderIndex == RallyPoint) {
+            sb->Append(New<Int>(tilePosition->x)->ToString());
+            sb->Append(New<Sova::String>(","));
+            sb->Append(New<Int>(tilePosition->y)->ToString());
+        }
+        if (orderIndex == RallyUnit){
+            sb->Append(New<Int>(targetId)->ToString());
+        }
 
         g->gameServer->send(sb->ToString());
     }

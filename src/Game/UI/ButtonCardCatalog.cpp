@@ -67,5 +67,11 @@ namespace DsprFrontend
         villagerButton->setAction([&]{
            this->buttonActions->createVillagerAction();
         });
+        
+        auto rallyButton = New<Button>(g->spriteCatalog->sprCommandActions, 6, true, Key::Y); rallyButton->usesSubframes = true;
+        this->templeCommandCard->AddButton(rallyButton);
+        rallyButton->setAction([&]{
+            this->buttonActions->rallyAction();
+        });
     }
 }

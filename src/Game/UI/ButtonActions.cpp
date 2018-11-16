@@ -39,4 +39,8 @@ namespace DsprFrontend
     void ButtonActions::gatherAction() {
         this->g->unitManager->issueUnitOrderGather();
     }
+
+    void ButtonActions::rallyAction() {
+        this->g->unitManager->issueUnitOrderRally();
+    }
 }

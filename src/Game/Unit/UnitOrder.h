@@ -17,6 +17,8 @@ namespace DsprFrontend {
         Pickup,
         ItemSwap,
         ItemDrop,
-        ItemGive
+        ItemGive,
+        RallyPoint,
+        RallyUnit
     };
 }
