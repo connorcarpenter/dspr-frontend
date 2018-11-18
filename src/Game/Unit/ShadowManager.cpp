@@ -17,7 +17,7 @@ namespace DsprFrontend {
     void ShadowManager::drawSelf(Ref<Camera> camera, int xoffset, int yoffset) {
         auto g = (Global*) InternalApp::getGlobal();
 
-        for (auto iterator = g->unitManager->getUnits()->GetIterator(); iterator->Valid(); iterator->Next()) {
+        for (auto iterator = g->unitManager->getUnitsIterator(); iterator->Valid(); iterator->Next()) {
             auto unit = iterator->Get();
             if (!unit->unitTemplate->hasShadow) continue;
             unit->drawShadow(camera, xoffset, yoffset);

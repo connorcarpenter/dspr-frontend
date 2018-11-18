@@ -6,6 +6,7 @@
 
 #include <Sova/References/Refable.h>
 #include <Sova/Graphics/Pixel.h>
+#include <Sova/Common/Map.h>
 #include "Sova/Common/Int.h"
 #include "UnitOrder.h"
 #include "RefIsoGrid.h"
@@ -32,7 +33,7 @@ namespace DsprFrontend
         Ref<List<Unit>> getNonHoveringUnitsWithinBox(int x1, int y1, int x2, int y2);
         Ref<List<Unit>> getUnitsOutsideBox(Ref<List<Unit>> hoverList, int x1, int y1, int x2, int y2);
         void deselectAllUnits();
-        Ref<List<Unit>> getUnits();
+        Ref<MapIterator<Unit>> getUnitsIterator();
         void issueUnitOrder(bool attackOrderSelected);
         Ref<List<Unit>> getSelectedUnits();
         Ref<Unit> getUnitWithId(int id);
@@ -54,7 +55,7 @@ namespace DsprFrontend
         void issueUnitOrderRally();
 
     private:
-        Ref<List<Unit>> unitList = Null<List<Unit>>();
+        Ref<Map<Unit>> unitMap = Null<Map<Unit>>();
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
         Ref<RefIsoGrid<Unit>> unitGrid = Null<RefIsoGrid<Unit>>();
         bool receivedGrid = false;

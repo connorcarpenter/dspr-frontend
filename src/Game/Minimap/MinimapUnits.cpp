@@ -25,8 +25,7 @@ namespace DsprFrontend
 
     void MinimapUnits::drawSelf(Sova::Ref<Camera> camera, int xoffset, int yoffset)
     {
-        auto unitList = this->g->unitManager->getUnits();
-        for (auto iterator = unitList->GetIterator(); iterator->Valid(); iterator->Next())
+        for (auto iterator = this->g->unitManager->getUnitsIterator(); iterator->Valid(); iterator->Next())
         {
             auto unit = iterator->Get();
 

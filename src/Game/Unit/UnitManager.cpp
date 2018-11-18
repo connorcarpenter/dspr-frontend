@@ -28,7 +28,7 @@ namespace DsprFrontend
 {
     UnitManager::UnitManager()
     {
-        this->unitList = New<List<Unit>>();
+        this->unitMap = New<Map<Unit>>();
         this->selectionList = New<List<Int>>();
         this->minimapPixel = New<Pixel>();
         this->minimapPixel->setLineStyle(1, Color::White);
@@ -114,7 +114,7 @@ namespace DsprFrontend
     void UnitManager::deselectAllUnits()
     {
         this->selectionList->Clear();
-        for (auto iterator = this->unitList->GetIterator(); iterator->Valid(); iterator->Next())
+        for (auto iterator = this->unitMap->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto unit = iterator->Get();
             unit->selected = false;
@@ -151,7 +151,7 @@ namespace DsprFrontend
         auto newUnit = New<Unit>(id, x, y, tribeIndex, unitTemplate);
 
         g->world->AddChild(newUnit);
-        this->unitList->Add(newUnit);
+        this->unitMap->Insert(id, newUnit);
 
         this->updateUnitPosition(newUnit, Null<Point>(), newUnit->nextTilePosition);
     }
@@ -160,9 +160,7 @@ namespace DsprFrontend
     {
         int id = atoi(idStr->AsCStr());
 
-        Ref<Unit> unit = this->unitList->Find([&](Ref<Unit> inspectUnit) { //replace this with a Hash lookup someday!
-            return (inspectUnit->id == id);
-        });
+        Ref<Unit> unit = this->unitMap->At(id);
 
         if (unit == nullptr) return;
 
@@ -325,9 +323,7 @@ namespace DsprFrontend
     {
         int id = atoi(idStr->AsCStr());
 
-        Ref<Unit> unit = this->unitList->Find([&](Ref<Unit> inspectUnit) { //replace this with a Hash lookup someday!
-            return (inspectUnit->id == id);
-        });
+        Ref<Unit> unit = this->unitMap->At(id);
 
         if (unit == nullptr) return;
 
@@ -357,7 +353,7 @@ namespace DsprFrontend
             g->fogManager->conceilFog(unit->tilePosition->x, unit->tilePosition->y, unit->unitTemplate->sight);
         }
 
-        this->unitList->Remove(unit);
+        this->unitMap->Erase(unit->id);
         this->selectionList->Remove(unit);
         this->updateUnitPosition(unit, unit->nextTilePosition, Null<Point>());
         unit->Destroy();
@@ -367,14 +363,8 @@ namespace DsprFrontend
         return this->selectionList;
     }
 
-    Ref<List<Unit>> UnitManager::getUnits() {
-        return this->unitList;
-    }
-
     Ref<Unit> UnitManager::getUnitWithId(int id) {
-        return this->unitList->Find([&](Ref<Unit> evalUnit){
-            return evalUnit->id ==  id;
-        });
+        return this->unitMap->At(id);
     }
 
     void UnitManager::issueUnitOrder(bool attackOrderSelected)
@@ -779,5 +769,9 @@ namespace DsprFrontend
                 return Color::Blue;
                 break;
         }
+    }
+
+    Ref<MapIterator<Unit>> UnitManager::getUnitsIterator() {
+        return this->unitMap->GetIterator();
     }
 }
