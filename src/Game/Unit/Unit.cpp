@@ -607,6 +607,12 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getGlobal();
 
+        //preemptively cut out of this if possible
+        int rx = xoffset + this->position->x - (int) (this->anchor->x * this->scale->x);
+        int ry = yoffset + this->position->y - (int) (this->anchor->y * this->scale->y);
+        if (!this->spriteInsideCameraBounds(camera, rx, ry)) return;
+        ////////////////////////////////////////////////
+
         if (this->selected)
         {
             this->unitTemplate->sprSelectCircle->tint = (this->tribeIndex==-1) ?
@@ -717,6 +723,12 @@ namespace DsprFrontend
 
     void Unit::drawShadow(Ref<Camera> camera, int xoffset, int yoffset)
     {
+        //preemptively cut out of this if possible
+        int rx = xoffset + this->position->x - (int) (this->anchor->x * this->scale->x);
+        int ry = yoffset + this->position->y - (int) (this->anchor->y * this->scale->y);
+        if (!this->spriteInsideCameraBounds(camera, rx, ry)) return;
+        ////////////////////////////////////////////////
+
         int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
         const int theSkewX = -6;
         const float theAlpha = 0.25f;

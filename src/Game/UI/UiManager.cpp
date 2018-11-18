@@ -260,6 +260,7 @@ namespace DsprFrontend
         if (this->currentButtonCard != nullptr) {
             for (auto iterator = this->currentButtonCard->buttonList->GetIterator(); iterator->Valid(); iterator->Next()) {
                 auto button = iterator->Get();
+                if (button == nullptr) continue;
                 if (InternalApp::getInternalApp()->keyPressed(button->keyboardShortcut)){
                     if (!button->needKeyUp) {
                         if (button->requiresClickOnGameArea) {
@@ -627,6 +628,10 @@ namespace DsprFrontend
                     if (!iterator->Valid()) break;
 
                     auto button = iterator->Get();
+                    if (button == nullptr) {
+                        iterator->Next();
+                        continue;
+                    }
 
                     int leftX = 208 + (11 * i);
                     int upY = 103 + 13*j;
