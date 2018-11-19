@@ -4,6 +4,7 @@
 
 #include <Sova/Internal/InternalApp.h>
 #include <Sova/Common/StringBuilder.h>
+#include "../DsprMessage/ToServerMsg.h"
 #include "MessageSender.h"
 
 namespace DsprFrontend {

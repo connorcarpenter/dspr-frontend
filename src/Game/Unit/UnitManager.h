@@ -7,6 +7,7 @@
 #include <Sova/References/Refable.h>
 #include <Sova/Graphics/Pixel.h>
 #include <Sova/Common/Map.h>
+#include <DsprMessage/ToClientMsg.h>
 #include "Sova/Common/Int.h"
 #include "UnitOrder.h"
 #include "RefIsoGrid.h"
@@ -23,6 +24,7 @@ namespace DsprFrontend
         UnitManager();
         void receiveUnit(int id, int x, int y, int tribeIndex,
                          int templateIndex);
+        void receiveUnitUpdate(DsprMessage::UnitUpdateMsgV1);
         void receiveUnitUpdate(int id, Ref<List<String>> propsSplitStr);
         void receiveUnitDelete(int id, Ref<Sova::String> propsStr);
 

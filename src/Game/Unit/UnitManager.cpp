@@ -150,6 +150,118 @@ namespace DsprFrontend
         this->updateUnitPosition(newUnit, Null<Point>(), newUnit->nextTilePosition);
     }
 
+    void UnitManager::receiveUnitUpdate(DsprMessage::UnitUpdateMsgV1 updateMsg) {
+        Ref<Unit> unit = this->unitMap->At(updateMsg.id.get());
+
+        if (unit == nullptr) return;
+
+        if (updateMsg.nextPosition.wasSet)
+        {
+            int x = updateMsg.nextPosition.getA();
+            int y = updateMsg.nextPosition.getB();
+            this->updateUnitPosition(unit, unit->nextTilePosition, New<Point>(x, y));
+            unit->newNextTilePosition(x, y);
+        }
+
+        if (updateMsg.moveTarget.wasSet)
+        {
+            unit->moveTarget->x = updateMsg.moveTarget.getA();
+            unit->moveTarget->y = updateMsg.moveTarget.getB();
+        }
+
+        if (updateMsg.animationState.wasSet)
+        {
+            unit->setAnimationState(static_cast<Unit::UnitAnimationState >(updateMsg.animationState.getA()),
+                                    updateMsg.animationState.getB());
+        }
+
+        if (updateMsg.health.wasSet)
+        {
+            unit->health = updateMsg.health.get();
+        }
+
+        if (updateMsg.bleed.wasSet)
+        {
+            auto g = (Global*) InternalApp::getGlobal();
+            if (unit->unitTemplate->bleeds && updateMsg.bleed.get() == 1)
+            {
+                auto bloodPartNum = Math::Random(1, 2);
+                for (int i = 0; i < bloodPartNum; i++)
+                    g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0, 6), unit->depth, unit->unitTemplate->bloodColor));
+            }
+        }
+
+        if (updateMsg.targetUnitId.wasSet)
+        {
+            unit->targetUnitId  = updateMsg.targetUnitId.get();
+        }
+
+        if (updateMsg.gatherYield.wasSet)
+        {
+            int gatherRate = updateMsg.gatherYield.getA();
+            if (gatherRate != 0) {
+                unit->gatherYield(gatherRate);
+                auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
+                if (unit->tribeIndex == g->playersTribeIndex)
+                    g->economyManager->setMana(updateMsg.gatherYield.getB());
+            }
+        }
+
+        if (updateMsg.constructionQueue.wasSet)
+        {
+            DsprMessage::ConstructionQueueMsgV1 cqMsg(updateMsg.constructionQueue.get());
+
+            if (cqMsg.buildTime.wasSet)
+            {
+                unit->constructionQueue->currentBuildTime = cqMsg.buildTime.get();
+            }
+
+            if (cqMsg.queue.wasSet)
+            {
+                if (cqMsg.queue.numBytes != 0) {
+
+                    auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
+
+                    unit->constructionQueue->emptyQueue();
+                    for (int i = 0; i < cqMsg.queue.numBytes; i++) {
+                        int index = cqMsg.queue.getArray(i);
+                        Ref<UnitTemplate> ut = g->unitTemplateCatalog->findTemplateByIndex(index);
+                        unit->constructionQueue->enqueue(ut);
+                    }
+                }
+            }
+        }
+
+        if (updateMsg.inventory.wasSet)
+        {
+            auto g = (Global*) InternalApp::getGlobal();
+
+            for(int i=0;i<updateMsg.inventory.numBytes;i++) {
+                int itemIndex = updateMsg.inventory.getArray(i);
+                if (unit == g->cursor->itemInHandOwner && g->cursor->itemInHandSlotIndex == itemIndex) {
+                    g->cursor->setItemInHandTemplate(g->itemTemplateCatalog->findTemplateByIndex(itemIndex));
+                } else {
+                    unit->inventory->SetItemIndex(itemIndex, g->itemTemplateCatalog->findTemplateByIndex(itemIndex));
+                }
+            }
+        }
+
+        if (updateMsg.rallyPoint.wasSet)
+        {
+            if (unit->unitTemplate->hasRallyPoint) {
+                unit->rallyPoint->x = updateMsg.rallyPoint.getA();
+                unit->rallyPoint->y = updateMsg.rallyPoint.getB();
+            }
+        }
+
+        if (updateMsg.rallyUnitId.wasSet)
+        {
+            if (unit->unitTemplate->hasRallyPoint) {
+                unit->rallyUnitId = updateMsg.rallyUnitId.get();
+            }
+        }
+    }
+
     void UnitManager::receiveUnitUpdate(int id, Ref<List<String>> propsSplitStr)
     {
         Ref<Unit> unit = this->unitMap->At(id);
