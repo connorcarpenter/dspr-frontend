@@ -150,40 +150,40 @@ namespace DsprFrontend
         this->updateUnitPosition(newUnit, Null<Point>(), newUnit->nextTilePosition);
     }
 
-    void UnitManager::receiveUnitUpdate(DsprMessage::UnitUpdateMsgV1 updateMsg) {
-        Ref<Unit> unit = this->unitMap->At(updateMsg.id.get());
+    void UnitManager::receiveUnitUpdate(DsprMessage::UnitUpdateMsgV1 *updateMsg) {
+        Ref<Unit> unit = this->unitMap->At(updateMsg->id.get());
 
         if (unit == nullptr) return;
 
-        if (updateMsg.nextPosition.wasSet)
+        if (updateMsg->nextPosition.wasSet)
         {
-            int x = updateMsg.nextPosition.getA();
-            int y = updateMsg.nextPosition.getB();
+            int x = updateMsg->nextPosition.getA();
+            int y = updateMsg->nextPosition.getB();
             this->updateUnitPosition(unit, unit->nextTilePosition, New<Point>(x, y));
             unit->newNextTilePosition(x, y);
         }
 
-        if (updateMsg.moveTarget.wasSet)
+        if (updateMsg->moveTarget.wasSet)
         {
-            unit->moveTarget->x = updateMsg.moveTarget.getA();
-            unit->moveTarget->y = updateMsg.moveTarget.getB();
+            unit->moveTarget->x = updateMsg->moveTarget.getA();
+            unit->moveTarget->y = updateMsg->moveTarget.getB();
         }
 
-        if (updateMsg.animationState.wasSet)
+        if (updateMsg->animationState.wasSet)
         {
-            unit->setAnimationState(static_cast<Unit::UnitAnimationState >(updateMsg.animationState.getA()),
-                                    updateMsg.animationState.getB());
+            unit->setAnimationState(static_cast<Unit::UnitAnimationState >(updateMsg->animationState.getA()),
+                                    updateMsg->animationState.getB());
         }
 
-        if (updateMsg.health.wasSet)
+        if (updateMsg->health.wasSet)
         {
-            unit->health = updateMsg.health.get();
+            unit->health = updateMsg->health.get();
         }
 
-        if (updateMsg.bleed.wasSet)
+        if (updateMsg->bleed.wasSet)
         {
             auto g = (Global*) InternalApp::getGlobal();
-            if (unit->unitTemplate->bleeds && updateMsg.bleed.get() == 1)
+            if (unit->unitTemplate->bleeds && updateMsg->bleed.get() == 1)
             {
                 auto bloodPartNum = Math::Random(1, 2);
                 for (int i = 0; i < bloodPartNum; i++)
@@ -191,25 +191,25 @@ namespace DsprFrontend
             }
         }
 
-        if (updateMsg.targetUnitId.wasSet)
+        if (updateMsg->targetUnitId.wasSet)
         {
-            unit->targetUnitId  = updateMsg.targetUnitId.get();
+            unit->targetUnitId  = updateMsg->targetUnitId.get();
         }
 
-        if (updateMsg.gatherYield.wasSet)
+        if (updateMsg->gatherYield.wasSet)
         {
-            int gatherRate = updateMsg.gatherYield.getA();
+            int gatherRate = updateMsg->gatherYield.getA();
             if (gatherRate != 0) {
                 unit->gatherYield(gatherRate);
                 auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
                 if (unit->tribeIndex == g->playersTribeIndex)
-                    g->economyManager->setMana(updateMsg.gatherYield.getB());
+                    g->economyManager->setMana(updateMsg->gatherYield.getB());
             }
         }
 
-        if (updateMsg.constructionQueue.wasSet)
+        if (updateMsg->constructionQueue.wasSet)
         {
-            DsprMessage::ConstructionQueueMsgV1 cqMsg(updateMsg.constructionQueue.get());
+            DsprMessage::ConstructionQueueMsgV1 cqMsg(updateMsg->constructionQueue.get());
 
             if (cqMsg.buildTime.wasSet)
             {
@@ -232,32 +232,34 @@ namespace DsprFrontend
             }
         }
 
-        if (updateMsg.inventory.wasSet)
+        if (updateMsg->inventory.wasSet)
         {
             auto g = (Global*) InternalApp::getGlobal();
 
-            for(int i=0;i<updateMsg.inventory.numBytes;i++) {
-                int itemIndex = updateMsg.inventory.getArray(i);
-                if (unit == g->cursor->itemInHandOwner && g->cursor->itemInHandSlotIndex == itemIndex) {
+            for(int i=0;i<updateMsg->inventory.numBytes;i++) {
+                int itemIndex = updateMsg->inventory.getArray(i);
+                if (itemIndex == 0)continue;
+                itemIndex--;
+                if (unit == g->cursor->itemInHandOwner && g->cursor->itemInHandSlotIndex == i) {
                     g->cursor->setItemInHandTemplate(g->itemTemplateCatalog->findTemplateByIndex(itemIndex));
                 } else {
-                    unit->inventory->SetItemIndex(itemIndex, g->itemTemplateCatalog->findTemplateByIndex(itemIndex));
+                    unit->inventory->SetItemIndex(i, g->itemTemplateCatalog->findTemplateByIndex(itemIndex));
                 }
             }
         }
 
-        if (updateMsg.rallyPoint.wasSet)
+        if (updateMsg->rallyPoint.wasSet)
         {
             if (unit->unitTemplate->hasRallyPoint) {
-                unit->rallyPoint->x = updateMsg.rallyPoint.getA();
-                unit->rallyPoint->y = updateMsg.rallyPoint.getB();
+                unit->rallyPoint->x = updateMsg->rallyPoint.getA();
+                unit->rallyPoint->y = updateMsg->rallyPoint.getB();
             }
         }
 
-        if (updateMsg.rallyUnitId.wasSet)
+        if (updateMsg->rallyUnitId.wasSet)
         {
             if (unit->unitTemplate->hasRallyPoint) {
-                unit->rallyUnitId = updateMsg.rallyUnitId.get();
+                unit->rallyUnitId = updateMsg->rallyUnitId.get();
             }
         }
     }

@@ -91,50 +91,58 @@ namespace DsprFrontend
         std::cout << "Gameserver Start" << std::endl;
     }
 
-    void NetworkManager::OnGameServerUpdate(Ref<Sova::String> message)
+    void NetworkManager::OnGameServerUpdate(Ref<Sova::String> message1)
     {
-        message = message->TrimEnd("\r\n")->TrimStart("\n");
+        //message = message->TrimEnd("\r\n")->TrimStart("\n");
 
-        DsprMessage::_cstr theCStr((char*) message->AsCStr(), message->Length());
+        DsprMessage::_cstr theCStr((char*) message1->AsCStr(), message1->Length());
         DsprMessage::ToClientMsg clientMsg(theCStr);
         if (clientMsg.msgType.get() == DsprMessage::ToClientMsg::UnitUpdate)
         {
-            DsprMessage::UnitUpdateMsgV1 unitUpdateMsg(clientMsg.msgBytes.get());
+            auto unitUpdateMsg = new DsprMessage::UnitUpdateMsgV1(clientMsg.msgBytes.get());
             //int id = unitUpdateMsg.id.get();
             g->unitManager->receiveUnitUpdate(unitUpdateMsg);
+            delete unitUpdateMsg;
             return;
         }
         else
         if (clientMsg.msgType.get() == DsprMessage::ToClientMsg::StandardMessage)
         {
             auto msgBytes = clientMsg.msgBytes.get();
-            auto newMsg = New<String>(msgBytes.innerCstr, msgBytes.number, true);
-            auto ss = New<StringScanner>(newMsg);
 
-            if (ss->EqualsUntil("auth/1.0/gametoken", '|')) {
+            char* newCstr = new char[msgBytes.number-1];
+            for(int i =0;i<msgBytes.number-2;i++)
+                newCstr[i] = msgBytes.getDs(i)+1;
+            newCstr[msgBytes.number-2] = '\0';
+
+            auto newMsg = New<String>(newCstr, true);
+
+            auto splitString = newMsg->Split('|');
+
+            if (splitString->At(0)->Equals("auth/1.0/gametoken")) {
                 this->messageSender->sendStartGameMessage();
                 return;
-            } else if (ss->EqualsUntil("tribe/1.0/set", '|')) {
-                auto splitString = message->Split('|');
+            } else if (splitString->At(0)->Equals("tribe/1.0/set")) {
+
                 g->playersTribeIndex = atoi(splitString->At(1)->AsCStr());
                 return;
-            } else if (ss->EqualsUntil("grid/1.0/create", '|')) {
-                auto splitString = message->Split('|');
+            } else if (splitString->At(0)->Equals("grid/1.0/create")) {
+
                 auto gridString = splitString->At(1)->Split(',');
                 auto gridWidth = atoi(gridString->At(0)->AsCStr());
                 auto gridHeight = atoi(gridString->At(1)->AsCStr());
                 g->tileManager->receiveGrid(gridWidth, gridHeight);
                 return;
-            } else if (ss->EqualsUntil("tile/1.0/create", '|')) {
-                auto splitString = message->Split('|');
+            } else if (splitString->At(0)->Equals("tile/1.0/create")) {
+
                 auto tileString = splitString->At(1)->Split(',');
                 int tileX = atoi(tileString->At(0)->AsCStr());
                 int tileY = atoi(tileString->At(1)->AsCStr());
                 int tileFrame = atoi(tileString->At(2)->AsCStr());
                 g->tileManager->receiveTile(tileX, tileY, tileFrame);
                 return;
-            } else if (ss->EqualsUntil("unit/1.0/create", '|')) {
-                auto splitString = message->Split('|');
+            } else if (splitString->At(0)->Equals("unit/1.0/create")) {
+
                 auto unitString = splitString->At(1)->Split(',');
                 int id = atoi(unitString->At(0)->AsCStr());
                 int x = atoi(unitString->At(1)->AsCStr());
@@ -143,27 +151,27 @@ namespace DsprFrontend
                 int templateIndex = atoi(unitString->At(4)->AsCStr());
                 g->unitManager->receiveUnit(id, x, y, tribeIndex, templateIndex);
                 return;
-            } else if (ss->EqualsUntil("unit/1.0/update", '|')) {
+            } else if (splitString->At(0)->Equals("unit/1.0/update")) {
                 int what = 0;//huh? how'd we get here
-                auto splitString = message->Split('|');
+
                 auto idString = splitString->At(1);
                 auto propsString = splitString->At(2);
                 int id = atoi(idString->AsCStr());
                 g->unitManager->receiveUnitUpdate(id, propsString->Split('&'));
                 return;
-            } else if (ss->EqualsUntil("unit/1.0/delete", '|')) {
-                auto splitString = message->Split('|');
+            } else if (splitString->At(0)->Equals("unit/1.0/delete")) {
+
                 auto idString = splitString->At(1);
                 auto propsString = splitString->At(2);
                 int id = atoi(idString->AsCStr());
                 g->unitManager->receiveUnitDelete(id, propsString);
                 return;
-            } else if (ss->EqualsUntil("economy/1.0/update", '|')) {
-                ss->Advance(19);
-                g->economyManager->receiveUpdate(ss);
+            } else if (splitString->At(0)->Equals("economy/1.0/update")) {
+                //ss->Advance(19);
+                //->economyManager->receiveUpdate(ss);
                 return;
-            } else if (ss->EqualsUntil("item/1.0/create", '|')) {
-                auto splitString = message->Split('|');
+            } else if (splitString->At(0)->Equals("item/1.0/create")) {
+
                 auto itemString = splitString->At(1)->Split(',');
                 int id = atoi(itemString->At(0)->AsCStr());
                 int x = atoi(itemString->At(1)->AsCStr());
@@ -171,14 +179,14 @@ namespace DsprFrontend
                 int index = atoi(itemString->At(3)->AsCStr());
                 g->itemManager->receiveItem(id, x, y, index);
                 return;
-            } else if (ss->EqualsUntil("item/1.0/delete", '|')) {
-                auto splitString = message->Split('|');
+            } else if (splitString->At(0)->Equals("item/1.0/delete")) {
+
                 auto idString = splitString->At(1);
                 int id = atoi(idString->AsCStr());
                 g->itemManager->receiveItemDelete(id);
                 return;
-            } else if (ss->EqualsUntil("chat/1.0/send", '|')) {
-                auto splitString = message->Split('|');
+            } else if (splitString->At(0)->Equals("chat/1.0/send")) {
+
                 auto tribeIndex = atoi(splitString->At(1)->AsCStr());
                 auto msgString = splitString->At(2);
                 g->chatManager->receiveMessage(tribeIndex, msgString);
