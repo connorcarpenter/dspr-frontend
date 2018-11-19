@@ -56,6 +56,10 @@ namespace DsprFrontend
 
         void issueUnitOrderRally();
 
+        int getNumberOfUnits();
+
+        void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
+
     private:
         Ref<Map<Unit>> unitMap = Null<Map<Unit>>();
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();
@@ -63,8 +67,6 @@ namespace DsprFrontend
         bool receivedGrid = false;
         int gridWidth;
         int gridHeight;
-
-        void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
 
     };
 }

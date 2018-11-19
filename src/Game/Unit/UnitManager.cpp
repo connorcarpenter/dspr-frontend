@@ -880,4 +880,8 @@ namespace DsprFrontend
     Ref<MapIterator<Unit>> UnitManager::getUnitsIterator() {
         return this->unitMap->GetIterator();
     }
+
+    int UnitManager::getNumberOfUnits() {
+        return this->unitMap->Size();
+    }
 }
