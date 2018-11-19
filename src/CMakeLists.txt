@@ -20,6 +20,7 @@ fips_begin_app(dspr-frontend windowed)
             Network/NetworkManager.h Network/NetworkManager.cpp
             Network/MessageSender.h Network/MessageSender.cpp
             Network/MessageReceiver.h Network/MessageReceiver.cpp
+            Network/StringScanner.h Network/StringScanner.cpp
 
             Game/Unit/Unit.h Game/Unit/Unit.cpp
             Game/Unit/DyingUnit.h Game/Unit/DyingUnit.cpp

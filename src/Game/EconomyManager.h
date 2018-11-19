@@ -6,7 +6,7 @@
 
 #include <Sova/References/Refable.h>
 #include <Sova/Common/String.h>
-
+#include "../Network/StringScanner.h"
 using namespace Sova;
 
 namespace DsprFrontend {
@@ -16,14 +16,14 @@ namespace DsprFrontend {
         EconomyManager();
         int getMana();
 
-        void receiveUpdate(Ref<List<String>> propsStrList);
-
+        void receiveUpdate(Ref<StringScanner> ss);
         void setMana(int value);
 
         int mana = 0;
         int pop = 3;
         int popMax = 25;
     private:
+
 
     };
 }

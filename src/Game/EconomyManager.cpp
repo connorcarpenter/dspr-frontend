@@ -2,6 +2,7 @@
 // Created by connor on 10/31/18.
 //
 
+#include <Network/StringScanner.h>
 #include "EconomyManager.h"
 
 namespace DsprFrontend {
@@ -21,34 +22,34 @@ namespace DsprFrontend {
         }
     }
 
-    void EconomyManager::receiveUpdate(Ref<List<Sova::String>> propsStrList)
+    void EconomyManager::receiveUpdate(Ref<StringScanner> ss)
     {
-        for (auto iterator = propsStrList->GetIterator(); iterator->Valid(); iterator->Next())
-        {
-            auto propsStr = iterator->Get();
-            auto propsParts = propsStr->Split(':');
-
-            auto propName = propsParts->At(0);
-
-            if (propName->Equals("mana"))
-            {
-                int amount = atoi(propsParts->At(1)->AsCStr());
+        while(!ss->IsAtEnd()) {
+            if (ss->EqualsUntil("mana", ':')) {
+                ss->Advance(5);
+                if (ss->IsAtEnd())return;
+                char *cstr = ss->CstrAndAdvanceUntil('&');
+                if (cstr == nullptr) return;
+                int amount = atoi(cstr);
+                ss->CleanCstr();
                 this->setMana(amount);
-                continue;
-            }
-            else
-            if (propName->Equals("pop"))
-            {
-                int amount = atoi(propsParts->At(1)->AsCStr());
+            } else if (ss->EqualsUntil("pop", ':')) {
+                ss->Advance(4);
+                if (ss->IsAtEnd())return;
+                char *cstr = ss->CstrAndAdvanceUntil('&');
+                if (cstr == nullptr) return;
+                int amount = atoi(cstr);
+                ss->CleanCstr();
                 this->pop = amount;
-                continue;
-            }
-            else
-            if (propName->Equals("popMax"))
-            {
-                int amount = atoi(propsParts->At(1)->AsCStr());
+
+            } else if (ss->EqualsUntil("popMax", ':')) {
+                ss->Advance(7);
+                if (ss->IsAtEnd())return;
+                char *cstr = ss->CstrAndAdvanceUntil('&');
+                if (cstr == nullptr) return;
+                int amount = atoi(cstr);
+                ss->CleanCstr();
                 this->popMax = amount;
-                continue;
             }
         }
     }
