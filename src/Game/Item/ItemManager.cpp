@@ -28,8 +28,7 @@ namespace DsprFrontend {
         this->updateItemPosition(newItem, Null<Point>(), newItem->tilePosition);
     }
 
-    void ItemManager::receiveItemDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr) {
-        int id = atoi(idStr->AsCStr());
+    void ItemManager::receiveItemDelete(int id) {
 
         Ref<Item> item = this->itemList->Find([&](Ref<Item> inspectItem) { //replace this with a Hash lookup someday!
             return (inspectItem->id == id);

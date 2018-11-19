@@ -15,7 +15,7 @@ namespace DsprFrontend {
         ItemManager();
         void receiveItem(int id, int x, int y,
                          int index);
-        void receiveItemDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr);
+        void receiveItemDelete(int id);
         void receiveGrid(int w, int h);
 
         Ref<Item> getItemOverlappingWithPoint(int x, int y);

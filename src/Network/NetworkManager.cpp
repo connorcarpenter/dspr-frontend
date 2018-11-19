@@ -162,8 +162,8 @@ namespace DsprFrontend
         }
         else if (command->Equals("item/1.0/delete")) {
             auto idString = splitString->At(1);
-            auto propsString = splitString->At(2);
-            g->itemManager->receiveItemDelete(idString, propsString);
+            int id = atoi(idString->AsCStr());
+            g->itemManager->receiveItemDelete(id);
             return;
         }
         else if (command->Equals("chat/1.0/send")) {
