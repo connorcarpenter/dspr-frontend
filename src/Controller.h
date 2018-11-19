@@ -20,7 +20,7 @@
 #include "SpriteCatalog.h"
 #include "Game/TileManager.h"
 #include "Game/Minimap/Minimap.h"
-#include "NetworkManager.h"
+#include "Network/NetworkManager.h"
 #include "Game/UI/Cursor.h"
 #include "Game/UI/ButtonCardCatalog.h"
 #include "Circle/CircleCache.h"

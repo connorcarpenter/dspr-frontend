@@ -23,6 +23,8 @@ namespace DsprFrontend
     NetworkManager::NetworkManager()
     {
         this->g = (Global*) InternalApp::getGlobal();
+        this->messageSender = New<MessageSender>();
+        this->messageReceiver = New<MessageReceiver>();
 
         Ref<HttpRequest> bffReq = g->app->makeHttpRequest(New<Sova::String>("GET"), New<Sova::String>("http://www.deuspora.com:3170/orchestrator/bff"));
         bffReq->onResponse(
@@ -53,11 +55,11 @@ namespace DsprFrontend
     {
         message = message->TrimEnd("\r\n");
 
-        Ref<List<Sova::String>> splitString = message->Split('|');
+        auto splitString = message->Split('|');
 
         if (splitString->Size() != 3) return;
 
-        Ref<Sova::String> command = splitString->At(0);
+        auto command = splitString->At(0);
         if (command->Equals("gameserver/connect"))
         {
             auto addressBody = splitString->At(1);
@@ -90,18 +92,15 @@ namespace DsprFrontend
     {
         message = message->TrimEnd("\r\n")->TrimStart("\n");
 
-        Ref<List<Sova::String>> splitString = message->Split('|');
+        auto splitString = message->Split('|');
 
         if (splitString->Size() < 2) return;
 
-        Ref<Sova::String> command = splitString->At(0);
+        auto command = splitString->At(0);
 
         if (command->Equals("auth/1.0/gametoken"))
         {
-            auto sb = New<Sova::StringBuilder>();
-            sb->Append(New<Sova::String>("auth/1.0/gametoken|"));
-            sb->Append(g->gameServerPlayerToken);
-            g->gameServer->send(sb->ToString());
+            this->messageSender->sendStartGameMessage();
             return;
         }
         else if (command->Equals("tribe/1.0/set")) {
@@ -109,31 +108,42 @@ namespace DsprFrontend
             return;
         }
         else if (command->Equals("grid/1.0/create")) {
-            Ref<List<Sova::String>> gridString = splitString->At(1)->Split(',');
-            g->tileManager->receiveGrid(gridString->At(0), gridString->At(1));
+            auto gridString = splitString->At(1)->Split(',');
+            auto gridWidth = atoi(gridString->At(0)->AsCStr());
+            auto gridHeight = atoi(gridString->At(1)->AsCStr());
+            g->tileManager->receiveGrid(gridWidth, gridHeight);
             return;
         }
         else if (command->Equals("tile/1.0/create")) {
-            Ref<List<Sova::String>> tileString = splitString->At(1)->Split(',');
-            g->tileManager->receiveTile(tileString->At(0), tileString->At(1), tileString->At(2));
+            auto tileString = splitString->At(1)->Split(',');
+            int tileX = atoi(tileString->At(0)->AsCStr());
+            int tileY = atoi(tileString->At(1)->AsCStr());
+            int tileFrame = atoi(tileString->At(2)->AsCStr());
+            g->tileManager->receiveTile(tileX, tileY, tileFrame);
             return;
         }
         else if (command->Equals("unit/1.0/create")) {
-            Ref<List<Sova::String>> unitString = splitString->At(1)->Split(',');
-            g->unitManager->receiveUnit(unitString->At(0), unitString->At(1), unitString->At(2), unitString->At(3),
-                                        unitString->At(4));
+            auto unitString = splitString->At(1)->Split(',');
+            int id = atoi(unitString->At(0)->AsCStr());
+            int x = atoi(unitString->At(1)->AsCStr());
+            int y = atoi(unitString->At(2)->AsCStr());
+            int tribeIndex = atoi(unitString->At(3)->AsCStr());
+            int templateIndex = atoi(unitString->At(4)->AsCStr());
+            g->unitManager->receiveUnit(id, x, y, tribeIndex, templateIndex);
             return;
         }
         else if (command->Equals("unit/1.0/update")) {
             auto idString = splitString->At(1);
             auto propsString = splitString->At(2);
-            g->unitManager->receiveUnitUpdate(idString, propsString->Split('&'));
+            int id = atoi(idString->AsCStr());
+            g->unitManager->receiveUnitUpdate(id, propsString->Split('&'));
             return;
         }
         else if (command->Equals("unit/1.0/delete")) {
             auto idString = splitString->At(1);
             auto propsString = splitString->At(2);
-            g->unitManager->receiveUnitDelete(idString, propsString);
+            int id = atoi(idString->AsCStr());
+            g->unitManager->receiveUnitDelete(id, propsString);
             return;
         }
         else if (command->Equals("economy/1.0/update")) {
@@ -142,8 +152,12 @@ namespace DsprFrontend
             return;
         }
         else if (command->Equals("item/1.0/create")) {
-            Ref<List<Sova::String>> itemString = splitString->At(1)->Split(',');
-            g->itemManager->receiveItem(itemString->At(0), itemString->At(1), itemString->At(2), itemString->At(3));
+            auto itemString = splitString->At(1)->Split(',');
+            int id = atoi(itemString->At(0)->AsCStr());
+            int x = atoi(itemString->At(1)->AsCStr());
+            int y = atoi(itemString->At(2)->AsCStr());
+            int index = atoi(itemString->At(3)->AsCStr());
+            g->itemManager->receiveItem(id, x, y, index);
             return;
         }
         else if (command->Equals("item/1.0/delete")) {

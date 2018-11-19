@@ -23,8 +23,8 @@ namespace DsprFrontend
 
         TileManager();
         ~TileManager();
-        void receiveGrid(Sova::Ref<Sova::String> width, Sova::Ref<Sova::String> height);
-        void receiveTile(Sova::Ref<Sova::String> x, Sova::Ref<Sova::String> y, Sova::Ref<Sova::String> frame);
+        void receiveGrid(int width, int height);
+        void receiveTile(int tileX, int tileY, int tileFrame);
         void Draw(Ref<Camera> camera, int xoffset, int yoffset);
 
         const int tileWidth = 20;

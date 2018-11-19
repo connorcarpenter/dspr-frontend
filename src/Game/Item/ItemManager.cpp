@@ -15,12 +15,8 @@ namespace DsprFrontend {
         this->itemList = New<List<Item>>();
     }
 
-    void ItemManager::receiveItem(Ref<Sova::String> idStr, Ref<Sova::String> xStr, Ref<Sova::String> yStr,
-                                                Ref<Sova::String> itemIndexStr) {
-        int id = atoi(idStr->AsCStr());
-        int x = atoi(xStr->AsCStr());
-        int y = atoi(yStr->AsCStr());
-        int index = atoi(itemIndexStr->AsCStr());
+    void ItemManager::receiveItem(int id, int x, int y,
+                                  int index) {
 
         auto g = (Global*) InternalApp::getGlobal();
         

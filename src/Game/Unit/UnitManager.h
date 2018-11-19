@@ -21,10 +21,10 @@ namespace DsprFrontend
     public:
 
         UnitManager();
-        void receiveUnit(Ref<Sova::String> id, Ref<Sova::String> x, Ref<Sova::String> y, Ref<Sova::String> tribeIndex,
-                                 Ref<Sova::String> templateIndexStr);
-        void receiveUnitUpdate(Ref<Sova::String> id, Ref<List<Sova::String>> propsStrList);
-        void receiveUnitDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr);
+        void receiveUnit(int id, int x, int y, int tribeIndex,
+                         int templateIndex);
+        void receiveUnitUpdate(int id, Ref<List<String>> propsSplitStr);
+        void receiveUnitDelete(int id, Ref<Sova::String> propsStr);
 
         void addToSelectionList(Ref<Unit> unit);
         void removeFromSelectionList(Ref<Unit> unit);

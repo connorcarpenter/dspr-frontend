@@ -136,15 +136,9 @@ namespace DsprFrontend
         }
     }
 
-    void UnitManager::receiveUnit(Ref<Sova::String> idStr, Ref<Sova::String> xStr, Ref<Sova::String> yStr,
-                                      Ref<Sova::String> tribeIndexStr, Ref<Sova::String> templateIndexStr)
+    void UnitManager::receiveUnit(int id, int x, int y,
+                                  int tribeIndex, int templateIndex)
     {
-        int id = atoi(idStr->AsCStr());
-        int x = atoi(xStr->AsCStr());
-        int y = atoi(yStr->AsCStr());
-        int tribeIndex = atoi(tribeIndexStr->AsCStr());
-        int templateIndex = atoi(templateIndexStr->AsCStr());
-
         auto g = (Global*) InternalApp::getGlobal();
 
         auto unitTemplate = g->unitTemplateCatalog->findTemplateByIndex(templateIndex);
@@ -156,15 +150,13 @@ namespace DsprFrontend
         this->updateUnitPosition(newUnit, Null<Point>(), newUnit->nextTilePosition);
     }
 
-    void UnitManager::receiveUnitUpdate(Ref<Sova::String> idStr, Ref<List<Sova::String>> propsStrList)
+    void UnitManager::receiveUnitUpdate(int id, Ref<List<String>> propsSplitStr)
     {
-        int id = atoi(idStr->AsCStr());
-
         Ref<Unit> unit = this->unitMap->At(id);
 
         if (unit == nullptr) return;
 
-        for (auto iterator = propsStrList->GetIterator(); iterator->Valid(); iterator->Next())
+        for (auto iterator = propsSplitStr->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto propsStr = iterator->Get();
             auto propsParts = propsStr->Split(':');
@@ -319,9 +311,9 @@ namespace DsprFrontend
         }
     }
 
-    void UnitManager::receiveUnitDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr)
+    void UnitManager::receiveUnitDelete(int id, Ref<Sova::String> propsStr)
     {
-        int id = atoi(idStr->AsCStr());
+        //int id = atoi(idStr->AsCStr());
 
         Ref<Unit> unit = this->unitMap->At(id);
 

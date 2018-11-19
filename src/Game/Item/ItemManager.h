@@ -13,8 +13,8 @@ namespace DsprFrontend {
     class ItemManager : public Sova::Refable {
     public:
         ItemManager();
-        void receiveItem(Ref<Sova::String> id, Ref<Sova::String> x, Ref<Sova::String> y,
-                         Ref<Sova::String> itemIndexStr);
+        void receiveItem(int id, int x, int y,
+                         int index);
         void receiveItemDelete(Ref<Sova::String> idStr, Ref<Sova::String> propsStr);
         void receiveGrid(int w, int h);
 

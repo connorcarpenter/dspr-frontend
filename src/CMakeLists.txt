@@ -6,7 +6,6 @@ fips_begin_app(dspr-frontend windowed)
             DsprShaderHandler.h DsprShaderHandler.cpp
             Game/Tile.h Game/Tile.cpp
             Game/TileManager.h Game/TileManager.cpp
-            NetworkManager.h NetworkManager.cpp
             Game/FogManager.h Game/FogManager.cpp
             DsprColors.h DsprColors.cpp
             Game/Block.h Game/Block.cpp
@@ -17,6 +16,10 @@ fips_begin_app(dspr-frontend windowed)
             ResourceList.h
             Game/EconomyManager.h Game/EconomyManager.cpp
             GraphicsManager.h GraphicsManager.cpp
+
+            Network/NetworkManager.h Network/NetworkManager.cpp
+            Network/MessageSender.h Network/MessageSender.cpp
+            Network/MessageReceiver.h Network/MessageReceiver.cpp
 
             Game/Unit/Unit.h Game/Unit/Unit.cpp
             Game/Unit/DyingUnit.h Game/Unit/DyingUnit.cpp

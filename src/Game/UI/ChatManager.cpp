@@ -9,6 +9,7 @@
 #include "ChatManager.h"
 #include "GraphicsManager.h"
 #include "Game/Unit/UnitManager.h"
+#include "Network/NetworkManager.h"
 
 namespace DsprFrontend {
 
@@ -99,13 +100,7 @@ namespace DsprFrontend {
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("chat/1.0/send|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(this->playerStr);
-        auto msgToSend = sb->ToString();
-        g->gameServer->send(msgToSend);
+        g->networkManager->messageSender->sendChatMessage(this->playerStr);
 
         this->addToMessageLog(g->playersTribeIndex, this->playerStr);
     }

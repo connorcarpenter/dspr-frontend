@@ -30,7 +30,7 @@ namespace DsprFrontend
     {
     }
 
-    void TileManager::receiveGrid(Ref<Sova::String> width, Ref<Sova::String> height)
+    void TileManager::receiveGrid(int width, int height)
     {
         if (this->receivedGrid) return;
 
@@ -38,8 +38,8 @@ namespace DsprFrontend
         this->texture = InternalApp::getInternalApp()->resourceManager.textures[textureString];
         this->visible = true;
 
-        this->gridWidth = atoi(width->AsCStr());
-        this->gridHeight = atoi(height->AsCStr());
+        this->gridWidth = width;
+        this->gridHeight = height;
         this->receivedGrid = true;
 
         this->tileGrid = New<RefIsoGrid<Tile>>();
@@ -53,16 +53,12 @@ namespace DsprFrontend
         std::cout << "received Grid"<< std::endl;
     }
 
-    void TileManager::receiveTile(Ref<Sova::String> x, Ref<Sova::String> y, Ref<Sova::String> frame)
+    void TileManager::receiveTile(int tileX, int tileY, int tileFrame)
     {
         if (!this->receivedGrid)
             return;
 
         auto g = (Global*) InternalApp::getGlobal();
-
-        int tileX = atoi(x->AsCStr());
-        int tileY = atoi(y->AsCStr());
-        int tileFrame = atoi(frame->AsCStr());
 
         auto newTile = New<Tile>(tileFrame);
         this->tileGrid->set(tileX, tileY, newTile);
