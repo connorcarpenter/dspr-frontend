@@ -95,7 +95,7 @@ namespace DsprFrontend
     {
         //message = message->TrimEnd("\r\n")->TrimStart("\n");
 
-        DsprMessage::_cstr theCStr((char*) message1->AsCStr(), message1->Length());
+        DsprMessage::_cstr theCStr((unsigned char*) message1->AsCStr(), message1->Length());
         DsprMessage::ToClientMsg clientMsg(theCStr);
         if (clientMsg.msgType.get() == DsprMessage::ToClientMsg::UnitUpdate)
         {
