@@ -99,7 +99,7 @@ namespace DsprFrontend
         DsprMessage::ToClientMsg clientMsg(theCStr);
         if (clientMsg.msgType.get() == DsprMessage::ToClientMsg::UnitUpdate)
         {
-            auto unitUpdateMsg = new DsprMessage::UnitUpdateMsgV1(clientMsg.msgBytes.get());
+            auto unitUpdateMsg = new DsprMessage::UnitUpdateMsgV1(clientMsg.msgBytes.getCstr());
             //int id = unitUpdateMsg.id.get();
             g->unitManager->receiveUnitUpdate(unitUpdateMsg);
             delete unitUpdateMsg;
@@ -108,7 +108,7 @@ namespace DsprFrontend
         else
         if (clientMsg.msgType.get() == DsprMessage::ToClientMsg::StandardMessage)
         {
-            auto msgBytes = clientMsg.msgBytes.get();
+            auto msgBytes = clientMsg.msgBytes.getCstr();
 
             char* newCstr = new char[msgBytes.number-1];
             for(int i =0;i<msgBytes.number-2;i++)

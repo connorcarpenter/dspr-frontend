@@ -24,7 +24,7 @@ fips_begin_app(dspr-frontend windowed)
 
             DsprMessage/ToServerMsg.h DsprMessage/ToServerMsg.cpp
             DsprMessage/ToClientMsg.h DsprMessage/ToClientMsg.cpp
-            DsprMessage/DataTypes.h
+            DsprMessage/DataTypes.h DsprMessage/DataTypes.cpp
 
             Game/Unit/Unit.h Game/Unit/Unit.cpp
             Game/Unit/DyingUnit.h Game/Unit/DyingUnit.cpp

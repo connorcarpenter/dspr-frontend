@@ -157,22 +157,22 @@ namespace DsprFrontend
 
         if (updateMsg->nextPosition.wasSet)
         {
-            int x = updateMsg->nextPosition.getA();
-            int y = updateMsg->nextPosition.getB();
+            int x = updateMsg->nextPosition.get(0);
+            int y = updateMsg->nextPosition.get(1);
             this->updateUnitPosition(unit, unit->nextTilePosition, New<Point>(x, y));
             unit->newNextTilePosition(x, y);
         }
 
         if (updateMsg->moveTarget.wasSet)
         {
-            unit->moveTarget->x = updateMsg->moveTarget.getA();
-            unit->moveTarget->y = updateMsg->moveTarget.getB();
+            unit->moveTarget->x = updateMsg->moveTarget.get(0);
+            unit->moveTarget->y = updateMsg->moveTarget.get(1);
         }
 
         if (updateMsg->animationState.wasSet)
         {
-            unit->setAnimationState(static_cast<Unit::UnitAnimationState >(updateMsg->animationState.getA()),
-                                    updateMsg->animationState.getB());
+            unit->setAnimationState(static_cast<Unit::UnitAnimationState >(updateMsg->animationState.get(0)),
+                                    updateMsg->animationState.get(1));
         }
 
         if (updateMsg->health.wasSet)
@@ -198,18 +198,18 @@ namespace DsprFrontend
 
         if (updateMsg->gatherYield.wasSet)
         {
-            int gatherRate = updateMsg->gatherYield.getA();
+            int gatherRate = updateMsg->gatherYield.get(0);
             if (gatherRate != 0) {
                 unit->gatherYield(gatherRate);
                 auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
                 if (unit->tribeIndex == g->playersTribeIndex)
-                    g->economyManager->setMana(updateMsg->gatherYield.getB());
+                    g->economyManager->setMana(updateMsg->gatherYield.get(1));
             }
         }
 
         if (updateMsg->constructionQueue.wasSet)
         {
-            DsprMessage::ConstructionQueueMsgV1 cqMsg(updateMsg->constructionQueue.get());
+            DsprMessage::ConstructionQueueMsgV1 cqMsg(updateMsg->constructionQueue.getCstr());
 
             if (cqMsg.buildTime.wasSet)
             {
@@ -218,13 +218,13 @@ namespace DsprFrontend
 
             if (cqMsg.queue.wasSet)
             {
-                if (cqMsg.queue.numBytes != 0) {
+                if (cqMsg.queue.size() != 0) {
 
                     auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
 
                     unit->constructionQueue->emptyQueue();
-                    for (int i = 0; i < cqMsg.queue.numBytes; i++) {
-                        int index = cqMsg.queue.getArray(i);
+                    for (int i = 0; i < cqMsg.queue.size(); i++) {
+                        int index = cqMsg.queue.get(i);
                         Ref<UnitTemplate> ut = g->unitTemplateCatalog->findTemplateByIndex(index);
                         unit->constructionQueue->enqueue(ut);
                     }
@@ -236,8 +236,8 @@ namespace DsprFrontend
         {
             auto g = (Global*) InternalApp::getGlobal();
 
-            for(int i=0;i<updateMsg->inventory.numBytes;i++) {
-                int itemIndex = updateMsg->inventory.getArray(i);
+            for(int i=0;i<updateMsg->inventory.size();i++) {
+                int itemIndex = updateMsg->inventory.get(i);
                 if (itemIndex == 0)continue;
                 itemIndex--;
                 if (unit == g->cursor->itemInHandOwner && g->cursor->itemInHandSlotIndex == i) {
@@ -251,8 +251,8 @@ namespace DsprFrontend
         if (updateMsg->rallyPoint.wasSet)
         {
             if (unit->unitTemplate->hasRallyPoint) {
-                unit->rallyPoint->x = updateMsg->rallyPoint.getA();
-                unit->rallyPoint->y = updateMsg->rallyPoint.getB();
+                unit->rallyPoint->x = updateMsg->rallyPoint.get(0);
+                unit->rallyPoint->y = updateMsg->rallyPoint.get(1);
             }
         }
 
