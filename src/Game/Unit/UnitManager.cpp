@@ -23,6 +23,7 @@
 #include "Game/Item/ItemManager.h"
 #include "Game/Item/Item.h"
 #include "Game/Item/ItemTemplateCatalog.h"
+#include "Network/NetworkManager.h"
 
 namespace DsprFrontend
 {
@@ -353,41 +354,27 @@ namespace DsprFrontend
                            g->tileManager->getTilePosition(g->cursor->worldPosition->x, g->cursor->worldPosition->y) : mmPosition;
         }
 
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("unit/1.0/order|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        bool first = true;
+        auto idList = New<List<Int>>();
+
         for (Ref<ListIterator<Unit>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
         {
-            if (first)
-            {
-                first = false;
-            }
-            else
-            {
-                sb->Append(New<Sova::String>(","));
-            }
-
             auto unit = iterator->Get();
             Ref<Int> intObj = New<Int>(unit->id);
-            sb->Append(intObj->ToString());
-
+            idList->Add(intObj);
             unit->currentOrder = orderIndex;
         }
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(New<Int>(orderIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
+
+        auto otherNumberList = New<List<Int>>();
+
         if (orderIndex == Move || orderIndex == AttackMove) {
-            sb->Append(New<Int>(tilePosition->x)->ToString());
-            sb->Append(New<Sova::String>(","));
-            sb->Append(New<Int>(tilePosition->y)->ToString());
+            otherNumberList->Add(New<Int>(tilePosition->x));
+            otherNumberList->Add(New<Int>(tilePosition->y));
         }
         if (orderIndex == Follow || orderIndex == AttackTarget || orderIndex == Gather || orderIndex == Pickup){
-            sb->Append(New<Int>(targetId)->ToString());
+            otherNumberList->Add(New<Int>(targetId));
         }
 
-        g->gameServer->send(sb->ToString());
+        g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
     }
 
     void UnitManager::issueUnitOrderGather()
