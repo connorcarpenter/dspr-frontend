@@ -111,6 +111,13 @@ namespace DsprFrontend
                 return;
             }
                 break;
+            case DsprMessage::ToClientMsg::MessageType::GridCreate:
+            {
+                auto gridCreateMsg = DsprMessage::GridCreateMsgV1(clientMsg.msgBytes);
+                g->tileManager->receiveGrid(gridCreateMsg.width.get(), gridCreateMsg.height.get());
+                return;
+            }
+                break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
             {
                 char* newCstr = new char[clientMsg.msgBytes.size()+1];
@@ -125,13 +132,6 @@ namespace DsprFrontend
 
                 if (splitString->At(0)->Equals("auth/1.0/gametoken")) {
                     this->messageSender->sendStartGameMessage();
-                    return;
-                } else if (splitString->At(0)->Equals("grid/1.0/create")) {
-
-                    auto gridString = splitString->At(1)->Split(',');
-                    auto gridWidth = atoi(gridString->At(0)->AsCStr());
-                    auto gridHeight = atoi(gridString->At(1)->AsCStr());
-                    g->tileManager->receiveGrid(gridWidth, gridHeight);
                     return;
                 } else if (splitString->At(0)->Equals("tile/1.0/create")) {
 

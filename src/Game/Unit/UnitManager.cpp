@@ -209,8 +209,7 @@ namespace DsprFrontend
 
         if (updateMsg.constructionQueue.getWasSet())
         {
-            std::shared_ptr<DsprMessage::CStr> cqMsgStr = DsprMessage::CStr::make_cstr(updateMsg.constructionQueue);
-            DsprMessage::ConstructionQueueMsgV1 cqMsg(cqMsgStr);
+            DsprMessage::ConstructionQueueMsgV1 cqMsg(updateMsg.constructionQueue);
 
             if (cqMsg.buildTime.getWasSet())
             {
