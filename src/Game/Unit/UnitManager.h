@@ -24,7 +24,7 @@ namespace DsprFrontend
         UnitManager();
         void receiveUnit(int id, int x, int y, int tribeIndex,
                          int templateIndex);
-        void receiveUnitUpdate(DsprMessage::UnitUpdateMsgV1 *);
+        void receiveUnitUpdate(const DsprMessage::UnitUpdateMsgV1 &);
         void receiveUnitUpdate(int id, Ref<List<String>> propsSplitStr);
         void receiveUnitDelete(int id, Ref<Sova::String> propsStr);
 

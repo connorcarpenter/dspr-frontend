@@ -150,40 +150,40 @@ namespace DsprFrontend
         this->updateUnitPosition(newUnit, Null<Point>(), newUnit->nextTilePosition);
     }
 
-    void UnitManager::receiveUnitUpdate(DsprMessage::UnitUpdateMsgV1 *updateMsg) {
-        Ref<Unit> unit = this->unitMap->At(updateMsg->id.get());
+    void UnitManager::receiveUnitUpdate(const DsprMessage::UnitUpdateMsgV1& updateMsg) {
+        Ref<Unit> unit = this->unitMap->At(updateMsg.id.get());
 
         if (unit == nullptr) return;
 
-        if (updateMsg->nextPosition.wasSet)
+        if (updateMsg.nextPosition.getWasSet())
         {
-            int x = updateMsg->nextPosition.get(0);
-            int y = updateMsg->nextPosition.get(1);
+            int x = updateMsg.nextPosition.get(0);
+            int y = updateMsg.nextPosition.get(1);
             this->updateUnitPosition(unit, unit->nextTilePosition, New<Point>(x, y));
             unit->newNextTilePosition(x, y);
         }
 
-        if (updateMsg->moveTarget.wasSet)
+        if (updateMsg.moveTarget.getWasSet())
         {
-            unit->moveTarget->x = updateMsg->moveTarget.get(0);
-            unit->moveTarget->y = updateMsg->moveTarget.get(1);
+            unit->moveTarget->x = updateMsg.moveTarget.get(0);
+            unit->moveTarget->y = updateMsg.moveTarget.get(1);
         }
 
-        if (updateMsg->animationState.wasSet)
+        if (updateMsg.animationState.getWasSet())
         {
-            unit->setAnimationState(static_cast<Unit::UnitAnimationState >(updateMsg->animationState.get(0)),
-                                    updateMsg->animationState.get(1));
+            unit->setAnimationState(static_cast<Unit::UnitAnimationState >(updateMsg.animationState.get(0)),
+                                    updateMsg.animationState.get(1));
         }
 
-        if (updateMsg->health.wasSet)
+        if (updateMsg.health.getWasSet())
         {
-            unit->health = updateMsg->health.get();
+            unit->health = updateMsg.health.get();
         }
 
-        if (updateMsg->bleed.wasSet)
+        if (updateMsg.bleed.getWasSet())
         {
             auto g = (Global*) InternalApp::getGlobal();
-            if (unit->unitTemplate->bleeds && updateMsg->bleed.get() == 1)
+            if (unit->unitTemplate->bleeds && updateMsg.bleed.get() == 1)
             {
                 auto bloodPartNum = Math::Random(1, 2);
                 for (int i = 0; i < bloodPartNum; i++)
@@ -191,32 +191,33 @@ namespace DsprFrontend
             }
         }
 
-        if (updateMsg->targetUnitId.wasSet)
+        if (updateMsg.targetUnitId.getWasSet())
         {
-            unit->targetUnitId  = updateMsg->targetUnitId.get();
+            unit->targetUnitId  = updateMsg.targetUnitId.get();
         }
 
-        if (updateMsg->gatherYield.wasSet)
+        if (updateMsg.gatherYield.getWasSet())
         {
-            int gatherRate = updateMsg->gatherYield.get(0);
+            int gatherRate = updateMsg.gatherYield.get(0);
             if (gatherRate != 0) {
                 unit->gatherYield(gatherRate);
                 auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
                 if (unit->tribeIndex == g->playersTribeIndex)
-                    g->economyManager->setMana(updateMsg->gatherYield.get(1));
+                    g->economyManager->setMana(updateMsg.gatherYield.get(1));
             }
         }
 
-        if (updateMsg->constructionQueue.wasSet)
+        if (updateMsg.constructionQueue.getWasSet())
         {
-            DsprMessage::ConstructionQueueMsgV1 cqMsg(updateMsg->constructionQueue.getCstr());
+            std::shared_ptr<DsprMessage::CStr> cqMsgStr = DsprMessage::CStr::make_cstr(updateMsg.constructionQueue);
+            DsprMessage::ConstructionQueueMsgV1 cqMsg(cqMsgStr);
 
-            if (cqMsg.buildTime.wasSet)
+            if (cqMsg.buildTime.getWasSet())
             {
                 unit->constructionQueue->currentBuildTime = cqMsg.buildTime.get();
             }
 
-            if (cqMsg.queue.wasSet)
+            if (cqMsg.queue.getWasSet())
             {
                 if (cqMsg.queue.size() != 0) {
 
@@ -232,12 +233,12 @@ namespace DsprFrontend
             }
         }
 
-        if (updateMsg->inventory.wasSet)
+        if (updateMsg.inventory.getWasSet())
         {
             auto g = (Global*) InternalApp::getGlobal();
 
-            for(int i=0;i<updateMsg->inventory.size();i++) {
-                int itemIndex = updateMsg->inventory.get(i);
+            for(int i=0;i<updateMsg.inventory.size();i++) {
+                int itemIndex = updateMsg.inventory.get(i);
                 if (itemIndex == 0)continue;
                 itemIndex--;
                 if (unit == g->cursor->itemInHandOwner && g->cursor->itemInHandSlotIndex == i) {
@@ -248,179 +249,18 @@ namespace DsprFrontend
             }
         }
 
-        if (updateMsg->rallyPoint.wasSet)
+        if (updateMsg.rallyPoint.getWasSet())
         {
             if (unit->unitTemplate->hasRallyPoint) {
-                unit->rallyPoint->x = updateMsg->rallyPoint.get(0);
-                unit->rallyPoint->y = updateMsg->rallyPoint.get(1);
+                unit->rallyPoint->x = updateMsg.rallyPoint.get(0);
+                unit->rallyPoint->y = updateMsg.rallyPoint.get(1);
             }
         }
 
-        if (updateMsg->rallyUnitId.wasSet)
+        if (updateMsg.rallyUnitId.getWasSet())
         {
             if (unit->unitTemplate->hasRallyPoint) {
-                unit->rallyUnitId = updateMsg->rallyUnitId.get();
-            }
-        }
-    }
-
-    void UnitManager::receiveUnitUpdate(int id, Ref<List<String>> propsSplitStr)
-    {
-        Ref<Unit> unit = this->unitMap->At(id);
-
-        if (unit == nullptr) return;
-
-        for (auto iterator = propsSplitStr->GetIterator(); iterator->Valid(); iterator->Next())
-        {
-            auto propsStr = iterator->Get();
-            auto propsParts = propsStr->Split(':');
-
-            auto propName = propsParts->At(0);
-
-            if (propName->Equals("nextPosition"))
-            {
-                auto varsStr = propsParts->At(1);
-                if (varsStr == nullptr) continue;
-                auto varsParts = varsStr->Split(',');
-
-                ///
-                int x = atoi(varsParts->At(0)->AsCStr());
-                int y = atoi(varsParts->At(1)->AsCStr());
-                this->updateUnitPosition(unit, unit->nextTilePosition, New<Point>(x, y));
-                unit->newNextTilePosition(x, y);
-                continue;
-            }
-            else
-            if (propName->Equals("moveTarget"))
-            {
-                auto varsParts = propsParts->At(1)->Split(',');
-
-                unit->moveTarget->x = atoi(varsParts->At(0)->AsCStr());
-                unit->moveTarget->y = atoi(varsParts->At(1)->AsCStr());
-                continue;
-            }
-            else
-            if (propName->Equals("animationState"))
-            {
-                auto varsParts = propsParts->At(1)->Split(',');
-
-                unit->setAnimationState(static_cast<Unit::UnitAnimationState >(atoi(varsParts->At(0)->AsCStr())),
-                                        atoi(varsParts->At(1)->AsCStr()));
-                continue;
-            }
-            else
-            if (propName->Equals("health"))
-            {
-                auto g = (Global*) InternalApp::getGlobal();
-                unit->health = atoi(propsParts->At(1)->AsCStr());
-                continue;
-            }
-            else
-            if (propName->Equals("bleed"))
-            {
-                auto g = (Global*) InternalApp::getGlobal();
-                if (unit->unitTemplate->bleeds && atoi(propsParts->At(1)->AsCStr()) == 1)
-                {
-                    auto bloodPartNum = Math::Random(1, 2);
-                    for (int i = 0; i < bloodPartNum; i++)
-                        g->world->AddChild(New<BloodParticle>(unit->position, -2 - Math::Random(0, 6), unit->depth, unit->unitTemplate->bloodColor));
-                }
-                continue;
-            }
-            else
-            if (propName->Equals("targetUnitId"))
-            {
-                unit->targetUnitId  = atoi(propsParts->At(1)->AsCStr());
-                continue;
-            }
-            else
-            if (propName->Equals("gatherYield"))
-            {
-                auto varsParts = propsParts->At(1)->Split(',');
-                int gatherRate = atoi(varsParts->At(0)->AsCStr());
-                if (gatherRate != 0) {
-                    unit->gatherYield(gatherRate);
-                    auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
-                    if (unit->tribeIndex == g->playersTribeIndex)
-                        g->economyManager->setMana(atoi(varsParts->At(1)->AsCStr()));
-                }
-                continue;
-            }
-            else
-            if (propName->Equals("cq"))
-            {
-                auto varsParts = propsParts->At(1)->Split('+');
-
-                auto index = 0;
-
-                while(index < varsParts->Size())
-                {
-                    auto intVarsParts = varsParts->At(index)->Split('-');
-                    if (intVarsParts->At(0)->Equals("bt"))
-                    {
-                        unit->constructionQueue->currentBuildTime = atoi(intVarsParts->At(1)->AsCStr());
-                    }
-                    else
-                    if (intVarsParts->At(0)->Equals("q"))
-                    {
-                        if (intVarsParts->At(1)->Length() == 0) {index++;continue;}
-
-                        auto g = (Global*) InternalApp::getGlobal();
-                        auto queueParts = intVarsParts->At(1)->Split(',');
-                        unit->constructionQueue->emptyQueue();
-                        for(int i = 0;i<queueParts->Size();i++){
-                            int index = atoi(queueParts->At(i)->AsCStr());
-                            Ref<UnitTemplate> ut = g->unitTemplateCatalog->findTemplateByIndex(index);
-                            unit->constructionQueue->enqueue(ut);
-                        }
-                    }
-                    index++;
-                }
-                continue;
-            }
-            else
-            if (propName->Equals("inventory"))
-            {
-                auto g = (Global*) InternalApp::getGlobal();
-
-                auto varsParts = propsParts->At(1)->Split(',');
-
-                auto index = 0;
-
-                while(index < varsParts->Size())
-                {
-                    int itemIndex = atoi(varsParts->At(index)->AsCStr());
-                    if (unit == g->cursor->itemInHandOwner && g->cursor->itemInHandSlotIndex == index)
-                    {
-                        g->cursor->setItemInHandTemplate(g->itemTemplateCatalog->findTemplateByIndex(itemIndex));
-                    }
-                    else
-                    {
-                        unit->inventory->SetItemIndex(index, g->itemTemplateCatalog->findTemplateByIndex(itemIndex));
-                    }
-
-                    index++;
-                }
-                continue;
-            }
-            else
-            if (propName->Equals("rallyPoint"))
-            {
-                auto varsParts = propsParts->At(1)->Split(',');
-                if (unit->unitTemplate->hasRallyPoint) {
-                    unit->rallyPoint->x = atoi(varsParts->At(0)->AsCStr());
-                    unit->rallyPoint->y = atoi(varsParts->At(1)->AsCStr());
-                }
-                continue;
-            }
-            else
-            if (propName->Equals("rallyUnitId"))
-            {
-                auto varsParts = propsParts->At(1)->Split(',');
-                if (unit->unitTemplate->hasRallyPoint) {
-                    unit->rallyUnitId = atoi(varsParts->At(0)->AsCStr());
-                }
-                continue;
+                unit->rallyUnitId = updateMsg.rallyUnitId.get();
             }
         }
     }

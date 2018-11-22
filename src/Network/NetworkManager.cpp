@@ -3,20 +3,15 @@
 //
 
 #include <Sova/Common/StringBuilder.h>
-#include <Sova/Common/String.h>
 #include <Sova/Network/HttpRequest.h>
 #include <Sova/Internal/InternalApp.h>
 #include "NetworkManager.h"
-#include "Game/Global.h"
 #include <iostream>
+#include <DsprMessage/Main.h>
 #include "Game/TileManager.h"
 #include "Game/Unit/UnitManager.h"
-#include "Game/EconomyManager.h"
 #include "Game/Item/ItemManager.h"
 #include "Game/UI/ChatManager.h"
-#include "StringScanner.h"
-#include "DsprMessage/ToClientMsg.h"
-#include "DsprMessage/DataTypes.h"
 
 using Sova::String;
 using Sova::StringBuilder;
@@ -76,7 +71,7 @@ namespace DsprFrontend
             g->gameServerPlayerToken = splitString->At(2);
 
             g->gameServer = g->app->openWebsocket(fullAddress);
-            g->gameServer->setEscapeCharacter('\1');
+            g->gameServer->setEscapeCharacter(DsprMessage::EscapeCharacter);
             g->gameServer->onOpen(
                     [&](){
                         this->OnGameServerStart();
@@ -96,36 +91,30 @@ namespace DsprFrontend
     void NetworkManager::OnGameServerUpdate(Ref<Sova::String> message)
     {
         //std::cout << "Receive message" << message->AsCStr() << std::endl;
-        message = message->TrimEnd("\1");
+        //message = message->TrimEnd(DsprMessage::EscapeCharacter);
 
-        DsprMessage::_cstr theCStr((unsigned char*) message->AsCStr(), message->Length());
+        std::shared_ptr<DsprMessage::CStr> theCStr = DsprMessage::CStr::make_cstr((unsigned char*) message->AsCStr(), message->Length());
         DsprMessage::ToClientMsg clientMsg(theCStr);
         switch (clientMsg.msgType.get())
         {
             case DsprMessage::ToClientMsg::MessageType::UnitUpdate:
             {
-                auto unitUpdateMsg = new DsprMessage::UnitUpdateMsgV1(clientMsg.msgBytes.getCstr());
+                std::shared_ptr<DsprMessage::CStr> unitUpdateCStr = DsprMessage::CStr::make_cstr(clientMsg.msgBytes);
+                auto unitUpdateMsg = DsprMessage::UnitUpdateMsgV1(unitUpdateCStr);
                 //int id = unitUpdateMsg.id.get();
                 g->unitManager->receiveUnitUpdate(unitUpdateMsg);
-                delete unitUpdateMsg;
                 return;
-            }
-                break;
-            case DsprMessage::ToClientMsg::MessageType::AuthGameToken:
-            {
-
             }
                 break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
             {
-                auto msgBytes = clientMsg.msgBytes.getCstr();
-
-                char* newCstr = new char[msgBytes.number];
-                for(int i =0;i<msgBytes.number-1;i++)
-                    newCstr[i] = msgBytes.getDs(i);
-                newCstr[msgBytes.number-1] = '\0';
+                char* newCstr = new char[clientMsg.msgBytes.size()+1];
+                for(int i =0;i<clientMsg.msgBytes.size();i++)
+                    newCstr[i] = clientMsg.msgBytes.get(i);
+                newCstr[clientMsg.msgBytes.size()] = '\0';
 
                 auto newMsg = New<String>(newCstr, true);
+                delete [] newCstr;
 
                 auto splitString = newMsg->Split('|');
 
