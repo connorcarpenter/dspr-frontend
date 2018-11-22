@@ -13,11 +13,31 @@ namespace DsprFrontend {
         this->g = (Global*) InternalApp::getGlobal();
     }
 
+    std::shared_ptr<DsprMessage::CStr> MessageSender::getAuthTokenCstr() {
+        if (this->authTokenCstr == nullptr)
+        {
+            this->authTokenCstr = DsprMessage::CStr::make_cstr((unsigned char*) g->gameServerPlayerToken->AsCStr(), g->gameServerPlayerToken->Length());
+        }
+
+        return this->authTokenCstr;
+    }
+
+    void MessageSender::sendStandardMessage(Ref<String> str) {
+
+        DsprMessage::ToServerMsg toServerMsg;
+        toServerMsg.msgType.set((unsigned char) DsprMessage::ToServerMsg::MessageType::StandardMessage);
+        std::shared_ptr<DsprMessage::CStr> cstr = DsprMessage::CStr::make_cstr(str->AsCStr(), str->Length());
+        toServerMsg.msgBytes.loadFromCstr(cstr);
+
+        auto packedMsg = toServerMsg.Pack();
+        g->gameServer->send(New<String>(packedMsg->getCharPtr(), packedMsg->size(), true));
+    }
+
     void MessageSender::sendStartGameMessage() {
             auto sb = New<Sova::StringBuilder>();
             sb->Append(New<Sova::String>("auth/1.0/gametoken|"));
             sb->Append(g->gameServerPlayerToken);
-            g->gameServer->send(sb->ToString());
+        this->sendStandardMessage(sb->ToString());
     }
 
     void MessageSender::sendChatMessage(Ref<Sova::String> chatMsg)
@@ -28,7 +48,7 @@ namespace DsprFrontend {
         sb->Append(New<Sova::String>("|"));
         sb->Append(chatMsg);
         auto msgToSend = sb->ToString();
-        g->gameServer->send(msgToSend);
+        this->sendStandardMessage(sb->ToString());
     }
 
     void MessageSender::sendUnitOrderMessage(Ref<List<Int>> idList, Ref<Int> orderIndex, Ref<List<Int>> otherNumberList) {
@@ -45,18 +65,9 @@ namespace DsprFrontend {
             unitOrderMsgV1.otherNumbers.add(id->getInt());
         }
 
-        auto clientMsg = unitOrderMsgV1.getToServerMessage();
-        clientMsg->authToken.loadFromCstr(this->getAuthTokenCstr());
-        auto packedMsg = clientMsg->Pack();
-        g->gameServer->send(New<String>(packedMsg));
-    }
-
-    std::shared_ptr<DsprMessage::CStr> MessageSender::getAuthTokenCstr() {
-        if (this->authTokenCstr == nullptr)
-        {
-            this->authTokenCstr = DsprMessage::CStr::make_cstr(g->gameServerPlayerToken->AsCStr(), g->gameServerPlayerToken->Length());
-        }
-
-        return this->authTokenCstr;
+        auto serverMsg = unitOrderMsgV1.getToServerMessage();
+        serverMsg->authToken.loadFromCstr(this->getAuthTokenCstr());
+        auto packedMsg = serverMsg->Pack();
+        g->gameServer->send(New<String>(packedMsg->getCharPtr(), packedMsg->size(), true));
     }
 }

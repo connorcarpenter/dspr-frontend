@@ -432,7 +432,7 @@ namespace DsprFrontend
 
         sb->Append(New<Int>(targetId)->ToString());
 
-        g->gameServer->send(sb->ToString());
+        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
     }
 
     void UnitManager::orderCurrentlySelectedUnits(UnitOrder orderIndex)
@@ -466,7 +466,7 @@ namespace DsprFrontend
         sb->Append(New<Sova::String>("|"));
         sb->Append(New<Int>(orderIndex)->ToString());
 
-        g->gameServer->send(sb->ToString());
+        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
     }
 
     void UnitManager::orderCurrentlySelectedUnitsToBuildUnit(Ref<UnitTemplate> unitTemplate)
@@ -505,7 +505,7 @@ namespace DsprFrontend
         sb->Append(New<Sova::String>(","));
         sb->Append(New<Int>(unitTemplate->index)->ToString());
 
-        g->gameServer->send(sb->ToString());
+        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
     }
 
     void UnitManager::orderUnitSwapInventory(Ref<Unit> unit, int beforeSlotIndex, int afterSlotIndex)
@@ -529,7 +529,7 @@ namespace DsprFrontend
         sb->Append(New<Sova::String>(","));
         sb->Append(New<Int>(afterSlotIndex)->ToString());
 
-        g->gameServer->send(sb->ToString());
+        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
     }
 
     void UnitManager::orderUnitDropItem(Ref<Unit> unit, int slotIndex, Ref<Point> position)
@@ -558,7 +558,7 @@ namespace DsprFrontend
         sb->Append(New<Sova::String>(","));
         sb->Append(New<Int>(tilePosition->y)->ToString());
 
-        g->gameServer->send(sb->ToString());
+        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
     }
 
     void UnitManager::orderUnitGiveItem(Ref<Unit> unit, int slotIndex, int targetUnitId)
@@ -580,7 +580,7 @@ namespace DsprFrontend
         sb->Append(New<Sova::String>(","));
         sb->Append(New<Int>(targetUnitId)->ToString());
 
-        g->gameServer->send(sb->ToString());
+        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
     }
 
     void UnitManager::issueUnitOrderRally(){
@@ -639,7 +639,7 @@ namespace DsprFrontend
             sb->Append(New<Int>(targetId)->ToString());
         }
 
-        g->gameServer->send(sb->ToString());
+        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
     }
 
     void UnitManager::updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition)

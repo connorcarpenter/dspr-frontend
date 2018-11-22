@@ -8,6 +8,13 @@
 #include <Sova/Common/String.h>
 #include <Game/Global.h>
 #include <Sova/Common/Int.h>
+#include <memory>
+
+namespace DsprMessage
+{
+    class CStr;
+}
+
 
 namespace DsprFrontend {
     class MessageSender : public Sova::Refable {
@@ -16,11 +23,15 @@ namespace DsprFrontend {
         void sendChatMessage(Ref<Sova::String> chatMsg);
         void sendStartGameMessage();
         void sendUnitOrderMessage(Ref<List<Int>> idList, Ref<Int> orderIndex, Ref<List<Int>> otherNumberList);
+
+        void sendStandardMessage(Ref<String> str);
+
     private:
         Global* g = nullptr;
 
         std::shared_ptr<DsprMessage::CStr> getAuthTokenCstr();
 
         std::shared_ptr<DsprMessage::CStr> authTokenCstr = nullptr;
+
     };
 }
