@@ -136,6 +136,14 @@ namespace DsprFrontend
                 return;
             }
                 break;
+            case DsprMessage::ToClientMsg::MessageType::UnitDelete:
+            {
+                auto unitDeleteMsgV1 = DsprMessage::UnitDeleteMsgV1(clientMsg.msgBytes);
+                g->unitManager->receiveUnitDelete(unitDeleteMsgV1.id.get(),
+                                                  unitDeleteMsgV1.dead.get() == 1);
+                return;
+            }
+                break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
             {
                 char* newCstr = new char[clientMsg.msgBytes.size()+1];
@@ -152,14 +160,7 @@ namespace DsprFrontend
                     this->messageSender->sendStartGameMessage();
                     return;
                 } else
-                if (splitString->At(0)->Equals("unit/1.0/delete")) {
-
-                    auto idString = splitString->At(1);
-                    auto propsString = splitString->At(2);
-                    int id = atoi(idString->AsCStr());
-                    g->unitManager->receiveUnitDelete(id, propsString);
-                    return;
-                } else if (splitString->At(0)->Equals("economy/1.0/update")) {
+                if (splitString->At(0)->Equals("economy/1.0/update")) {
                     //ss->Advance(19);
                     //->economyManager->receiveUpdate(ss);
                     return;

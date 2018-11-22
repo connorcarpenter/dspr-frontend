@@ -264,7 +264,7 @@ namespace DsprFrontend
         }
     }
 
-    void UnitManager::receiveUnitDelete(int id, Ref<Sova::String> propsStr)
+    void UnitManager::receiveUnitDelete(int id, bool dead)
     {
         //int id = atoi(idStr->AsCStr());
 
@@ -274,9 +274,7 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        auto deleteModifier = atoi(propsStr->AsCStr());
-
-        if (deleteModifier == 1)
+        if (dead == 1)
         {
             unit->playDeathSound();
 

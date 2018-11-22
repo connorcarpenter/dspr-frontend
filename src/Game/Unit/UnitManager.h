@@ -26,7 +26,7 @@ namespace DsprFrontend
                          int templateIndex);
         void receiveUnitUpdate(const DsprMessage::UnitUpdateMsgV1 &);
         void receiveUnitUpdate(int id, Ref<List<String>> propsSplitStr);
-        void receiveUnitDelete(int id, Ref<Sova::String> propsStr);
+        void receiveUnitDelete(int id, bool dead);
 
         void addToSelectionList(Ref<Unit> unit);
         void removeFromSelectionList(Ref<Unit> unit);
