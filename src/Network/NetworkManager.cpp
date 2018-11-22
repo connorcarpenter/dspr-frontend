@@ -118,6 +118,13 @@ namespace DsprFrontend
                 return;
             }
                 break;
+            case DsprMessage::ToClientMsg::MessageType::TileCreate:
+            {
+                auto tileCreateMsg = DsprMessage::TileCreateMsgV1(clientMsg.msgBytes);
+                g->tileManager->receiveTile(tileCreateMsg.x.get(), tileCreateMsg.y.get(), tileCreateMsg.frame.get());
+                return;
+            }
+                break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
             {
                 char* newCstr = new char[clientMsg.msgBytes.size()+1];
@@ -133,15 +140,8 @@ namespace DsprFrontend
                 if (splitString->At(0)->Equals("auth/1.0/gametoken")) {
                     this->messageSender->sendStartGameMessage();
                     return;
-                } else if (splitString->At(0)->Equals("tile/1.0/create")) {
-
-                    auto tileString = splitString->At(1)->Split(',');
-                    int tileX = atoi(tileString->At(0)->AsCStr());
-                    int tileY = atoi(tileString->At(1)->AsCStr());
-                    int tileFrame = atoi(tileString->At(2)->AsCStr());
-                    g->tileManager->receiveTile(tileX, tileY, tileFrame);
-                    return;
-                } else if (splitString->At(0)->Equals("unit/1.0/create")) {
+                } else
+                if (splitString->At(0)->Equals("unit/1.0/create")) {
 
                     auto unitString = splitString->At(1)->Split(',');
                     int id = atoi(unitString->At(0)->AsCStr());

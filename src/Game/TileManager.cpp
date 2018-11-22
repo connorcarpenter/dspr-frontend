@@ -60,13 +60,13 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        auto newTile = New<Tile>(tileFrame);
+        auto newTile = New<Tile>(tileFrame-1);
         this->tileGrid->set(tileX, tileY, newTile);
 
         g->minimap->DrawTile(tileX,tileY);
         g->fogManager->shroudToFog(tileX, tileY);
 
-        if (tileFrame == -1)
+        if (tileFrame == 0)
         {
             auto newBlock = New<Block>(tileX, tileY);
 
