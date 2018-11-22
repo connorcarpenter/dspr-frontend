@@ -151,9 +151,9 @@ namespace DsprFrontend
                 if (economyUpdateMsgV1.mana.getWasSet())
                     g->economyManager->setMana(economyUpdateMsgV1.mana.get());
                 if (economyUpdateMsgV1.pop.getWasSet())
-                    g->economyManager->setMana(economyUpdateMsgV1.pop.get());
+                    g->economyManager->setPop(economyUpdateMsgV1.pop.get());
                 if (economyUpdateMsgV1.popMax.getWasSet())
-                    g->economyManager->setMana(economyUpdateMsgV1.popMax.get());
+                    g->economyManager->setPopMax(economyUpdateMsgV1.popMax.get());
             }
                 break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
