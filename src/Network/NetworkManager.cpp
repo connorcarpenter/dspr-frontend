@@ -99,10 +99,15 @@ namespace DsprFrontend
         {
             case DsprMessage::ToClientMsg::MessageType::UnitUpdate:
             {
-                std::shared_ptr<DsprMessage::CStr> unitUpdateCStr = DsprMessage::CStr::make_cstr(clientMsg.msgBytes);
-                auto unitUpdateMsg = DsprMessage::UnitUpdateMsgV1(unitUpdateCStr);
-                //int id = unitUpdateMsg.id.get();
+                auto unitUpdateMsg = DsprMessage::UnitUpdateMsgV1(clientMsg.msgBytes);
                 g->unitManager->receiveUnitUpdate(unitUpdateMsg);
+                return;
+            }
+                break;
+            case DsprMessage::ToClientMsg::MessageType::TribeSet:
+            {
+                auto tribeSetMsg = DsprMessage::TribeSetMsgV1(clientMsg.msgBytes);
+                g->playersTribeIndex = tribeSetMsg.tribeIndex.get();
                 return;
             }
                 break;
@@ -120,10 +125,6 @@ namespace DsprFrontend
 
                 if (splitString->At(0)->Equals("auth/1.0/gametoken")) {
                     this->messageSender->sendStartGameMessage();
-                    return;
-                } else if (splitString->At(0)->Equals("tribe/1.0/set")) {
-
-                    g->playersTribeIndex = atoi(splitString->At(1)->AsCStr());
                     return;
                 } else if (splitString->At(0)->Equals("grid/1.0/create")) {
 
