@@ -156,6 +156,16 @@ namespace DsprFrontend
                     g->economyManager->setPopMax(economyUpdateMsgV1.popMax.get());
             }
                 break;
+            case DsprMessage::ToClientMsg::MessageType::ItemCreate:
+            {
+                auto itemCreateMsgV1 = DsprMessage::ItemCreateMsgV1(clientMsg.msgBytes);
+                g->itemManager->receiveItem(itemCreateMsgV1.id.get(),
+                                            itemCreateMsgV1.x.get(),
+                                            itemCreateMsgV1.y.get(),
+                                            itemCreateMsgV1.templateIndex.get());
+                return;
+            }
+                break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
             {
                 char* newCstr = new char[clientMsg.msgBytes.size()+1];
@@ -172,16 +182,7 @@ namespace DsprFrontend
                     this->messageSender->sendStartGameMessage();
                     return;
                 }
-                else if (splitString->At(0)->Equals("item/1.0/create")) {
-
-                    auto itemString = splitString->At(1)->Split(',');
-                    int id = atoi(itemString->At(0)->AsCStr());
-                    int x = atoi(itemString->At(1)->AsCStr());
-                    int y = atoi(itemString->At(2)->AsCStr());
-                    int index = atoi(itemString->At(3)->AsCStr());
-                    g->itemManager->receiveItem(id, x, y, index);
-                    return;
-                } else if (splitString->At(0)->Equals("item/1.0/delete")) {
+                else if (splitString->At(0)->Equals("item/1.0/delete")) {
 
                     auto idString = splitString->At(1);
                     int id = atoi(idString->AsCStr());
