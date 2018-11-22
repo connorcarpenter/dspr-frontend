@@ -707,10 +707,10 @@ namespace DsprFrontend
     Color UnitManager::getColorFromTribeIndex(int index) {
         switch (index)
         {
-            case 0:
+            case 1:
                 return Color::Red;
                 break;
-            case 1:
+            case 2:
                 return Color::Blue;
                 break;
         }

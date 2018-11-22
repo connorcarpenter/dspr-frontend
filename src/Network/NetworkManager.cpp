@@ -125,6 +125,17 @@ namespace DsprFrontend
                 return;
             }
                 break;
+            case DsprMessage::ToClientMsg::MessageType::UnitCreate:
+            {
+                auto unitCreateMsg = DsprMessage::UnitCreateMsgV1(clientMsg.msgBytes);
+                g->unitManager->receiveUnit(unitCreateMsg.id.get(),
+                                            unitCreateMsg.x.get(),
+                                            unitCreateMsg.y.get(),
+                                            unitCreateMsg.tribeIndex.get(),
+                                            unitCreateMsg.templateIndex.get());
+                return;
+            }
+                break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
             {
                 char* newCstr = new char[clientMsg.msgBytes.size()+1];
@@ -141,17 +152,7 @@ namespace DsprFrontend
                     this->messageSender->sendStartGameMessage();
                     return;
                 } else
-                if (splitString->At(0)->Equals("unit/1.0/create")) {
-
-                    auto unitString = splitString->At(1)->Split(',');
-                    int id = atoi(unitString->At(0)->AsCStr());
-                    int x = atoi(unitString->At(1)->AsCStr());
-                    int y = atoi(unitString->At(2)->AsCStr());
-                    int tribeIndex = atoi(unitString->At(3)->AsCStr());
-                    int templateIndex = atoi(unitString->At(4)->AsCStr());
-                    g->unitManager->receiveUnit(id, x, y, tribeIndex, templateIndex);
-                    return;
-                } else if (splitString->At(0)->Equals("unit/1.0/delete")) {
+                if (splitString->At(0)->Equals("unit/1.0/delete")) {
 
                     auto idString = splitString->At(1);
                     auto propsString = splitString->At(2);
