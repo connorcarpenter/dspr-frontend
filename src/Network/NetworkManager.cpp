@@ -65,6 +65,7 @@ namespace DsprFrontend
         auto command = splitString->At(0);
         if (command->Equals("gameserver/connect"))
         {
+            std::cout << "received bff message!";
             auto addressBody = splitString->At(1);
 
             Ref<Sova::StringBuilder> sb = New<Sova::StringBuilder>();
@@ -75,6 +76,7 @@ namespace DsprFrontend
             g->gameServerPlayerToken = splitString->At(2);
 
             g->gameServer = g->app->openWebsocket(fullAddress);
+            g->gameServer->setEscapeCharacter('\1');
             g->gameServer->onOpen(
                     [&](){
                         this->OnGameServerStart();
@@ -91,193 +93,112 @@ namespace DsprFrontend
         std::cout << "Gameserver Start" << std::endl;
     }
 
-    void NetworkManager::OnGameServerUpdate(Ref<Sova::String> message1)
+    void NetworkManager::OnGameServerUpdate(Ref<Sova::String> message)
     {
-        //message = message->TrimEnd("\r\n")->TrimStart("\n");
+        //std::cout << "Receive message" << message->AsCStr() << std::endl;
+        message = message->TrimEnd("\1");
 
-        DsprMessage::_cstr theCStr((unsigned char*) message1->AsCStr(), message1->Length());
+        DsprMessage::_cstr theCStr((unsigned char*) message->AsCStr(), message->Length());
         DsprMessage::ToClientMsg clientMsg(theCStr);
-        if (clientMsg.msgType.get() == DsprMessage::ToClientMsg::UnitUpdate)
+        switch (clientMsg.msgType.get())
         {
-            auto unitUpdateMsg = new DsprMessage::UnitUpdateMsgV1(clientMsg.msgBytes.getCstr());
-            //int id = unitUpdateMsg.id.get();
-            g->unitManager->receiveUnitUpdate(unitUpdateMsg);
-            delete unitUpdateMsg;
-            return;
-        }
-        else
-        if (clientMsg.msgType.get() == DsprMessage::ToClientMsg::StandardMessage)
-        {
-            auto msgBytes = clientMsg.msgBytes.getCstr();
-
-            char* newCstr = new char[msgBytes.number-1];
-            for(int i =0;i<msgBytes.number-2;i++)
-                newCstr[i] = msgBytes.getDs(i)+1;
-            newCstr[msgBytes.number-2] = '\0';
-
-            auto newMsg = New<String>(newCstr, true);
-
-            auto splitString = newMsg->Split('|');
-
-            if (splitString->At(0)->Equals("auth/1.0/gametoken")) {
-                this->messageSender->sendStartGameMessage();
-                return;
-            } else if (splitString->At(0)->Equals("tribe/1.0/set")) {
-
-                g->playersTribeIndex = atoi(splitString->At(1)->AsCStr());
-                return;
-            } else if (splitString->At(0)->Equals("grid/1.0/create")) {
-
-                auto gridString = splitString->At(1)->Split(',');
-                auto gridWidth = atoi(gridString->At(0)->AsCStr());
-                auto gridHeight = atoi(gridString->At(1)->AsCStr());
-                g->tileManager->receiveGrid(gridWidth, gridHeight);
-                return;
-            } else if (splitString->At(0)->Equals("tile/1.0/create")) {
-
-                auto tileString = splitString->At(1)->Split(',');
-                int tileX = atoi(tileString->At(0)->AsCStr());
-                int tileY = atoi(tileString->At(1)->AsCStr());
-                int tileFrame = atoi(tileString->At(2)->AsCStr());
-                g->tileManager->receiveTile(tileX, tileY, tileFrame);
-                return;
-            } else if (splitString->At(0)->Equals("unit/1.0/create")) {
-
-                auto unitString = splitString->At(1)->Split(',');
-                int id = atoi(unitString->At(0)->AsCStr());
-                int x = atoi(unitString->At(1)->AsCStr());
-                int y = atoi(unitString->At(2)->AsCStr());
-                int tribeIndex = atoi(unitString->At(3)->AsCStr());
-                int templateIndex = atoi(unitString->At(4)->AsCStr());
-                g->unitManager->receiveUnit(id, x, y, tribeIndex, templateIndex);
-                return;
-            } else if (splitString->At(0)->Equals("unit/1.0/update")) {
-                int what = 0;//huh? how'd we get here
-
-                auto idString = splitString->At(1);
-                auto propsString = splitString->At(2);
-                int id = atoi(idString->AsCStr());
-                g->unitManager->receiveUnitUpdate(id, propsString->Split('&'));
-                return;
-            } else if (splitString->At(0)->Equals("unit/1.0/delete")) {
-
-                auto idString = splitString->At(1);
-                auto propsString = splitString->At(2);
-                int id = atoi(idString->AsCStr());
-                g->unitManager->receiveUnitDelete(id, propsString);
-                return;
-            } else if (splitString->At(0)->Equals("economy/1.0/update")) {
-                //ss->Advance(19);
-                //->economyManager->receiveUpdate(ss);
-                return;
-            } else if (splitString->At(0)->Equals("item/1.0/create")) {
-
-                auto itemString = splitString->At(1)->Split(',');
-                int id = atoi(itemString->At(0)->AsCStr());
-                int x = atoi(itemString->At(1)->AsCStr());
-                int y = atoi(itemString->At(2)->AsCStr());
-                int index = atoi(itemString->At(3)->AsCStr());
-                g->itemManager->receiveItem(id, x, y, index);
-                return;
-            } else if (splitString->At(0)->Equals("item/1.0/delete")) {
-
-                auto idString = splitString->At(1);
-                int id = atoi(idString->AsCStr());
-                g->itemManager->receiveItemDelete(id);
-                return;
-            } else if (splitString->At(0)->Equals("chat/1.0/send")) {
-
-                auto tribeIndex = atoi(splitString->At(1)->AsCStr());
-                auto msgString = splitString->At(2);
-                g->chatManager->receiveMessage(tribeIndex, msgString);
+            case DsprMessage::ToClientMsg::MessageType::UnitUpdate:
+            {
+                auto unitUpdateMsg = new DsprMessage::UnitUpdateMsgV1(clientMsg.msgBytes.getCstr());
+                //int id = unitUpdateMsg.id.get();
+                g->unitManager->receiveUnitUpdate(unitUpdateMsg);
+                delete unitUpdateMsg;
                 return;
             }
+                break;
+            case DsprMessage::ToClientMsg::MessageType::AuthGameToken:
+            {
+
+            }
+                break;
+            case DsprMessage::ToClientMsg::MessageType::StandardMessage:
+            {
+                auto msgBytes = clientMsg.msgBytes.getCstr();
+
+                char* newCstr = new char[msgBytes.number];
+                for(int i =0;i<msgBytes.number-1;i++)
+                    newCstr[i] = msgBytes.getDs(i);
+                newCstr[msgBytes.number-1] = '\0';
+
+                auto newMsg = New<String>(newCstr, true);
+
+                auto splitString = newMsg->Split('|');
+
+                if (splitString->At(0)->Equals("auth/1.0/gametoken")) {
+                    this->messageSender->sendStartGameMessage();
+                    return;
+                } else if (splitString->At(0)->Equals("tribe/1.0/set")) {
+
+                    g->playersTribeIndex = atoi(splitString->At(1)->AsCStr());
+                    return;
+                } else if (splitString->At(0)->Equals("grid/1.0/create")) {
+
+                    auto gridString = splitString->At(1)->Split(',');
+                    auto gridWidth = atoi(gridString->At(0)->AsCStr());
+                    auto gridHeight = atoi(gridString->At(1)->AsCStr());
+                    g->tileManager->receiveGrid(gridWidth, gridHeight);
+                    return;
+                } else if (splitString->At(0)->Equals("tile/1.0/create")) {
+
+                    auto tileString = splitString->At(1)->Split(',');
+                    int tileX = atoi(tileString->At(0)->AsCStr());
+                    int tileY = atoi(tileString->At(1)->AsCStr());
+                    int tileFrame = atoi(tileString->At(2)->AsCStr());
+                    g->tileManager->receiveTile(tileX, tileY, tileFrame);
+                    return;
+                } else if (splitString->At(0)->Equals("unit/1.0/create")) {
+
+                    auto unitString = splitString->At(1)->Split(',');
+                    int id = atoi(unitString->At(0)->AsCStr());
+                    int x = atoi(unitString->At(1)->AsCStr());
+                    int y = atoi(unitString->At(2)->AsCStr());
+                    int tribeIndex = atoi(unitString->At(3)->AsCStr());
+                    int templateIndex = atoi(unitString->At(4)->AsCStr());
+                    g->unitManager->receiveUnit(id, x, y, tribeIndex, templateIndex);
+                    return;
+                } else if (splitString->At(0)->Equals("unit/1.0/delete")) {
+
+                    auto idString = splitString->At(1);
+                    auto propsString = splitString->At(2);
+                    int id = atoi(idString->AsCStr());
+                    g->unitManager->receiveUnitDelete(id, propsString);
+                    return;
+                } else if (splitString->At(0)->Equals("economy/1.0/update")) {
+                    //ss->Advance(19);
+                    //->economyManager->receiveUpdate(ss);
+                    return;
+                } else if (splitString->At(0)->Equals("item/1.0/create")) {
+
+                    auto itemString = splitString->At(1)->Split(',');
+                    int id = atoi(itemString->At(0)->AsCStr());
+                    int x = atoi(itemString->At(1)->AsCStr());
+                    int y = atoi(itemString->At(2)->AsCStr());
+                    int index = atoi(itemString->At(3)->AsCStr());
+                    g->itemManager->receiveItem(id, x, y, index);
+                    return;
+                } else if (splitString->At(0)->Equals("item/1.0/delete")) {
+
+                    auto idString = splitString->At(1);
+                    int id = atoi(idString->AsCStr());
+                    g->itemManager->receiveItemDelete(id);
+                    return;
+                } else if (splitString->At(0)->Equals("chat/1.0/send")) {
+
+                    auto tribeIndex = atoi(splitString->At(1)->AsCStr());
+                    auto msgString = splitString->At(2);
+                    g->chatManager->receiveMessage(tribeIndex, msgString);
+                    return;
+                }
+            }
+            break;
+            default:
+                int i = 12; //????
+                break;
         }
     }
-
-//    void NetworkManager::OnGameServerUpdate(Ref<Sova::String> message)
-//    {
-//        message = message->TrimEnd("\r\n")->TrimStart("\n");
-//
-//        auto splitString = message->Split('|');
-//
-//        if (splitString->Size() < 2) return;
-//
-//        auto command = splitString->At(0);
-//
-//        if (command->Equals("auth/1.0/gametoken"))
-//        {
-//            this->messageSender->sendStartGameMessage();
-//            return;
-//        }
-//        else if (command->Equals("tribe/1.0/set")) {
-//            g->playersTribeIndex = atoi(splitString->At(1)->AsCStr());
-//            return;
-//        }
-//        else if (command->Equals("grid/1.0/create")) {
-//            auto gridString = splitString->At(1)->Split(',');
-//            auto gridWidth = atoi(gridString->At(0)->AsCStr());
-//            auto gridHeight = atoi(gridString->At(1)->AsCStr());
-//            g->tileManager->receiveGrid(gridWidth, gridHeight);
-//            return;
-//        }
-//        else if (command->Equals("tile/1.0/create")) {
-//            auto tileString = splitString->At(1)->Split(',');
-//            int tileX = atoi(tileString->At(0)->AsCStr());
-//            int tileY = atoi(tileString->At(1)->AsCStr());
-//            int tileFrame = atoi(tileString->At(2)->AsCStr());
-//            g->tileManager->receiveTile(tileX, tileY, tileFrame);
-//            return;
-//        }
-//        else if (command->Equals("unit/1.0/create")) {
-//            auto unitString = splitString->At(1)->Split(',');
-//            int id = atoi(unitString->At(0)->AsCStr());
-//            int x = atoi(unitString->At(1)->AsCStr());
-//            int y = atoi(unitString->At(2)->AsCStr());
-//            int tribeIndex = atoi(unitString->At(3)->AsCStr());
-//            int templateIndex = atoi(unitString->At(4)->AsCStr());
-//            g->unitManager->receiveUnit(id, x, y, tribeIndex, templateIndex);
-//            return;
-//        }
-//        else if (command->Equals("unit/1.0/update")) {
-//            auto idString = splitString->At(1);
-//            auto propsString = splitString->At(2);
-//            int id = atoi(idString->AsCStr());
-//            g->unitManager->receiveUnitUpdate(id, propsString->Split('&'));
-//            return;
-//        }
-//        else if (command->Equals("unit/1.0/delete")) {
-//            auto idString = splitString->At(1);
-//            auto propsString = splitString->At(2);
-//            int id = atoi(idString->AsCStr());
-//            g->unitManager->receiveUnitDelete(id, propsString);
-//            return;
-//        }
-//        else if (command->Equals("economy/1.0/update")) {
-//            auto propsString = splitString->At(1);
-//            g->economyManager->receiveUpdate(propsString->Split('&'));
-//            return;
-//        }
-//        else if (command->Equals("item/1.0/create")) {
-//            auto itemString = splitString->At(1)->Split(',');
-//            int id = atoi(itemString->At(0)->AsCStr());
-//            int x = atoi(itemString->At(1)->AsCStr());
-//            int y = atoi(itemString->At(2)->AsCStr());
-//            int index = atoi(itemString->At(3)->AsCStr());
-//            g->itemManager->receiveItem(id, x, y, index);
-//            return;
-//        }
-//        else if (command->Equals("item/1.0/delete")) {
-//            auto idString = splitString->At(1);
-//            int id = atoi(idString->AsCStr());
-//            g->itemManager->receiveItemDelete(id);
-//            return;
-//        }
-//        else if (command->Equals("chat/1.0/send")) {
-//            auto tribeIndex = atoi(splitString->At(1)->AsCStr());
-//            auto msgString = splitString->At(2);
-//            g->chatManager->receiveMessage(tribeIndex, msgString);
-//            return;
-//        }
-//    }
 }
