@@ -22,6 +22,14 @@ namespace DsprFrontend {
         }
     }
 
+    void EconomyManager::setPop(int value) {
+        this->pop = value;
+    }
+
+    void EconomyManager::setPopMax(int value) {
+        this->popMax = value;
+    }
+
     void EconomyManager::receiveUpdate(Ref<StringScanner> ss)
     {
         while(!ss->IsAtEnd()) {

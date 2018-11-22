@@ -12,6 +12,7 @@
 #include "Game/Unit/UnitManager.h"
 #include "Game/Item/ItemManager.h"
 #include "Game/UI/ChatManager.h"
+#include "Game/EconomyManager.h"
 
 using Sova::String;
 using Sova::StringBuilder;
@@ -144,6 +145,17 @@ namespace DsprFrontend
                 return;
             }
                 break;
+            case DsprMessage::ToClientMsg::MessageType::EconomyUpdate:
+            {
+                auto economyUpdateMsgV1 = DsprMessage::EconomyUpdateMsgV1(clientMsg.msgBytes);
+                if (economyUpdateMsgV1.mana.getWasSet())
+                    g->economyManager->setMana(economyUpdateMsgV1.mana.get());
+                if (economyUpdateMsgV1.pop.getWasSet())
+                    g->economyManager->setMana(economyUpdateMsgV1.pop.get());
+                if (economyUpdateMsgV1.popMax.getWasSet())
+                    g->economyManager->setMana(economyUpdateMsgV1.popMax.get());
+            }
+                break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
             {
                 char* newCstr = new char[clientMsg.msgBytes.size()+1];
@@ -159,12 +171,8 @@ namespace DsprFrontend
                 if (splitString->At(0)->Equals("auth/1.0/gametoken")) {
                     this->messageSender->sendStartGameMessage();
                     return;
-                } else
-                if (splitString->At(0)->Equals("economy/1.0/update")) {
-                    //ss->Advance(19);
-                    //->economyManager->receiveUpdate(ss);
-                    return;
-                } else if (splitString->At(0)->Equals("item/1.0/create")) {
+                }
+                else if (splitString->At(0)->Equals("item/1.0/create")) {
 
                     auto itemString = splitString->At(1)->Split(',');
                     int id = atoi(itemString->At(0)->AsCStr());

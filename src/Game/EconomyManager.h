@@ -22,7 +22,10 @@ namespace DsprFrontend {
         int mana = 0;
         int pop = 3;
         int popMax = 25;
-    private:
+
+        void setPop(int value);
+
+        void setPopMax(int value);
 
 
     };
