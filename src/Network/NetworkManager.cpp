@@ -188,24 +188,12 @@ namespace DsprFrontend
                 return;
             }
                 break;
-            case DsprMessage::ToClientMsg::MessageType::StandardMessage:
+            case DsprMessage::ToClientMsg::MessageType::AuthGameToken:
             {
-                char* newCstr = new char[clientMsg.msgBytes.size()+1];
-                for(int i =0;i<clientMsg.msgBytes.size();i++)
-                    newCstr[i] = clientMsg.msgBytes.get(i);
-                newCstr[clientMsg.msgBytes.size()] = '\0';
-
-                auto newMsg = New<String>(newCstr, true);
-                delete [] newCstr;
-
-                auto splitString = newMsg->Split('|');
-
-                if (splitString->At(0)->Equals("auth/1.0/gametoken")) {
-                    this->messageSender->sendStartGameMessage();
-                    return;
-                }
+                this->messageSender->sendStartGameMessage();
+                return;
             }
-            break;
+                break;
             default:
                 int i = 12; //????
                 break;
