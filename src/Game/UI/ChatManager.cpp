@@ -18,6 +18,7 @@ namespace DsprFrontend {
         this->messageList = New<List<String>>();
         this->indexList = New<List<Int>>();
         this->nameList = New<List<String>>();
+        this->nameList->Add(New<String>("Neutral: "));
         this->nameList->Add(New<String>("Player1: "));
         this->nameList->Add(New<String>("Player2: "));
     }

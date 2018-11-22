@@ -173,6 +173,21 @@ namespace DsprFrontend
                 return;
             }
                 break;
+            case DsprMessage::ToClientMsg::MessageType::ChatSend:
+            {
+                auto chatSendMsgV1 = DsprMessage::ChatSendClientMsgV1(clientMsg.msgBytes);
+
+                char* cstr = new char[chatSendMsgV1.chatMsg.size()];
+                for(int i = 0;i<chatSendMsgV1.chatMsg.size();i++)
+                    cstr[i] = chatSendMsgV1.chatMsg.get(i);
+
+                Ref<String> chatStr = New<String>(cstr, chatSendMsgV1.chatMsg.size(), true);
+                g->chatManager->receiveMessage(chatSendMsgV1.tribeIndex.get(),
+                                               chatStr);
+                delete [] cstr;
+                return;
+            }
+                break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
             {
                 char* newCstr = new char[clientMsg.msgBytes.size()+1];
@@ -187,13 +202,6 @@ namespace DsprFrontend
 
                 if (splitString->At(0)->Equals("auth/1.0/gametoken")) {
                     this->messageSender->sendStartGameMessage();
-                    return;
-                }
-                else if (splitString->At(0)->Equals("chat/1.0/send")) {
-
-                    auto tribeIndex = atoi(splitString->At(1)->AsCStr());
-                    auto msgString = splitString->At(2);
-                    g->chatManager->receiveMessage(tribeIndex, msgString);
                     return;
                 }
             }
