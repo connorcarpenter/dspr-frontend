@@ -166,6 +166,13 @@ namespace DsprFrontend
                 return;
             }
                 break;
+            case DsprMessage::ToClientMsg::MessageType::ItemDelete:
+            {
+                auto itemDeleteMsgV1 = DsprMessage::ItemDeleteMsgV1(clientMsg.msgBytes);
+                g->itemManager->receiveItemDelete(itemDeleteMsgV1.id.get());
+                return;
+            }
+                break;
             case DsprMessage::ToClientMsg::MessageType::StandardMessage:
             {
                 char* newCstr = new char[clientMsg.msgBytes.size()+1];
@@ -182,13 +189,7 @@ namespace DsprFrontend
                     this->messageSender->sendStartGameMessage();
                     return;
                 }
-                else if (splitString->At(0)->Equals("item/1.0/delete")) {
-
-                    auto idString = splitString->At(1);
-                    int id = atoi(idString->AsCStr());
-                    g->itemManager->receiveItemDelete(id);
-                    return;
-                } else if (splitString->At(0)->Equals("chat/1.0/send")) {
+                else if (splitString->At(0)->Equals("chat/1.0/send")) {
 
                     auto tribeIndex = atoi(splitString->At(1)->AsCStr());
                     auto msgString = splitString->At(2);
