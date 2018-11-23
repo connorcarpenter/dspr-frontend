@@ -43,13 +43,12 @@ namespace DsprFrontend {
 
     void MessageSender::sendChatMessage(Ref<Sova::String> chatMsg)
     {
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("chat/1.0/send|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(chatMsg);
-        auto msgToSend = sb->ToString();
-        this->sendStandardMessage(sb->ToString());
+        DsprMessage::ChatSendServerMsgV1 chatSendServerMsgV1;
+        chatSendServerMsgV1.chatMsg.loadFromCharPtr(chatMsg->AsCStr(), chatMsg->Length());
+        auto serverMsg = chatSendServerMsgV1.getToServerMessage();
+        serverMsg->authToken.loadFromCstr(this->getAuthTokenCstr());
+        auto packedMsg = serverMsg->Pack();
+        g->gameServer->send(New<String>((char*) packedMsg->getCharPtr(), packedMsg->size(), true));
     }
 
     void MessageSender::sendUnitOrderMessage(Ref<List<Int>> idList, Ref<Int> orderIndex, Ref<List<Int>> otherNumberList) {
@@ -70,15 +69,15 @@ namespace DsprFrontend {
         serverMsg->authToken.loadFromCstr(this->getAuthTokenCstr());
         auto packedMsg = serverMsg->Pack();
 
-        //TESTING
-        std::shared_ptr<DsprMessage::CStr> copiedPackedMsg = packedMsg->getCopy();
-        DsprMessage::ToServerMsg testServerMsg = DsprMessage::ToServerMsg(copiedPackedMsg);
-        DsprMessage::UnitOrderMsgV1 testUnitOrderMsg = DsprMessage::UnitOrderMsgV1(testServerMsg.msgBytes);
-        std::shared_ptr<DsprMessage::CStr> testCstr = DsprMessage::CStr::make_cstr(testServerMsg.msgBytes);
-        DsprMessage::CStr* testCstrR = testCstr.get();
-        auto testAuthToken = serverMsg->authToken.toStdString();
-        std::string testATR = *testAuthToken.get();
-        //TESTING
+//        //TESTING
+//        std::shared_ptr<DsprMessage::CStr> copiedPackedMsg = packedMsg->getCopy();
+//        DsprMessage::ToServerMsg testServerMsg = DsprMessage::ToServerMsg(copiedPackedMsg);
+//        DsprMessage::UnitOrderMsgV1 testUnitOrderMsg = DsprMessage::UnitOrderMsgV1(testServerMsg.msgBytes);
+//        std::shared_ptr<DsprMessage::CStr> testCstr = DsprMessage::CStr::make_cstr(testServerMsg.msgBytes);
+//        DsprMessage::CStr* testCstrR = testCstr.get();
+//        auto testAuthToken = serverMsg->authToken.toStdString();
+//        std::string testATR = *testAuthToken.get();
+//        //TESTING
 
         g->gameServer->send(New<String>((char*) packedMsg->getCharPtr(), packedMsg->size(), true));
     }
