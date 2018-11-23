@@ -355,6 +355,7 @@ namespace DsprFrontend
         }
 
         auto idList = New<List<Int>>();
+        auto otherNumberList = New<List<Int>>();
 
         for (Ref<ListIterator<Unit>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
         {
@@ -363,8 +364,6 @@ namespace DsprFrontend
             idList->Add(intObj);
             unit->currentOrder = orderIndex;
         }
-
-        auto otherNumberList = New<List<Int>>();
 
         if (orderIndex == Move || orderIndex == AttackMove) {
             otherNumberList->Add(New<Int>(tilePosition->x));
@@ -401,38 +400,22 @@ namespace DsprFrontend
             orderIndex = Gather;
         }
 
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("unit/1.0/order|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        bool first = true;
+        auto idList = New<List<Int>>();
+        auto otherNumberList = New<List<Int>>();
+
         for (auto iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto unit = iterator->Get();
-            if (!unit->unitTemplate->canGather) continue;
-
-            if (first)
-            {
-                first = false;
-            }
-            else
-            {
-                sb->Append(New<Sova::String>(","));
-            }
-
             Ref<Int> intObj = New<Int>(unit->id);
-            sb->Append(intObj->ToString());
+            idList->Add(intObj);
 
             unit->currentOrder = orderIndex;
         }
-        if(first)return;
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(New<Int>(orderIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
 
-        sb->Append(New<Int>(targetId)->ToString());
+        otherNumberList->Add(New<Int>(orderIndex));
+        otherNumberList->Add(New<Int>(targetId));
 
-        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
+        g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
     }
 
     void UnitManager::orderCurrentlySelectedUnits(UnitOrder orderIndex)
@@ -441,32 +424,19 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("unit/1.0/order|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        bool first = true;
-        for (Ref<ListIterator<Unit>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
-        {
-            if (first)
-            {
-                first = false;
-            }
-            else
-            {
-                sb->Append(New<Sova::String>(","));
-            }
+        auto idList = New<List<Int>>();
+        auto otherNumberList = New<List<Int>>();
 
+        for (auto iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
             auto unit = iterator->Get();
             Ref<Int> intObj = New<Int>(unit->id);
-            sb->Append(intObj->ToString());
+            idList->Add(intObj);
 
             unit->currentOrder = orderIndex;
         }
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(New<Int>(orderIndex)->ToString());
 
-        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
+        g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex));
     }
 
     void UnitManager::orderCurrentlySelectedUnitsToBuildUnit(Ref<UnitTemplate> unitTemplate)
@@ -477,35 +447,22 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("unit/1.0/order|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        bool first = true;
-        for (Ref<ListIterator<Unit>> iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
-        {
-            if (first)
-            {
-                first = false;
-            }
-            else
-            {
-                sb->Append(New<Sova::String>(","));
-            }
+        auto idList = New<List<Int>>();
+        auto otherNumberList = New<List<Int>>();
 
+        for (auto iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
+        {
             auto unit = iterator->Get();
             Ref<Int> intObj = New<Int>(unit->id);
-            sb->Append(intObj->ToString());
+            idList->Add(intObj);
 
             unit->currentOrder = orderIndex;
             unit->trainUnit(unitTemplate);
         }
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(New<Int>(orderIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
-        sb->Append(New<Int>(unitTemplate->index)->ToString());
 
-        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
+        otherNumberList->Add(New<Int>(unitTemplate->index));
+
+        g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
     }
 
     void UnitManager::orderUnitSwapInventory(Ref<Unit> unit, int beforeSlotIndex, int afterSlotIndex)
@@ -516,20 +473,15 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("unit/1.0/order|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        Ref<Int> intObj = New<Int>(unit->id);
-        sb->Append(intObj->ToString());
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(New<Int>(orderIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
-        sb->Append(New<Int>(beforeSlotIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
-        sb->Append(New<Int>(afterSlotIndex)->ToString());
+        auto idList = New<List<Int>>();
+        auto otherNumberList = New<List<Int>>();
 
-        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
+        idList->Add(New<Int>(unit->id));
+
+        otherNumberList->Add(New<Int>(beforeSlotIndex));
+        otherNumberList->Add(New<Int>(afterSlotIndex));
+
+        g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
     }
 
     void UnitManager::orderUnitDropItem(Ref<Unit> unit, int slotIndex, Ref<Point> position)
@@ -543,22 +495,16 @@ namespace DsprFrontend
         tilePosition = (mmPosition == nullptr) ?
                        g->tileManager->getTilePosition(position->x, position->y) : mmPosition;
 
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("unit/1.0/order|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        Ref<Int> intObj = New<Int>(unit->id);
-        sb->Append(intObj->ToString());
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(New<Int>(orderIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
-        sb->Append(New<Int>(slotIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
-        sb->Append(New<Int>(tilePosition->x)->ToString());
-        sb->Append(New<Sova::String>(","));
-        sb->Append(New<Int>(tilePosition->y)->ToString());
+        auto idList = New<List<Int>>();
+        auto otherNumberList = New<List<Int>>();
 
-        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
+        idList->Add(New<Int>(unit->id));
+
+        otherNumberList->Add(New<Int>(slotIndex));
+        otherNumberList->Add(New<Int>(tilePosition->x));
+        otherNumberList->Add(New<Int>(tilePosition->y));
+
+        g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
     }
 
     void UnitManager::orderUnitGiveItem(Ref<Unit> unit, int slotIndex, int targetUnitId)
@@ -567,20 +513,15 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("unit/1.0/order|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        Ref<Int> intObj = New<Int>(unit->id);
-        sb->Append(intObj->ToString());
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(New<Int>(orderIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
-        sb->Append(New<Int>(slotIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
-        sb->Append(New<Int>(targetUnitId)->ToString());
+        auto idList = New<List<Int>>();
+        auto otherNumberList = New<List<Int>>();
 
-        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
+        idList->Add(New<Int>(unit->id));
+
+        otherNumberList->Add(New<Int>(slotIndex));
+        otherNumberList->Add(New<Int>(targetUnitId));
+
+        g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
     }
 
     void UnitManager::issueUnitOrderRally(){
@@ -605,41 +546,26 @@ namespace DsprFrontend
         tilePosition = (mmPosition == nullptr) ?
                        g->tileManager->getTilePosition(g->cursor->worldPosition->x, g->cursor->worldPosition->y) : mmPosition;
 
-        auto sb = New<Sova::StringBuilder>();
-        sb->Append(New<Sova::String>("unit/1.0/order|"));
-        sb->Append(g->gameServerPlayerToken);
-        sb->Append(New<Sova::String>("|"));
-        bool first = true;
+        auto idList = New<List<Int>>();
+        auto otherNumberList = New<List<Int>>();
+
         for (auto iterator = this->selectionList->GetIterator(); iterator->Valid(); iterator->Next())
         {
-            if (first)
-            {
-                first = false;
-            }
-            else
-            {
-                sb->Append(New<Sova::String>(","));
-            }
-
             auto unit = iterator->Get();
-            Ref<Int> intObj = New<Int>(unit->id);
-            sb->Append(intObj->ToString());
+            idList->Add(New<Int>(unit->id));
 
             unit->currentOrder = orderIndex;
         }
-        sb->Append(New<Sova::String>("|"));
-        sb->Append(New<Int>(orderIndex)->ToString());
-        sb->Append(New<Sova::String>(","));
+
         if (orderIndex == RallyPoint) {
-            sb->Append(New<Int>(tilePosition->x)->ToString());
-            sb->Append(New<Sova::String>(","));
-            sb->Append(New<Int>(tilePosition->y)->ToString());
+            otherNumberList->Add(New<Int>(tilePosition->x));
+            otherNumberList->Add(New<Int>(tilePosition->y));
         }
         if (orderIndex == RallyUnit){
-            sb->Append(New<Int>(targetId)->ToString());
+            otherNumberList->Add(New<Int>(targetId));
         }
 
-        g->networkManager->messageSender->sendStandardMessage(sb->ToString());
+        g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
     }
 
     void UnitManager::updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition)

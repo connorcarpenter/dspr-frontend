@@ -24,16 +24,16 @@ namespace DsprFrontend {
         return this->authTokenCstr;
     }
 
-    void MessageSender::sendStandardMessage(Ref<String> str) {
-
-        DsprMessage::ToServerMsg toServerMsg;
-        toServerMsg.msgType.set((unsigned char) DsprMessage::ToServerMsg::MessageType::StandardMessage);
-        std::shared_ptr<DsprMessage::CStr> cstr = DsprMessage::CStr::make_cstr((const unsigned char*) str->AsCStr(), str->Length());
-        toServerMsg.msgBytes.loadFromCstr(cstr);
-
-        auto packedMsg = toServerMsg.Pack();
-        g->gameServer->send(New<String>((char*) packedMsg->getCharPtr(), packedMsg->size(), true));
-    }
+//    void MessageSender::sendStandardMessage(Ref<String> str) {
+//
+//        DsprMessage::ToServerMsg toServerMsg;
+//        toServerMsg.msgType.set((unsigned char) DsprMessage::ToServerMsg::MessageType::StandardMessage);
+//        std::shared_ptr<DsprMessage::CStr> cstr = DsprMessage::CStr::make_cstr((const unsigned char*) str->AsCStr(), str->Length());
+//        toServerMsg.msgBytes.loadFromCstr(cstr);
+//
+//        auto packedMsg = toServerMsg.Pack();
+//        g->gameServer->send(New<String>((char*) packedMsg->getCharPtr(), packedMsg->size(), true));
+//    }
 
     void MessageSender::sendStartGameMessage() {
         DsprMessage::ToServerMsg toServerMsg;
@@ -52,6 +52,10 @@ namespace DsprFrontend {
         serverMsg->authToken.loadFromCstr(this->getAuthTokenCstr());
         auto packedMsg = serverMsg->Pack();
         g->gameServer->send(New<String>((char*) packedMsg->getCharPtr(), packedMsg->size(), true));
+    }
+
+    void MessageSender::sendUnitOrderMessage(Ref<List<Int>> idList, Ref<Int> orderIndex) {
+        this->sendUnitOrderMessage(idList, orderIndex, Null<List<Int>>());
     }
 
     void MessageSender::sendUnitOrderMessage(Ref<List<Int>> idList, Ref<Int> orderIndex, Ref<List<Int>> otherNumberList) {

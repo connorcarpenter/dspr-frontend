@@ -24,7 +24,7 @@ namespace DsprFrontend {
         void sendStartGameMessage();
         void sendUnitOrderMessage(Ref<List<Int>> idList, Ref<Int> orderIndex, Ref<List<Int>> otherNumberList);
 
-        void sendStandardMessage(Ref<String> str);
+        void sendUnitOrderMessage(Ref<List<Int>> idList, Ref<Int> orderIndex);
 
     private:
         Global* g = nullptr;
