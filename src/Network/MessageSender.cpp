@@ -6,6 +6,7 @@
 #include <Sova/Common/StringBuilder.h>
 #include "../DsprMessage/ToServerMsg.h"
 #include "MessageSender.h"
+#include "../DsprMessage/Array.h"
 
 namespace DsprFrontend {
 
@@ -68,6 +69,17 @@ namespace DsprFrontend {
         auto serverMsg = unitOrderMsgV1.getToServerMessage();
         serverMsg->authToken.loadFromCstr(this->getAuthTokenCstr());
         auto packedMsg = serverMsg->Pack();
+
+        //TESTING
+        std::shared_ptr<DsprMessage::CStr> copiedPackedMsg = packedMsg->getCopy();
+        DsprMessage::ToServerMsg testServerMsg = DsprMessage::ToServerMsg(copiedPackedMsg);
+        DsprMessage::UnitOrderMsgV1 testUnitOrderMsg = DsprMessage::UnitOrderMsgV1(testServerMsg.msgBytes);
+        std::shared_ptr<DsprMessage::CStr> testCstr = DsprMessage::CStr::make_cstr(testServerMsg.msgBytes);
+        DsprMessage::CStr* testCstrR = testCstr.get();
+        auto testAuthToken = serverMsg->authToken.toStdString();
+        std::string testATR = *testAuthToken.get();
+        //TESTING
+
         g->gameServer->send(New<String>((char*) packedMsg->getCharPtr(), packedMsg->size(), true));
     }
 }
