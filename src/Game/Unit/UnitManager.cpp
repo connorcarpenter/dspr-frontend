@@ -219,16 +219,13 @@ namespace DsprFrontend
 
             if (cqMsg.queue.getWasSet())
             {
-                if (cqMsg.queue.size() != 0) {
+                auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
 
-                    auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
-
-                    unit->constructionQueue->emptyQueue();
-                    for (int i = 0; i < cqMsg.queue.size(); i++) {
-                        int index = cqMsg.queue.get(i);
-                        Ref<UnitTemplate> ut = g->unitTemplateCatalog->findTemplateByIndex(index);
-                        unit->constructionQueue->enqueue(ut);
-                    }
+                unit->constructionQueue->emptyQueue();
+                for (int i = 0; i < cqMsg.queue.size(); i++) {
+                    int index = cqMsg.queue.get(i);
+                    Ref<UnitTemplate> ut = g->unitTemplateCatalog->findTemplateByIndex(index);
+                    unit->constructionQueue->enqueue(ut);
                 }
             }
         }
