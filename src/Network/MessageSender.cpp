@@ -4,6 +4,7 @@
 
 #include <Sova/Internal/InternalApp.h>
 #include <Sova/Common/StringBuilder.h>
+#include <DsprMessage/ToClientMsg.h>
 #include "../DsprMessage/ToServerMsg.h"
 #include "MessageSender.h"
 #include "../DsprMessage/Array.h"
@@ -35,10 +36,12 @@ namespace DsprFrontend {
     }
 
     void MessageSender::sendStartGameMessage() {
-            auto sb = New<Sova::StringBuilder>();
-            sb->Append(New<Sova::String>("auth/1.0/gametoken|"));
-            sb->Append(g->gameServerPlayerToken);
-        this->sendStandardMessage(sb->ToString());
+        DsprMessage::ToServerMsg toServerMsg;
+        toServerMsg.authToken.loadFromCstr(this->getAuthTokenCstr());
+        toServerMsg.msgType.set((unsigned char) DsprMessage::ToServerMsg::MessageType::StartGame);
+        auto packedMsg = toServerMsg.Pack();
+        g->gameServer->send(New<String>((char*) packedMsg->getCharPtr(), packedMsg->size(), true));
+
     }
 
     void MessageSender::sendChatMessage(Ref<Sova::String> chatMsg)
