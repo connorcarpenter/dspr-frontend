@@ -76,5 +76,6 @@ namespace DsprFrontend
         Ref<Sprite> unitSelectCircle_2x2 = Null<Sprite>();
 
         int playersTribeIndex = -1;
+        const int gameServerTickMs = 100;
     };
 }

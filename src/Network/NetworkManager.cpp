@@ -8,6 +8,7 @@
 #include "NetworkManager.h"
 #include <iostream>
 #include <DsprMessage/Main.h>
+#include <Game/Effects/Projectile.h>
 #include "Game/TileManager.h"
 #include "Game/Unit/UnitManager.h"
 #include "Game/Item/ItemManager.h"
@@ -191,6 +192,17 @@ namespace DsprFrontend
             case DsprMessage::ToClientMsg::MessageType::AuthGameToken:
             {
                 this->messageSender->sendStartGameMessage();
+                return;
+            }
+                break;
+            case DsprMessage::ToClientMsg::MessageType::ProjectileCreate:
+            {
+                auto projectileCreateMsg = DsprMessage::ProjectileCreateMsgV1(clientMsg.msgBytes);
+                g->world->AddChild(New<Projectile>(projectileCreateMsg.from.get(0),
+                                                   projectileCreateMsg.from.get(1),
+                                                   projectileCreateMsg.to.get(0),
+                                                   projectileCreateMsg.to.get(1),
+                                                   projectileCreateMsg.index.get()));
                 return;
             }
                 break;

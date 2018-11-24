@@ -134,7 +134,8 @@ namespace DsprFrontend
         //construction queue
         if (this->constructionQueue != nullptr)
         {
-            this->constructionQueue->update(deltaFrameMs / gameServerTickMs);
+            auto g = (Global*) InternalApp::getGlobal();
+            this->constructionQueue->update(deltaFrameMs / g->gameServerTickMs);
         }
 
         //call into specific unit
@@ -150,7 +151,7 @@ namespace DsprFrontend
         if (!this->tilePosition->Equals(this->nextTilePosition))
         {
             this->imageSpeed = walkImageSpeed;
-            this->walkAmount += this->walkSpeed * (deltaFrameMs / gameServerTickMs);
+            this->walkAmount += this->walkSpeed * (deltaFrameMs / g->gameServerTickMs);
             if (this->walkAmount >= this->unitTemplate->walkMax)
             {
                 //update fog
@@ -199,8 +200,9 @@ namespace DsprFrontend
     }
 
     void Unit::attackingStep(float deltaFrameMs) {
+        auto g = (Global*) InternalApp::getGlobal();
         if (this->attackWaitIndex <= 0) {
-            this->attackFrameIndex += attackAnimationSpeed * deltaFrameMs / gameServerTickMs;
+            this->attackFrameIndex += attackAnimationSpeed * deltaFrameMs / g->gameServerTickMs;
             if (this->attackFrameIndex >= this->attackFramesNumber) {
                 this->attackFrameIndex = 0;
                 this->attackWaitIndex = this->attackWaitFrames;
@@ -213,13 +215,14 @@ namespace DsprFrontend
             }
         }
         else {
-            this->attackWaitIndex -= this->attackWaitSpeed * deltaFrameMs / gameServerTickMs;
+            this->attackWaitIndex -= this->attackWaitSpeed * deltaFrameMs / g->gameServerTickMs;
             this->imageIndex = 0;
         }
     }
 
     void Unit::gatheringStep(float deltaFrameMs) {
-        this->gatherFrameIndex += (deltaFrameMs / gameServerTickMs);
+        auto g = (Global*) InternalApp::getGlobal();
+        this->gatherFrameIndex += (deltaFrameMs / g->gameServerTickMs);
         if (this->myManaball == nullptr)
         {
             auto manapartPoint = New<Point>(this->position->x + (this->scale->x * 4) + (this->scale->x==-1 ? this->unitTemplate->spriteFaceLeftXoffset : 0),

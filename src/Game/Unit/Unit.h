@@ -86,7 +86,6 @@ namespace DsprFrontend
         const int interpolationMax = 6;
         const int interpolationStep = 1;
         const float walkImageSpeed = 0.1f;
-        const int gameServerTickMs = 100;
 
         float attackFrameIndex = 0;
         float attackWaitIndex = 0;

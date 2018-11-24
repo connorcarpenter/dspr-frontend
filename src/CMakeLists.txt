@@ -52,6 +52,7 @@ fips_begin_app(dspr-frontend windowed)
             Game/Effects/BloodParticle.h Game/Effects/BloodParticle.cpp
             Game/Effects/FloatingNumber.h Game/Effects/FloatingNumber.cpp
             Game/Effects/Sparkle.h Game/Effects/Sparkle.cpp
+            Game/Effects/Projectile.h Game/Effects/Projectile.cpp
 
             Game/UI/UiManager.h Game/UI/UiManager.cpp
             Game/UI/Cursor.h Game/UI/Cursor.cpp

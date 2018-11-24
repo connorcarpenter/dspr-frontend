@@ -67,9 +67,11 @@ namespace DsprFrontend {
 
         unitOrderMsgV1.orderIndex.set(orderIndex->getInt());
 
-        for (auto iterator = otherNumberList->GetIterator(); iterator->Valid(); iterator->Next()) {
-            auto id = iterator->Get();
-            unitOrderMsgV1.otherNumbers.add(id->getInt());
+        if (otherNumberList != nullptr) {
+            for (auto iterator = otherNumberList->GetIterator(); iterator->Valid(); iterator->Next()) {
+                auto id = iterator->Get();
+                unitOrderMsgV1.otherNumbers.add(id->getInt());
+            }
         }
 
         auto serverMsg = unitOrderMsgV1.getToServerMessage();
