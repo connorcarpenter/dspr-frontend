@@ -11,6 +11,7 @@
 #include <Game/Effects/Manaball.h>
 #include <Game/Effects/FloatingNumber.h>
 #include <Game/Unit/SpecificUnit/Manafount.h>
+#include <Game/Effects/Projectile.h>
 #include "Unit.h"
 #include "Game/TileManager.h"
 #include "DsprColors.h"
@@ -201,20 +202,54 @@ namespace DsprFrontend
 
     void Unit::attackingStep(float deltaFrameMs) {
         auto g = (Global*) InternalApp::getGlobal();
-        if (this->attackWaitIndex <= 0) {
+        if (this->attackWaitIndex <= 0)
+        {
             this->attackFrameIndex += attackAnimationSpeed * deltaFrameMs / g->gameServerTickMs;
-            if (this->attackFrameIndex >= this->attackFramesNumber) {
+            if (this->attackFrameIndex >= this->attackFramesNumber)
+            {
                 this->attackFrameIndex = 0;
                 this->attackWaitIndex = this->attackWaitFrames;
             }
             this->imageIndex = this->attackFrameIndex;
-            if (this->unitTemplate->hitSound != nullptr) {
-                if (Math::Floor(this->imageIndex) == 3) {
-                    this->unitTemplate->hitSound->PlayAndDisable();
-                } else this->unitTemplate->hitSound->Enable();
+
+            if (Math::Floor(this->imageIndex) == this->attackHitFrame)
+            {
+                if (!this->attackEventHappened)
+                {
+                    this->attackEventHappened = true;
+                    if (this->leftHandItemTemplate != nullptr)
+                    {
+                        if (this->leftHandItemTemplate->index == 0){
+                            //we got a sling! make dat projectile!
+                            auto targetUnit = g->unitManager->getUnitWithId(this->targetUnitId);
+                            if (targetUnit != nullptr)
+                            {
+                                g->world->AddChild(New<Projectile>(this->tilePosition->x,
+                                                                   this->tilePosition->y,
+                                                                   targetUnit->tilePosition->x,
+                                                                   targetUnit->tilePosition->y,
+                                                                   0));
+                            }
+                        }
+                    }
+                    if (this->leftHandItemTemplate != nullptr && this->leftHandItemTemplate->useSound != nullptr)
+                    {
+                        this->leftHandItemTemplate->useSound->Play();
+                    }
+                    else
+                    {
+                        if (this->unitTemplate->hitSound != nullptr)
+                        {
+                            this->unitTemplate->hitSound->Play();
+                        }
+                    }
+                }
             }
+                else
+                    this->attackEventHappened = false;
         }
-        else {
+        else
+        {
             this->attackWaitIndex -= this->attackWaitSpeed * deltaFrameMs / g->gameServerTickMs;
             this->imageIndex = 0;
         }
@@ -590,11 +625,13 @@ namespace DsprFrontend
         if (itemTemplate == nullptr)
         {
             this->leftHandSprite = Null<AnimatedSprite>();
+            this->leftHandItemTemplate = Null<ItemTemplate>();
         }
         else
         {
             if (this->leftHandSprite == nullptr) this->leftHandSprite = New<AnimatedSprite>();
             this->leftHandSprite->useAnimatedSpriteInfo(itemTemplate->wornSpriteInfo);
+            this->leftHandItemTemplate = itemTemplate;
         }
     }
 
@@ -603,11 +640,13 @@ namespace DsprFrontend
         if (itemTemplate == nullptr)
         {
             this->rightHandSprite = Null<AnimatedSprite>();
+            this->rightHandItemTemplate = Null<ItemTemplate>();
         }
         else
         {
             if (this->rightHandSprite == nullptr) this->rightHandSprite = New<AnimatedSprite>();
             this->rightHandSprite->useAnimatedSpriteInfo(itemTemplate->wornSpriteInfo);
+            this->rightHandItemTemplate = itemTemplate;
         }
     }
 

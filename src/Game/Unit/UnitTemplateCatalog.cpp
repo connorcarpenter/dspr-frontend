@@ -40,10 +40,10 @@ namespace DsprFrontend
         this->worker->buildTime = 300;
         this->worker->setWalkSpeed(2,3);
 
-//        this->worker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
-//        this->worker->selectedSound = New<Sound>(New<Sova::String>("sounds/hello.wav"));
-//        this->worker->dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
-//        this->worker->readySound = New<Sound>(New<Sova::String>("sounds/ready.wav"));
+        this->worker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
+        this->worker->selectedSound = New<Sound>(New<Sova::String>("sounds/hello.wav"));
+        this->worker->dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
+        this->worker->readySound = New<Sound>(New<Sova::String>("sounds/ready.wav"));
         this->worker->sprSelectCircle = g->unitSelectCircle_1x1;
         this->worker->sprHoverCircle = g->unitHoverCircle_1x1;
         this->worker->hasIdleTurnBehavior = true;
@@ -93,8 +93,8 @@ namespace DsprFrontend
         this->ashwalker->maxHealth = 340;
         this->ashwalker->setWalkSpeed(4,6);
 
-//        this->ashwalker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
-//        this->ashwalker->dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
+        this->ashwalker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
+        this->ashwalker->dieSound = New<Sound>(New<Sova::String>("sounds/die.wav"));
         this->ashwalker->sprSelectCircle = g->unitSelectCircle_1x1;
         this->ashwalker->sprHoverCircle = g->unitHoverCircle_1x1;
         this->ashwalker->hasIdleTurnBehavior = true;

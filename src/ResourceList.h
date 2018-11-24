@@ -78,6 +78,8 @@ namespace DsprFrontend
             resources->Add(New<String>("sounds/hit.wav"));
             resources->Add(New<String>("sounds/die.wav"));
             resources->Add(New<String>("sounds/ready.wav"));
+            resources->Add(New<String>("sounds/swing.wav"));
+            resources->Add(New<String>("sounds/bowfire.wav"));
 
             return resources;
         }

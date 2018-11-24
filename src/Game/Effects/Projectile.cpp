@@ -6,6 +6,7 @@
 #include <Game/Global.h>
 #include <Sova/Graphics/Rectangle.h>
 #include <Sova/Math/Math.h>
+#include <Sova/Audio/Sound.h>
 #include "Projectile.h"
 #include "GraphicsManager.h"
 #include "SpriteCatalog.h"
@@ -40,9 +41,16 @@ namespace DsprFrontend {
     {
         auto g = (Global*) InternalApp::getGlobal();
         this->distance -= this->speed * (deltaMs / g->gameServerTickMs);
-        if (this->distance <= 0) this->Destroy();
+        if (this->distance <= 0)
+        {
+            if (!this->destroyed) {
+                auto hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
+                hitSound->Play();
+                this->Destroy();
+            }
+        }
 
-        this->position->x = (int) (((Math::Lerp(this->to->x, this->from->x, this->distance/this->maxDistance)/2) + 0.5f) * g->tileManager->tileWidth);
+        this->position->x = (int) (((Math::Lerp(this->to->x, this->from->x, this->distance/this->maxDistance)/2) + 0.5f) * g->tileManager->tileWidth) - 7;
         this->position->y = (int) (((Math::Lerp(this->to->y, this->from->y, this->distance/this->maxDistance)/2) + 0.5f) * g->tileManager->tileHeight) - 7;
     }
 

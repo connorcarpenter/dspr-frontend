@@ -93,6 +93,7 @@ namespace DsprFrontend
         const float attackWaitSpeed = 1.0f / 1.7f;
         const int attackFramesNumber = 5;
         const int attackWaitFrames = 5;
+        const int attackHitFrame = 3;
         float walkAmount = 0;
         int walkSpeed = 0;
         bool checkReleaseSelectionBox = false;
@@ -105,5 +106,8 @@ namespace DsprFrontend
         bool hasShortHair = false;
         Color hairColor = Color::Black;
 
+        bool attackEventHappened = false;
+        Ref<ItemTemplate> leftHandItemTemplate = Null<ItemTemplate>();
+        Ref<ItemTemplate> rightHandItemTemplate = Null<ItemTemplate>();
     };
 }

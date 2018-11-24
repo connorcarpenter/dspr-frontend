@@ -6,6 +6,7 @@
 
 #include <Sova/References/Refable.h>
 #include <Sova/Graphics/AnimatedSpriteInfo.h>
+#include <Sova/Audio/Sound.h>
 
 namespace DsprFrontend {
 
@@ -18,5 +19,6 @@ namespace DsprFrontend {
         BodyPart wornOn = BodyPart::None;
         bool leftHanded = false;
         Ref<Sova::AnimatedSpriteInfo> wornSpriteInfo = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::Sound> useSound = Null<Sova::Sound>();
     };
 }

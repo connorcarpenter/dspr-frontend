@@ -18,6 +18,7 @@ namespace DsprFrontend {
         this->sling->wornOn = BodyPart::Hand;
         this->sling->leftHanded = true;
         this->sling->wornSpriteInfo = g->spriteCatalog->workerSling;
+        this->sling->useSound = New<Sound>(New<Sova::String>("sounds/bowfire.wav"));
         this->templateList->Add(this->sling);
 
         this->club = New<ItemTemplate>(2);
