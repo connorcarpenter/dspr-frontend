@@ -17,7 +17,10 @@ namespace DsprFrontend
         void drawSelf(Sova::Ref<Camera> camera, int xoffset, int yoffset) override;
     private:
         Global* g = nullptr;
-        Ref<Sova::Pixel> pixel = Null<Sova::Pixel>();
         Ref<Sova::Rectangle> rectangle = Null<Sova::Rectangle>();
+
+        void drawTile(Ref<Camera> camera, int x, int y);
+
+        void drawTile(Ref<Camera> camera, int x, int y, Color color);
     };
 }

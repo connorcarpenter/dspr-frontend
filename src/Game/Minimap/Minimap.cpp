@@ -62,8 +62,6 @@ namespace DsprFrontend {
     void Minimap::DrawTile(int x, int y) {
         auto frame = this->g->tileManager->getTileFrame(x,y);
         if (frame == -1) return;
-        if (frame >= 0 && frame <=2) g->minimap->DrawTile(x, y, Color::Green);
-        if (frame >= 3 && frame <=5) g->minimap->DrawTile(x, y, Color::Blue);
-        if (frame >= 6 && frame <=8) g->minimap->DrawTile(x, y, Color::Brown);
+        g->minimap->DrawTile(x, y, Color::Brown);
     }
 }
