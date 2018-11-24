@@ -37,7 +37,7 @@ namespace DsprFrontend
         this->worker->sight = 6;
         this->worker->maxHealth = 420;
         this->worker->maxStamina = 100;
-        this->worker->buildTime = 100;
+        this->worker->buildTime = 300;
         this->worker->setWalkSpeed(2,3);
 
         this->worker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
