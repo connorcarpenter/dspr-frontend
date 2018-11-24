@@ -462,6 +462,26 @@ namespace DsprFrontend
         g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
     }
 
+    void UnitManager::orderCurrentlySelectedUnitsToCancelTrainUnit(int queueIndex)
+    {
+        auto unit = this->selectionList->At(0);
+        
+        auto orderIndex = UnitOrder::CancelTrain;
+
+        auto idList = New<List<Int>>();
+        auto otherNumberList = New<List<Int>>();
+
+        Ref<Int> intObj = New<Int>(unit->id);
+        idList->Add(intObj);
+        unit->currentOrder = orderIndex;
+        unit->cancelTrainUnit(queueIndex);
+
+        otherNumberList->Add(New<Int>(queueIndex));
+
+        auto g = (Global*) InternalApp::getGlobal();
+        g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
+    }
+
     void UnitManager::orderUnitSwapInventory(Ref<Unit> unit, int beforeSlotIndex, int afterSlotIndex)
     {
         if (beforeSlotIndex == afterSlotIndex)return;

@@ -55,6 +55,10 @@ namespace DsprFrontend
 
     void ConstructionQueue::emptyQueue() {
         this->unitQueue->Clear();
+    }
 
+    void ConstructionQueue::cancelAtIndex(int index) {
+        if (index == 0) this->currentBuildTime = 0;
+        this->unitQueue->Remove(index);
     }
 }

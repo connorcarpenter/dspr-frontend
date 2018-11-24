@@ -113,9 +113,10 @@ namespace DsprFrontend
 
     Ref<Button> UiManager::getButtonWithLeftClick(Ref<Point> clickPoint) {
 
+        auto g = (Global *) InternalApp::getGlobal();
+
         if (Math::PointInBox(clickPoint->x, clickPoint->y, bigPortraitX, bigPortraitY, bigPortraitX + bigPortraitW, bigPortraitY + bigPortraitH)) {
             //clicking within portrait
-            auto g = (Global *) InternalApp::getGlobal();
             if (g->unitManager->getSelectedUnits()->Size() > 0)
             {
                 auto firstUnit = g->unitManager->getSelectedUnits()->At(0);
@@ -123,11 +124,44 @@ namespace DsprFrontend
             }
             return Null<Button>();
         }
-        
+
+
         if (Math::PointInBox(clickPoint->x, clickPoint->y, armyBarX, armyBarY, armyBarX + armyBarW, armyBarY + armyBarH)) {
             //clicking within armybar
-            auto g = (Global *) InternalApp::getGlobal();
-            if (g->unitManager->getSelectedUnits()->Size() > 0) {
+            if (g->unitManager->getSelectedUnits()->Size() == 1) {
+                auto firstUnit = g->unitManager->getSelectedUnits()->At(0);
+                bool showTraining = (firstUnit->unitTemplate->hasConstructionQueue &&
+                                     firstUnit->constructionQueue->isTraining());
+
+                if (showTraining) {
+                    int showIcons = 0;
+                    int i = 0;
+                    int j = 0;
+                    int unitTrainingIndex = 0;
+                    for (auto iterator = firstUnit->constructionQueue->GetIterator(); iterator->Valid(); iterator->Next()) {
+                        auto unitTemplate = iterator->Get();
+
+                        int leftX = 93 + (i * 11);
+                        int upY = 116 + (j * 13);
+                        auto selecting = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                                          leftX, upY,
+                                                          leftX + 10, upY + 12);
+
+                        if (selecting) {
+                            g->unitManager->orderCurrentlySelectedUnitsToCancelTrainUnit(unitTrainingIndex);
+                            return Null<Button>();
+                        }
+
+                        if (showIcons == 0) j += 1;
+                        if (showIcons >= 1) i += 1;
+                        showIcons += 1;
+                        unitTrainingIndex += 1;
+                    }
+                }
+            }
+        }
+
+            if (g->unitManager->getSelectedUnits()->Size() > 1) {
                 int i = 0;
                 int j = 0;
                 for (auto iterator = g->unitManager->getSelectedUnits()->GetIterator(); iterator->Valid(); iterator->Next()) {
@@ -165,7 +199,6 @@ namespace DsprFrontend
                     }
                 }
             }
-        }
 
         if (Math::PointInBox(clickPoint->x, clickPoint->y, 204, 100, 256, 144))
         {
@@ -175,7 +208,7 @@ namespace DsprFrontend
                 auto g = (Global*) InternalApp::getGlobal();
                 auto iterator = this->currentButtonCard->buttonList->GetIterator();
 
-                for (int j = 0; j < 2; j += 1)
+                for (int j = 0; j < 3; j += 1)
                 {
                     for (int i = 0; i < 4; i += 1)
                     {
@@ -527,9 +560,16 @@ namespace DsprFrontend
                         int j = 0;
                         for (auto iterator = firstUnit->constructionQueue->GetIterator(); iterator->Valid(); iterator->Next()) {
                             auto unitTemplate = iterator->Get();
+
+                            int leftX = 93 + (i * 11);
+                            int upY = 116 + (j * 13);
+                            auto selecting = Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                                              leftX, upY,
+                                                              leftX + 10, upY + 12);
+
                             this->mySprite->useSpriteInfo(unitTemplate->sprUnitPortrait);
-                            this->mySprite->tint = Color::White;
-                            this->mySprite->position->set(87 + 6 + (i * 11), 107 + 9 + (13 * j));
+                            this->mySprite->tint = selecting ? Color::LightGray : Color::White;
+                            this->mySprite->position->set(leftX, upY);
                             this->mySprite->drawSelf(camera, 0, 0);
 
                             if (showIcons == 0) j+=1;
@@ -537,15 +577,15 @@ namespace DsprFrontend
                             showIcons += 1;
                         }
 
-                        float healthBarLineLength = (firstUnit->constructionQueue->currentBuildTime /
+                        float buildTimeBarLength = (firstUnit->constructionQueue->currentBuildTime /
                                                      firstUnit->constructionQueue->getCurrentTotalBuildTime()) *
                                                     53;
-                        if(healthBarLineLength > 1) {
+                        if(buildTimeBarLength > 1) {
                             this->myRectangle->position->set(105, 124);
                             this->myRectangle->setLineStyle(1, Color::White);
                             this->myRectangle->setFillStyle(Color::White, 1.0f);
 
-                            this->myRectangle->size->set(healthBarLineLength, 3);
+                            this->myRectangle->size->set(buildTimeBarLength, 3);
                             this->myRectangle->drawSelf(camera, 0, 0);
                         }
                     }
@@ -621,7 +661,7 @@ namespace DsprFrontend
         {
             auto iterator = this->currentButtonCard->buttonList->GetIterator();
 
-            for (int j = 0; j < 2; j += 1)
+            for (int j = 0; j < 3; j += 1)
             {
                 for (int i = 0; i < 4; i += 1)
                 {

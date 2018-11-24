@@ -68,13 +68,22 @@ namespace DsprFrontend
            this->buttonActions->createVillagerAction();
         });
 
-        this->templeCommandCard->AddButton(Null<Button>());
-        this->templeCommandCard->AddButton(Null<Button>());
+        for(int i=0;i<2;i++)
+            this->templeCommandCard->AddButton(Null<Button>());
         
         auto rallyButton = New<Button>(g->spriteCatalog->sprCommandActions, 6, true, Key::Y); rallyButton->usesSubframes = true;
         this->templeCommandCard->AddButton(rallyButton);
         rallyButton->setAction([&]{
             this->buttonActions->rallyAction();
+        });
+
+        for(int i=0;i<7;i++)
+            this->templeCommandCard->AddButton(Null<Button>());
+
+        auto cancelButton = New<Button>(g->spriteCatalog->sprCommandActions, 7, false, Key::C); cancelButton->usesSubframes = true;
+        this->templeCommandCard->AddButton(cancelButton);
+        cancelButton->setAction([&]{
+            this->buttonActions->cancelTrainAction();
         });
     }
 }

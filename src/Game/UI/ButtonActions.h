@@ -17,13 +17,15 @@ namespace DsprFrontend {
         void stopAction();
         void holdAction();
         void attackAction();
-        void createVillagerAction();
         void gatherAction();
 
+        void createVillagerAction();
         void rallyAction();
+        void cancelTrainAction();
 
     private:
         Global* g = nullptr;
 
+        
     };
 }

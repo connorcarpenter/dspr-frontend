@@ -22,6 +22,7 @@ namespace DsprFrontend {
         bool isTraining();
         int getCurrentTotalBuildTime();
         void emptyQueue();
+        void cancelAtIndex(int index);
 
         Ref<ListIterator<UnitTemplate>> GetIterator();
 

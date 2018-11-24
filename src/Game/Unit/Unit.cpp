@@ -500,7 +500,12 @@ namespace DsprFrontend
         if (!this->unitTemplate->hasConstructionQueue) return;
         if (this->constructionQueue->atMaxQueue()) return;
 
-        //this->constructionQueue->enqueue(unitTemplate);
+        this->constructionQueue->enqueue(unitTemplate);
+    }
+
+    void Unit::cancelTrainUnit(int queueIndex) {
+        if (!this->unitTemplate->hasConstructionQueue) return;
+        this->constructionQueue->cancelAtIndex(queueIndex);
     }
 
     void Unit::handleFacing(int heading) {

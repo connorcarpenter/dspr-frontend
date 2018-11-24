@@ -60,6 +60,8 @@ namespace DsprFrontend
 
         void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
 
+        void orderCurrentlySelectedUnitsToCancelTrainUnit(int queueIndex);
+
     private:
         Ref<Map<Unit>> unitMap = Null<Map<Unit>>();
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();

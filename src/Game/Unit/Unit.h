@@ -34,6 +34,7 @@ namespace DsprFrontend
         void playSelectedSound();
         void playDeathSound();
         void trainUnit(Ref<UnitTemplate> unitTemplate);
+        void cancelTrainUnit(int queueIndex);
         void gatherYield(int yieldAmount);
         void updateHeadSprite(Ref<ItemTemplate> itemTemplate);
         void updateBodySprite(Ref<ItemTemplate> itemTemplate);

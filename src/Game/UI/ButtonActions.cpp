@@ -36,6 +36,10 @@ namespace DsprFrontend
         this->g->unitManager->orderCurrentlySelectedUnitsToBuildUnit(this->g->unitTemplateCatalog->worker);
     }
 
+    void ButtonActions::cancelTrainAction() {
+        this->g->unitManager->orderCurrentlySelectedUnitsToCancelTrainUnit(0);
+    }
+
     void ButtonActions::gatherAction() {
         this->g->unitManager->issueUnitOrderGather();
     }
