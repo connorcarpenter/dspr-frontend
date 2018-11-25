@@ -8,6 +8,7 @@ namespace DsprFrontend {
     enum UnitOrderType {
         Move,
         AttackMove,
+        AttackMoveStrong,
         Follow,
         AttackTargetStrong,
         AttackTargetWeak,

@@ -9,6 +9,7 @@
 #include "SpriteCatalog.h"
 #include "Game/Unit/Unit.h"
 #include "Sova/Audio/Sound.h"
+#include "UnitManager.h"
 
 namespace DsprFrontend
 {
@@ -19,22 +20,12 @@ namespace DsprFrontend
         this->useAnimatedSpriteInfo(unit->unitTemplate->sprBase);
         this->tcSprite = New<AnimatedSprite>();
         this->tcSprite->useAnimatedSpriteInfo(unit->unitTemplate->sprTC);
+        this->tcSprite->tint = g->unitManager->getColorFromTribeIndex(unit->tribeIndex);
 
         if (unit->facingDown)
             this->useAnimatedSequenceInfo(unit->unitTemplate->sprDieDown);
         else
             this->useAnimatedSequenceInfo(unit->unitTemplate->sprDieUp);
-
-
-        switch (unit->tribeIndex)
-        {
-            case 0:
-                this->tcSprite->tint = Color::Red;
-                break;
-            case 1:
-                this->tcSprite->tint = Color::Blue;
-                break;
-        }
 
         this->imageSpeed = 0.1f;
 
