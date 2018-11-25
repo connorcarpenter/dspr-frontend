@@ -677,7 +677,7 @@ namespace DsprFrontend
                 int x = (int) ((((float) this->moveTarget->x / 2) + 0.5f) * g->tileManager->tileWidth);
                 int y = (int) ((((float) this->moveTarget->y / 2) + 0.5f) * g->tileManager->tileHeight);
 
-                g->moveMarker->tint = (this->currentOrder == AttackTarget || this->currentOrder == AttackMove) ? DsprColors::LightRed : DsprColors::LightGreen;
+                g->moveMarker->tint = (this->currentOrder == AttackTargetStrong || this->currentOrder == AttackMove) ? DsprColors::LightRed : DsprColors::LightGreen;
                 g->moveMarker->position->set(x, y);
                 g->moveMarker->drawSelf(camera, xoffset, yoffset);
             }

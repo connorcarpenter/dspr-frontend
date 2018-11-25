@@ -33,7 +33,7 @@ fips_begin_app(dspr-frontend windowed)
             Game/Unit/Unit.h Game/Unit/Unit.cpp
             Game/Unit/DyingUnit.h Game/Unit/DyingUnit.cpp
             Game/Unit/UnitManager.h Game/Unit/UnitManager.cpp
-            Game/Unit/UnitOrder.h
+            Game/Unit/UnitOrderType.h
             Game/Unit/UnitTemplate.h Game/Unit/UnitTemplate.cpp
             Game/Unit/UnitTemplateCatalog.h Game/Unit/UnitTemplateCatalog.cpp
             Game/Unit/ConstructionQueue.h Game/Unit/ConstructionQueue.cpp

@@ -9,7 +9,7 @@
 #include <Sova/Common/Map.h>
 #include <DsprMessage/ToClientMsg.h>
 #include "Sova/Common/Int.h"
-#include "UnitOrder.h"
+#include "UnitOrderType.h"
 #include "RefIsoGrid.h"
 #include "UnitTemplate.h"
 
@@ -39,7 +39,7 @@ namespace DsprFrontend
         void issueUnitOrder(bool attackOrderSelected);
         Ref<List<Unit>> getSelectedUnits();
         Ref<Unit> getUnitWithId(int id);
-        void orderCurrentlySelectedUnits(DsprFrontend::UnitOrder orderIndex);
+        void orderCurrentlySelectedUnits(DsprFrontend::UnitOrderType orderIndex);
         void orderCurrentlySelectedUnitsToBuildUnit(Ref<UnitTemplate> unitTemplate);
         void receiveGrid(int w, int h);
         void issueUnitOrderGather();

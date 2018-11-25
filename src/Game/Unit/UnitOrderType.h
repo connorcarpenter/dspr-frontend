@@ -5,11 +5,12 @@
 //
 
 namespace DsprFrontend {
-    enum UnitOrder {
+    enum UnitOrderType {
         Move,
         AttackMove,
         Follow,
-        AttackTarget,
+        AttackTargetStrong,
+        AttackTargetWeak,
         Stop,
         Hold,
         Train,

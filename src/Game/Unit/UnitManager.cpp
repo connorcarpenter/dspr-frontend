@@ -314,7 +314,7 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        UnitOrder orderIndex = Move;
+        UnitOrderType orderIndex = Move;
 
         auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
         int targetId = -1;
@@ -324,7 +324,7 @@ namespace DsprFrontend
             targetId = targetedUnit->id;
 
             orderIndex = (targetedUnit->tribeIndex == firstSelectedUnit->tribeIndex || targetedUnit->tribeIndex==-1) ? //change this later to actually check if tribes are enemies or not (to support allies, neutral)
-                         Follow : AttackTarget;
+                         Follow : AttackTargetStrong;
             if (targetedUnit->unitTemplate->isGatherable && firstSelectedUnit->unitTemplate->canGather)
                 orderIndex = Gather;
         }
@@ -340,7 +340,7 @@ namespace DsprFrontend
         }
 
         if (attackOrderSelected)
-            orderIndex = (orderIndex == Move) ? AttackMove : AttackTarget;
+            orderIndex = (orderIndex == Move) ? AttackMove : AttackTargetStrong;
 
         Ref<Point> tilePosition = Null<Point>();
 
@@ -366,7 +366,7 @@ namespace DsprFrontend
             otherNumberList->Add(New<Int>(tilePosition->x));
             otherNumberList->Add(New<Int>(tilePosition->y));
         }
-        if (orderIndex == Follow || orderIndex == AttackTarget || orderIndex == Gather || orderIndex == Pickup){
+        if (orderIndex == Follow || orderIndex == AttackTargetStrong || orderIndex == Gather || orderIndex == Pickup){
             otherNumberList->Add(New<Int>(targetId));
         }
 
@@ -379,7 +379,7 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        UnitOrder orderIndex;
+        UnitOrderType orderIndex;
 
         auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
         int targetId = -1;
@@ -415,7 +415,7 @@ namespace DsprFrontend
         g->networkManager->messageSender->sendUnitOrderMessage(idList, New<Int>(orderIndex), otherNumberList);
     }
 
-    void UnitManager::orderCurrentlySelectedUnits(UnitOrder orderIndex)
+    void UnitManager::orderCurrentlySelectedUnits(UnitOrderType orderIndex)
     {
         if (this->selectionList->Size() <= 0) return;
 
@@ -440,7 +440,7 @@ namespace DsprFrontend
     {
         if (this->selectionList->Size() <= 0) return;
 
-        auto orderIndex = UnitOrder::Train;
+        auto orderIndex = UnitOrderType::Train;
 
         auto g = (Global*) InternalApp::getGlobal();
 
@@ -466,7 +466,7 @@ namespace DsprFrontend
     {
         auto unit = this->selectionList->At(0);
         
-        auto orderIndex = UnitOrder::CancelTrain;
+        auto orderIndex = UnitOrderType::CancelTrain;
 
         auto idList = New<List<Int>>();
         auto otherNumberList = New<List<Int>>();
@@ -486,7 +486,7 @@ namespace DsprFrontend
     {
         if (beforeSlotIndex == afterSlotIndex)return;
 
-        auto orderIndex = UnitOrder::ItemSwap;
+        auto orderIndex = UnitOrderType::ItemSwap;
 
         auto g = (Global*) InternalApp::getGlobal();
 
@@ -503,7 +503,7 @@ namespace DsprFrontend
 
     void UnitManager::orderUnitDropItem(Ref<Unit> unit, int slotIndex, Ref<Point> position)
     {
-        auto orderIndex = UnitOrder::ItemDrop;
+        auto orderIndex = UnitOrderType::ItemDrop;
 
         auto g = (Global*) InternalApp::getGlobal();
 
@@ -526,7 +526,7 @@ namespace DsprFrontend
 
     void UnitManager::orderUnitGiveItem(Ref<Unit> unit, int slotIndex, int targetUnitId)
     {
-        auto orderIndex = UnitOrder::ItemGive;
+        auto orderIndex = UnitOrderType::ItemGive;
 
         auto g = (Global*) InternalApp::getGlobal();
 
@@ -546,7 +546,7 @@ namespace DsprFrontend
 
         auto g = (Global*) InternalApp::getGlobal();
 
-        UnitOrder orderIndex = RallyPoint;
+        UnitOrderType orderIndex = RallyPoint;
 
         auto targetedUnit = g->unitManager->getUnitOverlappingWithPoint(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
         int targetId = -1;

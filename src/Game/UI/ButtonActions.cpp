@@ -4,7 +4,7 @@
 
 #include <Sova/Internal/InternalApp.h>
 #include <Game/Global.h>
-#include <Game/Unit/UnitOrder.h>
+#include <Game/Unit/UnitOrderType.h>
 #include "ButtonActions.h"
 #include "Game/Unit/UnitManager.h"
 #include "Game/Unit/UnitTemplateCatalog.h"
@@ -25,11 +25,11 @@ namespace DsprFrontend
     }
 
     void ButtonActions::holdAction() {
-        this->g->unitManager->orderCurrentlySelectedUnits(UnitOrder::Hold);
+        this->g->unitManager->orderCurrentlySelectedUnits(UnitOrderType::Hold);
     }
 
     void ButtonActions::stopAction() {
-        this->g->unitManager->orderCurrentlySelectedUnits(UnitOrder::Stop);
+        this->g->unitManager->orderCurrentlySelectedUnits(UnitOrderType::Stop);
     }
 
     void ButtonActions::createVillagerAction() {

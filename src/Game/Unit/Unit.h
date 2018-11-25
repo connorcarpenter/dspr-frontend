@@ -5,7 +5,7 @@
 //
 
 #include <Sova/Graphics/AnimatedSprite.h>
-#include "UnitOrder.h"
+#include "UnitOrderType.h"
 #include "ConstructionQueue.h"
 #include "Game/Item/Inventory.h"
 
@@ -61,7 +61,7 @@ namespace DsprFrontend
         int stamina;
         bool facingDown = true;
 
-        UnitOrder currentOrder = Move;
+        UnitOrderType currentOrder = Move;
         Ref<UnitTemplate> unitTemplate = Null<UnitTemplate>();
         Ref<ConstructionQueue> constructionQueue = Null<ConstructionQueue>();
         Ref<Inventory> inventory = Null<Inventory>();
