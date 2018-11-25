@@ -37,6 +37,9 @@ namespace DsprFrontend
             resources->Add(New<String>("images/temple/temple_unitPortrait_TC.png"));
             resources->Add(New<String>("images/temple/temple_bigUnitPortrait.png"));
             resources->Add(New<String>("images/temple/temple_bigUnitPortrait_TC.png"));
+            resources->Add(New<String>("images/temple/templeFlying.png"));
+            resources->Add(New<String>("images/temple/templeFlyingToGround.png"));
+            resources->Add(New<String>("images/temple/templeLandedToGround.png"));
 
             resources->Add(New<String>("images/worker/sprWorkerBase.png"));
             resources->Add(New<String>("images/worker/sprWorkerTC.png"));
