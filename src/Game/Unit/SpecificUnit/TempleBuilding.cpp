@@ -16,6 +16,18 @@ namespace DsprFrontend
     }
 
     void TempleBuilding::specialAction(int actionIndex) {
-        int i = 0;
+        switch(actionIndex)
+        {
+            case 0:
+            {
+
+            }
+                break;
+            default:
+            {
+                int i = 1/0; // ?
+            }
+                break;
+        }
     }
 }

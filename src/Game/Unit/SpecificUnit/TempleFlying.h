@@ -17,5 +17,8 @@ namespace DsprFrontend {
         void specialAction(int actionIndex) override;
     private:
         Unit* masterUnit = nullptr;
+        int hoverBuildup = 1;
+        bool hoverUp = true;
+        int hoverStep = 0;
     };
 }

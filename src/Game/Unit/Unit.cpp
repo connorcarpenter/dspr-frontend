@@ -37,6 +37,8 @@ namespace DsprFrontend
         this->health = this->unitTemplate->maxHealth;
         this->stamina = this->unitTemplate->maxStamina;
 
+        this->z = this->unitTemplate->zBase;
+
         this->useAnimatedSpriteInfo(this->unitTemplate->sprBase);
 
         this->tcSprite = New<AnimatedSprite>();
@@ -369,7 +371,8 @@ namespace DsprFrontend
 
         if (difx != 0)
         {
-            this->scale->x = Math::Sign(difx);
+            if (this->unitTemplate->canTurnLeftAndRight)
+                this->scale->x = Math::Sign(difx);
         }
         if (dify >= 0)
         {
@@ -551,12 +554,14 @@ namespace DsprFrontend
         {
             case 0: {
                 this->facingDown = true;
-                this->scale->x = 1;
+                if (this->unitTemplate->canTurnLeftAndRight)
+                    this->scale->x = 1;
             }
                 break;
             case 1: {
                 this->facingDown = false;
-                this->scale->x = 1;
+                if (this->unitTemplate->canTurnLeftAndRight)
+                    this->scale->x = 1;
             }
                 break;
             case 2: {
@@ -565,17 +570,20 @@ namespace DsprFrontend
                 break;
             case 3: {
                 this->facingDown = false;
-                this->scale->x = -1;
+                if (this->unitTemplate->canTurnLeftAndRight)
+                    this->scale->x = -1;
             }
                 break;
             case 4: {
                 this->facingDown = true;
-                this->scale->x = -1;
+                if (this->unitTemplate->canTurnLeftAndRight)
+                    this->scale->x = -1;
             }
                 break;
             case 5: {
                 this->facingDown = true;
-                this->scale->x = -1;
+                if (this->unitTemplate->canTurnLeftAndRight)
+                    this->scale->x = -1;
             }
                 break;
             case 6: {
@@ -584,7 +592,8 @@ namespace DsprFrontend
                 break;
             case 7: {
                 this->facingDown = true;
-                this->scale->x = 1;
+                if (this->unitTemplate->canTurnLeftAndRight)
+                    this->scale->x = 1;
             }
                 break;
 
@@ -698,6 +707,7 @@ namespace DsprFrontend
             }
         }
 
+        yoffset += this->z;
         int newOffset = (this->scale->x == -1) ? (xoffset + this->unitTemplate->spriteFaceLeftXoffset) : xoffset;
 
         //Weapon

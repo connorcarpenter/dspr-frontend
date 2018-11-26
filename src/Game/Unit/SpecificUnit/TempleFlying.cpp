@@ -13,6 +13,25 @@ namespace DsprFrontend
     }
 
     void TempleFlying::stepFunction() {
+        if (hoverStep < 40)
+        {
+            hoverStep++;
+        }
+            else
+        {
+            hoverStep = 0;
+            if (hoverBuildup < 2)
+            {
+                this->masterUnit->z += (hoverUp) ? -1 : 1;
+                hoverBuildup += 1;
+            }
+            else
+            {
+                hoverUp = !hoverUp;
+                hoverBuildup = 0;
+                hoverStep = -40;
+            }
+        }
     }
 
     void TempleFlying::specialAction(int actionIndex) {

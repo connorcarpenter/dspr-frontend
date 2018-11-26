@@ -46,6 +46,8 @@ namespace DsprFrontend {
         bool canGather = false;
         bool hasShadow = false;
         bool hasRallyPoint = false;
+        bool canTurnLeftAndRight = true;
+        int zBase = 0;
 
         //sprites
         Ref<Sova::AnimatedSpriteInfo> sprBase = Null<Sova::AnimatedSpriteInfo>();

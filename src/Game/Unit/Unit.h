@@ -61,6 +61,7 @@ namespace DsprFrontend
         int health;
         int stamina;
         bool facingDown = true;
+        int z = 0;
 
         UnitOrderType currentOrder = Move;
         Ref<UnitTemplate> unitTemplate = Null<UnitTemplate>();

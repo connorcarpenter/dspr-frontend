@@ -53,7 +53,7 @@ namespace DsprFrontend
         this->templeBuilding                = New<AnimatedSequenceInfo>(this->templeBase, 0, 0);
         this->templeBuildingToGround        = New<AnimatedSequenceInfo>(this->templeBase, 1, 4);
         this->templeGroundToFlying          = New<AnimatedSequenceInfo>(this->templeBase, 4, 7);
-        this->templeFlying                  = New<AnimatedSequenceInfo>(this->templeBase, 8, 11);
+        this->templeFlying                  = New<AnimatedSequenceInfo>(this->templeBase, 8, 11, 50, 82);
 
         this->bloodParticle = New<AnimatedSpriteInfo>(New<Sova::String>("images/bloodParticle.png"), 5, 5, 1, 2, 2);
 

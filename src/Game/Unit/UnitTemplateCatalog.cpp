@@ -171,8 +171,15 @@ namespace DsprFrontend
         this->templeFlying->bleeds = false;
         this->templeFlying->hasDeathAnimation = false;
         this->templeFlying->commandCard = g->buttonCardCatalog->templeFlyingCommandCard;
+        this->templeFlying->setWalkSpeed(20,30);
+        this->templeFlying->hasShadow = true;
+        this->templeFlying->canTurnLeftAndRight = false;
+        this->templeFlying->zBase = -6;
 
         this->templeFlying->sprBase = g->spriteCatalog->templeBase;
+        this->templeFlying->sprWalkDown = g->spriteCatalog->templeFlying;
+        this->templeFlying->sprWalkUp = g->spriteCatalog->templeFlying;
+
         this->templeFlying->sprTC = g->spriteCatalog->templeTC;
         this->templeFlying->sprUnitPortrait = g->spriteCatalog->templeUnitPortrait;
         this->templeFlying->sprUnitPortraitTC = g->spriteCatalog->templeUnitPortraitTC;
