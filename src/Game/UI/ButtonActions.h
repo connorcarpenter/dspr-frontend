@@ -23,9 +23,11 @@ namespace DsprFrontend {
         void rallyAction();
         void cancelTrainAction();
 
+        void specialAction(int actionIndex);
+
     private:
         Global* g = nullptr;
 
-        
+
     };
 }

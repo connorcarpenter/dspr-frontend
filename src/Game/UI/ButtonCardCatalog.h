@@ -18,13 +18,16 @@ namespace DsprFrontend {
     public:
         ButtonCardCatalog();
         Ref<ButtonCard> workerCommandCard = Null<ButtonCard>();
-        Ref<ButtonCard> templeCommandCard = Null<ButtonCard>();
+        Ref<ButtonCard> templeBuildingCommandCard = Null<ButtonCard>();
+        Ref<ButtonCard> templeFlyingCommandCard = Null<ButtonCard>();
+        Ref<Button> moveButton = Null<Button>();
+        Ref<Button> stopButton = Null<Button>();
         Ref<Button> attackButton = Null<Button>();
     private:
         Ref<ButtonActions> buttonActions = Null<ButtonActions>();
 
         void initWorkerButtonCard();
-
-        void initTempleButtonCard();
+        void initTempleBuildingButtonCard();
+        void initTempleFlyingButtonCard();
     };
 }

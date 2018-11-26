@@ -16,7 +16,8 @@ namespace DsprFrontend {
     public:
         UnitTemplateCatalog();
         Ref<UnitTemplate> worker = Null<UnitTemplate>();
-        Ref<UnitTemplate> temple = Null<UnitTemplate>();
+        Ref<UnitTemplate> templeBuilding = Null<UnitTemplate>();
+        Ref<UnitTemplate> templeFlying = Null<UnitTemplate>();
         Ref<UnitTemplate> manafount = Null<UnitTemplate>();
         Ref<UnitTemplate> ashwalker = Null<UnitTemplate>();
 
@@ -25,11 +26,9 @@ namespace DsprFrontend {
         Ref<List<UnitTemplate>> templateList = Null<List<UnitTemplate>>();
 
         void initWorker();
-
-        void initTemple();
-
+        void initTempleBuilding();
+        void initTempleFlying();
         void initManafount();
-
         void initAshwalker();
     };
 }

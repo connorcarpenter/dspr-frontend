@@ -22,6 +22,7 @@ namespace DsprFrontend {
         ItemGive,
         RallyPoint,
         RallyUnit,
-        CancelTrain
+        CancelTrain,
+        SpecialAction
     };
 }

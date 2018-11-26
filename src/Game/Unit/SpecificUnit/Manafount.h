@@ -12,8 +12,9 @@ namespace DsprFrontend {
     class Unit;
     class Manafount : public SpecificUnit {
     public:
-        Manafount(Unit* masterUnit);
-        virtual void stepFunction();
+        explicit Manafount(Unit* masterUnit);
+        void stepFunction() override;
+        void specialAction(int actionIndex) override {};
         int gatherRate = 10;
     private:
         Unit* masterUnit = nullptr;

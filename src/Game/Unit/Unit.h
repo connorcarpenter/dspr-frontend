@@ -40,6 +40,7 @@ namespace DsprFrontend
         void updateBodySprite(Ref<ItemTemplate> itemTemplate);
         void updateLeftHandSprite(Ref<ItemTemplate> itemTemplate);
         void drawShadow(Ref<Camera> camera, int xoffset, int yoffset);
+        void specialAction(int actionIndex);
         //
         Ref<Point> moveTarget = Null<Point>();
         Ref<Point> tilePosition = Null<Point>();

@@ -47,4 +47,8 @@ namespace DsprFrontend
     void ButtonActions::rallyAction() {
         this->g->unitManager->issueUnitOrderRally();
     }
+
+    void ButtonActions::specialAction(int actionIndex) {
+        this->g->unitManager->issueUnitOrderSpecialAction(actionIndex);
+    }
 }

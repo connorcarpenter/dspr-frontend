@@ -61,6 +61,7 @@ namespace DsprFrontend
         void updateUnitPosition(Ref<Unit> unit, Ref<Point> oldPosition, Ref<Point> newPosition);
 
         void orderCurrentlySelectedUnitsToCancelTrainUnit(int queueIndex);
+        void issueUnitOrderSpecialAction(int actionIndex);
 
     private:
         Ref<Map<Unit>> unitMap = Null<Map<Unit>>();
@@ -69,6 +70,7 @@ namespace DsprFrontend
         bool receivedGrid = false;
         int gridWidth;
         int gridHeight;
+
 
     };
 }

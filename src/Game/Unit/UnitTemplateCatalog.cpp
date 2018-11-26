@@ -6,6 +6,8 @@
 #include <Game/Global.h>
 #include <Game/Unit/SpecificUnit/Manafount.h>
 #include <DsprColors.h>
+#include <Game/Unit/SpecificUnit/TempleBuilding.h>
+#include <Game/Unit/SpecificUnit/TempleFlying.h>
 #include "UnitTemplateCatalog.h"
 #include "SpriteCatalog.h"
 #include "../UI/ButtonCardCatalog.h"
@@ -17,7 +19,8 @@ namespace DsprFrontend
         this->templateList = New<List<UnitTemplate>>();
 
         initWorker();
-        initTemple();
+        initTempleBuilding();
+        initTempleFlying();
         initManafount();
         initAshwalker();
     }
@@ -119,34 +122,67 @@ namespace DsprFrontend
         this->templateList->Add(this->ashwalker);
     }
 
-    void UnitTemplateCatalog::initTemple()
+    void UnitTemplateCatalog::initTempleBuilding()
     {
         auto g = (Global*) InternalApp::getGlobal();
 
-        this->temple = New<UnitTemplate>(1);
-        this->temple->sight = 12;
-        this->temple->maxHealth = 1500;
-        this->temple->buildTime = 1000;
-        this->temple->sprSelectCircle = g->unitSelectCircle_5x5;
-        this->temple->sprHoverCircle = g->unitHoverCircle_5x5;
-        this->temple->canMove = false;
-        this->temple->tileWidth = 5;
-        this->temple->tileHeight = 5;
-        this->temple->bleeds = false;
-        this->temple->hasDeathAnimation = false;
-        this->temple->commandCard = g->buttonCardCatalog->templeCommandCard;
-        this->temple->hasConstructionQueue = true;
-        this->temple->sprCenterAdjust = New<Point>(0,1);
-        this->temple->hasRallyPoint = true;
+        this->templeBuilding = New<UnitTemplate>(1);
+        this->templeBuilding->sight = 12;
+        this->templeBuilding->maxHealth = 1500;
+        this->templeBuilding->buildTime = 1000;
+        this->templeBuilding->sprSelectCircle = g->unitSelectCircle_5x5;
+        this->templeBuilding->sprHoverCircle = g->unitHoverCircle_5x5;
+        this->templeBuilding->canMove = false;
+        this->templeBuilding->tileWidth = 5;
+        this->templeBuilding->tileHeight = 5;
+        this->templeBuilding->bleeds = false;
+        this->templeBuilding->hasDeathAnimation = false;
+        this->templeBuilding->commandCard = g->buttonCardCatalog->templeBuildingCommandCard;
+        this->templeBuilding->hasConstructionQueue = true;
+        this->templeBuilding->sprCenterAdjust = New<Point>(0,1);
+        this->templeBuilding->hasRallyPoint = true;
 
-        this->temple->sprBase = g->spriteCatalog->temple;
-        this->temple->sprTC = g->spriteCatalog->templeTC;
-        this->temple->sprUnitPortrait = g->spriteCatalog->templeUnitPortrait;
-        this->temple->sprUnitPortraitTC = g->spriteCatalog->templeUnitPortraitTC;
-        this->temple->sprBigPortrait = g->spriteCatalog->templeBigPortrait;
-        this->temple->sprBigPortraitTC = g->spriteCatalog->templeBigPortraitTC;
+        this->templeBuilding->sprBase = g->spriteCatalog->templeBase;
+        this->templeBuilding->sprTC = g->spriteCatalog->templeTC;
+        this->templeBuilding->sprUnitPortrait = g->spriteCatalog->templeUnitPortrait;
+        this->templeBuilding->sprUnitPortraitTC = g->spriteCatalog->templeUnitPortraitTC;
+        this->templeBuilding->sprBigPortrait = g->spriteCatalog->templeBigPortrait;
+        this->templeBuilding->sprBigPortraitTC = g->spriteCatalog->templeBigPortraitTC;
+        this->templeBuilding->createSpecificUnitFunction = [&](Unit* unit) {
+            return New<DsprFrontend::TempleBuilding>(unit);
+        };
 
-        this->templateList->Add(this->temple);
+        this->templateList->Add(this->templeBuilding);
+    }
+
+    void UnitTemplateCatalog::initTempleFlying()
+    {
+        auto g = (Global*) InternalApp::getGlobal();
+
+        this->templeFlying = New<UnitTemplate>(4);
+        this->templeFlying->sight = 12;
+        this->templeFlying->maxHealth = 1500;
+        this->templeFlying->buildTime = 1000;
+        this->templeFlying->sprSelectCircle = g->unitSelectCircle_1x1;
+        this->templeFlying->sprHoverCircle = g->unitHoverCircle_1x1;
+        this->templeFlying->canMove = true;
+        this->templeFlying->tileWidth = 1;
+        this->templeFlying->tileHeight = 1;
+        this->templeFlying->bleeds = false;
+        this->templeFlying->hasDeathAnimation = false;
+        this->templeFlying->commandCard = g->buttonCardCatalog->templeFlyingCommandCard;
+
+        this->templeFlying->sprBase = g->spriteCatalog->templeBase;
+        this->templeFlying->sprTC = g->spriteCatalog->templeTC;
+        this->templeFlying->sprUnitPortrait = g->spriteCatalog->templeUnitPortrait;
+        this->templeFlying->sprUnitPortraitTC = g->spriteCatalog->templeUnitPortraitTC;
+        this->templeFlying->sprBigPortrait = g->spriteCatalog->templeBigPortrait;
+        this->templeFlying->sprBigPortraitTC = g->spriteCatalog->templeBigPortraitTC;
+        this->templeFlying->createSpecificUnitFunction = [&](Unit* unit) {
+            return New<DsprFrontend::TempleFlying>(unit);
+        };
+
+        this->templateList->Add(this->templeFlying);
     }
 
     void UnitTemplateCatalog::initManafount() {

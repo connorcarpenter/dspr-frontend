@@ -10,6 +10,8 @@
 namespace DsprFrontend {
     class SpecificUnit : public Sova::Refable {
     public:
+        SpecificUnit();
         virtual void stepFunction() = 0;
+        virtual void specialAction(int actionIndex) = 0;
     };
 }

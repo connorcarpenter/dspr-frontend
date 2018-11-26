@@ -832,4 +832,9 @@ namespace DsprFrontend
             this->rightHandSprite->alpha = 1.0f;
         }
     }
+
+    void Unit::specialAction(int actionIndex) {
+        if (this->specificUnit != nullptr)
+            this->specificUnit->specialAction(actionIndex);
+    }
 }
