@@ -49,6 +49,7 @@ namespace DsprFrontend
         this->selectionBox->setFillStyle(Color::Green, 0.5f);
         this->hoverList = New<List<Unit>>();
         this->worldPosition = New<Point>(0,0);
+        this->errorSound = New<Sound>(New<Sova::String>("sounds/error.wav"));
 
         //this->tint = DsprColors::Yellow;
 
@@ -91,12 +92,19 @@ namespace DsprFrontend
 
                     if (g->uiManager->isInGameArea(this->position))
                     {
-                        this->buttonOrder->executeFinalAction();
-                        this->undoBuildingPlacementState();
-                        this->buttonOrder = Null<Button>();
-                        this->leftButtonPressedTime = 0;
-                        this->ignoreNextLeftButtonClicked = 10;
-                        this->imageIndex = 1;
+                        if (this->buttonOrder->evalConditionalFunc())
+                        {
+                            this->buttonOrder->executeFinalAction();
+                            this->undoBuildingPlacementState();
+                            this->buttonOrder = Null<Button>();
+                            this->leftButtonPressedTime = 0;
+                            this->ignoreNextLeftButtonClicked = 10;
+                            this->imageIndex = 1;
+                        }
+                        else
+                        {
+                            this->errorSound->Play();
+                        }
                     }
                 }
             }

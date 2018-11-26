@@ -69,6 +69,6 @@ namespace DsprFrontend
         Ref<Item> lastSelectedItem = Null<Item>();
         bool enabled = true;
 
-
+        Ref<Sound> errorSound = Null<Sound>();
     };
 }

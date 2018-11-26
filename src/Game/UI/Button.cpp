@@ -40,6 +40,17 @@ namespace DsprFrontend {
         }
     }
 
+    void Button::setConditionalFunc(std::function<bool()> conditionalFunc)
+    {
+        this->conditionalFunc = conditionalFunc;
+    }
+
+    bool Button::evalConditionalFunc()
+    {
+        if (this->conditionalFunc == nullptr) return true;
+        return this->conditionalFunc();
+    }
+
     Button::Button(Ref<AnimatedSpriteInfo> spriteInfo, bool requiresClickOnGameArea, Key::Code keyboardShortcut)
     {
         this->usesSubframes = false;

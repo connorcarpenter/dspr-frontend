@@ -11,6 +11,9 @@
 #include "Game/Unit/UnitTemplateCatalog.h"
 #include "Cursor.h"
 #include "Game/TileManager.h"
+#include "IsoBox/IsoBoxCache.h"
+#include "Game/Unit/UnitManager.h"
+#include "Game/Item/ItemManager.h"
 
 namespace DsprFrontend
 {
@@ -120,6 +123,22 @@ namespace DsprFrontend
         landButton->setBeginAction([&] {
             auto g = (Global*) InternalApp::getGlobal();
             g->cursor->beginBuildingState(g->unitTemplateCatalog->templeBuilding);
+        });
+        landButton->setConditionalFunc([&] {
+            auto g = (Global*) InternalApp::getGlobal();
+            auto worldPoint = g->tileManager->getTilePosition(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
+
+            auto unitIsoBoxBase = g->isoBoxCache->getIsoBox(g->cursor->buildingStateTemplate->tileWidth, g->cursor->buildingStateTemplate->tileHeight);
+
+            for (auto iterator = unitIsoBoxBase->coordList->GetIterator(); iterator->Valid(); iterator->Next())
+            {
+                auto coord = iterator->Get();
+                if ((g->unitManager->getUnitAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y) != nullptr) ||
+                    (!g->tileManager->getWalkable(worldPoint->x + coord->x, worldPoint->y + coord->y)) ||
+                    (g->itemManager->getItemAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y)))
+                    return false;
+            }
+            return true;
         });
         landButton->setFinalAction([&] {
             auto g = (Global*) InternalApp::getGlobal();

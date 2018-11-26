@@ -399,6 +399,7 @@ namespace DsprFrontend
             }
         }
 
+        //building placement state
         if (g->cursor->isInBuildingPlacementState())
         {
             auto worldPoint = g->tileManager->getTilePosition(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
@@ -415,8 +416,8 @@ namespace DsprFrontend
                         (!g->tileManager->getWalkable(worldPoint->x + coord->x, worldPoint->y + coord->y)) ||
                         (g->itemManager->getItemAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y)))
                     this->mySprite->tint = Color::Red;
-                this->mySprite->position->set(((((float) (worldPoint->x + coord->x)/2) + 0.5f) * g->tileManager->tileWidth)-1,
-                                              (((float) (worldPoint->y + coord->y)/2) + 0.5f) * g->tileManager->tileHeight);
+                this->mySprite->position->set(((((float) (worldPoint->x + coord->x)/2) + 0.5f) * g->tileManager->tileWidth)-1-(g->cursor->buildingStateTemplate->sprCenterAdjust->x),
+                                              ((((float) (worldPoint->y + coord->y)/2) + 0.5f) * g->tileManager->tileHeight)-(g->cursor->buildingStateTemplate->sprCenterAdjust->y));
                 this->mySprite->drawSelf(camera, xoffset, yoffset);
             }
             this->mySprite->alpha = 1.0f;
@@ -426,8 +427,8 @@ namespace DsprFrontend
             this->myAnimatedSprite->tint = Color::White;
             this->myAnimatedSprite->alpha = 0.5f;
 
-            this->myAnimatedSprite->position->x = (((float) worldPoint->x/2) + 0.5f) * g->tileManager->tileWidth;
-            this->myAnimatedSprite->position->y = (((float) worldPoint->y/2) + 0.5f) * g->tileManager->tileHeight;
+            this->myAnimatedSprite->position->x = ((((float) worldPoint->x/2) + 0.5f) * g->tileManager->tileWidth)-(g->cursor->buildingStateTemplate->sprCenterAdjust->x);
+            this->myAnimatedSprite->position->y = ((((float) worldPoint->y/2) + 0.5f) * g->tileManager->tileHeight)-(g->cursor->buildingStateTemplate->sprCenterAdjust->y);
             this->myAnimatedSprite->drawSelf(camera, xoffset, yoffset);
             this->myAnimatedSprite->alpha = 1.0f;
         }

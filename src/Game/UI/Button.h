@@ -27,6 +27,9 @@ namespace DsprFrontend {
         void executeBeginAction();
         void setBeginAction(std::function<void()> actionFunction);
 
+        bool evalConditionalFunc();
+        void setConditionalFunc(std::function<bool()> actionFunction);
+
         int imageIndex;
         bool requiresClickOnGameArea = false;
         Key::Code keyboardShortcut;
@@ -38,5 +41,6 @@ namespace DsprFrontend {
     private:
         std::function<void()> finalAction = nullptr;
         std::function<void()> beginAction = nullptr;
+        std::function<bool()> conditionalFunc = nullptr;
     };
 }
