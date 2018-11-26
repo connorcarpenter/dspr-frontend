@@ -46,6 +46,12 @@ namespace DsprFrontend
         return this->unitGrid->get(tilePos->x, tilePos->y);
     }
 
+    Ref<Unit> UnitManager::getUnitAtCoord(int x, int y){
+        if (!this->receivedGrid) return Null<Unit>();
+
+        return this->unitGrid->get(x, y);
+    }
+
     Ref<List<Unit>> UnitManager::getNonHoveringUnitsWithinBox(int x1, int y1, int x2, int y2)
     {
         if (!this->receivedGrid) return Null<List<Unit>>();

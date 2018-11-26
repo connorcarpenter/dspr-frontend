@@ -63,6 +63,8 @@ namespace DsprFrontend
         void orderCurrentlySelectedUnitsToCancelTrainUnit(int queueIndex);
         void issueUnitOrderSpecialAction(int actionIndex);
 
+        Ref<Unit> getUnitAtCoord(int x, int y);
+
     private:
         Ref<Map<Unit>> unitMap = Null<Map<Unit>>();
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();

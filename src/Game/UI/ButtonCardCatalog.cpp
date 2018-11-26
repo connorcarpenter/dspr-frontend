@@ -8,6 +8,8 @@
 #include "ButtonActions.h"
 #include "SpriteCatalog.h"
 #include "Game/Global.h"
+#include "Game/Unit/UnitTemplateCatalog.h"
+#include "Cursor.h"
 
 namespace DsprFrontend
 {
@@ -19,15 +21,15 @@ namespace DsprFrontend
 
         //create standard actions
         this->moveButton = New<Button>(g->spriteCatalog->sprCommandActions, 0, true, Key::M); moveButton->usesSubframes = true;
-        moveButton->setAction([&](){
+        moveButton->setFinalAction([&]() {
             this->buttonActions->moveAction();
         });
         this->stopButton = New<Button>(g->spriteCatalog->sprCommandActions, 1, false, Key::S); stopButton->usesSubframes = true;
-        stopButton->setAction([&](){
+        stopButton->setFinalAction([&]() {
             this->buttonActions->stopAction();
         });
         this->attackButton = New<Button>(g->spriteCatalog->sprCommandActions, 3, true, Key::A); attackButton->usesSubframes = true;
-        this->attackButton->setAction([&](){
+        this->attackButton->setFinalAction([&]() {
             this->buttonActions->attackAction();
         });
 
@@ -54,10 +56,10 @@ namespace DsprFrontend
         this->workerCommandCard->AddButton(dashButton);
         this->workerCommandCard->AddButton(gatherButton);
 
-        holdButton->setAction([&](){
+        holdButton->setFinalAction([&]() {
             this->buttonActions->holdAction();
         });
-        gatherButton->setAction([&](){
+        gatherButton->setFinalAction([&]() {
             this->buttonActions->gatherAction();
         });
     }
@@ -71,8 +73,8 @@ namespace DsprFrontend
         auto villagerButton = New<Button>(g->spriteCatalog->workerUnitPortrait, false, Key::V); villagerButton->usesTeamColor = true;
         villagerButton->tcSpriteInfo = g->spriteCatalog->workerUnitPortraitTC;
         this->templeBuildingCommandCard->AddButton(villagerButton);
-        villagerButton->setAction([&]{
-           this->buttonActions->createVillagerAction();
+        villagerButton->setFinalAction([&] {
+            this->buttonActions->createVillagerAction();
         });
 
         for(int i=0;i<6;i++)
@@ -80,7 +82,7 @@ namespace DsprFrontend
         
         auto rallyButton = New<Button>(g->spriteCatalog->sprCommandActions, 6, true, Key::Y); rallyButton->usesSubframes = true;
         this->templeBuildingCommandCard->AddButton(rallyButton);
-        rallyButton->setAction([&]{
+        rallyButton->setFinalAction([&] {
             this->buttonActions->rallyAction();
         });
 
@@ -89,13 +91,13 @@ namespace DsprFrontend
 
         auto liftOffButton = New<Button>(g->spriteCatalog->sprCommandActions, 8, false, Key::L); liftOffButton->usesSubframes = true;
         this->templeBuildingCommandCard->AddButton(liftOffButton);
-        liftOffButton->setAction([&]{
+        liftOffButton->setFinalAction([&] {
             this->buttonActions->specialAction(0);
         });
 
         auto cancelButton = New<Button>(g->spriteCatalog->sprCommandActions, 7, false, Key::C); cancelButton->usesSubframes = true;
         this->templeBuildingCommandCard->AddButton(cancelButton);
-        cancelButton->setAction([&]{
+        cancelButton->setFinalAction([&] {
             this->buttonActions->cancelTrainAction();
         });
     }
@@ -109,12 +111,16 @@ namespace DsprFrontend
         this->templeFlyingCommandCard->AddButton(this->moveButton);
         this->templeFlyingCommandCard->AddButton(this->stopButton);
 
-        for(int i=0;i<8;i++)
+        for(int i=0;i<9;i++)
             this->templeFlyingCommandCard->AddButton(Null<Button>());
 
-        auto landButton = New<Button>(g->spriteCatalog->sprCommandActions, 9, false, Key::L); landButton->usesSubframes = true;
-        this->templeBuildingCommandCard->AddButton(landButton);
-        landButton->setAction([&]{
+        auto landButton = New<Button>(g->spriteCatalog->sprCommandActions, 9, true, Key::L); landButton->usesSubframes = true;
+        this->templeFlyingCommandCard->AddButton(landButton);
+        landButton->setBeginAction([&] {
+            auto g = (Global*) InternalApp::getGlobal();
+            g->cursor->beginBuildingState(g->unitTemplateCatalog->templeBuilding);
+        });
+        landButton->setFinalAction([&] {
             this->buttonActions->specialAction(0);
         });
     }

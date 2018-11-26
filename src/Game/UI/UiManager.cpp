@@ -15,6 +15,9 @@
 #include "Game/EconomyManager.h"
 #include "GraphicsManager.h"
 #include "ChatManager.h"
+#include "IsoBox/IsoBoxCache.h"
+#include "IsoBox/IsoBox.h"
+#include "Game/Item/ItemManager.h"
 
 namespace DsprFrontend
 {
@@ -224,11 +227,12 @@ namespace DsprFrontend
                                              leftX + 10, upY + 12)) {
                             if (button->requiresClickOnGameArea)
                             {
+                                button->executeBeginAction();
                                 return button;
                             }
                             else
                             {
-                                button->executeAction();
+                                button->executeFinalAction();
                                 return Null<Button>();
                             }
                         }
@@ -297,10 +301,11 @@ namespace DsprFrontend
                 if (InternalApp::getInternalApp()->keyPressed(button->keyboardShortcut)){
                     if (!button->needKeyUp) {
                         if (button->requiresClickOnGameArea) {
+                            button->executeBeginAction();
                             return button;
                         } else {
                             button->needKeyUp = true;
-                            button->executeAction();
+                            button->executeFinalAction();
                             return Null<Button>();
                         }
                     }
@@ -387,6 +392,41 @@ namespace DsprFrontend
                     this->mySprite->drawSelf(camera, xoffset, yoffset);
                 }
             }
+        }
+
+        if (g->cursor->buildingStateTemplate != nullptr)
+        {
+            auto worldPoint = g->tileManager->getTilePosition(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
+
+
+
+            auto unitIsoBoxBase = g->isoBoxCache->getIsoBox(g->cursor->buildingStateTemplate->tileWidth, g->cursor->buildingStateTemplate->tileHeight);
+
+            this->mySprite->useSpriteInfo(g->spriteCatalog->tile1x1);
+            this->mySprite->alpha = 0.5f;
+            for (auto iterator = unitIsoBoxBase->coordList->GetIterator(); iterator->Valid(); iterator->Next())
+            {
+                auto coord = iterator->Get();
+                this->mySprite->tint = Color::Green;
+                if ((g->unitManager->getUnitAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y) != nullptr) ||
+                        (!g->tileManager->getWalkable(worldPoint->x + coord->x, worldPoint->y + coord->y)) ||
+                        (g->itemManager->getItemAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y)))
+                    this->mySprite->tint = Color::Red;
+                this->mySprite->position->set(((((float) (worldPoint->x + coord->x)/2) + 0.5f) * g->tileManager->tileWidth)-1,
+                                              (((float) (worldPoint->y + coord->y)/2) + 0.5f) * g->tileManager->tileHeight);
+                this->mySprite->drawSelf(camera, xoffset, yoffset);
+            }
+            this->mySprite->alpha = 1.0f;
+
+            this->myAnimatedSprite->useAnimatedSequenceInfo(g->cursor->buildingStateTemplate->sprWalkDown);
+            this->myAnimatedSprite->imageIndex = 0;
+            this->myAnimatedSprite->tint = Color::White;
+            this->myAnimatedSprite->alpha = 0.5f;
+
+            this->myAnimatedSprite->position->x = (((float) worldPoint->x/2) + 0.5f) * g->tileManager->tileWidth;
+            this->myAnimatedSprite->position->y = (((float) worldPoint->y/2) + 0.5f) * g->tileManager->tileHeight;
+            this->myAnimatedSprite->drawSelf(camera, xoffset, yoffset);
+            this->myAnimatedSprite->alpha = 1.0f;
         }
 
         //draw minimap

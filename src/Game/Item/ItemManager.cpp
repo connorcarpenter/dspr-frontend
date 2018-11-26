@@ -71,4 +71,10 @@ namespace DsprFrontend {
 
         return this->itemGrid->get(tilePos->x, tilePos->y);
     }
+
+    Ref<Item> ItemManager::getItemAtCoord(int x, int y) {
+        if (!this->receivedGrid) return Null<Item>();
+
+        return this->itemGrid->get(x,y );
+    }
 }

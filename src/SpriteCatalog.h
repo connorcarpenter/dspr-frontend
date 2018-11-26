@@ -86,6 +86,7 @@ namespace DsprFrontend {
         Ref<Sova::AnimatedSpriteInfo> sprSparkle = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprRallyFlag = Null<Sova::AnimatedSpriteInfo>();
         Ref<Sova::AnimatedSpriteInfo> sprRallyFlagTC = Null<Sova::AnimatedSpriteInfo>();
+        Ref<Sova::AnimatedSpriteInfo> tile1x1 = Null<Sova::AnimatedSpriteInfo>();
 
         //ui
         Ref<Sova::AnimatedSpriteInfo> sprCursor = Null<Sova::AnimatedSpriteInfo>();

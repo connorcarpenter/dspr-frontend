@@ -22,6 +22,7 @@
 #include "Game/Item/ItemTemplate.h"
 
 #include <Modules/Gfx/private/glfw/glfwDisplayMgr.h>
+#include <Sova/Graphics/Internal/InternalSprite.h>
 
 #if ORYOL_EMSCRIPTEN
 #include <emscripten/html5.h>
@@ -68,6 +69,9 @@ namespace DsprFrontend
         this->worldPosition->x = this->position->x  + g->camera->position->x;
         this->worldPosition->y = this->position->y  + g->camera->position->y;
 
+        if (this->buildingStateTemplate != nullptr) {
+
+        } else
         if (!this->isItemInHand()) {
             this->tint = DsprColors::Yellow;
 
@@ -296,7 +300,7 @@ namespace DsprFrontend
                 }
             } else {
                 if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left)) {
-                    this->buttonOrder->executeAction();
+                    this->buttonOrder->executeFinalAction();
                     this->buttonOrder = Null<Button>();
                     this->leftButtonPressedTime = 0;
                     this->ignoreNextLeftButtonClicked = 10;
@@ -441,7 +445,8 @@ namespace DsprFrontend
             }
         }
 
-        AnimatedSprite::drawSelf(camera, xoffset, yoffset);
+        if (this->enabled)
+            AnimatedSprite::drawSelf(camera, xoffset, yoffset);
 
         if (!this->isItemInHand()) {
             if (this->leftButtonDragging) {
@@ -515,5 +520,10 @@ namespace DsprFrontend
         } else {
             this->imageIndex = itemTemplate->index;
         }
+    }
+
+    void Cursor::beginBuildingState(Ref<UnitTemplate> buildingTemplate) {
+        this->buildingStateTemplate = buildingTemplate;
+        this->enabled = false;
     }
 }

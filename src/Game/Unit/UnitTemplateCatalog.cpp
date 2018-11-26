@@ -143,6 +143,7 @@ namespace DsprFrontend
         this->templeBuilding->hasRallyPoint = true;
 
         this->templeBuilding->sprBase = g->spriteCatalog->templeBase;
+        this->templeBuilding->sprWalkDown = g->spriteCatalog->templeBuilding;
         this->templeBuilding->sprTC = g->spriteCatalog->templeTC;
         this->templeBuilding->sprUnitPortrait = g->spriteCatalog->templeUnitPortrait;
         this->templeBuilding->sprUnitPortraitTC = g->spriteCatalog->templeUnitPortraitTC;

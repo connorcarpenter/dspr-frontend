@@ -21,8 +21,11 @@ namespace DsprFrontend {
         Button(Ref<AnimatedSpriteInfo> spriteInfo, bool requiresClickOnGameArea,
                Key::Code keyboardShortcut);
 
-        void executeAction();
-        void setAction(std::function<void()> actionFunction);
+        void executeFinalAction();
+        void setFinalAction(std::function<void()> actionFunction);
+
+        void executeBeginAction();
+        void setBeginAction(std::function<void()> actionFunction);
 
         int imageIndex;
         bool requiresClickOnGameArea = false;
@@ -33,6 +36,7 @@ namespace DsprFrontend {
         Ref<AnimatedSpriteInfo> spriteInfo = Null<AnimatedSpriteInfo>();
         Ref<AnimatedSpriteInfo> tcSpriteInfo = Null<AnimatedSpriteInfo>();
     private:
-        std::function<void()> action = nullptr;
+        std::function<void()> finalAction = nullptr;
+        std::function<void()> beginAction = nullptr;
     };
 }

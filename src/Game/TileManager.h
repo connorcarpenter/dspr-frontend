@@ -31,6 +31,7 @@ namespace DsprFrontend
         const int tileHeight = 10;
 
         int getTileFrame(int x, int y);
+        bool getWalkable(int x, int y);
         Ref<Point> getGridSize();
 
         Ref<Point> getTilePosition(int x, int y);

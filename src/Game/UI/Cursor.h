@@ -6,6 +6,7 @@
 
 #include <Sova/Graphics/AnimatedSprite.h>
 #include <Sova/Graphics/Rectangle.h>
+#include <Game/Unit/UnitTemplate.h>
 
 namespace Sova
 {
@@ -29,6 +30,7 @@ namespace DsprFrontend
         bool isItemInHand();
         void handleItemPutSlot(Ref<Unit> unit, int slotIndex);
         void setItemInHandTemplate(Ref<ItemTemplate> itemTemplate);
+        void beginBuildingState(Ref<UnitTemplate> buildingTemplate);
 
         bool leftButtonDragging = false;
         Ref<Point> leftButtonDragPoint = Null<Point>();
@@ -38,6 +40,7 @@ namespace DsprFrontend
         Ref<Unit> itemInHandOwner = Null<Unit>();
         int itemInHandSlotIndex = -1;
         Ref<ItemTemplate> itemInHandTemplate = Null<ItemTemplate>();
+        Ref<UnitTemplate> buildingStateTemplate = Null<UnitTemplate>();
     private:
 
         void step();
@@ -62,5 +65,6 @@ namespace DsprFrontend
 
         Ref<Item> lastHoveringItem = Null<Item>();
         Ref<Item> lastSelectedItem = Null<Item>();
+        bool enabled = true;
     };
 }

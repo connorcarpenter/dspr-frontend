@@ -83,6 +83,13 @@ namespace DsprFrontend
         return -1;
     }
 
+    bool TileManager::getWalkable(int x, int y)
+    {
+        Ref<Tile> foundTile = this->tileGrid->get(x,y);
+        if (foundTile == nullptr) return false;
+        return foundTile->frame != -1;
+    }
+
     Ref<Point> TileManager::getTilePosition(int inX, int inY)
     {
         int halfTileW = (this->tileWidth/2);

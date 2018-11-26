@@ -15,6 +15,7 @@ namespace DsprFrontend
         {
             Ref<List<String>> resources = New<List<String>>();
 
+            resources->Add(New<String>("images/tile_1x1.png"));
             resources->Add(New<String>("images/tiles.png"));
             resources->Add(New<String>("images/trees.png"));
             resources->Add(New<String>("images/block.png"));

@@ -19,6 +19,7 @@ namespace DsprFrontend {
         void receiveGrid(int w, int h);
 
         Ref<Item> getItemOverlappingWithPoint(int x, int y);
+        Ref<Item> getItemAtCoord(int x, int y);
 
     private:
         Ref<List<Item>> itemList = Null<List<Item>>();

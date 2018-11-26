@@ -16,15 +16,27 @@ namespace DsprFrontend {
         this->keyboardShortcut = keyboardShortcut;
     }
 
-    void Button::setAction(std::function<void()> actionFunction)
+    void Button::setFinalAction(std::function<void()> actionFunction)
     {
-        this->action = actionFunction;
+        this->finalAction = actionFunction;
     }
 
-    void Button::executeAction()
+    void Button::executeFinalAction()
     {
-        if (this->action != nullptr){
-            this->action();
+        if (this->finalAction != nullptr){
+            this->finalAction();
+        }
+    }
+
+    void Button::setBeginAction(std::function<void()> actionFunction)
+    {
+        this->beginAction = actionFunction;
+    }
+
+    void Button::executeBeginAction()
+    {
+        if (this->beginAction != nullptr){
+            this->beginAction();
         }
     }
 
