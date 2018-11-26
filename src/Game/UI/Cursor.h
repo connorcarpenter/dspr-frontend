@@ -31,6 +31,8 @@ namespace DsprFrontend
         void handleItemPutSlot(Ref<Unit> unit, int slotIndex);
         void setItemInHandTemplate(Ref<ItemTemplate> itemTemplate);
         void beginBuildingState(Ref<UnitTemplate> buildingTemplate);
+        bool isInBuildingPlacementState();
+        void undoBuildingPlacementState();
 
         bool leftButtonDragging = false;
         Ref<Point> leftButtonDragPoint = Null<Point>();
@@ -66,5 +68,7 @@ namespace DsprFrontend
         Ref<Item> lastHoveringItem = Null<Item>();
         Ref<Item> lastSelectedItem = Null<Item>();
         bool enabled = true;
+
+
     };
 }

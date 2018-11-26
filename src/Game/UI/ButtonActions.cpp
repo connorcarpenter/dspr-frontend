@@ -51,4 +51,8 @@ namespace DsprFrontend
     void ButtonActions::specialAction(int actionIndex) {
         this->g->unitManager->issueUnitOrderSpecialAction(actionIndex);
     }
+
+    void ButtonActions::specialAction(int actionIndex, int x, int y) {
+        this->g->unitManager->issueUnitOrderSpecialAction(actionIndex, x, y);
+    }
 }

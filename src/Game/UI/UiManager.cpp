@@ -328,21 +328,26 @@ namespace DsprFrontend
         if (g->app->keyPressed(Key::Down)) g->camera->position->y += cameraSpeed;
 
         //right clicking?
-        if (g->cursor->isItemInHand())
+        if (g->cursor->isInBuildingPlacementState())
         {
-
         }
         else
         {
-            if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked) {
-                this->rightButtonAlreadyClicked = true;
-                g->unitManager->issueUnitOrder(false);
+            if (g->cursor->isItemInHand())
+            {
+
             }
+            else
+            {
+                if (InternalApp::mouseButtonPressed(MouseButton::Right) && !rightButtonAlreadyClicked) {
+                    this->rightButtonAlreadyClicked = true;
+                    g->unitManager->issueUnitOrder(false);
+                }
 
-            if (!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
-                rightButtonAlreadyClicked = false;
+                if (!InternalApp::mouseButtonPressed(MouseButton::Right) && rightButtonAlreadyClicked)
+                    rightButtonAlreadyClicked = false;
+            }
         }
-
         //chat stuff
         g->chatManager->step();
         if (g->chatManager->isPlayerTyping()) return;
@@ -394,11 +399,9 @@ namespace DsprFrontend
             }
         }
 
-        if (g->cursor->buildingStateTemplate != nullptr)
+        if (g->cursor->isInBuildingPlacementState())
         {
             auto worldPoint = g->tileManager->getTilePosition(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
-
-
 
             auto unitIsoBoxBase = g->isoBoxCache->getIsoBox(g->cursor->buildingStateTemplate->tileWidth, g->cursor->buildingStateTemplate->tileHeight);
 

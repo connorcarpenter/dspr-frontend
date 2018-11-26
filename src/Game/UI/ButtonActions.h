@@ -25,6 +25,8 @@ namespace DsprFrontend {
 
         void specialAction(int actionIndex);
 
+        void specialAction(int actionIndex, int x, int y);
+
     private:
         Global* g = nullptr;
 

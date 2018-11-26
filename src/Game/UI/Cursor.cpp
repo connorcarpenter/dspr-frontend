@@ -69,8 +69,37 @@ namespace DsprFrontend
         this->worldPosition->x = this->position->x  + g->camera->position->x;
         this->worldPosition->y = this->position->y  + g->camera->position->y;
 
-        if (this->buildingStateTemplate != nullptr) {
+        if (this->isInBuildingPlacementState())
+        {
+            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Right)) {
+                this->undoBuildingPlacementState();
+                g->uiManager->rightButtonAlreadyClicked = true;
+                this->buttonOrder = Null<Button>();
+                this->imageIndex = 1;
+                return;
+            }
 
+            if (InternalApp::getInternalApp()->mouseButtonPressed(MouseButton::Left))
+            {
+                this->leftButtonPressedTime = 1;
+            }
+            else
+            {
+                if (this->leftButtonPressedTime > 0)
+                {
+                    this->leftButtonPressedTime = 0;
+
+                    if (g->uiManager->isInGameArea(this->position))
+                    {
+                        this->buttonOrder->executeFinalAction();
+                        this->undoBuildingPlacementState();
+                        this->buttonOrder = Null<Button>();
+                        this->leftButtonPressedTime = 0;
+                        this->ignoreNextLeftButtonClicked = 10;
+                        this->imageIndex = 1;
+                    }
+                }
+            }
         } else
         if (!this->isItemInHand()) {
             this->tint = DsprColors::Yellow;
@@ -525,5 +554,14 @@ namespace DsprFrontend
     void Cursor::beginBuildingState(Ref<UnitTemplate> buildingTemplate) {
         this->buildingStateTemplate = buildingTemplate;
         this->enabled = false;
+    }
+
+    bool Cursor::isInBuildingPlacementState() {
+        return this->buildingStateTemplate != nullptr;
+    }
+
+    void Cursor::undoBuildingPlacementState() {
+        this->enabled = true;
+        this->buildingStateTemplate = nullptr;
     }
 }

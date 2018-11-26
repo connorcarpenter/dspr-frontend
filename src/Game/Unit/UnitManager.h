@@ -65,6 +65,8 @@ namespace DsprFrontend
 
         Ref<Unit> getUnitAtCoord(int x, int y);
 
+        void issueUnitOrderSpecialAction(int actionIndex, int x, int y);
+
     private:
         Ref<Map<Unit>> unitMap = Null<Map<Unit>>();
         Ref<Sova::Pixel> minimapPixel = Null<Sova::Pixel>();

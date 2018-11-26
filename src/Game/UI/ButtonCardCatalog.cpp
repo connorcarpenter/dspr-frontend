@@ -10,6 +10,7 @@
 #include "Game/Global.h"
 #include "Game/Unit/UnitTemplateCatalog.h"
 #include "Cursor.h"
+#include "Game/TileManager.h"
 
 namespace DsprFrontend
 {
@@ -121,7 +122,9 @@ namespace DsprFrontend
             g->cursor->beginBuildingState(g->unitTemplateCatalog->templeBuilding);
         });
         landButton->setFinalAction([&] {
-            this->buttonActions->specialAction(0);
+            auto g = (Global*) InternalApp::getGlobal();
+            auto tilePosition = g->tileManager->getTilePosition(g->cursor->worldPosition->x, g->cursor->worldPosition->y);
+            this->buttonActions->specialAction(0, tilePosition->x, tilePosition->y);
         });
     }
 }
