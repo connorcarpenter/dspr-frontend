@@ -34,7 +34,7 @@ namespace DsprFrontend
             {
                 auto g = (Global*) InternalApp::getGlobal();
                 this->masterUnit->useAnimatedSequenceInfo(g->spriteCatalog->templeBuildingToGround);
-                this->imageSpeed = 0.2f;
+                this->imageSpeed = 0.1f;
                 this->masterUnit->imageIndex = 0;
             }
                 break;

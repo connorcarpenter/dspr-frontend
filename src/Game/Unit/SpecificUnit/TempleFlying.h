@@ -20,5 +20,7 @@ namespace DsprFrontend {
         int hoverBuildup = 1;
         bool hoverUp = true;
         int hoverStep = 0;
+        float imageSpeed = 0;
+        bool hovering = false;
     };
 }

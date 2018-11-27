@@ -141,6 +141,7 @@ namespace DsprFrontend
         this->templeBuilding->hasConstructionQueue = true;
         this->templeBuilding->sprCenterAdjust = New<Point>(0,1);
         this->templeBuilding->hasRallyPoint = true;
+        this->templeBuilding->hasShadow = true;
 
         this->templeBuilding->sprBase = g->spriteCatalog->templeBase;
         this->templeBuilding->sprWalkDown = g->spriteCatalog->templeBuilding;
@@ -176,6 +177,7 @@ namespace DsprFrontend
         this->templeFlying->hasShadow = true;
         this->templeFlying->canTurnLeftAndRight = false;
         this->templeFlying->zBase = -6;
+        this->templeFlying->sprCenterAdjust = New<Point>(0,1);
 
         this->templeFlying->sprBase = g->spriteCatalog->templeBase;
         this->templeFlying->sprWalkDown = g->spriteCatalog->templeFlying;
