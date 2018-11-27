@@ -164,8 +164,8 @@ namespace DsprFrontend
         this->templeFlying->sight = 12;
         this->templeFlying->maxHealth = 1500;
         this->templeFlying->buildTime = 1000;
-        this->templeFlying->sprSelectCircle = g->unitSelectCircle_1x1;
-        this->templeFlying->sprHoverCircle = g->unitHoverCircle_1x1;
+        this->templeFlying->sprSelectCircle = g->unitSelectCircle_5x5;
+        this->templeFlying->sprHoverCircle = g->unitHoverCircle_5x5;
         this->templeFlying->canMove = true;
         this->templeFlying->tileWidth = 1;
         this->templeFlying->tileHeight = 1;

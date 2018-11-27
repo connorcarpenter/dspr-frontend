@@ -148,13 +148,31 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getGlobal();
 
+        bool addToSelection = false;
+
+        auto existingUnitWithId = this->unitMap->At(id);
+        if (existingUnitWithId != nullptr)
+        {
+            if (this->selectionList->Contains(existingUnitWithId))
+            {
+                addToSelection = true;
+            }
+
+            this->receiveUnitDelete(id, false);
+        }
+
         auto unitTemplate = g->unitTemplateCatalog->findTemplateByIndex(templateIndex);
         auto newUnit = New<Unit>(id, x, y, tribeIndex, unitTemplate);
-
         g->world->AddChild(newUnit);
         this->unitMap->Insert(id, newUnit);
 
         this->updateUnitPosition(newUnit, Null<Point>(), newUnit->nextTilePosition);
+
+        if (addToSelection)
+        {
+            newUnit->selected = true;
+            this->selectionList->Add(newUnit);
+        }
     }
 
     void UnitManager::receiveUnitUpdate(const DsprMessage::UnitUpdateMsgV1& updateMsg) {
