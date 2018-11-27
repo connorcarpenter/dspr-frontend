@@ -133,7 +133,8 @@ namespace DsprFrontend
             for (auto iterator = unitIsoBoxBase->coordList->GetIterator(); iterator->Valid(); iterator->Next())
             {
                 auto coord = iterator->Get();
-                if ((g->unitManager->getUnitAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y) != nullptr) ||
+                Ref<Unit> unitAtCoord = g->unitManager->getUnitAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y);
+                if ((unitAtCoord != nullptr && unitAtCoord.obj != g->unitManager->getSelectedUnits()->At(0).obj) ||
                     (!g->tileManager->getWalkable(worldPoint->x + coord->x, worldPoint->y + coord->y)) ||
                     (g->itemManager->getItemAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y)))
                     return false;

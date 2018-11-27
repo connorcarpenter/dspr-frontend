@@ -411,13 +411,17 @@ namespace DsprFrontend
             for (auto iterator = unitIsoBoxBase->coordList->GetIterator(); iterator->Valid(); iterator->Next())
             {
                 auto coord = iterator->Get();
-                this->mySprite->tint = Color::Green;
-                if ((g->unitManager->getUnitAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y) != nullptr) ||
-                        (!g->tileManager->getWalkable(worldPoint->x + coord->x, worldPoint->y + coord->y)) ||
-                        (g->itemManager->getItemAtCoord(worldPoint->x + coord->x, worldPoint->y + coord->y)))
-                    this->mySprite->tint = Color::Red;
-                this->mySprite->position->set(((((float) (worldPoint->x + coord->x)/2) + 0.5f) * g->tileManager->tileWidth)-1-(g->cursor->buildingStateTemplate->sprCenterAdjust->x),
-                                              ((((float) (worldPoint->y + coord->y)/2) + 0.5f) * g->tileManager->tileHeight)-(g->cursor->buildingStateTemplate->sprCenterAdjust->y));
+                bool invalid = false;
+                auto worldX = worldPoint->x + coord->x;
+                auto worldY = worldPoint->y + coord->y;
+                auto unitAtCoord = g->unitManager->getUnitAtCoord(worldX, worldY);
+                if ((unitAtCoord != nullptr && unitAtCoord != selectedUnitList->At(0)) ||
+                        (!g->tileManager->getWalkable(worldX, worldY)) ||
+                        (g->itemManager->getItemAtCoord(worldX, worldY)))
+                    invalid = true;
+                this->mySprite->tint = invalid ? Color::Red : Color::Green;
+                this->mySprite->position->set(((((float) (worldX)/2) + 0.5f) * g->tileManager->tileWidth)-1-(g->cursor->buildingStateTemplate->sprCenterAdjust->x),
+                                              ((((float) (worldY)/2) + 0.5f) * g->tileManager->tileHeight)-(g->cursor->buildingStateTemplate->sprCenterAdjust->y));
                 this->mySprite->drawSelf(camera, xoffset, yoffset);
             }
             this->mySprite->alpha = 1.0f;
