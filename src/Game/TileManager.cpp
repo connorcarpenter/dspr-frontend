@@ -49,6 +49,7 @@ namespace DsprFrontend
         g->fogManager->receiveGrid(this->gridWidth, this->gridHeight);
         g->unitManager->receiveGrid(this->gridWidth, this->gridHeight);
         g->itemManager->receiveGrid(this->gridWidth, this->gridHeight);
+        g->minimap->ReceiveGrid(this->gridWidth, this->gridHeight);
 
         std::cout << "received Grid"<< std::endl;
     }

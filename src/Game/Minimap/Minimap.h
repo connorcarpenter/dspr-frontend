@@ -17,11 +17,17 @@ namespace DsprFrontend
 
         void DrawTile(int x, int y);
 
+        void ReceiveGrid(int width, int height);
+
     private:
         Global* g = nullptr;
         Ref<Camera> terrainCamera = Null<Camera>();
         Ref<Sova::Pixel> pixel = Null<Sova::Pixel>();
 
         void Step(float deltaFrameMs);
+
+        void initMinimap(int width, int height);
+
+        bool receivedGrid = false;
     };
 }
