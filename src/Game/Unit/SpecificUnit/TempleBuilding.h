@@ -17,5 +17,6 @@ namespace DsprFrontend {
         void specialAction(int actionIndex) override;
     private:
         Unit* masterUnit = nullptr;
+        float imageSpeed = 0;
     };
 }
