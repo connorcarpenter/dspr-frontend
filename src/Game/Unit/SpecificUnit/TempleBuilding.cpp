@@ -13,16 +13,27 @@ namespace DsprFrontend
 {
     TempleBuilding::TempleBuilding(Unit* masterUnit) {
         this->masterUnit = masterUnit;
+
+        auto g = (Global*) InternalApp::getGlobal();
+        this->masterUnit->useAnimatedSequenceInfo(g->spriteCatalog->templeBuildingToGround);
+        this->imageSpeed = -0.1f;
+        this->masterUnit->imageIndex = this->masterUnit->imageNumber;
     }
 
     void TempleBuilding::stepFunction() {
         if (imageSpeed != 0)
         {
             this->masterUnit->imageIndex += imageSpeed;
-            if (this->masterUnit->imageIndex >= this->masterUnit->imageNumber)
-            {
-                this->masterUnit->imageIndex = this->masterUnit->imageNumber-1;
-                this->imageSpeed = 0;
+            if (imageSpeed > 0) {
+                if (this->masterUnit->imageIndex >= this->masterUnit->imageNumber) {
+                    this->masterUnit->imageIndex = this->masterUnit->imageNumber - 1;
+                    this->imageSpeed = 0;
+                }
+            } else {
+                if (this->masterUnit->imageIndex <= 0) {
+                    this->masterUnit->imageIndex = 0;
+                    this->imageSpeed = 0;
+                }
             }
         }
     }

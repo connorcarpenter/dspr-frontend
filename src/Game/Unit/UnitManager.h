@@ -27,6 +27,7 @@ namespace DsprFrontend
         void receiveUnitUpdate(const DsprMessage::UnitUpdateMsgV1 &);
         void receiveUnitUpdate(int id, Ref<List<String>> propsSplitStr);
         void receiveUnitDelete(int id, bool dead);
+        void receiveUnitSpecialAction(int id, int actionIndex);
 
         void addToSelectionList(Ref<Unit> unit);
         void removeFromSelectionList(Ref<Unit> unit);
@@ -74,6 +75,7 @@ namespace DsprFrontend
         bool receivedGrid = false;
         int gridWidth;
         int gridHeight;
+
 
 
     };

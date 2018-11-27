@@ -22,5 +22,7 @@ namespace DsprFrontend {
         int hoverStep = 0;
         float imageSpeed = 0;
         bool hovering = false;
+        bool upAnimation = true;
+        bool toggle = false;
     };
 }

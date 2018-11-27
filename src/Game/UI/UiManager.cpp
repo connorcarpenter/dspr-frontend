@@ -379,7 +379,8 @@ namespace DsprFrontend
         {
             for (auto iterator = selectedUnitList->GetIterator(); iterator->Valid(); iterator->Next()) {
                 auto unit = iterator->Get();
-                if (unit != nullptr && unit->unitTemplate->hasRallyPoint) {
+                if (unit != nullptr && unit->unitTemplate->hasRallyPoint)
+                if (!unit->rallyPoint->Equals(unit->tilePosition)){
                     //draw rally point!
                     auto drawX = (int) (((((float) unit->rallyPoint->x) / 2) + 0.5f) * g->tileManager->tileWidth);
                     auto drawY =

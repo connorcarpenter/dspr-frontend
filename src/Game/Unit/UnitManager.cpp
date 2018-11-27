@@ -175,6 +175,12 @@ namespace DsprFrontend
         }
     }
 
+    void UnitManager::receiveUnitSpecialAction(int id, int actionIndex)
+    {
+        auto existingUnitWithId = this->unitMap->At(id);
+        existingUnitWithId->specialAction(actionIndex);
+    }
+
     void UnitManager::receiveUnitUpdate(const DsprMessage::UnitUpdateMsgV1& updateMsg) {
         Ref<Unit> unit = this->unitMap->At(updateMsg.id.get());
 

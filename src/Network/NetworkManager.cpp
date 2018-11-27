@@ -138,6 +138,14 @@ namespace DsprFrontend
                 return;
             }
                 break;
+            case DsprMessage::ToClientMsg::MessageType::UnitSpecialAction:
+            {
+                auto unitSpecialActionMsg = DsprMessage::UnitSpecialActionMsgV1(clientMsg.msgBytes);
+                g->unitManager->receiveUnitSpecialAction(unitSpecialActionMsg.id.get(),
+                                                         unitSpecialActionMsg.actionIndex.get());
+                return;
+            }
+                break;
             case DsprMessage::ToClientMsg::MessageType::UnitDelete:
             {
                 auto unitDeleteMsgV1 = DsprMessage::UnitDeleteMsgV1(clientMsg.msgBytes);
