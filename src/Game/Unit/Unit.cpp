@@ -172,7 +172,7 @@ namespace DsprFrontend
         }
         else
         {
-            this->imageSpeed = 0;
+            this->imageSpeed = this->unitTemplate->idleAnimationSpeed;
 
             if (this->unitTemplate->hasIdleTurnBehavior) {
                 this->imageIndex = 0;

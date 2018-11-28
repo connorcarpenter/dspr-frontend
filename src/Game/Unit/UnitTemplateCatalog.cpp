@@ -41,7 +41,7 @@ namespace DsprFrontend
         this->worker->sight = 6;
         this->worker->maxHealth = 420;
         this->worker->maxStamina = 100;
-        this->worker->buildTime = 300;
+        this->worker->buildTime = 50;
         this->worker->setWalkSpeed(2,3);
 
         this->worker->hitSound = New<Sound>(New<Sova::String>("sounds/hit.wav"));
@@ -231,6 +231,7 @@ namespace DsprFrontend
         this->rift->bleeds = false;
         this->rift->hasDeathAnimation = false;
         this->rift->hasShadow = true;
+        this->rift->idleAnimationSpeed = 0.2f;
 
         this->rift->sprBase = g->spriteCatalog->rift;
 

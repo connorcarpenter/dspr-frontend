@@ -37,7 +37,7 @@ namespace DsprFrontend
         int* fogArrayB = nullptr;
         const int tileWidth = 20;
         const int tileHeight = 10;
-        const int fogState = 2;
+        const int fogState = 0;
 
         int * initializeFogArray(int width, int height);
         void updateFog(int x, int y, int radius, bool reveal);
