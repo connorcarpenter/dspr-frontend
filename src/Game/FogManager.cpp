@@ -50,7 +50,7 @@ namespace DsprFrontend
         {
             for (int i = 0;i< width; i+=1)
             {
-                output[(j*width)+i] = 0;
+                output[(j*width)+i] = fogState;
             }
         }
         return output;

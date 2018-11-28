@@ -31,6 +31,7 @@ namespace DsprFrontend
             resources->Add(New<String>("images/sprRallyFlagTC.png"));
 
             resources->Add(New<String>("images/enemy/sprAshwalker.png"));
+            resources->Add(New<String>("images/rift.png"));
 
             resources->Add(New<String>("images/temple/temple.png"));
             resources->Add(New<String>("images/temple/temple_TC.png"));

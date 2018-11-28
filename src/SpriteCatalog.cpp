@@ -90,5 +90,7 @@ namespace DsprFrontend
         this->ashwalkerAttackDown1HS      = New<AnimatedSequenceInfo>(this->ashwalkerBase, 28, 32);
 
         this->tile1x1 = New<AnimatedSpriteInfo>(New<Sova::String>("images/tile_1x1.png"), 20,12, 1, 10, 6);
+
+        this->rift = New<AnimatedSpriteInfo>(New<Sova::String>("images/rift.png"), 88, 88, 1, 44, 84);
     }
 }

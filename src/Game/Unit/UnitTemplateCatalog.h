@@ -20,6 +20,7 @@ namespace DsprFrontend {
         Ref<UnitTemplate> templeFlying = Null<UnitTemplate>();
         Ref<UnitTemplate> manafount = Null<UnitTemplate>();
         Ref<UnitTemplate> ashwalker = Null<UnitTemplate>();
+        Ref<UnitTemplate> rift = Null<UnitTemplate>();
 
         Ref<UnitTemplate> findTemplateByIndex(int index);
     private:
@@ -30,5 +31,6 @@ namespace DsprFrontend {
         void initTempleFlying();
         void initManafount();
         void initAshwalker();
+        void initRift();
     };
 }

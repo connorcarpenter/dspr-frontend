@@ -23,6 +23,7 @@ namespace DsprFrontend
         initTempleFlying();
         initManafount();
         initAshwalker();
+        initRift();
     }
 
     Ref<UnitTemplate> UnitTemplateCatalog::findTemplateByIndex(int index)
@@ -215,5 +216,24 @@ namespace DsprFrontend
         };
 
         this->templateList->Add(this->manafount);
+    }
+
+    void UnitTemplateCatalog::initRift() {
+        auto g = (Global*) InternalApp::getGlobal();
+
+        this->rift = New<UnitTemplate>(5);
+        this->rift->sight = 0;
+        this->rift->sprSelectCircle = g->unitSelectCircle_5x5;
+        this->rift->sprHoverCircle = g->unitHoverCircle_5x5;
+        this->rift->canMove = false;
+        this->rift->tileWidth = 5;
+        this->rift->tileHeight = 5;
+        this->rift->bleeds = false;
+        this->rift->hasDeathAnimation = false;
+        this->rift->hasShadow = true;
+
+        this->rift->sprBase = g->spriteCatalog->rift;
+
+        this->templateList->Add(this->rift);
     }
 }

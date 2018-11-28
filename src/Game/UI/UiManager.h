@@ -31,10 +31,11 @@ namespace DsprFrontend
         Ref<ButtonCard> currentButtonCard = Null<ButtonCard>();
         bool rightButtonAlreadyClicked = false;
 
+        void centerCameraOnUnit(Ref<Unit> unit);
+
     private:
 
         void step();
-        void centerCameraOnUnit(Ref<Unit> unit);
 
         Ref<Sprite> mySprite = Null<Sprite>();
         Ref<AnimatedSprite> myAnimatedSprite = Null<AnimatedSprite>();

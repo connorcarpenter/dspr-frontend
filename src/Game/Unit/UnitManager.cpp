@@ -148,6 +148,8 @@ namespace DsprFrontend
     {
         auto g = (Global*) InternalApp::getGlobal();
 
+
+
         bool addToSelection = false;
 
         auto existingUnitWithId = this->unitMap->At(id);
@@ -172,6 +174,11 @@ namespace DsprFrontend
         {
             newUnit->selected = true;
             this->selectionList->Add(newUnit);
+        }
+
+        if(existingUnitWithId == nullptr && unitTemplate.obj == g->unitTemplateCatalog->templeBuilding.obj && tribeIndex == g->playersTribeIndex)
+        {
+            g->uiManager->centerCameraOnUnit(newUnit);
         }
     }
 
@@ -707,6 +714,9 @@ namespace DsprFrontend
     Color UnitManager::getColorFromTribeIndex(int index) {
         switch (index)
         {
+            case 0:
+                return Color::Yellow;
+                break;
             case 1:
                 return Color::Red;
                 break;

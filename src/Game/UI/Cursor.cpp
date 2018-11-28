@@ -197,7 +197,7 @@ namespace DsprFrontend
 
                     this->tint = (unitHovering->tribeIndex == g->playersTribeIndex) ? DsprColors::Green
                                                                                     : DsprColors::Red;
-                    if (unitHovering->tribeIndex == -1) this->tint = DsprColors::Yellow;
+                    if (unitHovering->tribeIndex == 0) this->tint = DsprColors::Yellow;
 
                     if (this->cursorIsHovering) {
                         if (!this->hoverList->Contains(unitHovering)) {

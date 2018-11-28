@@ -696,7 +696,7 @@ namespace DsprFrontend
         if (this->hovering)
         {
             if (this->unitTemplate->sprHoverCircle != nullptr) {
-                this->unitTemplate->sprHoverCircle->tint = (this->tribeIndex==-1) ?
+                this->unitTemplate->sprHoverCircle->tint = (this->tribeIndex==0) ?
                                                            DsprColors::LightYellow :
                                                            (this->tribeIndex == g->playersTribeIndex) ?
                                                            DsprColors::LightGreen :
