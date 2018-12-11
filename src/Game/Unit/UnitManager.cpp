@@ -176,7 +176,7 @@ namespace DsprFrontend
             this->selectionList->Add(newUnit);
         }
 
-        if(existingUnitWithId == nullptr && unitTemplate.obj == g->unitTemplateCatalog->templeBuilding.obj && tribeIndex == g->playersTribeIndex)
+        if(existingUnitWithId == nullptr && unitTemplate.obj == g->unitTemplateCatalog->templeBuilding.obj)
         {
             g->uiManager->centerCameraOnUnit(newUnit);
         }
@@ -240,7 +240,7 @@ namespace DsprFrontend
             if (gatherRate != 0) {
                 unit->gatherYield(gatherRate);
                 auto g = (Global *) InternalApp::getSovaApp()->getGlobal();
-                if (unit->tribeIndex == g->playersTribeIndex)
+                if (g->tribeManager->isPlayer(unit->tribeIndex))
                     g->economyManager->setMana(updateMsg.gatherYield.get(1));
             }
         }
@@ -326,7 +326,7 @@ namespace DsprFrontend
             }
         }
 
-        if (unit->tribeIndex == g->playersTribeIndex)
+        if (g->tribeManager->givesSight(unit->tribeIndex))
         {
             g->fogManager->conceilFog(unit->tilePosition->x, unit->tilePosition->y, unit->unitTemplate->sight);
         }
@@ -709,21 +709,6 @@ namespace DsprFrontend
 
         this->unitGrid = New<RefIsoGrid<Unit>>();
         this->unitGrid->initialize(this->gridWidth * 2, this->gridHeight * 2);
-    }
-
-    Color UnitManager::getColorFromTribeIndex(int index) {
-        switch (index)
-        {
-            case 0:
-                return Color::Yellow;
-                break;
-            case 1:
-                return Color::Red;
-                break;
-            case 2:
-                return Color::Blue;
-                break;
-        }
     }
 
     Ref<MapIterator<Unit>> UnitManager::getUnitsIterator() {

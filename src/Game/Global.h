@@ -7,6 +7,7 @@
 #include <Sova/References/Ref.h>
 #include <Sova/References/Refable.h>
 #include <Sova/App.h>
+#include "TribeManager.h"
 
 namespace Sova
 {
@@ -35,6 +36,7 @@ namespace DsprFrontend
     class ShadowManager;
     class ItemTemplateCatalog;
     class ChatManager;
+    class TribeManager;
 
     class Global : public Sova::Refable
     {
@@ -64,6 +66,7 @@ namespace DsprFrontend
         Ref<ShadowManager> shadowManager = Null<ShadowManager>();
         Ref<ItemTemplateCatalog> itemTemplateCatalog = Null<ItemTemplateCatalog>();
         Ref<ChatManager> chatManager = Null<ChatManager>();
+        Ref<TribeManager> tribeManager = Null<TribeManager>();
 
         Ref<AnimatedSprite> moveMarker = Null<AnimatedSprite>();
         Ref<AnimatedSprite> unitHoverCircle_1x1 = Null<AnimatedSprite>();
@@ -75,7 +78,6 @@ namespace DsprFrontend
         Ref<AnimatedSprite> unitHoverCircle_2x2 = Null<AnimatedSprite>();
         Ref<Sprite> unitSelectCircle_2x2 = Null<Sprite>();
 
-        int playersTribeIndex = -1;
         const int gameServerTickMs = 100;
     };
 }

@@ -43,7 +43,7 @@ namespace DsprFrontend
 
         this->tcSprite = New<AnimatedSprite>();
         this->tcSprite->useAnimatedSpriteInfo(this->unitTemplate->sprTC);
-        this->tcSprite->tint = g->unitManager->getColorFromTribeIndex(tribeIndex);
+        this->tcSprite->tint = g->tribeManager->getTeamColor(tribeIndex);
 
         //skin
         this->skinSprite = New<AnimatedSprite>();
@@ -89,7 +89,7 @@ namespace DsprFrontend
 
         this->OnUpdate([&](float deltaFrameMs){ step(deltaFrameMs); });
 
-        if (this->tribeIndex == g->playersTribeIndex)
+        if (g->tribeManager->givesSight(this->tribeIndex))
             g->fogManager->revealFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
 
         this->updatePosition();
@@ -158,7 +158,7 @@ namespace DsprFrontend
             if (this->walkAmount >= this->unitTemplate->walkMax)
             {
                 //update fog
-                if (this->tribeIndex == g->playersTribeIndex) {
+                if (g->tribeManager->givesSight(this->tribeIndex)) {
                     g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
                     g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);
                 }
@@ -346,7 +346,7 @@ namespace DsprFrontend
         if (!this->unitTemplate->canMove) return;
 
         auto g = (Global*) InternalApp::getGlobal();
-        if (this->tribeIndex == g->playersTribeIndex) {
+        if (g->tribeManager->givesSight(this->tribeIndex)) {
             g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
             g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);
         }
@@ -423,7 +423,7 @@ namespace DsprFrontend
                 this->imageIndex = 0;
                 this->imageSpeed = 0;
 
-                if (this->tribeIndex == g->playersTribeIndex) {
+                if (g->tribeManager->givesSight(this->tribeIndex)) {
                     g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
                     g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);
                 }
@@ -477,7 +477,7 @@ namespace DsprFrontend
                 this->imageIndex = 0;
                 this->imageSpeed = 0;
 
-                if (this->tribeIndex == g->playersTribeIndex) {
+                if (g->tribeManager->givesSight(this->tribeIndex)) {
                     g->fogManager->conceilFog(this->tilePosition->x, this->tilePosition->y, this->unitTemplate->sight);
                     g->fogManager->revealFog(this->nextTilePosition->x, this->nextTilePosition->y, this->unitTemplate->sight);
                 }
@@ -672,11 +672,7 @@ namespace DsprFrontend
 
         if (this->selected)
         {
-            this->unitTemplate->sprSelectCircle->tint = (this->tribeIndex==-1) ?
-                                                        DsprColors::LightYellow :
-                                                        (this->tribeIndex == g->playersTribeIndex) ?
-                                                        DsprColors::LightGreen :
-                                                        DsprColors::LightRed;
+            this->unitTemplate->sprSelectCircle->tint = g->tribeManager->getSelectionColor(this->tribeIndex);
 
             this->unitTemplate->sprSelectCircle->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
 
@@ -696,11 +692,7 @@ namespace DsprFrontend
         if (this->hovering)
         {
             if (this->unitTemplate->sprHoverCircle != nullptr) {
-                this->unitTemplate->sprHoverCircle->tint = (this->tribeIndex==0) ?
-                                                           DsprColors::LightYellow :
-                                                           (this->tribeIndex == g->playersTribeIndex) ?
-                                                           DsprColors::LightGreen :
-                                                           DsprColors::LightRed;
+                this->unitTemplate->sprHoverCircle->tint = g->tribeManager->getSelectionColor(this->tribeIndex);
 
                 this->unitTemplate->sprHoverCircle->position->set(this->position->x - this->unitTemplate->sprCenterAdjust->x, this->position->y - this->unitTemplate->sprCenterAdjust->y);
 

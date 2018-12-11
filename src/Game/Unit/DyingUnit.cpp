@@ -20,7 +20,7 @@ namespace DsprFrontend
         this->useAnimatedSpriteInfo(unit->unitTemplate->sprBase);
         this->tcSprite = New<AnimatedSprite>();
         this->tcSprite->useAnimatedSpriteInfo(unit->unitTemplate->sprTC);
-        this->tcSprite->tint = g->unitManager->getColorFromTribeIndex(unit->tribeIndex);
+        this->tcSprite->tint = g->tribeManager->getTeamColor(unit->tribeIndex);
 
         if (unit->facingDown)
             this->useAnimatedSequenceInfo(unit->unitTemplate->sprDieDown);

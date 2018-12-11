@@ -89,6 +89,7 @@ namespace DsprFrontend
 
         g->graphicsManager = New<GraphicsManager>();
         g->economyManager = New<EconomyManager>();
+        g->tribeManager = New<TribeManager>();
 
         g->tileManager = New<TileManager>();
         g->tileManager->SetDepth(9999);

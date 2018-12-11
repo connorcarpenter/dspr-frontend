@@ -195,9 +195,7 @@ namespace DsprFrontend
                         this->imageIndex = 0;
                     }
 
-                    this->tint = (unitHovering->tribeIndex == g->playersTribeIndex) ? DsprColors::Green
-                                                                                    : DsprColors::Red;
-                    if (unitHovering->tribeIndex == 0) this->tint = DsprColors::Yellow;
+                    this->tint = g->tribeManager->getCursorColor(unitHovering->tribeIndex);
 
                     if (this->cursorIsHovering) {
                         if (!this->hoverList->Contains(unitHovering)) {
@@ -405,7 +403,7 @@ namespace DsprFrontend
 
                     if (g->uiManager->isInGameArea(this->position))
                     {
-                        if (unitHovering != nullptr && unitHovering->unitTemplate->hasInventory && unitHovering->tribeIndex == g->playersTribeIndex)
+                        if (unitHovering != nullptr && unitHovering->unitTemplate->hasInventory && g->tribeManager->isPlayer(unitHovering->tribeIndex))
                         {
                             g->unitManager->orderUnitGiveItem(this->itemInHandOwner, this->itemInHandSlotIndex, unitHovering->id);
                         }
@@ -444,7 +442,7 @@ namespace DsprFrontend
         for (auto iterator = this->hoverList->GetIterator(); iterator->Valid(); iterator->Next())
         {
             auto unit = iterator->Get();
-            if (unit->tribeIndex != g->playersTribeIndex) continue;
+            if (!g->tribeManager->isPlayer(unit->tribeIndex)) continue;
 
             bool shouldSelect = (toggle) ? (!unit->selected) : selected;
 

@@ -45,6 +45,8 @@ fips_begin_app(dspr-frontend windowed)
             Game/Unit/SpecificUnit/TempleBuilding.h Game/Unit/SpecificUnit/TempleBuilding.cpp
             Game/Unit/SpecificUnit/TempleFlying.h Game/Unit/SpecificUnit/TempleFlying.cpp
 
+            Game/TribeManager.h Game/TribeManager.cpp
+
             Game/Item/Item.h Game/Item/Item.cpp
             Game/Item/ItemManager.h Game/Item/ItemManager.cpp
             Game/Item/ItemTemplate.h Game/Item/ItemTemplate.cpp

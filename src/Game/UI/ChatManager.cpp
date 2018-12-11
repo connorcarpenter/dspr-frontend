@@ -10,6 +10,7 @@
 #include "GraphicsManager.h"
 #include "Game/Unit/UnitManager.h"
 #include "Network/NetworkManager.h"
+#include "Game/TribeManager.h"
 
 namespace DsprFrontend {
 
@@ -103,7 +104,7 @@ namespace DsprFrontend {
 
         g->networkManager->messageSender->sendChatMessage(this->playerStr);
 
-        this->addToMessageLog(g->playersTribeIndex, this->playerStr);
+        this->addToMessageLog(g->tribeManager->getPlayerTribeIndex(), this->playerStr);
     }
 
     void ChatManager::receiveMessage(int tribeIndex, Ref<String> chatMsg) {
@@ -128,7 +129,7 @@ namespace DsprFrontend {
                 auto message = msgIterator->Get();
                 auto index = indexIterator->Get()->getInt();
 
-                g->graphicsManager->drawText(camera, 1, upY, this->nameList->At(index), g->unitManager->getColorFromTribeIndex(index), true);
+                g->graphicsManager->drawText(camera, 1, upY, this->nameList->At(index), g->tribeManager->getTeamColor(index), true);
                 g->graphicsManager->drawText(camera, 35, upY, message, Color::White, true);
 
                 upY += 6;
