@@ -218,6 +218,7 @@ namespace DsprFrontend
                         if (!iterator->Valid()) break;
 
                         auto button = iterator->Get();
+                        if (button == nullptr) continue;
 
                         int leftX = 208 + (11 * i);
                         int upY = 103 + 13*j;
