@@ -218,23 +218,26 @@ namespace DsprFrontend
                         if (!iterator->Valid()) break;
 
                         auto button = iterator->Get();
-                        if (button == nullptr) continue;
+                        if (button != nullptr)
+                        {
 
-                        int leftX = 208 + (11 * i);
-                        int upY = 103 + 13*j;
+                            int leftX = 208 + (11 * i);
+                            int upY = 103 + 13 * j;
 
-                        if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
-                                             leftX, upY,
-                                             leftX + 10, upY + 12)) {
-                            if (button->requiresClickOnGameArea)
+                            if (Math::PointInBox(g->cursor->position->x, g->cursor->position->y,
+                                                 leftX, upY,
+                                                 leftX + 10, upY + 12))
                             {
-                                button->executeBeginAction();
-                                return button;
-                            }
-                            else
-                            {
-                                button->executeFinalAction();
-                                return Null<Button>();
+                                if (button->requiresClickOnGameArea)
+                                {
+                                    button->executeBeginAction();
+                                    return button;
+                                }
+                                else
+                                {
+                                    button->executeFinalAction();
+                                    return Null<Button>();
+                                }
                             }
                         }
 
